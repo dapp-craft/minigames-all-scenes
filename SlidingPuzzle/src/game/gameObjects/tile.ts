@@ -76,7 +76,7 @@ export function createTile(board: Board, number: number) {
       opts: { button: InputAction.IA_POINTER, hoverText: number.toString() }
     },
     () => {
-      board.moveTile(number)
+      board.moveMultipleTiles(number)
     }
   )
 }
