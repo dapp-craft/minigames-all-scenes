@@ -4,7 +4,7 @@ import { createTile } from '../gameObjects/tile'
 import { Tile } from '../components/definitions'
 import { getTilePosition } from './tileCalculation'
 import { Vector3 } from '@dcl/sdk/math'
-
+import { shuffleMatrix } from './shuffle'
 
 const TileMoveDirection = {
   "UP": {row: -1, column: 0},
@@ -41,6 +41,8 @@ export class Board {
         createTile(this, tileNumber)
       }
     }
+
+    shuffleMatrix(this.matrix, 100)
 
     this.updateAllTiles()
     
