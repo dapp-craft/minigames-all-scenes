@@ -19,11 +19,31 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_stairs_mesh"
+			"name":"obj_stairs",
+			"scale":[
+				0.9846489429473877,
+				1,
+				1.000579595565796
+			],
+			"translation":[
+				0,
+				0,
+				4.5
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_stairs_collider"
+			"name":"obj_stairs_collider",
+			"scale":[
+				0.9846489429473877,
+				1,
+				1.000579595565796
+			],
+			"translation":[
+				0,
+				0,
+				4.5
+			]
 		}
 	],
 	"materials":[
@@ -66,7 +86,7 @@
 			]
 		},
 		{
-			"name":"Plane.076",
+			"name":"Plane.074",
 			"primitives":[
 				{
 					"attributes":{
@@ -100,35 +120,35 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1132,
+			"count":1160,
 			"max":[
-				6.866280555725098,
-				0.31416943669319153,
-				6.920658588409424
+				7.098075866699219,
+				0.3082330524921417,
+				2.522739887237549
 			],
 			"min":[
-				-6.866280555725098,
-				0.00014016032218933105,
-				-4.906463623046875
+				-7.098075866699219,
+				-0.004936377517879009,
+				-9.530025482177734
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1132,
+			"count":1160,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1132,
+			"count":1160,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":3252,
+			"count":3324,
 			"type":"SCALAR"
 		},
 		{
@@ -136,14 +156,14 @@
 			"componentType":5126,
 			"count":532,
 			"max":[
-				6.838723182678223,
-				0.30254873633384705,
-				6.896430492401123
+				6.984685897827148,
+				0.29661238193511963,
+				2.396430492401123
 			],
 			"min":[
-				-6.838723182678223,
-				0.0009999702451750636,
-				-4.877372741699219
+				-6.984685897827148,
+				-0.004936377517879009,
+				-9.378129959106445
 			],
 			"type":"VEC3"
 		},
@@ -169,50 +189,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":13584,
+			"byteLength":13920,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":13584,
-			"byteOffset":13584,
+			"byteLength":13920,
+			"byteOffset":13920,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9056,
-			"byteOffset":27168,
+			"byteLength":9280,
+			"byteOffset":27840,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6504,
-			"byteOffset":36224,
+			"byteLength":6648,
+			"byteOffset":37120,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":6384,
-			"byteOffset":42728,
+			"byteOffset":43768,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":6384,
-			"byteOffset":49112,
+			"byteOffset":50152,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":4256,
-			"byteOffset":55496,
+			"byteOffset":56536,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":2472,
-			"byteOffset":59752,
+			"byteOffset":60792,
 			"target":34963
 		}
 	],
@@ -224,7 +244,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":62224,
+			"byteLength":63264,
 			"uri":"obj_stairs.bin"
 		}
 	]

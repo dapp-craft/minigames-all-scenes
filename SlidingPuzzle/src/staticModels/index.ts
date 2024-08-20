@@ -1,10 +1,12 @@
 import { GltfContainer, MeshCollider, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
-import { floorShape, signShape, stairsShape } from '../resources/resources'
+import { floorShape, signShape, stairsShape, pillarsShape, gamezoneShape } from '../resources/resources'
 
 const staticModels = [
     floorShape,
     signShape,
     stairsShape,
+    pillarsShape,
+    gamezoneShape,
 ]
 
 export const setupStaticModels = () => {

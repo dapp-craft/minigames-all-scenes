@@ -9,7 +9,10 @@ const imagesFolder = 'images/';
 export const floorShape: PBGltfContainer = { src: modelsFolder + 'obj_floor.gltf' };
 export const signShape: PBGltfContainer = { src: modelsFolder + 'obj_sign.gltf' };
 export const stairsShape: PBGltfContainer = { src: modelsFolder + 'obj_stairs.gltf' };
+export const pillarsShape: PBGltfContainer = { src: modelsFolder + 'obj_pillars.gltf' };
 
+//Game Zone Collider
+export const gamezoneShape: PBGltfContainer = { src: modelsFolder + 'obj_gamezone.gltf' };
 
 // Game shapes
 export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' };
