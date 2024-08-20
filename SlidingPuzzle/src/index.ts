@@ -15,7 +15,13 @@ export function main() {
   setupStaticModels()
 
 
-  let board = new Board(BOARD_TRANSFORM, 3, 1, (time, steps) => {
-    console.log(`Solved in ${time / 1000} seconds and ${steps} steps`)
-  })
+  let board
+
+  const onSolved = (time: number, steps: number) => {
+    console.log('Solved in', time, 'ms and', steps, 'steps')
+    board = new Board(BOARD_TRANSFORM, 3, 1, onSolved)
+  }
+
+  board = new Board(BOARD_TRANSFORM, 3, 1, onSolved)
+
 }
