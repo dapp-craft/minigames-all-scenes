@@ -33,17 +33,20 @@ export class Board {
 
   public mainEntity: Entity = engine.addEntity()
 
-  constructor(position: TransformType, size: number, lvl: number) {
-    // Setup the main entity
-    Transform.create(this.mainEntity, position)
+  private onSolve: (time: number, steps: number) => void
 
+  constructor(position: TransformType, size: number, lvl: number, onSolved: (time: number, steps: number) => void = () => {}) {
+    // Setup the main entity
+    this.onSolve = onSolved
     this.size = size
     this.matrix = Array.from({ length: this.size }, (_, rowIndex) =>
       Array.from({ length: this.size }, (_, colIndex) => rowIndex * this.size + colIndex + 1)
     )
     this.matrix[this.size - 1][this.size - 1] = -1
-
     this.image = getImage(lvl)
+
+    Transform.create(this.mainEntity, position)
+
 
     for (const i of this.matrix) {
       for (const tileNumber of i) {
@@ -148,6 +151,10 @@ export class Board {
     this.matrix[row][column] = -1
     this.updateTile(tileNumber)
     this.steps++
+    if (this.isSolved()) {
+      this.terminate()
+      this.onSolve(Date.now() - this.startTime, this.steps)
+    }
   }
 
   private getMoveDirection(tileNumber: number): keyof typeof TileMoveDirection | undefined {
@@ -160,18 +167,14 @@ export class Board {
       return 'UP'
     }
     if (row! < this.size - 1 && this.matrix[row + 1][column!] === -1) {
-      console.log('Available move: Down')
       return 'DOWN'
     }
     if (column > 0 && this.matrix[row][column - 1] === -1) {
-      console.log('Available move: Left')
       return 'LEFT'
     }
     if (column < this.size - 1 && this.matrix[row][column + 1] === -1) {
-      console.log('Available move: Right')
       return 'RIGHT'
     }
-    console.log('No available moves')
     return undefined
   }
 
@@ -202,5 +205,21 @@ export class Board {
    */
   private validateTileNumber(tileNumber: number) {
     if (!(tileNumber >= 1 && tileNumber < this.size * this.size)) throw new Error('Invalid tile number')
+  }
+
+  private isSolved(): boolean {
+    for (let i = 0; i < this.size; i++) {
+      for (let j = 0; j < this.size; j++) {
+        if (this.matrix[i][j] === -1) continue
+        if (this.matrix[i][j] !== i * this.size + j + 1) {
+          return false
+        }
+      }
+    }
+    return true
+  }
+
+  public terminate(): void {
+    engine.removeEntityWithChildren(this.mainEntity)
   }
 }

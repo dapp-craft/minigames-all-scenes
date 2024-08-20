@@ -14,5 +14,8 @@ export function main() {
   // Setup Environment models
   setupStaticModels()
 
-  new Board(BOARD_TRANSFORM, 5, 1)
+
+  let board = new Board(BOARD_TRANSFORM, 3, 1, (time, steps) => {
+    console.log(`Solved in ${time / 1000} seconds and ${steps} steps`)
+  })
 }
