@@ -43,27 +43,11 @@ export class Board {
 
     shuffleMatrix(this.matrix, 100)
 
-    this.updateAllTiles()
-    
-  }
-
-  public updateAllTiles(): void {
-
-    const tiles: { [key: number]: Entity } = {}
-    for (const [tile] of engine.getEntitiesWith(Tile)) {
-      tiles[Tile.get(tile).number] = tile
-    }
-
-    for (let row = 0; row < this.size; row++) {
-      for (let column = 0; column < this.size; column++) {
-        const tileNumber = this.matrix[row][column]
-        if (tileNumber === -1) continue
-        const tile = tiles[tileNumber]
-        const position = getTilePosition(this.size, row, column)
-        Transform.getMutable(tile).position = position
-      }
+    for (let i = 1; i < this.size * this.size; i++) {
+      this.updateTile(i)
     }
   }
+
 
   public updateTile(tileNumber: number): void {
     this.validateTileNumber(tileNumber)
