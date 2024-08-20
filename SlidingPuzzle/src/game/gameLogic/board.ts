@@ -26,7 +26,6 @@ export class Board {
     // Setup the main entity
     Transform.create(this.mainEntity, position)
 
-
     this.size = size
     this.matrix = Array.from({ length: this.size }, (_, rowIndex) =>
       Array.from({ length: this.size }, (_, colIndex) => rowIndex * this.size + colIndex + 1)
@@ -67,6 +66,8 @@ export class Board {
   }
 
   public updateTile(tileNumber: number): void {
+    this.validateTileNumber(tileNumber)
+    
     let tile
     for (const [t] of engine.getEntitiesWith(Tile)) {
       if (Tile.get(t).number === tileNumber) {
@@ -75,19 +76,9 @@ export class Board {
       }
     }
 
-    let row: number
-    let column: number
-    for (let i = 0; i < this.size; i++) {
-      for (let j = 0; j < this.size; j++) {
-        if (this.matrix[i][j] === tileNumber) {
-          row = i
-          column = j
-          break
-        }
-      }
-    }
+    const { row, column } = this.getRowColumn(tileNumber)
 
-    const position = getTilePosition(this.size, row!, column!)
+    const position = getTilePosition(this.size, row, column)
     // Transform.getMutable(tile!).position = position
 
     Tween.createOrReplace(tile!, {
@@ -101,30 +92,47 @@ export class Board {
   }
 
   public moveTile(tileNumber: number): void {
+    this.validateTileNumber(tileNumber)
+
     const direction = this.getMoveDirection(tileNumber)
     if (direction === undefined) return
-    let row: number
-    let column: number
-    for (let i = 0; i < this.size; i++) {
-      for (let j = 0; j < this.size; j++) {
-        if (this.matrix[i][j] === tileNumber) {
-          row = i
-          column = j
-          break
-        }
-      }
-    }
-    const newRow = row! + TileMoveDirection[direction].row
-    const newColumn = column! + TileMoveDirection[direction].column
+    const { row, column } = this.getRowColumn(tileNumber)
+    const newRow = row + TileMoveDirection[direction].row
+    const newColumn = column + TileMoveDirection[direction].column
 
     this.matrix[newRow][newColumn] = tileNumber
-    this.matrix[row!][column!] = -1
+    this.matrix[row][column] = -1
     this.updateTile(tileNumber)
     
   }
 
   public getMoveDirection(tileNumber: number): keyof typeof TileMoveDirection | undefined{
-    // Check if the move is possible
+    this.validateTileNumber(tileNumber)
+
+    const { row, column } = this.getRowColumn(tileNumber)
+    if (row === undefined || column! === undefined) return undefined
+    if (row > 0 && this.matrix[row - 1][column] === -1) {
+      console.log("Available move: Up")
+      return "UP"
+    }
+    if (row! < this.size - 1 && this.matrix[row + 1][column!] === -1) {
+      console.log("Available move: Down")
+      return "DOWN"
+    }
+    if (column > 0 && this.matrix[row][column - 1] === -1) {
+      console.log("Available move: Left")
+      return "LEFT"
+    }
+    if (column < this.size - 1 && this.matrix[row][column + 1] === -1) {
+      console.log("Available move: Right")
+      return "RIGHT"
+    }
+    console.log("No available moves")
+    return undefined
+  }
+
+  private getRowColumn(tileNumber: number): { row: number; column: number } {
+    this.validateTileNumber(tileNumber)
     let row: number
     let column: number
     for (let i = 0; i < this.size; i++) {
@@ -136,24 +144,10 @@ export class Board {
         }
       }
     }
-    if (row! === undefined || column! === undefined) return undefined
-    if (row! > 0 && this.matrix[row! - 1][column!] === -1) {
-      console.log("Available move: Up")
-      return "UP"
-    }
-    if (row! < this.size - 1 && this.matrix[row! + 1][column!] === -1) {
-      console.log("Available move: Down")
-      return "DOWN"
-    }
-    if (column! > 0 && this.matrix[row!][column! - 1] === -1) {
-      console.log("Available move: Left")
-      return "LEFT"
-    }
-    if (column! < this.size - 1 && this.matrix[row!][column! + 1] === -1) {
-      console.log("Available move: Right")
-      return "RIGHT"
-    }
-    console.log("No available moves")
-    return undefined
+    return { row: row!, column: column! }
+  }
+
+  private validateTileNumber(tileNumber: number) {
+    if (!(tileNumber >= 1 && tileNumber < this.size * this.size)) throw new Error("Invalid tile number")
   }
 }
