@@ -26,7 +26,8 @@ export function createTile(board: Board, number: number) {
   Tile.create(tile, { number })
 
   Transform.create(tile, {
-    position: Vector3.Zero(),
+    // Hack to avoid z-flickering
+    position: Vector3.create(0, 0, number * 0.001),
     scale: Vector3.fromArray(Array(3).fill(tileSize)),
     parent: board.mainEntity
   })
