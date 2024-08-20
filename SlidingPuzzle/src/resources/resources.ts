@@ -1,8 +1,18 @@
 import { PBGltfContainer } from "@dcl/sdk/ecs";
 
 
-const modelFolder = 'models/';
+const modelsFolder = 'models/';
+const imagesFolder = 'images/';
 
-export let floorShape: PBGltfContainer = { src: modelFolder + 'obj_floor.gltf' };
-export let signShape: PBGltfContainer = { src: modelFolder + 'obj_sign.gltf' };
-export let stairsShape: PBGltfContainer = { src: modelFolder + 'obj_stairs.gltf' };
+
+// Static models
+export const floorShape: PBGltfContainer = { src: modelsFolder + 'obj_floor.gltf' };
+export const signShape: PBGltfContainer = { src: modelsFolder + 'obj_sign.gltf' };
+export const stairsShape: PBGltfContainer = { src: modelsFolder + 'obj_stairs.gltf' };
+
+
+// Game shapes
+export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' };
+
+// Game level images
+export const lvl1Image = imagesFolder + 'gameImages/lvl1/image.png';

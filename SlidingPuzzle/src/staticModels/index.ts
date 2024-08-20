@@ -8,7 +8,6 @@ const staticModels = [
 ]
 
 export const setupStaticModels = () => {
-    console.log('Setting up static models')
     staticModels.forEach((model) => {
         const enitity = engine.addEntity()
         // TODO move scene center to a global variable
