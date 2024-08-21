@@ -6,7 +6,7 @@ const staticModels = [
     signShape,
     stairsShape,
     pillarsShape,
-    gamezoneShape,
+    // gamezoneShape,
     titleShape,
     frameShape,
     textShape,
