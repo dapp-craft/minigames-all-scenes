@@ -24,7 +24,7 @@ import { shuffleMatrix } from './shuffle'
 import { syncEntity } from '@dcl/sdk/network'
 import { MAX_BOARD_SIZE, mainEntityId, tileEntityBaseId } from '../config'
 import { tileShape } from '../../resources/resources'
-import { queue, utilities } from '@dcl-sdk/mini-games/src'
+import { progress, queue, utilities } from '@dcl-sdk/mini-games/src'
 import { getPlayer } from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
 import * as utils from "@dcl-sdk/utils"
@@ -100,6 +100,7 @@ function startGame() {
 function startNewLevel(size: number, level: number) {
   const disc = Disc.getMutable(boardEntity)
   disc.size = size
+  disc.lvl = level
 
   disc.matrix = Array.from({ length: size }, (_, rowIndex) =>
     Array.from({ length: size }, (_, colIndex) => rowIndex * size + colIndex + 1)
@@ -275,7 +276,9 @@ function moveOneTile(tileNumber: any) {
 
   GameData.getMutable(gameDataEntity).moves++
   if (isSolved()) {
-    finishGame()
+    utils.timers.setTimeout(() => {
+      finishGame()
+    }, 1000)
   }
 
 }
@@ -407,6 +410,17 @@ function finishGame(){
   GameData.getMutable(gameDataEntity).levelFinishedAt = Date.now()
   console.log('Solved!')
   console.log('GameData:', GameData.get(gameDataEntity))
+
+  const gameData = GameData.get(gameDataEntity)
+  const disc = Disc.get(boardEntity)
+
+  progress.upsertProgress({
+    level: disc.lvl,
+    score: gameData.moves * 10,
+    moves: gameData.moves,
+    time: gameData.levelFinishedAt - gameData.levelStartedAt,
+    // data: { [key: string]: number | null }
+  })
 
   hideAllTiles()
 

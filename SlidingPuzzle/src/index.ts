@@ -53,7 +53,7 @@ export function main() {
     width,
     height,
     scale,
-    ui.TIME_LEVEL
+    ui.POINTS_TIME
   )
 
   // queue.initQueueDisplay({
