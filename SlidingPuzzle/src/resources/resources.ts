@@ -22,3 +22,6 @@ export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' 
 
 // Game level images
 export const lvl1Image = imagesFolder + 'gameImages/lvl1/image.png';
+
+// Game sounds
+export const slideSound = 'sounds/game/slide.mp3';

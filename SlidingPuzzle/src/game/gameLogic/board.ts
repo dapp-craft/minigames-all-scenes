@@ -28,6 +28,7 @@ import { progress, queue, utilities } from '@dcl-sdk/mini-games/src'
 import { getPlayer } from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
 import * as utils from "@dcl-sdk/utils"
+import { soundManager } from '../../globals'
 
 const BOARD_TRANSFORM: TransformType = {
   position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -298,6 +299,7 @@ function onTileClick(tileNumber: number) {
     tilesToMove.push(matrix[i + 1][column])
     if (matrix[i][column] === -1) {
       tilesToMove.reverse()
+      soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
       return
     }
@@ -309,6 +311,7 @@ function onTileClick(tileNumber: number) {
     tilesToMove.push(matrix[i - 1][column])
     if (matrix[i][column] === -1) {
       tilesToMove.reverse()
+      soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
       return
     }
@@ -320,6 +323,7 @@ function onTileClick(tileNumber: number) {
     tilesToMove.push(matrix[row][i + 1])
     if (matrix[row][i] === -1) {
       tilesToMove.reverse()
+      soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
       return
     }
@@ -331,6 +335,7 @@ function onTileClick(tileNumber: number) {
     tilesToMove.push(matrix[row][i - 1])
     if (matrix[row][i] === -1) {
       tilesToMove.reverse()
+      soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
       return
     }
