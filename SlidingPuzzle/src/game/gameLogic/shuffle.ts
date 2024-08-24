@@ -43,6 +43,6 @@ function isSolvable(matrix: number[][]): boolean {
         return inversionCount % 2 == 0
     } else {
         const emptyTileRow = matrix.findIndex((row) => row.includes(-1))
-        return (inversionCount + emptyTileRow) % 2 == 1
+        return (inversionCount + emptyTileRow + 1) % 2 == 1
     }
 }
