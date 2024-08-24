@@ -469,7 +469,7 @@ async function finishGame(){
   
 
   if (queue.getQueue().length === 1) {
-    const nextLevel = disc.lvl + 1
+    const nextLevel = (disc.lvl + 1) % MAX_LEVEL
     gameButtons[nextLevel - 1].enable()
     startNewLevel(disc.lvl + 1)
   } else {
