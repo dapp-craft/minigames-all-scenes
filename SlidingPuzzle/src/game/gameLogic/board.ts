@@ -40,11 +40,11 @@ const BOARD_TRANSFORM: TransformType = {
 
 export let gameDataEntity: Entity
 
-export let boardEntity: Entity
-export let tiles: { [key: number]: Entity } = {}
-export let tileImages: { [key: number]: Entity } = {}
-export let gameButtons: ui.MenuButton[] = []
-
+let boardEntity: Entity
+let tiles: { [key: number]: Entity } = {}
+let tileImages: { [key: number]: Entity } = {}
+let gameButtons: ui.MenuButton[] = []
+let maxProgress: progress.IProgress
 
 const TileMoveDirection = {
   UP: { row: -1, column: 0 },
@@ -53,7 +53,9 @@ const TileMoveDirection = {
   RIGHT: { row: 0, column: 1 }
 }
 
-export function initGame() {
+export async function initGame() {
+
+  await initMaxProgress()
 
   initGameDataEntity()
 
@@ -79,11 +81,19 @@ export function initGame() {
 }
 
 
+function getReadyToStart() {
+
+  console.log("Get Ready to start")
+
+  utils.timers.setTimeout(() => {
+    startGame()
+  }, 2)
+
+}
 
 
 
-function startGame() {
-  const level = 1
+async function startGame() {
 
   const localPlayer = getPlayer()
 
@@ -91,16 +101,15 @@ function startGame() {
   GameData.createOrReplace(gameDataEntity, {
     playerAddress: localPlayer?.userId,
     playerName: localPlayer?.name,
-    moves: 0,
-    levelStartedAt: Date.now(),
-    levelFinishedAt: 0,
   })
 
   movePlayerTo({
     newRelativePosition: Vector3.create(8, 1, 4)
   })
-
-  startNewLevel(3)
+  
+  const levelToStart = maxProgress?.level ?? 1
+  console.log("Starting level", levelToStart)
+  startNewLevel(levelToStart)
 }
 
 function startNewLevel(level: number) {
@@ -110,6 +119,10 @@ function startNewLevel(level: number) {
   const disc = Disc.getMutable(boardEntity)
   disc.size = getLevelSize(level)
   disc.lvl = level
+  const gameData = GameData.getMutable(gameDataEntity)
+  gameData.moves = 0
+  gameData.levelStartedAt = Date.now()
+  gameData.levelFinishedAt = 0
   
   disc.matrix = Array.from({ length: disc.size }, (_, rowIndex) =>
     Array.from({ length: disc.size }, (_, colIndex) => rowIndex * disc.size + colIndex + 1)
@@ -129,6 +142,22 @@ function startNewLevel(level: number) {
   for (let i = 1; i < disc.size * disc.size; i++) {
     updateTile(i)
   }
+
+  
+  // Update buttons
+  gameButtons.forEach((button, i) => {
+    if (i <= MAX_LEVEL - 1) {
+      //set level buttons according to currentLevel
+      //TODO: check max level played on progress
+      if (i < maxProgress?.level + 1 || i == 0) {
+        button.enable()
+      } else {
+        button.disable()
+      }
+    } else {
+      button.enable()
+    }
+  })
 
 }
 
@@ -419,23 +448,27 @@ function isSolved(){
   return true
 }
 
-function finishGame(){
+async function finishGame(){
   GameData.getMutable(gameDataEntity).levelFinishedAt = Date.now()
   console.log('Solved!')
   console.log('GameData:', GameData.get(gameDataEntity))
+  console.log('Disc:', Disc.get(boardEntity))
 
   const gameData = GameData.get(gameDataEntity)
   const disc = Disc.get(boardEntity)
-
+  
   progress.upsertProgress({
     level: disc.lvl,
     score: gameData.moves * 10,
     moves: gameData.moves,
     time: gameData.levelFinishedAt - gameData.levelStartedAt,
-    // data: { [key: string]: number | null }
   })
 
   hideAllTiles()
+
+
+  // TODO try to avoid this
+  await initMaxProgress()
 
   
   utils.timers.setTimeout(() => {
@@ -469,4 +502,10 @@ function initGameButtons() {
       }
     ))
   }
+}
+
+async function initMaxProgress(){
+  console.log("Fetching progress", Object.keys(progress))
+  let req = await progress.getProgress('level', progress.SortDirection.DESC, 1)
+  if (req?.length) maxProgress = req[0]
 }
