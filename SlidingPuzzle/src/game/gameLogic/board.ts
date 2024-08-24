@@ -22,13 +22,15 @@ import { getTilePosition } from './tileCalculation'
 import { Color4, Matrix, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { shuffleMatrix } from './shuffle'
 import { syncEntity } from '@dcl/sdk/network'
-import { MAX_BOARD_SIZE, mainEntityId, tileEntityBaseId } from '../config'
+import { MAX_BOARD_SIZE, MAX_LEVEL, mainEntityId, tileEntityBaseId } from '../config'
 import { tileShape } from '../../resources/resources'
-import { progress, queue, utilities } from '@dcl-sdk/mini-games/src'
+import { progress, queue, ui } from '@dcl-sdk/mini-games/src'
 import { getPlayer } from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
 import * as utils from "@dcl-sdk/utils"
-import { soundManager } from '../../globals'
+import { sceneParentEntity, soundManager } from '../../globals'
+import { init } from '@dcl-sdk/mini-games/src/config'
+
 
 const BOARD_TRANSFORM: TransformType = {
   position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -41,6 +43,7 @@ export let gameDataEntity: Entity
 export let boardEntity: Entity
 export let tiles: { [key: number]: Entity } = {}
 export let tileImages: { [key: number]: Entity } = {}
+export let gameButtons: ui.MenuButton[] = []
 
 
 const TileMoveDirection = {
@@ -59,6 +62,8 @@ export function initGame() {
   initTiles()
 
   hideAllTiles()
+
+  initGameButtons()
 
 
 
@@ -95,20 +100,23 @@ function startGame() {
     newRelativePosition: Vector3.create(8, 1, 4)
   })
 
-  startNewLevel(3, level)
+  startNewLevel(3)
 }
 
-function startNewLevel(size: number, level: number) {
-  const disc = Disc.getMutable(boardEntity)
-  disc.size = size
-  disc.lvl = level
+function startNewLevel(level: number) {
 
-  disc.matrix = Array.from({ length: size }, (_, rowIndex) =>
-    Array.from({ length: size }, (_, colIndex) => rowIndex * size + colIndex + 1)
+  hideAllTiles()
+
+  const disc = Disc.getMutable(boardEntity)
+  disc.size = getLevelSize(level)
+  disc.lvl = level
+  
+  disc.matrix = Array.from({ length: disc.size }, (_, rowIndex) =>
+    Array.from({ length: disc.size }, (_, colIndex) => rowIndex * disc.size + colIndex + 1)
   )
   console.log("Matrix init")
   disc.matrix.forEach((row) => console.log(row.join(' ')))
-  disc.matrix[size - 1][size - 1] = -1
+  disc.matrix[disc.size - 1][disc.size - 1] = -1
 
   disc.matrix = shuffleMatrix(disc.matrix, 100)
   console.log("Matrix shuffled")
@@ -118,7 +126,7 @@ function startNewLevel(size: number, level: number) {
 
   setTiles()
 
-  for (let i = 1; i < size * size; i++) {
+  for (let i = 1; i < disc.size * disc.size; i++) {
     updateTile(i)
   }
 
@@ -433,4 +441,32 @@ function finishGame(){
   utils.timers.setTimeout(() => {
     queue.setNextPlayer()
   }, 2000)
+}
+
+function getLevelSize(level: number): number {
+  if (level % 3 == 0) return 5
+  if (level % 3 == 1) return 3
+  if (level % 3 == 2) return 4
+  return 3
+}
+
+function initGameButtons() {
+
+  for (let i = 0; i < MAX_LEVEL; i++) {
+    let buttonOffset = MAX_LEVEL % 2 === 0 ? MAX_LEVEL / 2 -0.5 : Math.floor(MAX_LEVEL / 2)
+    buttonOffset *= 0.75
+    gameButtons.push(new ui.MenuButton({
+      parent: sceneParentEntity,
+      position: Vector3.create(buttonOffset - (0.75 * i), 0.75, -7.2007100105),
+      scale: Vector3.create(2.4, 2.4, 2.4),
+      rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+    },
+      ui.uiAssets.shapes.SQUARE_GREEN,
+      ui.uiAssets.numbers[i + 1],
+      `START LEVEL ${i + 1}`,
+      () => {
+        startNewLevel(i + 1)
+      }
+    ))
+  }
 }

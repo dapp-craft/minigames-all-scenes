@@ -8,7 +8,7 @@ const staticModels = [
     pillarsShape,
     // gamezoneShape,
     titleShape,
-    frameShape,
+    // frameShape,
     textShape,
 ]
 
