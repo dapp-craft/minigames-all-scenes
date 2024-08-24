@@ -30,6 +30,7 @@ import { movePlayerTo } from '~system/RestrictedActions'
 import * as utils from "@dcl-sdk/utils"
 import { sceneParentEntity, soundManager } from '../../globals'
 import { init } from '@dcl-sdk/mini-games/src/config'
+import { EASY_MODE } from '../../config'
 
 
 const BOARD_TRANSFORM: TransformType = {
@@ -479,6 +480,7 @@ async function finishGame(){
 }
 
 function getLevelSize(level: number): number {
+  if (EASY_MODE) return 3
   if (level % 3 == 0) return 5
   if (level % 3 == 1) return 3
   if (level % 3 == 2) return 4

@@ -1,8 +1,10 @@
+import { EASY_MODE } from '../../config'
 import { lvl3x3Image, lvl4x4Image, lvl5x5Image, lvlAbstractPattern, lvlDCLLogo } from '../../resources/resources'
 import { tileRowColumn } from './tileCalculation'
 
 // Move to separate function to be able to fetch images from the internet if needed or add more logic
 export function getImage(lvl: number) {
+  if (EASY_MODE) return lvl3x3Image
   if (lvl == 1) return lvl3x3Image
   if (lvl == 2) return lvl4x4Image
   if (lvl == 3) return lvl5x5Image
