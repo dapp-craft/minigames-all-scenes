@@ -106,9 +106,26 @@ async function startGame() {
   movePlayerTo({
     newRelativePosition: Vector3.create(8, 1, 4)
   })
-  
-  const levelToStart = maxProgress?.level ?? 1
+  console.log("Max progress", maxProgress)
+  const levelToStart = maxProgress?.level? maxProgress.level + 1 : 1
   console.log("Starting level", levelToStart)
+
+
+  // Update buttons
+  gameButtons.forEach((button, i) => {
+    if (i <= MAX_LEVEL - 1) {
+      //set level buttons according to currentLevel
+      //TODO: check max level played on progress
+      if (i < maxProgress?.level + 1 || i == 0) {
+        button.enable()
+      } else {
+        button.disable()
+      }
+    } else {
+      button.enable()
+    }
+  })
+
   startNewLevel(levelToStart)
 }
 
@@ -142,22 +159,6 @@ function startNewLevel(level: number) {
   for (let i = 1; i < disc.size * disc.size; i++) {
     updateTile(i)
   }
-
-  
-  // Update buttons
-  gameButtons.forEach((button, i) => {
-    if (i <= MAX_LEVEL - 1) {
-      //set level buttons according to currentLevel
-      //TODO: check max level played on progress
-      if (i < maxProgress?.level + 1 || i == 0) {
-        button.enable()
-      } else {
-        button.disable()
-      }
-    } else {
-      button.enable()
-    }
-  })
 
 }
 
@@ -465,15 +466,16 @@ async function finishGame(){
   })
 
   hideAllTiles()
-
-
-  // TODO try to avoid this
-  await initMaxProgress()
-
   
-  utils.timers.setTimeout(() => {
+
+  if (queue.getQueue().length === 1) {
+    const nextLevel = disc.lvl + 1
+    gameButtons[nextLevel - 1].enable()
+    startNewLevel(disc.lvl + 1)
+  } else {
     queue.setNextPlayer()
-  }, 2000)
+  }
+  
 }
 
 function getLevelSize(level: number): number {
