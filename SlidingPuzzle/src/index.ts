@@ -56,10 +56,10 @@ export function main() {
     {
       placementStart: 0.06,
       nameStart: 0.08,
-      scoreStart: 0.7,
+      timeStart: 0.7,
       levelStart: 0.96,
       nameHeader: 'PLAYER',
-      scoreHeader: 'POINTS',
+      timeHeader: 'TIME',
       levelHeader: 'LEVEL'
     }
   )
