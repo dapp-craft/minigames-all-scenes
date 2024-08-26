@@ -5,6 +5,7 @@ import {
   InputAction,
   Material,
   MaterialTransparencyMode,
+  MeshCollider,
   MeshRenderer,
   TextureFilterMode,
   Transform,
@@ -15,22 +16,22 @@ import {
   engine,
   pointerEventsSystem
 } from '@dcl/sdk/ecs'
-import { getImage, getImageUV } from './image'
+import { getImage, getImageUV } from './gameLogic/image'
 // import { createTile } from '../gameObjects/tile'
-import { Disc, GameData, Tile } from '../components/definitions'
-import { getTilePosition } from './tileCalculation'
+import { GameData, Tile } from './components/definitions'
+import { getTilePosition } from './gameLogic/tileCalculation'
 import { Color4, Matrix, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { shuffleMatrix } from './shuffle'
+import { shuffleMatrix } from './gameLogic/shuffle'
 import { syncEntity } from '@dcl/sdk/network'
-import { MAX_BOARD_SIZE, MAX_LEVEL, mainEntityId, tileEntityBaseId } from '../config'
-import { tileShape } from '../../resources/resources'
+import { MAX_BOARD_SIZE, MAX_LEVEL, mainEntityId, tileEntityBaseId } from './config'
+import { tileShape } from '../resources/resources'
 import { progress, queue, ui } from '@dcl-sdk/mini-games/src'
 import { getPlayer } from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
 import * as utils from "@dcl-sdk/utils"
-import { sceneParentEntity, soundManager } from '../../globals'
+import { sceneParentEntity, soundManager } from '../globals'
 import { init } from '@dcl-sdk/mini-games/src/config'
-import { EASY_MODE } from '../../config'
+import { EASY_MODE } from '../config'
 
 
 const BOARD_TRANSFORM: TransformType = {
@@ -75,7 +76,7 @@ export async function initGame() {
     if (player?.address === localPlayer?.userId) {
       startGame()
     } else {
-      GameData.createOrReplace(gameDataEntity, { playerAddress: '', playerName: '', moves: 0, levelStartedAt: 0, levelFinishedAt: 0 })
+      // GameData.createOrReplace(gameDataEntity, { playerAddress: '', playerName: '', moves: 0, levelStartedAt: 0, levelFinishedAt: 0 })
     }
   }
 
@@ -84,7 +85,7 @@ export async function initGame() {
 
 function getReadyToStart() {
 
-  console.log("Get Ready to start")
+  console.log("Get Ready to start!")
 
   utils.timers.setTimeout(() => {
     startGame()
@@ -98,10 +99,11 @@ async function startGame() {
 
   const localPlayer = getPlayer()
 
-  Disc.createOrReplace(boardEntity, { size: 3, matrix: [] })
   GameData.createOrReplace(gameDataEntity, {
     playerAddress: localPlayer?.userId,
     playerName: localPlayer?.name,
+    size: 3,
+    matrix: [],
   })
 
   movePlayerTo({
@@ -131,33 +133,36 @@ async function startGame() {
 }
 
 function startNewLevel(level: number) {
-
   hideAllTiles()
-
-  const disc = Disc.getMutable(boardEntity)
-  disc.size = getLevelSize(level)
-  disc.lvl = level
+  
   const gameData = GameData.getMutable(gameDataEntity)
   gameData.moves = 0
   gameData.levelStartedAt = Date.now()
   gameData.levelFinishedAt = 0
+  gameData.size = getLevelSize(level)
+  gameData.lvl = level
   
-  disc.matrix = Array.from({ length: disc.size }, (_, rowIndex) =>
-    Array.from({ length: disc.size }, (_, colIndex) => rowIndex * disc.size + colIndex + 1)
+  gameData.matrix = Array.from({ length: gameData.size }, (_, rowIndex) =>
+    Array.from({ length: gameData.size }, (_, colIndex) => rowIndex * gameData.size + colIndex + 1)
   )
   console.log("Matrix init")
-  disc.matrix.forEach((row) => console.log(row.join(' ')))
-  disc.matrix[disc.size - 1][disc.size - 1] = -1
+  gameData.matrix.forEach((row) => console.log(row.join(' ')))
+  gameData.matrix[gameData.size - 1][gameData.size - 1] = -1
 
-  disc.matrix = shuffleMatrix(disc.matrix, 100)
+  gameData.matrix = shuffleMatrix(gameData.matrix, 100)
   console.log("Matrix shuffled")
-  disc.matrix.forEach((row) => console.log(row.join(' ')))
+  gameData.matrix.forEach((row) => console.log(row.join(' ')))
+
+  removeTilesPointerEvents()
+
 
   setImage(level)
 
   setTiles()
+  setTilesPointerEvents()
 
-  for (let i = 1; i < disc.size * disc.size; i++) {
+
+  for (let i = 1; i < gameData.size * gameData.size; i++) {
     updateTile(i)
   }
 
@@ -179,7 +184,7 @@ function initGameDataEntity() {
 function initBoard(){
   boardEntity = engine.addEntity()
   Transform.create(boardEntity, BOARD_TRANSFORM)
-  syncEntity(boardEntity, [Transform.componentId, Disc.componentId], mainEntityId + 1)
+  syncEntity(boardEntity, [Transform.componentId], mainEntityId + 1)
 }
 
 
@@ -207,21 +212,12 @@ function initTiles(){
       parent: tile
     })
     MeshRenderer.setPlane(image, getImageUV(3, i))
+    MeshCollider.setPlane(image)
     tileImages[i] = image
 
-    pointerEventsSystem.onPointerDown(
-      {
-        entity: shape,
-        opts: { button: InputAction.IA_POINTER, hoverText: i.toString() }
-      },
-      () => {
-        onTileClick(i)
-      }
-    )
-
     syncEntity(tile, [Transform.componentId], tileEntityBaseId + i * 10 + 1)
-    // syncEntity(shape, [], tileEntityBaseId + i * 10 + 2)
-    syncEntity(image, [Transform.componentId, MeshRenderer.componentId, Material.componentId], tileEntityBaseId + i * 10 + 2)
+    syncEntity(shape, [Transform.componentId], tileEntityBaseId + i * 10 + 2)
+    syncEntity(image, [Transform.componentId, MeshRenderer.componentId, Material.componentId], tileEntityBaseId + i * 10 + 3)
   }
 }
 
@@ -229,7 +225,7 @@ function initTiles(){
 function setImage(lvl: number){
   const image = getImage(lvl)
 
-  const size = Disc.get(boardEntity).size
+  const size = GameData.get(gameDataEntity).size
   for (let i = 1; i < size * size; i++) {
     const imageEntity = tileImages[i]
     // @ts-ignore
@@ -270,7 +266,7 @@ function hideAllTiles() {
 }
 
 function setTiles() {
-  const size = Disc.get(boardEntity).size
+  const size = GameData.get(gameDataEntity).size
   for (let i = 1; i < size * size; i++) {
     Transform.getMutable(tiles[i]).scale = Vector3.fromArray(Array(3).fill(3 / size))
   }
@@ -280,11 +276,11 @@ function updateTile(tileNumber: any) {
   validateTileNumber(tileNumber)
   
   const tile = tiles[tileNumber]
-  const gameDisc = Disc.get(boardEntity)
+  const gameData = GameData.get(gameDataEntity)
 
   const { row, column } = getRowColumn(tileNumber)
 
-  const position = getTilePosition(gameDisc.size, row, column)
+  const position = getTilePosition(gameData.size, row, column)
 
   Tween.createOrReplace(tile, {
     mode: Tween.Mode.Move({
@@ -304,18 +300,18 @@ function moveOneTile(tileNumber: any) {
   const direction = getMoveDirection(tileNumber)
   if (direction === undefined) return
 
-  const matrix = Disc.getMutable(boardEntity).matrix
+  const gameData = GameData.getMutable(gameDataEntity)
 
   const { row, column } = getRowColumn(tileNumber)
   const newRow = row + TileMoveDirection[direction].row
   const newColumn = column + TileMoveDirection[direction].column
 
-  matrix[newRow][newColumn] = tileNumber
-  matrix[row][column] = -1
+  gameData.matrix[newRow][newColumn] = tileNumber
+  gameData.matrix[row][column] = -1
   updateTile(tileNumber)
 
-  GameData.getMutable(gameDataEntity).moves++
   if (isSolved()) {
+    removeTilesPointerEvents()
     utils.timers.setTimeout(() => {
       finishGame()
     }, 1000)
@@ -328,8 +324,9 @@ function onTileClick(tileNumber: number) {
 
   let tilesToMove: number[] = []
 
-  const matrix = Disc.get(boardEntity).matrix
-  const size = Disc.get(boardEntity).size
+  const gameData = GameData.get(gameDataEntity)
+  const matrix = gameData.matrix
+  const size = gameData.size
 
   const { row, column } = getRowColumn(tileNumber)
 
@@ -340,6 +337,7 @@ function onTileClick(tileNumber: number) {
       tilesToMove.reverse()
       soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
+      GameData.getMutable(gameDataEntity).moves++
       return
     }
   }
@@ -352,6 +350,7 @@ function onTileClick(tileNumber: number) {
       tilesToMove.reverse()
       soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
+      GameData.getMutable(gameDataEntity).moves++
       return
     }
   }
@@ -364,6 +363,7 @@ function onTileClick(tileNumber: number) {
       tilesToMove.reverse()
       soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
+      GameData.getMutable(gameDataEntity).moves++
       return
     }
   }
@@ -376,6 +376,7 @@ function onTileClick(tileNumber: number) {
       tilesToMove.reverse()
       soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
+      GameData.getMutable(gameDataEntity).moves++
       return
     }
   }
@@ -385,8 +386,9 @@ function onTileClick(tileNumber: number) {
 function getMoveDirection(tileNumber: number):  keyof typeof TileMoveDirection | undefined {
   validateTileNumber(tileNumber)
 
-  const matrix = Disc.get(boardEntity).matrix
-  const size = Disc.get(boardEntity).size
+  const gameData = GameData.get(gameDataEntity)
+  const matrix = gameData.matrix
+  const size = gameData.size
 
   const { row, column } = getRowColumn(tileNumber)
   if (row > 0 && matrix[row - 1][column] === -1) {
@@ -413,8 +415,9 @@ function getRowColumn(tileNumber: number): { row: number; column: number } {
   let row: any
   let column: any
 
-  const size = Disc.get(boardEntity).size
-  const matrix = Disc.get(boardEntity).matrix
+  const gameData = GameData.get(gameDataEntity)
+  const matrix = gameData.matrix
+  const size = gameData.size
 
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
@@ -431,13 +434,14 @@ function getRowColumn(tileNumber: number): { row: number; column: number } {
 }
 
 function validateTileNumber(tileNumber: number) {
-  let size = Disc.get(boardEntity).size
+  let size = GameData.get(gameDataEntity).size
   if (!(tileNumber >= 1 && tileNumber < size * size)) throw new Error('Invalid tile number')
 }
 
 function isSolved(){
-  const matrix = Disc.get(boardEntity).matrix
-  const size = Disc.get(boardEntity).size
+  const gameData = GameData.get(gameDataEntity)
+  const matrix = gameData.matrix
+  const size = gameData.size
 
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
@@ -451,16 +455,14 @@ function isSolved(){
 }
 
 async function finishGame(){
-  GameData.getMutable(gameDataEntity).levelFinishedAt = Date.now()
+  const gameData = GameData.getMutable(gameDataEntity)
+  gameData.levelFinishedAt = Date.now()
+
   console.log('Solved!')
   console.log('GameData:', GameData.get(gameDataEntity))
-  console.log('Disc:', Disc.get(boardEntity))
-
-  const gameData = GameData.get(gameDataEntity)
-  const disc = Disc.get(boardEntity)
   
   progress.upsertProgress({
-    level: disc.lvl,
+    level: gameData.lvl,
     score: gameData.moves * 10,
     moves: gameData.moves,
     time: gameData.levelFinishedAt - gameData.levelStartedAt,
@@ -468,11 +470,10 @@ async function finishGame(){
 
   hideAllTiles()
   
-
   if (queue.getQueue().length === 1) {
-    const nextLevel = (disc.lvl + 1) % MAX_LEVEL
+    const nextLevel = (gameData.lvl + 1) % MAX_LEVEL
     gameButtons[nextLevel - 1].enable()
-    startNewLevel(disc.lvl + 1)
+    startNewLevel(gameData.lvl + 1)
   } else {
     queue.setNextPlayer()
   }
@@ -512,4 +513,30 @@ async function initMaxProgress(){
   console.log("Fetching progress", Object.keys(progress))
   let req = await progress.getProgress('level', progress.SortDirection.DESC, 1)
   if (req?.length) maxProgress = req[0]
+}
+
+function setTilesPointerEvents(){
+  const size = GameData.get(gameDataEntity).size
+  for (let i = 1; i < size * size; i++) {
+    pointerEventsSystem.onPointerDown(
+      {
+        entity: tileImages[i],
+        opts: { button: InputAction.IA_POINTER, hoverText: i.toString() }
+      },
+      () => {
+        onTileClick(i)
+      }
+    )
+  }
+}
+
+function removeTilesPointerEvents(){
+  for (let i = 1; i < MAX_BOARD_SIZE * MAX_BOARD_SIZE; i++) {
+    pointerEventsSystem.removeOnPointerDown(tileImages[i])
+  }
+}
+
+function score(lvl: number, moves: number, time: number): number {
+  const TMax = 5 * 60 * 1000
+  return Math.floor((1000 * lvl / moves) * Math.max((TMax - time), 1000) / TMax)
 }

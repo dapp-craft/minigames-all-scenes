@@ -2,7 +2,7 @@
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { GltfContainer, MeshRenderer, Transform, TransformType, engine } from '@dcl/sdk/ecs'
 import { setupStaticModels } from './staticModels'
-import { initGame } from './game/gameLogic/board'
+import { initGame } from './game/game'
 import { initLibrary, sceneParentEntity, ui, queue } from '@dcl-sdk/mini-games/src'
 import { syncEntity } from '@dcl/sdk/network'
 import players, { getPlayer } from '@dcl/sdk/players'
@@ -53,7 +53,15 @@ export function main() {
     width,
     height,
     scale,
-    ui.POINTS_TIME
+    {
+      placementStart: 0.06,
+      nameStart: 0.08,
+      scoreStart: 0.7,
+      levelStart: 0.96,
+      nameHeader: 'PLAYER',
+      scoreHeader: 'POINTS',
+      levelHeader: 'LEVEL'
+    }
   )
 
   // queue.initQueueDisplay({
@@ -64,5 +72,4 @@ export function main() {
   // })
 
   initGame()
-  
 }
