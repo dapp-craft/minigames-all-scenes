@@ -8,6 +8,7 @@ import { syncEntity } from '@dcl/sdk/network'
 import players, { getPlayer } from '@dcl/sdk/players'
 import { GAME_ID } from './config'
 import { listeners } from '@dcl-sdk/mini-games/src/queue'
+import { setupUI } from './ui'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
@@ -72,4 +73,6 @@ export function main() {
   // })
 
   initGame()
+
+  setupUI()
 }
