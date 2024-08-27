@@ -3,7 +3,7 @@ import { Color4 } from '@dcl/sdk/math'
 import { DEBUG_MODE_UI, EASY_MODE, setEasyMode } from '../config'
 import { queue } from '@dcl-sdk/mini-games/src'
 import { GameData } from './components/definitions'
-import { gameDataEntity } from './game'
+import { gameDataEntity, gameState } from './game'
 
 const FONT_SIZE = 16
 
@@ -73,12 +73,24 @@ export const debugUi = () => (
       <UiEntity
         uiTransform={{
           width: '100%',
-          height: '300px',
+          height: '150px',
           flexDirection: 'row',
           justifyContent: 'flex-end'
         }}
         uiText={{ value: getGameData(), fontSize: FONT_SIZE }}
         uiBackground={{ color: Color4.create(0.5, 0.5, 1, 1) }}
+      ></UiEntity>
+
+    {/* GameState */}
+    <UiEntity
+        uiTransform={{
+          width: '100%',
+          height: '150',
+          flexDirection: 'row',
+          justifyContent: 'flex-end'
+        }}
+        uiText={{ value: getGameState(), fontSize: FONT_SIZE }}
+        uiBackground={{ color: Color4.create(0.2, 0.2, 1, 1) }}
       ></UiEntity>
     </UiEntity>
   </UiEntity>
@@ -128,4 +140,12 @@ function getGameData(): string {
     res += `${key}: ${value}\n`
   }
   return res
+}
+
+function getGameState(): string{
+    let res = ''
+    for (const [key, value] of Object.entries(gameState)) {
+      res += `${key}: ${value}\n`
+    }
+    return res
 }

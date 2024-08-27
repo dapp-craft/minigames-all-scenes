@@ -12,8 +12,4 @@ export const GameData = engine.defineComponent('game-data', {
     moves: Schemas.Number,
     levelStartedAt: Schemas.Int64,
     levelFinishedAt: Schemas.Int64,
-    size: Schemas.Int,
-    matrix: Schemas.Array(Schemas.Array(Schemas.Int)),
-    image: Schemas.String,
-    lvl: Schemas.Number,
   })
