@@ -74,9 +74,9 @@ export async function initGame() {
   queue.listeners.onActivePlayerChange = (player) => {
     const localPlayer = getPlayer()
     if (player?.address === localPlayer?.userId) {
-      startGame()
+      getReadyToStart()
     } else {
-      // GameData.createOrReplace(gameDataEntity, { playerAddress: '', playerName: '', moves: 0, levelStartedAt: 0, levelFinishedAt: 0 })
+      GameData.createOrReplace(gameDataEntity, { playerAddress: '', playerName: '', moves: 0, levelStartedAt: 0, levelFinishedAt: 0 })
     }
   }
 
@@ -89,7 +89,7 @@ function getReadyToStart() {
 
   utils.timers.setTimeout(() => {
     startGame()
-  }, 2)
+  }, 2000)
 
 }
 
