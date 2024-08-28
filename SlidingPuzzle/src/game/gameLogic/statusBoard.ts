@@ -3,6 +3,7 @@ import { gameDataEntity } from '../game'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { sceneParentEntity } from '../../globals'
 import { GameData } from '../components/definitions'
+import { steps, timer, name } from '../../positions'
 
 let movesEntity: Entity
 let timeEntity: Entity
@@ -15,19 +16,19 @@ export function initStatusBoard() {
 
   Transform.create(movesEntity, {
     parent: sceneParentEntity,
-    position: Vector3.create(-2.75, 2, -5),
+    position: steps.position,
     rotation: Quaternion.fromEulerDegrees(0, 180, 0)
   })
 
   Transform.create(timeEntity, {
     parent: sceneParentEntity,
-    position: Vector3.create(-1.4, 2, -5),
+    position: timer.position,
     rotation: Quaternion.fromEulerDegrees(0, 180, 0)
   })
 
   Transform.create(playerNameEntity, {
     parent: sceneParentEntity,
-    position: Vector3.create(1.9, 2, -5),
+    position: name.position,
     rotation: Quaternion.fromEulerDegrees(0, 180, 0)
   })
 
@@ -57,8 +58,8 @@ function updateTexts() {
   TextShape.createOrReplace(playerNameEntity, {
     text: `${gameData.playerName}`,
     fontSize: 3,
-    textAlign: TextAlignMode.TAM_TOP_LEFT,
-    textColor: Color4.Black()
+    textAlign: TextAlignMode.TAM_MIDDLE_CENTER,
+    textColor: Color4.White(),
   })
 
   if (GameData.get(gameDataEntity).level > 0) {

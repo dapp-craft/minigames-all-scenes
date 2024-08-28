@@ -35,6 +35,7 @@ import { sceneParentEntity, soundManager } from '../globals'
 import { init } from '@dcl-sdk/mini-games/src/config'
 import { EASY_MODE } from '../config'
 import { initStatusBoard } from './gameLogic/statusBoard'
+import { exitButton, levelButtons, musicButton, restartButton, sfxButton } from '../positions'
 
 const BOARD_TRANSFORM: TransformType = {
   position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -488,14 +489,13 @@ function getLevelSize(level: number): number {
 }
 
 function initGameButtons() {
+
   for (let i = 0; i < MAX_LEVEL; i++) {
-    let buttonOffset = MAX_LEVEL % 2 === 0 ? MAX_LEVEL / 2 - 0.5 : Math.floor(MAX_LEVEL / 2)
-    buttonOffset *= 0.75
     gameButtons.push(
       new ui.MenuButton(
         {
           parent: sceneParentEntity,
-          position: Vector3.create(buttonOffset - 0.75 * i, 0.75, -6.2007100105),
+          position: levelButtons[i + 1].position,
           scale: Vector3.create(2.4, 2.4, 2.4),
           rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
         },
@@ -511,7 +511,7 @@ function initGameButtons() {
 
   gameButtons.push(new ui.MenuButton({
     parent: sceneParentEntity,
-    position: Vector3.create(-2.75, 4.30, 0.1),
+    position: restartButton.position,
     scale: Vector3.create(2.4, 2.4, 2.4),
     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
   },
@@ -525,7 +525,7 @@ function initGameButtons() {
 
   gameButtons.push(new ui.MenuButton({
     parent: sceneParentEntity,
-    position: Vector3.create(-2.6, 5.7, 0.1),
+    position: sfxButton.position,
     scale: Vector3.create(2.4, 2.4, 2.4),
     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
   },
@@ -537,7 +537,7 @@ function initGameButtons() {
 
   gameButtons.push(new ui.MenuButton({
     parent: sceneParentEntity,
-    position: Vector3.create(2.75, 5.7, 0.1),
+    position: exitButton.position,
     scale: Vector3.create(2.4, 2.4, 2.4),
     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
   },
@@ -549,7 +549,7 @@ function initGameButtons() {
 
   new ui.MenuButton({
     parent: sceneParentEntity,
-    position: Vector3.create(-3.3, 5.7, 0.1),
+    position: musicButton.position,
     scale: Vector3.create(2.4, 2.4, 2.4),
     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
 },
