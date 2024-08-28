@@ -23,11 +23,11 @@ export const gamezoneShape: PBGltfContainer = { src: modelsFolder + 'obj_gamezon
 export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' };
 
 // Game level images
+export const level1Image = imagesFolder + 'gameImages/imageLevel1.jpg';
+export const level2Image = imagesFolder + 'gameImages/imageLevel2.jpg';
+export const level3Image = imagesFolder + 'gameImages/imageLevel3.jpg';
+
 export const lvl3x3Image = imagesFolder + 'gameImages/image_3x3.png';
-export const lvl4x4Image = imagesFolder + 'gameImages/image_4x4.png';
-export const lvl5x5Image = imagesFolder + 'gameImages/image_5x5.png';
-export const lvlAbstractPattern = imagesFolder + 'gameImages/abstract_pattern.png';
-export const lvlDCLLogo = imagesFolder + 'gameImages/dcl_logo.png';
 
 // Game sounds
 export const slideSound = 'sounds/game/slide.mp3';
