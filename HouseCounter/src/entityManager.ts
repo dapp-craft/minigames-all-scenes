@@ -1,6 +1,6 @@
 import * as utils from "@dcl-sdk/utils"
 import { EasingFunction, engine, Entity, GltfContainer, MeshRenderer, Transform, Tween, TweenLoop, TweenState, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs";
-import { modelPath } from "./config";
+import { entityConfig, modelPath } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { Cartridge, SpawnEntityDelay } from "./Types";
 import { gameState } from "./state";
@@ -14,6 +14,7 @@ export class gameEntityManager {
     private currentWaveStateMaxEntity = 0
     private currentWaveStateEntityCount = 0
     private entityIndex = 1
+    private rocketCoordinate = Vector3.create(Transform.get(gameState.rocketWindow!).position.x, Transform.get(gameState.rocketWindow!).position.y, Transform.get(gameState.rocketWindow!).position.z)
 
     private resolveReady!: () => void
     private waveIsDone: Promise<void>
@@ -32,20 +33,25 @@ export class gameEntityManager {
 
     public async startGame() {
         console.log("Start")
-        for (let i = 1; i <= this.roundCartrige.size; i++) {
-            let waveData = this.roundCartrige.get(i)!
-            this.currentWaveStateMaxEntity = waveData.itemQueue.length
-            waveData.itemQueue.forEach((entityName: any) => {
-                utils.timers.setTimeout(() => {
-                    this.spawnEntity(entityName, waveData.goOut)
-                }, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time - this.spawnEntityDelay.time / 100 + 1)) + this.spawnEntityDelay.time / 100 : this.spawnEntityDelay.time)
-            })
-            await this.waveIsDone;
-            this.waveIsDone = new Promise(r => this.resolveReady = r);
-            console.log("Wave is end")
-            this.entityIndex = 1
-        }
-        console.log("Res: ", this.entityCounter)
+        gameState.rocketWindow && VisibilityComponent.createOrReplace(gameState.rocketWindow, { visible: false })
+        this.initialEntity(this.entityCounter)
+        utils.timers.setTimeout(async () => {
+            gameState.rocketWindow && VisibilityComponent.createOrReplace(gameState.rocketWindow, { visible: true })
+            for (let i = 1; i <= this.roundCartrige.size; i++) {
+                let waveData = this.roundCartrige.get(i)!
+                this.currentWaveStateMaxEntity = waveData.itemQueue.length
+                waveData.itemQueue.forEach((entityName: any) => {
+                    utils.timers.setTimeout(() => {
+                        this.spawnEntity(entityName, waveData.goOut)
+                    }, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time - this.spawnEntityDelay.time / 1000 + 1)) + this.spawnEntityDelay.time / 100 : this.spawnEntityDelay.time)
+                })
+                await this.waveIsDone;
+                this.waveIsDone = new Promise(r => this.resolveReady = r);
+                console.log("Wave is end")
+                this.entityIndex = 1
+            }
+            console.log("Res: ", this.entityCounter)
+        }, 3000)
     }
 
     private generateCartrige() {
@@ -55,7 +61,6 @@ export class gameEntityManager {
     }
 
     private spawnEntity(modelName: string, isOut: boolean) {
-        // const entity = engine.addEntity()
         const entity = gameState.availableEntity[this.entityIndex]
         VisibilityComponent.createOrReplace(entity, { visible: true })
         console.log(this.entityIndex)
@@ -76,8 +81,8 @@ export class gameEntityManager {
         console.log("Move");
         Tween.createOrReplace(entity, {
             mode: Tween.Mode.Move({
-                start: isOut ? Vector3.create(1, 1, 8) : Vector3.create(8, 1, 1),
-                end: isOut ? Vector3.create(8, 1, 1) : Vector3.create(1, 1, 8),
+                start: isOut ? this.rocketCoordinate : this.getRandomPointOnCircle(),
+                end: isOut ? this.getRandomPointOnCircle() : this.rocketCoordinate,
             }),
             duration: 2000,
             easingFunction: EasingFunction.EF_LINEAR,
@@ -92,8 +97,8 @@ export class gameEntityManager {
                 VisibilityComponent.createOrReplace(entity, { visible: false })
                 Tween.createOrReplace(entity, {
                     mode: Tween.Mode.Move({
-                        start: !isOut ? Vector3.create(1, 1, 8) : Vector3.create(8, 1, 1),
-                        end: !isOut ? Vector3.create(8, 1, 1) : Vector3.create(1, 1, 8),
+                        start: !isOut ? Vector3.create(8, 1, 1) : Vector3.create(14, 1, 1),
+                        end: !isOut ? Vector3.create(8, 1, 1) : Vector3.create(1, 1, 1),
                     }),
                     duration: 1,
                     easingFunction: EasingFunction.EF_LINEAR,
@@ -104,5 +109,33 @@ export class gameEntityManager {
                 }
             }
         }, 1, `myEntityMove${entity}`)
+    }
+
+     private initialEntity(count: number) {
+        let x = 0
+        let y = 0
+
+        for (let i = 0; i < count; i++) {
+            const entity = gameState.availableEntity[i]
+            Transform.createOrReplace(entity, {
+                parent: gameState.rocketWindow!,
+                position: Vector3.create((x - 2) * entityConfig.spacing, (y - 2) * entityConfig.spacing, -.2),
+                scale: Vector3.create(entityConfig.initialEntitySize, entityConfig.initialEntitySize, entityConfig.initialEntitySize)
+            })
+            MeshRenderer.setBox(entity)
+            x++
+            if (x * (entityConfig.initialEntitySize + entityConfig.spacing) > entityConfig.maxRowLength) {
+                x = 0
+                y++
+            }
+        }
+    }
+
+    private getRandomPointOnCircle() {
+        const angle = Math.random() * 2 * Math.PI
+        const x = Transform.get(gameState.rocketWindow!).position.x + entityConfig.distance * Math.cos(angle)
+        const y = Math.abs(Transform.get(gameState.rocketWindow!).position.y * Math.sin(angle)) + entityConfig.distance
+        console.log(x, y)
+        return Vector3.create(x, y, Transform.get(gameState.rocketWindow!).position.z)
     }
 }

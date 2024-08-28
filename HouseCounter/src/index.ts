@@ -1,6 +1,6 @@
 // We define the empty imports so the auto-complete feature works as expected.
-import {} from '@dcl/sdk/math'
-import { engine } from '@dcl/sdk/ecs'
+import { Quaternion, Vector3 } from '@dcl/sdk/math'
+import { engine, MeshCollider, MeshRenderer, Transform } from '@dcl/sdk/ecs'
 
 import { changeColorSystem, circularSystem } from './systems'
 import { setupUi } from './ui'
@@ -18,24 +18,39 @@ export async function main() {
   // setupUi()
 
   const cartridge: Map<number, Cartridge> = new Map([
-    [1, {itemQueue: ['test', "test", "test"], goOut: false}],
-    [2, {itemQueue: ['test'], goOut: true}],
-    [3, {itemQueue: ['test', "test", "test"], goOut: false}]
+    [1, { itemQueue: ['test', "test", "test"], goOut: false }],
+    [2, { itemQueue: ['test'], goOut: true }],
+    [3, { itemQueue: ['test', "test", "test"], goOut: false }]
   ])
 
   const cartridgeLvl1: Map<number, Cartridge> = new Map([
-    [1, {itemQueue: ['test', 'test', 'test'], goOut: false}],
-    [2, {itemQueue: ['test', 'test'], goOut: false}],
+    [1, { itemQueue: ['test', 'test', 'test'], goOut: false }],
+    [2, { itemQueue: ['test', 'test'], goOut: false }],
   ])
 
   const cartridgeLvl2: Map<number, Cartridge> = new Map([
-    [1, {itemQueue: ['test', 'test'], goOut: false}],
-    [2, {itemQueue: ['test', 'test', 'test', 'test'], goOut: false}],
-    [3, {itemQueue: ['test', 'test', 'test'], goOut: false}],
+    [1, { itemQueue: ['test', 'test'], goOut: false }],
+    [2, { itemQueue: ['test', 'test', 'test', 'test'], goOut: false }],
+    [3, { itemQueue: ['test', 'test', 'test'], goOut: false }],
   ])
 
   for (let i = 0; i <= entityAmount; i++) gameState.availableEntity.push(engine.addEntity());
 
-  const entityManager = new gameEntityManager({ cartridge: cartridge, spawnEntityDelay: { time: 5000, random: true }, initialEntityAmount: 6})
+  rocket()
+
+  // spawnCubesAtDistance(5, 3)
+
+  const entityManager = new gameEntityManager({ cartridge: cartridge, spawnEntityDelay: { time: 5000, random: true }, initialEntityAmount: 6 })
   await entityManager.startGame()
+}
+
+const rocket = () => {
+  gameState.rocketWindow = engine.addEntity()
+  Transform.createOrReplace(gameState.rocketWindow,
+    {
+      position: Vector3.create(8, 1.5, 2),
+      rotation: Quaternion.Zero(),
+      scale: Vector3.create(3, 3, 3)
+    })
+  MeshRenderer.setPlane(gameState.rocketWindow)
 }
