@@ -560,7 +560,7 @@ function initGameButtons() {
     ui.uiAssets.shapes.RECT_RED,
     ui.uiAssets.icons.exitText,
     'Exit from game area',
-    () => {console.log('Exit from game area')}
+    () => {exitGame()}
   ))
 
   new ui.MenuButton({
@@ -807,4 +807,14 @@ function startWinAnimation() {
       }
     }
   }, 8000)
+}
+
+function exitGame() {
+
+  hideAllTiles()
+  queue.setNextPlayer()
+
+  movePlayerTo({
+    newRelativePosition: Vector3.create(8, 1, 14)
+  })
 }
