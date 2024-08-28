@@ -54,6 +54,7 @@ let maxProgress: progress.IProgress
 
 // GameUI
 let timer: ui.Timer3D
+let sfxEnable = true
 
 // game state
 export let gameState: {
@@ -345,7 +346,7 @@ function onTileClick(tileNumber: number) {
     tilesToMove.push(matrix[i + 1][column])
     if (matrix[i][column] === -1) {
       tilesToMove.reverse()
-      soundManager.playSound('slide')
+      if (sfxEnable) soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
       gameState.moves++
       return
@@ -358,7 +359,7 @@ function onTileClick(tileNumber: number) {
     tilesToMove.push(matrix[i - 1][column])
     if (matrix[i][column] === -1) {
       tilesToMove.reverse()
-      soundManager.playSound('slide')
+      if (sfxEnable) soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
       gameState.moves++
 
@@ -372,7 +373,7 @@ function onTileClick(tileNumber: number) {
     tilesToMove.push(matrix[row][i + 1])
     if (matrix[row][i] === -1) {
       tilesToMove.reverse()
-      soundManager.playSound('slide')
+      if (sfxEnable) soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
       gameState.moves++
       return
@@ -385,7 +386,7 @@ function onTileClick(tileNumber: number) {
     tilesToMove.push(matrix[row][i - 1])
     if (matrix[row][i] === -1) {
       tilesToMove.reverse()
-      soundManager.playSound('slide')
+      if (sfxEnable) soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
       gameState.moves++
       return
@@ -532,7 +533,7 @@ function initGameButtons() {
     ui.uiAssets.shapes.SQUARE_RED,
     ui.uiAssets.icons.sound,
     'Sound FX',
-    () => {console.log('Sound FX')}
+    () => {sfxEnable = !sfxEnable}
   ))
 
   gameButtons.push(new ui.MenuButton({
