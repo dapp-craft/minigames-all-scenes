@@ -10,22 +10,24 @@ import {
 } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { Vector3 } from '@dcl/sdk/math'
-import { slideSound } from '../resources/resources'
+import { mainTheme, slideSound } from '../resources/resources'
 
 export let SOUNDS: { [key: string]: string } = {
   "slide": slideSound
 }
 
-const STREAM_VOLUME_DELTA = 0.05
-const STREAM_VOUME_MAX = 0.025
+export let THEME = mainTheme
+export const THEME_VOLUME = 0.7
+
 // export const mainThereme = engine.addEntity()
 // Transform.create(mainThereme, {parent: engine.PlayerEntity})
 // AudioSource.create(mainThereme, {audioClipUrl: `sounds/futuristic-abstract-chill.mp3`, loop: true, playing: true, volume: 0.07})
 
 export class SoundManager {
   private soundsStorage: Entity[] = []
-  private themeVolume = 0
-  private currentThemeIndex: number = 0
+  private themeVolume = THEME_VOLUME
+  private themeEntity: Entity
+  private themeStatus: boolean = true
   constructor() {
     console.log('SoundManager constructor')
     console.log('SOUNDS', SOUNDS)
@@ -37,6 +39,14 @@ export class SoundManager {
         playing: false
       })
       this.soundsStorage.push(ent)
+    })
+
+    this.themeEntity = engine.addEntity()
+    AudioSource.create(this.themeEntity, {
+      audioClipUrl: THEME,
+      loop: true,
+      playing: this.themeStatus,
+      volume: this.themeVolume
     })
   }
 
@@ -59,5 +69,16 @@ export class SoundManager {
       engine.removeEntity(soundEntity)
     }, 2000)
   }
+
+  public themePlaying(status: boolean) {
+    this.themeStatus = status
+    let audioSource = AudioSource.getMutable(this.themeEntity)
+    audioSource.playing = this.themeStatus
+  }
+
+  public getThemeStatus() {
+    return this.themeStatus
+  }
+
 
 }

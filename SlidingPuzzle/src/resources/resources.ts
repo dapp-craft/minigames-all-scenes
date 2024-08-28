@@ -31,3 +31,7 @@ export const lvlDCLLogo = imagesFolder + 'gameImages/dcl_logo.png';
 
 // Game sounds
 export const slideSound = 'sounds/game/slide.mp3';
+
+
+// Theme sounds
+export const mainTheme = 'sounds/main_theme.mp3';

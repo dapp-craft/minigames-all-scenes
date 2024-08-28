@@ -571,7 +571,7 @@ function initGameButtons() {
     ui.uiAssets.shapes.SQUARE_RED,
     ui.uiAssets.icons.music,
     'Play/Stop Music',
-    () => {console.log("Play/Stop Music")}
+    () => {soundManager.themePlaying(!soundManager.getThemeStatus())}
 )
 }
 
