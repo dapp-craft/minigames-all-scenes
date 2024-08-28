@@ -500,7 +500,7 @@ function initGameButtons() {
       new ui.MenuButton(
         {
           parent: sceneParentEntity,
-          position: Vector3.create(buttonOffset - 0.75 * i, 0.75, -7.2007100105),
+          position: Vector3.create(buttonOffset - 0.75 * i, 0.75, -6.2007100105),
           scale: Vector3.create(2.4, 2.4, 2.4),
           rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
         },

@@ -66,7 +66,7 @@
 			]
 		},
 		{
-			"name":"Plane.107",
+			"name":"Plane.124",
 			"primitives":[
 				{
 					"attributes":{
@@ -100,7 +100,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":516,
+			"count":1032,
 			"max":[
 				7.266128063201904,
 				4.649672508239746,
@@ -116,103 +116,103 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":516,
+			"count":1032,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":516,
+			"count":1032,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1224,
+			"count":2448,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":288,
+			"count":456,
 			"max":[
-				7.24684476852417,
-				4.621578216552734,
-				5.735101222991943
+				7.266128063201904,
+				4.649672508239746,
+				5.754949569702148
 			],
 			"min":[
-				-7.246845722198486,
-				0.5404602289199829,
-				-7.124547004699707
+				-7.266128063201904,
+				0.5206048488616943,
+				-7.15183162689209
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":288,
+			"count":456,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":288,
+			"count":456,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":7,
 			"componentType":5123,
-			"count":612,
+			"count":1224,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":6192,
+			"byteLength":12384,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6192,
-			"byteOffset":6192,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4128,
+			"byteLength":12384,
 			"byteOffset":12384,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2448,
-			"byteOffset":16512,
+			"byteLength":8256,
+			"byteOffset":24768,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4896,
+			"byteOffset":33024,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":3456,
-			"byteOffset":18960,
+			"byteLength":5472,
+			"byteOffset":37920,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3456,
-			"byteOffset":22416,
+			"byteLength":5472,
+			"byteOffset":43392,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2304,
-			"byteOffset":25872,
+			"byteLength":3648,
+			"byteOffset":48864,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1224,
-			"byteOffset":28176,
+			"byteLength":2448,
+			"byteOffset":52512,
 			"target":34963
 		}
 	],
@@ -224,7 +224,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":29400,
+			"byteLength":54960,
 			"uri":"obj_frame.bin"
 		}
 	]
