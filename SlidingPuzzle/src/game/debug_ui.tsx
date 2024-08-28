@@ -134,7 +134,8 @@ function getQueue() {
 }
 
 function getGameData(): string {
-  const gameData = GameData.get(gameDataEntity)
+  const gameData = GameData.getOrNull(gameDataEntity)
+  if (gameData == null) return ''
   let res = ''
   for (const [key, value] of Object.entries(gameData)) {
     res += `${key}: ${value}\n`

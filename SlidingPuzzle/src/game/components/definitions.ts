@@ -12,4 +12,5 @@ export const GameData = engine.defineComponent('game-data', {
     moves: Schemas.Number,
     levelStartedAt: Schemas.Int64,
     levelFinishedAt: Schemas.Int64,
+    level: Schemas.Int,
   })

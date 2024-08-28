@@ -151,6 +151,7 @@ async function startGame() {
     }
   })
 
+  setTilesPointerEvents()
   startNewLevel(levelToStart)
 }
 
@@ -158,12 +159,6 @@ function startNewLevel(level: number) {
   if (!queue.isActive()) return
 
   hideAllTiles()
-
-  removeTilesPointerEvents()
-
-  const gameData = GameData.getMutable(gameDataEntity)
-  gameData.moves = 0
-
   gameState.lvl = level
   gameState.moves = 0
   gameState.size = getLevelSize(level)
@@ -178,18 +173,16 @@ function startNewLevel(level: number) {
   gameState.matrix = shuffleMatrix(gameState.matrix, 100)
   console.log('Matrix shuffled')
   gameState.matrix.forEach((row) => console.log(row.join(' ')))
+  syncGameData()
 
   setImage(level)
 
   countdown(() => {
-    gameData.levelStartedAt = Date.now()
-    gameData.levelFinishedAt = 0
-
     gameState.levelStartedAt = Date.now()
     gameState.levelFinishedAt = 0
+    syncGameData()
 
     setTiles()
-    setTilesPointerEvents()
 
     for (let i = 1; i < gameState.size * gameState.size; i++) {
       updateTile(i)
@@ -299,7 +292,6 @@ function updateTile(tileNumber: any) {
   validateTileNumber(tileNumber)
 
   const tile = tiles[tileNumber]
-  const gameData = GameData.get(gameDataEntity)
 
   const { row, column } = getRowColumn(tileNumber)
 
@@ -321,8 +313,6 @@ function moveOneTile(tileNumber: any) {
   const direction = getMoveDirection(tileNumber)
   if (direction === undefined) return
 
-  const gameData = GameData.getMutable(gameDataEntity)
-
   const { row, column } = getRowColumn(tileNumber)
   const newRow = row + TileMoveDirection[direction].row
   const newColumn = column + TileMoveDirection[direction].column
@@ -330,9 +320,9 @@ function moveOneTile(tileNumber: any) {
   gameState.matrix[newRow][newColumn] = tileNumber
   gameState.matrix[row][column] = -1
   updateTile(tileNumber)
+  syncGameData()
 
   if (isSolved()) {
-    removeTilesPointerEvents()
     utils.timers.setTimeout(() => {
       finishGame()
     }, 1000)
@@ -344,7 +334,6 @@ function onTileClick(tileNumber: number) {
 
   let tilesToMove: number[] = []
 
-  const gameData = GameData.get(gameDataEntity)
   const matrix = gameState.matrix
   const size = gameState.size
 
@@ -357,7 +346,7 @@ function onTileClick(tileNumber: number) {
       tilesToMove.reverse()
       soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
-      GameData.getMutable(gameDataEntity).moves++
+      gameState.moves++
       return
     }
   }
@@ -370,7 +359,8 @@ function onTileClick(tileNumber: number) {
       tilesToMove.reverse()
       soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
-      GameData.getMutable(gameDataEntity).moves++
+      gameState.moves++
+
       return
     }
   }
@@ -383,7 +373,7 @@ function onTileClick(tileNumber: number) {
       tilesToMove.reverse()
       soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
-      GameData.getMutable(gameDataEntity).moves++
+      gameState.moves++
       return
     }
   }
@@ -396,7 +386,7 @@ function onTileClick(tileNumber: number) {
       tilesToMove.reverse()
       soundManager.playSound('slide')
       tilesToMove.forEach((tile) => moveOneTile(tile))
-      GameData.getMutable(gameDataEntity).moves++
+      gameState.moves++
       return
     }
   }
@@ -405,7 +395,6 @@ function onTileClick(tileNumber: number) {
 function getMoveDirection(tileNumber: number): keyof typeof TileMoveDirection | undefined {
   validateTileNumber(tileNumber)
 
-  const gameData = GameData.get(gameDataEntity)
   const matrix = gameState.matrix
   const size = gameState.size
 
@@ -434,7 +423,6 @@ function getRowColumn(tileNumber: number): { row: number; column: number } {
   let row: any
   let column: any
 
-  const gameData = GameData.get(gameDataEntity)
   const matrix = gameState.matrix
   const size = gameState.size
 
@@ -457,7 +445,6 @@ function validateTileNumber(tileNumber: number) {
 }
 
 function isSolved() {
-  const gameData = GameData.get(gameDataEntity)
   const matrix = gameState.matrix
   const size = gameState.size
 
@@ -473,15 +460,12 @@ function isSolved() {
 }
 
 async function finishGame() {
-  const gameData = GameData.getMutable(gameDataEntity)
-  gameData.levelFinishedAt = Date.now()
+  gameState.levelFinishedAt = Date.now()
+  syncGameData()
 
+  const gameData = GameData.get(gameDataEntity)
   console.log('Solved!')
-  console.log('GameData:', GameData.get(gameDataEntity))
-
-  gameData.moves = gameState.moves
-  gameData.levelFinishedAt = Date.now()
-  gameData.levelStartedAt = gameState.levelStartedAt
+  console.log('GameData:', gameData)
 
   progress.upsertProgress({
     level: gameState.lvl,
@@ -583,8 +567,8 @@ async function initMaxProgress() {
 }
 
 function setTilesPointerEvents() {
-  const size = gameState.size
-  for (let i = 1; i < size * size; i++) {
+  console.log("SETTING POINTER EVENTS")
+  for (let i = 1; i < MAX_BOARD_SIZE * MAX_BOARD_SIZE; i++) {
     pointerEventsSystem.onPointerDown(
       {
         entity: tilesShape[i],
@@ -598,6 +582,7 @@ function setTilesPointerEvents() {
 }
 
 function removeTilesPointerEvents() {
+  console.log("REMOVING POINTER EVENTS")
   for (let i = 1; i < MAX_BOARD_SIZE * MAX_BOARD_SIZE; i++) {
     pointerEventsSystem.removeOnPointerDown(tilesShape[i])
   }
@@ -799,6 +784,7 @@ function startWinAnimation() {
       // console.log("playersQueue: ", queue.getQueue())
       //add challenge check
       if (queue.getQueue().length > 1) {
+        removeTilesPointerEvents()
         queue.setNextPlayer()
       } else {
         const nextLevel = Math.min(gameState.lvl + 1, MAX_LEVEL)
@@ -810,11 +796,19 @@ function startWinAnimation() {
 }
 
 function exitGame() {
-
-  hideAllTiles()
+  removeTilesPointerEvents()
   queue.setNextPlayer()
 
   movePlayerTo({
     newRelativePosition: Vector3.create(8, 1, 14)
   })
+}
+
+function syncGameData() {
+  const gameData = GameData.getMutable(gameDataEntity)
+  gameData.moves = gameState.moves
+  gameData.levelStartedAt = gameState.levelStartedAt
+  gameData.levelFinishedAt = gameState.levelFinishedAt ? gameState.levelFinishedAt : 0
+  gameData.playerName = getPlayer()?.name ? getPlayer()?.name as string : ''
+  gameData.level = gameState.lvl
 }

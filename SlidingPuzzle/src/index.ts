@@ -15,8 +15,8 @@ initLibrary(engine, syncEntity, players, {
   gameId: GAME_ID,
   gameTimeoutMs: 1000 * 60 * 5,
   gameArea: {
-    topLeft: Vector3.create(1, 0, 3),
-    bottomRight: Vector3.create(15, 3, 9),
+    topLeft: Vector3.create(1, 0, 0),
+    bottomRight: Vector3.create(15, 5, 9),
     exitSpawnPoint: Vector3.create(8, 1, 13)
   }
 })

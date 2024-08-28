@@ -3,7 +3,6 @@ import { gameDataEntity } from '../game'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { sceneParentEntity } from '../../globals'
 import { GameData } from '../components/definitions'
-import { gameState } from '../game'
 
 let movesEntity: Entity
 let timeEntity: Entity
@@ -49,8 +48,9 @@ function updateTexts() {
   const gameData = GameData.getOrNull(gameDataEntity)
 
   if (!gameData) return
+  if (gameData.levelStartedAt === 0) return
 
-  const gameElapsedTime = ((gameData.levelFinishedAt || Date.now()) - gameData.levelStartedAt) / 1000
+  const gameElapsedTime = ((GameData.get(gameDataEntity).levelFinishedAt || Date.now()) - GameData.get(gameDataEntity).levelStartedAt) / 1000
   const minutes = Math.floor(gameElapsedTime / 60)
   const seconds = Math.round(gameElapsedTime) - minutes * 60
 
@@ -61,7 +61,7 @@ function updateTexts() {
     textColor: Color4.Black()
   })
 
-  if (gameState.lvl > 0) {
+  if (GameData.get(gameDataEntity).level > 0) {
     TextShape.createOrReplace(timeEntity, {
       text: `${minutes.toLocaleString('en-US', {
         minimumIntegerDigits: 2,
@@ -79,7 +79,7 @@ function updateTexts() {
   }
 
   TextShape.createOrReplace(movesEntity, {
-    text: `${gameData.moves}`,
+    text: `${GameData.get(gameDataEntity).moves}`,
     fontSize: 3,
     textColor: Color4.Black()
   })
