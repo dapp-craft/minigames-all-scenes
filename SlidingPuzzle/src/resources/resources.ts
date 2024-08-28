@@ -14,6 +14,7 @@ export const titleShape: PBGltfContainer = { src: modelsFolder + 'obj_title.gltf
 export const frameShape: PBGltfContainer = { src: modelsFolder + 'obj_frame.gltf' };
 export const textShape: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
 export const plantsShape: PBGltfContainer = { src: modelsFolder + 'obj_plants.gltf' };
+export const benchShape: PBGltfContainer = { src: modelsFolder + 'obj_bench.gltf' };
 
 //Game Zone Collider
 export const gamezoneShape: PBGltfContainer = { src: modelsFolder + 'obj_gamezone.gltf' };
