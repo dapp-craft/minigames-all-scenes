@@ -5,7 +5,7 @@ import { engine, MeshCollider, MeshRenderer, Transform } from '@dcl/sdk/ecs'
 import { changeColorSystem, circularSystem } from './systems'
 import { setupUi } from './ui'
 import { gameEntityManager } from './entityManager'
-import { Cartridge } from './Types'
+import { Cartridge, CartridgeTest } from './Types'
 import { gameState } from './state'
 import { entityAmount } from './config'
 
@@ -21,6 +21,12 @@ export async function main() {
     [1, { itemQueue: ['test', "test", "test"], goOut: false }],
     [2, { itemQueue: ['test'], goOut: true }],
     [3, { itemQueue: ['test', "test", "test"], goOut: false }]
+  ])
+
+  const cartridgeTest: Map<number, CartridgeTest> = new Map([
+    [1, { itemQueue: 3, goOut: false }],
+    [2, { itemQueue: 1, goOut: true }],
+    [3, { itemQueue: 3, goOut: false }]
   ])
 
   const cartridgeLvl1: Map<number, Cartridge> = new Map([
@@ -40,7 +46,7 @@ export async function main() {
 
   // spawnCubesAtDistance(5, 3)
 
-  const entityManager = new gameEntityManager({ cartridge: cartridge, spawnEntityDelay: { time: 5000, random: true }, initialEntityAmount: 6 })
+  const entityManager = new gameEntityManager({ cartridge: generateCartrige(), spawnEntityDelay: { time: 5000, random: true }, initialEntityAmount: 6 })
   await entityManager.startGame()
 }
 
@@ -53,4 +59,34 @@ const rocket = () => {
       scale: Vector3.create(3, 3, 3)
     })
   MeshRenderer.setPlane(gameState.rocketWindow)
+}
+
+function generateRandomNumberAndIterations() {
+  const targetNumber = Math.floor(Math.random() * 30) + 1;
+  
+  let currentSum = 0;
+  const iterations = [];
+  
+  while (currentSum < targetNumber) {
+    const maxIteration = targetNumber - currentSum
+    
+    let iteration = Math.floor(Math.random() * (Math.min(maxIteration, 10) + Math.min(currentSum, 5) + 1)) - Math.min(currentSum, 5);
+    
+    if (iteration == 0) iteration++
+    iterations.push(iteration);
+    currentSum += iteration
+  }
+  return { targetNumber, iterations };
+}
+
+const generateCartrige = () => {
+  let generatedData = generateRandomNumberAndIterations()
+  let i = 1
+  generatedData.iterations.forEach((data => {
+    gameState.generatedCartrige.set(i, { itemQueue: Math.abs(data), goOut: data < 0 ? true : false })
+    i++
+  }))
+  gameState.generatedCartrige.forEach((data: any, key: number) => console.log(key, data))
+  console.log(generatedData.targetNumber);
+  return gameState.generatedCartrige;
 }

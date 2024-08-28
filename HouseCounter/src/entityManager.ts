@@ -2,14 +2,14 @@ import * as utils from "@dcl-sdk/utils"
 import { EasingFunction, engine, Entity, GltfContainer, MeshRenderer, Transform, Tween, TweenLoop, TweenState, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs";
 import { entityConfig, modelPath } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
-import { Cartridge, SpawnEntityDelay } from "./Types";
+import { Cartridge, CartridgeTest, SpawnEntityDelay } from "./Types";
 import { gameState } from "./state";
 
 export class gameEntityManager {
 
     public entityCounter = 0
 
-    private roundCartrige: Map<number, Cartridge>
+    private roundCartrige: Map<number, CartridgeTest>
     private spawnEntityDelay: SpawnEntityDelay = { time: 0, random: true }
     private currentWaveStateMaxEntity = 0
     private currentWaveStateEntityCount = 0
@@ -20,7 +20,7 @@ export class gameEntityManager {
     private waveIsDone: Promise<void>
 
     constructor(roundData: {
-        cartridge: Map<number, Cartridge> | false,
+        cartridge: Map<number, CartridgeTest> | false,
         spawnEntityDelay: { time: number, random?: boolean },
         initialEntityAmount?: number
     }) {
@@ -39,12 +39,12 @@ export class gameEntityManager {
             gameState.rocketWindow && VisibilityComponent.createOrReplace(gameState.rocketWindow, { visible: true })
             for (let i = 1; i <= this.roundCartrige.size; i++) {
                 let waveData = this.roundCartrige.get(i)!
-                this.currentWaveStateMaxEntity = waveData.itemQueue.length
-                waveData.itemQueue.forEach((entityName: any) => {
+                this.currentWaveStateMaxEntity = waveData.itemQueue
+                for(let j = 0; j < waveData.itemQueue; j++) {
                     utils.timers.setTimeout(() => {
-                        this.spawnEntity(entityName, waveData.goOut)
-                    }, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time - this.spawnEntityDelay.time / 1000 + 1)) + this.spawnEntityDelay.time / 100 : this.spawnEntityDelay.time)
-                })
+                        this.spawnEntity("test", waveData.goOut);
+                    }, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time - 1000 + 1)) + 1000 : this.spawnEntityDelay.time);
+                }
                 await this.waveIsDone;
                 this.waveIsDone = new Promise(r => this.resolveReady = r);
                 console.log("Wave is end")
@@ -56,7 +56,7 @@ export class gameEntityManager {
 
     private generateCartrige() {
         // TODO logic
-        const generatedCartrige = new Map([[1, { itemQueue: ["1"], goOut: false }]])
+        const generatedCartrige = new Map([[1, { itemQueue: 3, goOut: false }]])
         return generatedCartrige
     }
 
@@ -79,28 +79,28 @@ export class gameEntityManager {
     private moveEntity(entity: Entity, isOut: boolean) {
         // TODO refactor
         console.log("Move");
+        const random = this.getRandomPointOnCircle();
         Tween.createOrReplace(entity, {
             mode: Tween.Mode.Move({
-                start: isOut ? this.rocketCoordinate : this.getRandomPointOnCircle(),
-                end: isOut ? this.getRandomPointOnCircle() : this.rocketCoordinate,
+                start: isOut ? this.rocketCoordinate : random,
+                end: isOut ? random : this.rocketCoordinate,
             }),
             duration: 2000,
             easingFunction: EasingFunction.EF_LINEAR,
         })
-        Tween.getMutable(entity).playing = true
-
         engine.addSystem(() => {
             if (tweenSystem.tweenCompleted(entity)) {
+                console.log("Ready")
                 engine.removeSystem(`myEntityMove${entity}`)
                 isOut ? this.entityCounter-- : this.entityCounter++
                 this.currentWaveStateEntityCount++
                 VisibilityComponent.createOrReplace(entity, { visible: false })
                 Tween.createOrReplace(entity, {
                     mode: Tween.Mode.Move({
-                        start: !isOut ? Vector3.create(8, 1, 1) : Vector3.create(14, 1, 1),
-                        end: !isOut ? Vector3.create(8, 1, 1) : Vector3.create(1, 1, 1),
+                        start: !isOut ? this.rocketCoordinate : random,
+                        end: !isOut ? random : this.rocketCoordinate,
                     }),
-                    duration: 1,
+                    duration: 2,
                     easingFunction: EasingFunction.EF_LINEAR,
                 })
                 if (this.currentWaveStateMaxEntity == this.currentWaveStateEntityCount) {
@@ -135,7 +135,6 @@ export class gameEntityManager {
         const angle = Math.random() * 2 * Math.PI
         const x = Transform.get(gameState.rocketWindow!).position.x + entityConfig.distance * Math.cos(angle)
         const y = Math.abs(Transform.get(gameState.rocketWindow!).position.y * Math.sin(angle)) + entityConfig.distance
-        console.log(x, y)
         return Vector3.create(x, y, Transform.get(gameState.rocketWindow!).position.z)
     }
 }
