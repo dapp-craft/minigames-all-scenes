@@ -291,7 +291,7 @@ function hideAllTiles() {
 function setTiles() {
   const size = gameState.size
   for (let i = 1; i < size * size; i++) {
-    Transform.getMutable(tiles[i]).scale = Vector3.fromArray(Array(3).fill(3 / size))
+    Transform.getMutable(tiles[i]).scale = Vector3.create(3 / size, 3 / size, 1)
   }
 }
 
