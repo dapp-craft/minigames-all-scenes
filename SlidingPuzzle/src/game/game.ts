@@ -168,7 +168,6 @@ function startNewLevel(level: number) {
   gameState.moves = 0
   gameState.size = getLevelSize(level)
   gameState.matrix = []
-
   gameState.matrix = Array.from({ length: gameState.size }, (_, rowIndex) =>
     Array.from({ length: gameState.size }, (_, colIndex) => rowIndex * gameState.size + colIndex + 1)
   )
@@ -535,7 +534,9 @@ function initGameButtons() {
     ui.uiAssets.shapes.SQUARE_RED,
     ui.uiAssets.icons.restart,
     "RESTART LEVEL",
-    () => {console.log('Restarting level')}
+    () => {
+      startNewLevel(gameState.lvl)
+    }
   ))
 
   gameButtons.push(new ui.MenuButton({
@@ -793,7 +794,7 @@ function startWinAnimation() {
     for (const [entity] of animations) {
       VisibilityComponent.getMutable(entity).visible = false
     }
-    console.log("GameData current level: ", GameData.get(gameDataEntity).currentLevel)
+    console.log("GameData current level: ", gameState.lvl)
     if (gameState.lvl <= MAX_LEVEL) {
       // console.log("playersQueue: ", queue.getQueue())
       //add challenge check
