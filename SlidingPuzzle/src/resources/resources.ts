@@ -13,6 +13,7 @@ export const pillarsShape: PBGltfContainer = { src: modelsFolder + 'obj_pillars.
 export const titleShape: PBGltfContainer = { src: modelsFolder + 'obj_title.gltf' };
 export const frameShape: PBGltfContainer = { src: modelsFolder + 'obj_frame.gltf' };
 export const textShape: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
+export const plantsShape: PBGltfContainer = { src: modelsFolder + 'obj_plants.gltf' };
 
 //Game Zone Collider
 export const gamezoneShape: PBGltfContainer = { src: modelsFolder + 'obj_gamezone.gltf' };
