@@ -17,7 +17,10 @@ export class gameEntityManager {
     private rocketCoordinate = Vector3.create(Transform.get(gameState.rocketWindow!).position.x, Transform.get(gameState.rocketWindow!).position.y, Transform.get(gameState.rocketWindow!).position.z)
 
     private resolveReady!: () => void
+    private entityReady!: () => void
     private waveIsDone: Promise<void>
+    private entityMoved: Promise<void>
+
 
     constructor(roundData: {
         cartridge: Map<number, CartridgeTest> | false,
@@ -29,6 +32,7 @@ export class gameEntityManager {
         this.entityCounter = roundData.initialEntityAmount ? roundData.initialEntityAmount : 0
 
         this.waveIsDone = new Promise((res) => { this.resolveReady = res })
+        this.entityMoved = new Promise((res) => { this.entityReady = res })
     }
 
     public async startGame() {
@@ -41,9 +45,9 @@ export class gameEntityManager {
                 let waveData = this.roundCartrige.get(i)!
                 this.currentWaveStateMaxEntity = waveData.itemQueue
                 for(let j = 0; j < waveData.itemQueue; j++) {
-                    utils.timers.setTimeout(() => {
-                        this.spawnEntity("test", waveData.goOut);
-                    }, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time - 1000 + 1)) + 1000 : this.spawnEntityDelay.time);
+                    this.spawnEntity("test", waveData.goOut);
+                    await this.entityMoved;
+                    this.entityMoved = new Promise(r => this.entityReady = r)
                 }
                 await this.waveIsDone;
                 this.waveIsDone = new Promise(r => this.resolveReady = r);
@@ -77,7 +81,6 @@ export class gameEntityManager {
     }
 
     private moveEntity(entity: Entity, isOut: boolean) {
-        // TODO refactor
         console.log("Move");
         const random = this.getRandomPointOnCircle();
         Tween.createOrReplace(entity, {
@@ -90,19 +93,11 @@ export class gameEntityManager {
         })
         engine.addSystem(() => {
             if (tweenSystem.tweenCompleted(entity)) {
-                console.log("Ready")
                 engine.removeSystem(`myEntityMove${entity}`)
                 isOut ? this.entityCounter-- : this.entityCounter++
                 this.currentWaveStateEntityCount++
                 VisibilityComponent.createOrReplace(entity, { visible: false })
-                Tween.createOrReplace(entity, {
-                    mode: Tween.Mode.Move({
-                        start: !isOut ? this.rocketCoordinate : random,
-                        end: !isOut ? random : this.rocketCoordinate,
-                    }),
-                    duration: 2,
-                    easingFunction: EasingFunction.EF_LINEAR,
-                })
+                utils.timers.setTimeout(async () => {this.entityReady();}, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time - 1000 + 1)) + 1000 : this.spawnEntityDelay.time);
                 if (this.currentWaveStateMaxEntity == this.currentWaveStateEntityCount) {
                     this.currentWaveStateEntityCount = 0
                     this.resolveReady()
