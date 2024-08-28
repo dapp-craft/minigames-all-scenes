@@ -30,7 +30,7 @@ export function main() {
       parent: sceneParentEntity,
       position: Vector3.create(0, 1.03, 2),
       rotation: Quaternion.fromEulerDegrees(-45, 180, 0),
-      scale: Vector3.create(4, 4, 4)
+      scale: Vector3.create(2, 2, 2)
     },
     ui.uiAssets.shapes.RECT_GREEN,
     ui.uiAssets.icons.playText,
@@ -65,12 +65,12 @@ export function main() {
     }
   )
 
-  // queue.initQueueDisplay({
-  //   parent: sceneParentEntity,
-  //   position: Vector3.create(0, 5, 2),
-  //   rotation: Quaternion.fromEulerDegrees(45, 0, 0),
-  //   scale: Vector3.create(4, 4, 4)
-  // })
+  queue.initQueueDisplay({
+    parent: sceneParentEntity,
+    position: Vector3.create(0, 2, 2),
+    rotation: Quaternion.fromEulerDegrees(0, 0, 0),
+    scale: Vector3.create(1, 1, 1)
+  })
 
   initGame()
 

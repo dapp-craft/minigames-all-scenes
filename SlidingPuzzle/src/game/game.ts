@@ -32,6 +32,7 @@ import * as utils from '@dcl-sdk/utils'
 import { sceneParentEntity, soundManager } from '../globals'
 import { init } from '@dcl-sdk/mini-games/src/config'
 import { EASY_MODE } from '../config'
+import { initStatusBoard } from './gameLogic/statusBoard'
 
 const BOARD_TRANSFORM: TransformType = {
   position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -47,6 +48,9 @@ let tilesShape: { [key: number]: Entity } = {}
 let tileImages: { [key: number]: Entity } = {}
 let gameButtons: ui.MenuButton[] = []
 let maxProgress: progress.IProgress
+
+// GameUI
+let timer: ui.Timer3D
 
 // game state
 export let gameState: {
@@ -84,6 +88,10 @@ export async function initGame() {
   hideAllTiles()
 
   initGameButtons()
+
+  initCountdownNumbers()
+
+  initStatusBoard()
 
   queue.listeners.onActivePlayerChange = (player) => {
     const localPlayer = getPlayer()
@@ -143,17 +151,17 @@ async function startGame() {
 }
 
 function startNewLevel(level: number) {
+  if (!queue.isActive()) return
+
   hideAllTiles()
+
+  removeTilesPointerEvents()
 
   const gameData = GameData.getMutable(gameDataEntity)
   gameData.moves = 0
-  gameData.levelStartedAt = Date.now()
-  gameData.levelFinishedAt = 0
 
   gameState.lvl = level
   gameState.moves = 0
-  gameState.levelStartedAt = Date.now()
-  gameState.levelFinishedAt = 0
   gameState.size = getLevelSize(level)
   gameState.matrix = []
 
@@ -168,16 +176,22 @@ function startNewLevel(level: number) {
   console.log('Matrix shuffled')
   gameState.matrix.forEach((row) => console.log(row.join(' ')))
 
-  removeTilesPointerEvents()
-
   setImage(level)
 
-  setTiles()
-  setTilesPointerEvents()
+  countdown(() => {
+    gameData.levelStartedAt = Date.now()
+    gameData.levelFinishedAt = 0
 
-  for (let i = 1; i < gameState.size * gameState.size; i++) {
-    updateTile(i)
-  }
+    gameState.levelStartedAt = Date.now()
+    gameState.levelFinishedAt = 0
+
+    setTiles()
+    setTilesPointerEvents()
+
+    for (let i = 1; i < gameState.size * gameState.size; i++) {
+      updateTile(i)
+    }
+  }, 4)
 }
 
 function initGameDataEntity() {
@@ -470,7 +484,7 @@ async function finishGame() {
     level: gameState.lvl,
     score: gameState.moves * 10,
     moves: gameState.moves,
-    time: gameState.levelFinishedAt - gameState.levelStartedAt,
+    time: gameState.levelFinishedAt - gameState.levelStartedAt
   })
 
   hideAllTiles()
@@ -513,6 +527,54 @@ function initGameButtons() {
       )
     )
   }
+
+  gameButtons.push(new ui.MenuButton({
+    parent: sceneParentEntity,
+    position: Vector3.create(-2.75, 4.30, 0.1),
+    scale: Vector3.create(2.4, 2.4, 2.4),
+    rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+  },
+    ui.uiAssets.shapes.SQUARE_RED,
+    ui.uiAssets.icons.restart,
+    "RESTART LEVEL",
+    () => {console.log('Restarting level')}
+  ))
+
+  gameButtons.push(new ui.MenuButton({
+    parent: sceneParentEntity,
+    position: Vector3.create(-2.6, 5.7, 0.1),
+    scale: Vector3.create(2.4, 2.4, 2.4),
+    rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+  },
+    ui.uiAssets.shapes.SQUARE_RED,
+    ui.uiAssets.icons.sound,
+    'Sound FX',
+    () => {console.log('Sound FX')}
+  ))
+
+  gameButtons.push(new ui.MenuButton({
+    parent: sceneParentEntity,
+    position: Vector3.create(2.75, 5.7, 0.1),
+    scale: Vector3.create(2.4, 2.4, 2.4),
+    rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+  },
+    ui.uiAssets.shapes.RECT_RED,
+    ui.uiAssets.icons.exitText,
+    'Exit from game area',
+    () => {console.log('Exit from game area')}
+  ))
+
+  new ui.MenuButton({
+    parent: sceneParentEntity,
+    position: Vector3.create(-3.3, 5.7, 0.1),
+    scale: Vector3.create(2.4, 2.4, 2.4),
+    rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+},
+    ui.uiAssets.shapes.SQUARE_RED,
+    ui.uiAssets.icons.music,
+    'Play/Stop Music',
+    () => {console.log("Play/Stop Music")}
+)
 }
 
 async function initMaxProgress() {
@@ -545,4 +607,46 @@ function removeTilesPointerEvents() {
 function score(lvl: number, moves: number, time: number): number {
   const TMax = 5 * 60 * 1000
   return Math.floor((((1000 * lvl) / moves) * Math.max(TMax - time, 1000)) / TMax)
+}
+
+function initCountdownNumbers() {
+  timer = new ui.Timer3D(
+    {
+      parent: sceneParentEntity,
+      position: Vector3.create(0, 3, -6),
+      rotation: Quaternion.fromEulerDegrees(0, 0, 0)
+    },
+    1,
+    1,
+    false,
+    10
+  )
+
+  timer.hide()
+}
+
+async function countdown(cb: () => void, number: number) {
+  let currentValue = number
+  let time = 1
+
+  engine.addSystem(
+    (dt: number) => {
+      time += dt
+
+      if (time >= 1) {
+        time = 0
+
+        if (currentValue > 0) {
+          timer.show()
+          timer.setTimeAnimated(currentValue--)
+        } else {
+          timer.hide()
+          engine.removeSystem('countdown-system')
+          cb && cb()
+        }
+      }
+    },
+    undefined,
+    'countdown-system'
+  )
 }
