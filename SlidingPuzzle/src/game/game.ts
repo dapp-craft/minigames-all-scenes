@@ -132,7 +132,8 @@ async function startGame() {
   })
 
   movePlayerTo({
-    newRelativePosition: Vector3.create(8, 1, 4)
+    newRelativePosition: Vector3.create(8, 1, 5),
+    cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
   })
   console.log('Max progress', maxProgress)
   const levelToStart = maxProgress?.level ? Math.min(maxProgress?.level + 1, MAX_LEVEL) : 1
