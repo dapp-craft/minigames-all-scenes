@@ -1,3 +1,7 @@
+export const GAME_ID = "040ff183-c10a-4fba-8800-881cf9bda930"
+
+export const SESSION_DURATION = 1000 * 60 * 5 
+
 export const modelPath = new Map([
     ['defaultCat', "/"],
     ['test', '']

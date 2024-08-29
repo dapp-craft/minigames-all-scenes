@@ -7,7 +7,22 @@ import { setupUi } from './ui'
 import { gameEntityManager } from './entityManager'
 import { Cartridge, CartridgeTest } from './Types'
 import { gameState } from './state'
-import { entityAmount } from './config'
+import { entityAmount, GAME_ID, SESSION_DURATION } from './config'
+
+import { initLibrary } from '@dcl-sdk/mini-games/src'
+import { syncEntity } from '@dcl/sdk/network'
+import players from '@dcl/sdk/players'
+
+// initLibrary(engine, syncEntity, players, {
+//   environment: 'dev',
+//   gameId: GAME_ID,
+//   gameTimeoutMs: SESSION_DURATION,
+//   gameArea: {
+//     topLeft: Vector3.create(1, 0, 0),
+//     bottomRight: Vector3.create(15, 5, 9),
+//     exitSpawnPoint: Vector3.create(8, 1, 13)
+//   }
+// })
 
 export async function main() {
   // Defining behavior. See `src/systems.ts` file.
@@ -17,10 +32,10 @@ export async function main() {
   // draw UI. Here is the logic to spawn cubes.
   // setupUi()
 
-  const cartridge: Map<number, Cartridge> = new Map([
-    [1, { itemQueue: ['test', "test", "test"], goOut: false }],
-    [2, { itemQueue: ['test'], goOut: true }],
-    [3, { itemQueue: ['test', "test", "test"], goOut: false }]
+  const cartridge: Map<number, CartridgeTest> = new Map([
+    [1, { itemQueue: 3, goOut: false }],
+    [2, { itemQueue: 1, goOut: true }],
+    [3, { itemQueue: 3, goOut: false }]
   ])
 
   const cartridgeTest: Map<number, CartridgeTest> = new Map([
@@ -29,22 +44,20 @@ export async function main() {
     [3, { itemQueue: 3, goOut: false }]
   ])
 
-  const cartridgeLvl1: Map<number, Cartridge> = new Map([
-    [1, { itemQueue: ['test', 'test', 'test'], goOut: false }],
-    [2, { itemQueue: ['test', 'test'], goOut: false }],
+  const cartridgeLvl1: Map<number, CartridgeTest> = new Map([
+    [1, { itemQueue: 3, goOut: false }],
+    [2, { itemQueue: 2, goOut: false }],
   ])
 
-  const cartridgeLvl2: Map<number, Cartridge> = new Map([
-    [1, { itemQueue: ['test', 'test'], goOut: false }],
-    [2, { itemQueue: ['test', 'test', 'test', 'test'], goOut: false }],
-    [3, { itemQueue: ['test', 'test', 'test'], goOut: false }],
+  const cartridgeLvl2: Map<number, CartridgeTest> = new Map([
+    [1, { itemQueue: 2, goOut: false }],
+    [2, { itemQueue: 4, goOut: false }],
+    [3, { itemQueue: 3, goOut: false }],
   ])
 
   for (let i = 0; i <= entityAmount; i++) gameState.availableEntity.push(engine.addEntity());
 
   rocket()
-
-  // spawnCubesAtDistance(5, 3)
 
   const entityManager = new gameEntityManager({ cartridge: generateCartrige(), spawnEntityDelay: { time: 5000, random: true }, initialEntityAmount: 6 })
   await entityManager.startGame()

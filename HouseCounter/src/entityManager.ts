@@ -44,13 +44,14 @@ export class gameEntityManager {
             for (let i = 1; i <= this.roundCartrige.size; i++) {
                 let waveData = this.roundCartrige.get(i)!
                 this.currentWaveStateMaxEntity = waveData.itemQueue
-                for(let j = 0; j < waveData.itemQueue; j++) {
+                for (let j = 0; j < waveData.itemQueue; j++) {
                     this.spawnEntity("test", waveData.goOut);
+                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time / 10)) : this.spawnEntityDelay.time);
                     await this.entityMoved;
-                    this.entityMoved = new Promise(r => this.entityReady = r)
+                    this.entityMoved = new Promise(r => this.entityReady = r);
                 }
                 await this.waveIsDone;
-                this.waveIsDone = new Promise(r => this.resolveReady = r);
+                this.waveIsDone = new Promise(r => this.resolveReady = r)
                 console.log("Wave is end")
                 this.entityIndex = 1
             }
@@ -96,17 +97,16 @@ export class gameEntityManager {
                 engine.removeSystem(`myEntityMove${entity}`)
                 isOut ? this.entityCounter-- : this.entityCounter++
                 this.currentWaveStateEntityCount++
-                VisibilityComponent.createOrReplace(entity, { visible: false })
-                utils.timers.setTimeout(async () => {this.entityReady();}, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time - 1000 + 1)) + 1000 : this.spawnEntityDelay.time);
+                VisibilityComponent.createOrReplace(entity, { visible: false });
                 if (this.currentWaveStateMaxEntity == this.currentWaveStateEntityCount) {
                     this.currentWaveStateEntityCount = 0
-                    this.resolveReady()
+                    utils.timers.setTimeout(async () => { this.resolveReady()}, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time - 1000 + 1)) + 1000 : this.spawnEntityDelay.time);
                 }
             }
         }, 1, `myEntityMove${entity}`)
     }
 
-     private initialEntity(count: number) {
+    private initialEntity(count: number) {
         let x = 0
         let y = 0
 
