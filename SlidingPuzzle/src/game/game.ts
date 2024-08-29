@@ -486,10 +486,10 @@ async function finishGame() {
 
 function getLevelSize(level: number): number {
   if (EASY_MODE) return 3
-  if (level % 3 == 0) return 5
-  if (level % 3 == 1) return 3
-  if (level % 3 == 2) return 4
-  return 3
+  if (level <= 3) return 3
+  if (level <= 6) return 4
+  if (level <= 9) return 5
+  return 1
 }
 
 function initGameButtons() {

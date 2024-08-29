@@ -24,9 +24,17 @@ export const gamezoneShape: PBGltfContainer = { src: modelsFolder + 'obj_gamezon
 export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' };
 
 // Game level images
-export const level1Image = imagesFolder + 'gameImages/imageLevel1.jpg';
-export const level2Image = imagesFolder + 'gameImages/imageLevel2.jpg';
-export const level3Image = imagesFolder + 'gameImages/imageLevel3.jpg';
+export const levelImages = {
+    1: imagesFolder + 'gameImages/1.png',
+    2: imagesFolder + 'gameImages/2.png',
+    3: imagesFolder + 'gameImages/3.png',
+    4: imagesFolder + 'gameImages/4.png',
+    5: imagesFolder + 'gameImages/5.png',
+    6: imagesFolder + 'gameImages/6.png',
+    7: imagesFolder + 'gameImages/7.png',
+    8: imagesFolder + 'gameImages/8.png',
+    9: imagesFolder + 'gameImages/9.png',
+}
 
 export const lvl3x3Image = imagesFolder + 'gameImages/image_3x3.png';
 
