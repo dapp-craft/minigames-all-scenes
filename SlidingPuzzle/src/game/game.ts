@@ -175,19 +175,22 @@ function startNewLevel(level: number) {
   gameState.matrix.forEach((row) => console.log(row.join(' ')))
   gameState.matrix[gameState.size - 1][gameState.size - 1] = -1
 
-  gameState.matrix = shuffleMatrix(gameState.matrix, 100)
-  console.log('Matrix shuffled')
-  gameState.matrix.forEach((row) => console.log(row.join(' ')))
   syncGameData()
 
   setImage(level)
 
-  countdown(() => {
+  countdown(async () => {
+    setTiles()
+    for (let i = 1; i < gameState.size * gameState.size; i++) {
+      updateTile(i, 0)
+    }
+    await new Promise<void>(r => utils.timers.setTimeout(r, 3000))
+    gameState.matrix = shuffleMatrix(gameState.matrix, 100)
+    console.log('Matrix shuffled')
+  
     gameState.levelStartedAt = Date.now()
     gameState.levelFinishedAt = 0
     syncGameData()
-
-    setTiles()
 
     for (let i = 1; i < gameState.size * gameState.size; i++) {
       updateTile(i)
@@ -293,7 +296,7 @@ function setTiles() {
   }
 }
 
-function updateTile(tileNumber: any) {
+function updateTile(tileNumber: any, animDuration=500) {
   validateTileNumber(tileNumber)
 
   const tile = tiles[tileNumber]
@@ -307,7 +310,7 @@ function updateTile(tileNumber: any) {
       start: Transform.getMutable(tile).position,
       end: position
     }),
-    duration: 500,
+    duration: animDuration,
     easingFunction: EasingFunction.EF_EASECUBIC
   })
 }
