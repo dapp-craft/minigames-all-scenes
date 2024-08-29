@@ -500,7 +500,7 @@ function initGameButtons() {
         {
           parent: sceneParentEntity,
           position: levelButtons[i + 1].position,
-          scale: Vector3.create(2.4, 2.4, 2.4),
+          scale: Vector3.create(1.5, 1.5, 1.5),
           rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
         },
         ui.uiAssets.shapes.SQUARE_GREEN,
@@ -516,7 +516,7 @@ function initGameButtons() {
   gameButtons.push(new ui.MenuButton({
     parent: sceneParentEntity,
     position: restartButton.position,
-    scale: Vector3.create(2.4, 2.4, 2.4),
+    scale: Vector3.create(1.5, 1.5, 1.5),
     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
   },
     ui.uiAssets.shapes.SQUARE_RED,
@@ -530,7 +530,7 @@ function initGameButtons() {
   gameButtons.push(new ui.MenuButton({
     parent: sceneParentEntity,
     position: sfxButton.position,
-    scale: Vector3.create(2.4, 2.4, 2.4),
+    scale: Vector3.create(1.5, 1.5, 1.5),
     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
   },
     ui.uiAssets.shapes.SQUARE_RED,
@@ -542,7 +542,7 @@ function initGameButtons() {
   gameButtons.push(new ui.MenuButton({
     parent: sceneParentEntity,
     position: exitButton.position,
-    scale: Vector3.create(2.4, 2.4, 2.4),
+    scale: Vector3.create(1.5, 1.5, 1.5),
     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
   },
     ui.uiAssets.shapes.RECT_RED,
@@ -554,7 +554,7 @@ function initGameButtons() {
   new ui.MenuButton({
     parent: sceneParentEntity,
     position: musicButton.position,
-    scale: Vector3.create(2.4, 2.4, 2.4),
+    scale: Vector3.create(1.5, 1.5, 1.5),
     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
 },
     ui.uiAssets.shapes.SQUARE_RED,

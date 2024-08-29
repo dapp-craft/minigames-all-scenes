@@ -28,9 +28,9 @@ export function main() {
   new ui.MenuButton(
     {
       parent: sceneParentEntity,
-      position: Vector3.create(0, 1.03, 2),
-      rotation: Quaternion.fromEulerDegrees(-45, 180, 0),
-      scale: Vector3.create(2, 2, 2)
+      position: Vector3.create(0.008361, 1.28328, 2.94125),
+      rotation: Quaternion.fromEulerDegrees(-50, 180, 0),
+      scale: Vector3.create(1.25, 1.25, 1.25)
     },
     ui.uiAssets.shapes.RECT_GREEN,
     ui.uiAssets.icons.playText,
@@ -67,7 +67,7 @@ export function main() {
 
   queue.initQueueDisplay({
     parent: sceneParentEntity,
-    position: Vector3.create(0, 2, 2),
+    position: Vector3.create(0, 2, 2.53653),
     rotation: Quaternion.fromEulerDegrees(0, 0, 0),
     scale: Vector3.create(1, 1, 1)
   })
