@@ -173,7 +173,6 @@ function startNewLevel(level: number) {
   )
   console.log('Matrix init')
   gameState.matrix.forEach((row) => console.log(row.join(' ')))
-  gameState.matrix[gameState.size - 1][gameState.size - 1] = -1
 
   syncGameData()
 
@@ -185,6 +184,7 @@ function startNewLevel(level: number) {
       updateTile(i, 0)
     }
     await new Promise<void>(r => utils.timers.setTimeout(r, 3000))
+    gameState.matrix[gameState.size - 1][gameState.size - 1] = -1
     gameState.matrix = shuffleMatrix(gameState.matrix, 100)
     console.log('Matrix shuffled')
   
