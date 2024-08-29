@@ -6,14 +6,14 @@ import { initGame } from './game/game'
 import { initLibrary, sceneParentEntity, ui, queue } from '@dcl-sdk/mini-games/src'
 import { syncEntity } from '@dcl/sdk/network'
 import players, { getPlayer } from '@dcl/sdk/players'
-import { GAME_ID } from './config'
+import { GAME_ID, SESSION_DURATION } from './config'
 import { listeners } from '@dcl-sdk/mini-games/src/queue'
 import { setupUI } from './ui'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
   gameId: GAME_ID,
-  gameTimeoutMs: 1000 * 60 * 5,
+  gameTimeoutMs: SESSION_DURATION,
   gameArea: {
     topLeft: Vector3.create(1, 0, 0),
     bottomRight: Vector3.create(15, 5, 9),

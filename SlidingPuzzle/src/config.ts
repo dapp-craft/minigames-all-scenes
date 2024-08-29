@@ -8,3 +8,5 @@ export function setEasyMode(value: boolean) {
 }
 
 export const DEBUG_MODE_UI = true
+
+export const SESSION_DURATION = 1000 * 60 * 5 // 5 minutes

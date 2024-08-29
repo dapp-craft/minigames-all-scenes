@@ -1,9 +1,10 @@
 import { engine, Entity, TextAlignMode, TextShape, Transform } from '@dcl/sdk/ecs'
-import { gameDataEntity } from '../game'
+import { gameDataEntity, sessionStartedAt } from '../game'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { sceneParentEntity } from '../../globals'
 import { GameData } from '../components/definitions'
 import { steps, timer, name } from '../../positions'
+import { SESSION_DURATION } from '../../config'
 
 let movesEntity: Entity
 let timeEntity: Entity
@@ -49,11 +50,12 @@ function updateTexts() {
   const gameData = GameData.getOrNull(gameDataEntity)
 
   if (!gameData) return
-  if (gameData.levelStartedAt === 0) return
+  if (sessionStartedAt === 0) return
 
-  const gameElapsedTime = ((GameData.get(gameDataEntity).levelFinishedAt || Date.now()) - GameData.get(gameDataEntity).levelStartedAt) / 1000
-  const minutes = Math.floor(gameElapsedTime / 60)
-  const seconds = Math.round(gameElapsedTime) - minutes * 60
+  // const gameElapsedTime = ((GameData.get(gameDataEntity).levelFinishedAt || Date.now()) - GameData.get(gameDataEntity).levelStartedAt) / 1000
+  const gameElapsedTime = (SESSION_DURATION - (Date.now() - sessionStartedAt)) / 1000
+  const minutes = Math.max(Math.floor(gameElapsedTime / 60), 0)
+  const seconds = Math.max(Math.round(gameElapsedTime) - minutes * 60, 0)
 
   TextShape.createOrReplace(playerNameEntity, {
     text: `${gameData.playerName}`,
