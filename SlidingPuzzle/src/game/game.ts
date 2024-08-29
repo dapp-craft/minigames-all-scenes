@@ -181,7 +181,7 @@ function startNewLevel(level: number) {
   countdown(async () => {
     setTiles()
     for (let i = 1; i < gameState.size * gameState.size; i++) {
-      updateTile(i, 0)
+      updateTile(i, 1)
     }
     await new Promise<void>(r => utils.timers.setTimeout(r, 3000))
     gameState.matrix[gameState.size - 1][gameState.size - 1] = -1
