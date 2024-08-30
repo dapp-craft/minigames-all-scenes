@@ -32,10 +32,10 @@ import { getPlayer } from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
 import * as utils from '@dcl-sdk/utils'
 import { sceneParentEntity, soundManager } from '../globals'
-import { init } from '@dcl-sdk/mini-games/src/config'
 import { EASY_MODE } from '../config'
 import { initStatusBoard } from './gameLogic/statusBoard'
 import { exitButton, levelButtons, musicButton, restartButton, sfxButton } from '../positions'
+import { SolidImage } from './solidImage'
 
 const BOARD_TRANSFORM: TransformType = {
   position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -45,14 +45,14 @@ const BOARD_TRANSFORM: TransformType = {
 
 export let gameDataEntity: Entity
 
-let boardEntity: Entity
-let tiles: { [key: number]: Entity } = {}
+export let boardEntity: Entity
+export let tiles: { [key: number]: Entity } = {}
 let tilesShape: { [key: number]: Entity } = {}
-let tileImages: { [key: number]: Entity } = {}
+export let tileImages: { [key: number]: Entity } = {}
 let gameButtons: ui.MenuButton[] = []
 let maxProgress: progress.IProgress
 export let sessionStartedAt: number
-
+let solidImage: SolidImage
 // GameUI
 let timer: ui.Timer3D
 let sfxEnable = true
@@ -100,6 +100,8 @@ export async function initGame() {
 
   setupWinAnimations()
 
+  solidImage = new SolidImage(boardEntity)
+
   queue.listeners.onActivePlayerChange = (player) => {
     const localPlayer = getPlayer()
     if (player?.address === localPlayer?.userId) {
@@ -115,6 +117,7 @@ export async function initGame() {
     }
   }
 }
+
 
 function getReadyToStart() {
   console.log('Get Ready to start!')
@@ -171,26 +174,32 @@ function startNewLevel(level: number) {
   gameState.matrix = Array.from({ length: gameState.size }, (_, rowIndex) =>
     Array.from({ length: gameState.size }, (_, colIndex) => rowIndex * gameState.size + colIndex + 1)
   )
+
+  // TODO create a separate function that will generate a shuffled matrix
   console.log('Matrix init')
   gameState.matrix.forEach((row) => console.log(row.join(' ')))
 
-  syncGameData()
+  gameState.matrix[gameState.size - 1][gameState.size - 1] = -1
+  
+  gameState.matrix = shuffleMatrix(gameState.matrix, 100)
+  console.log('Matrix shuffled')
+  gameState.matrix.forEach((row) => console.log(row.join(' ')))
 
+  syncGameData()
   setImage(level)
+ 
+  solidImage.show(getImage(level))
 
   countdown(async () => {
-    setTiles()
-    for (let i = 1; i < gameState.size * gameState.size; i++) {
-      updateTile(i, 1)
-    }
-    await new Promise<void>(r => utils.timers.setTimeout(r, 3000))
-    gameState.matrix[gameState.size - 1][gameState.size - 1] = -1
-    gameState.matrix = shuffleMatrix(gameState.matrix, 100)
-    console.log('Matrix shuffled')
   
     gameState.levelStartedAt = Date.now()
     gameState.levelFinishedAt = 0
     syncGameData()
+
+
+    setTilesPointerEvents()
+    solidImage.hide()
+    setTiles()
 
     for (let i = 1; i < gameState.size * gameState.size; i++) {
       updateTile(i)
@@ -331,6 +340,8 @@ function moveOneTile(tileNumber: any) {
   syncGameData()
 
   if (isSolved()) {
+    solidImage.show(getImage(gameState.lvl))
+    removeTilesPointerEvents()
     utils.timers.setTimeout(() => {
       finishGame()
     }, 1000)
@@ -444,6 +455,7 @@ function getRowColumn(tileNumber: number): { row: number; column: number } {
     }
   }
 
+  console.log('Tile not found in the matrix', tileNumber, matrix)
   return { row, column }
 }
 
@@ -475,6 +487,7 @@ async function finishGame() {
   console.log('Solved!')
   console.log('GameData:', gameData)
 
+  solidImage.hide()
   progress.upsertProgress({
     level: gameState.lvl,
     score: gameState.moves * 10,
@@ -791,7 +804,6 @@ function startWinAnimation() {
       // console.log("playersQueue: ", queue.getQueue())
       //add challenge check
       if (queue.getQueue().length > 1) {
-        removeTilesPointerEvents()
         queue.setNextPlayer()
       } else {
         const nextLevel = Math.min(gameState.lvl + 1, MAX_LEVEL)
