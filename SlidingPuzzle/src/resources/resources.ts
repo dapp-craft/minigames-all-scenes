@@ -25,15 +25,15 @@ export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' 
 
 // Game level images
 export const levelImages = {
-    1: imagesFolder + 'gameImages/1.png',
-    2: imagesFolder + 'gameImages/2.png',
-    3: imagesFolder + 'gameImages/3.png',
-    4: imagesFolder + 'gameImages/4.png',
-    5: imagesFolder + 'gameImages/5.png',
-    6: imagesFolder + 'gameImages/6.png',
-    7: imagesFolder + 'gameImages/7.png',
-    8: imagesFolder + 'gameImages/8.png',
-    9: imagesFolder + 'gameImages/9.png',
+    1: imagesFolder + 'gameImages/1.jpg',
+    2: imagesFolder + 'gameImages/2.jpg',
+    3: imagesFolder + 'gameImages/3.jpg',
+    4: imagesFolder + 'gameImages/4.jpg',
+    5: imagesFolder + 'gameImages/5.jpg',
+    6: imagesFolder + 'gameImages/6.jpg',
+    7: imagesFolder + 'gameImages/7.jpg',
+    8: imagesFolder + 'gameImages/8.jpg',
+    9: imagesFolder + 'gameImages/9.jpg',
 }
 
 export const lvl3x3Image = imagesFolder + 'gameImages/image_3x3.png';
