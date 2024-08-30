@@ -30,9 +30,9 @@
 		{
 			"doubleSided":true,
 			"emissiveFactor":[
-				0.10000000149011612,
-				0.10000000149011612,
-				0.10000000149011612
+				0.20000000298023224,
+				0.20000000298023224,
+				0.20000000298023224
 			],
 			"emissiveTexture":{
 				"index":0
@@ -67,7 +67,7 @@
 			]
 		},
 		{
-			"name":"B\u00e9zierCircle.005",
+			"name":"B\u00e9zierCircle.003",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,7 +75,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":7
+					"indices":3
 				}
 			]
 		}
@@ -110,7 +110,7 @@
 			"min":[
 				-7.2290873527526855,
 				0.14389942586421967,
-				-7.5184645652771
+				-7.382771968841553
 			],
 			"type":"VEC3"
 		},
@@ -135,7 +135,7 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":464,
+			"count":2388,
 			"max":[
 				7.229086875915527,
 				8.606121063232422,
@@ -144,27 +144,21 @@
 			"min":[
 				-7.2290873527526855,
 				0.14389942586421967,
-				-7.5184645652771
+				-7.382771968841553
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":464,
+			"count":2388,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":464,
+			"count":2388,
 			"type":"VEC2"
-		},
-		{
-			"bufferView":7,
-			"componentType":5123,
-			"count":1176,
-			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -194,27 +188,21 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":5568,
+			"byteLength":28656,
 			"byteOffset":88080,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5568,
-			"byteOffset":93648,
+			"byteLength":28656,
+			"byteOffset":116736,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3712,
-			"byteOffset":99216,
+			"byteLength":19104,
+			"byteOffset":145392,
 			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":2352,
-			"byteOffset":102928,
-			"target":34963
 		}
 	],
 	"samplers":[
@@ -225,7 +213,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":105280,
+			"byteLength":164496,
 			"uri":"obj_wall.bin"
 		}
 	]

@@ -3,9 +3,6 @@
 		"generator":"Khronos glTF Blender I/O v4.2.57",
 		"version":"2.0"
 	},
-	"extensionsUsed":[
-		"KHR_materials_specular"
-	],
 	"scene":0,
 	"scenes":[
 		{
@@ -18,37 +15,32 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_ground"
+			"name":"obj_railings"
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
 			"emissiveFactor":[
-				0.20000000298023224,
-				0.20000000298023224,
-				0.20000000298023224
+				1,
+				0.33973193168640137,
+				0.02814362570643425
 			],
-			"emissiveTexture":{
-				"index":0
-			},
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularFactor":0
-				}
-			},
-			"name":"obj_ground",
+			"name":"obj_emission01",
 			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":1
-				},
+				"baseColorFactor":[
+					1,
+					0.3419203758239746,
+					0.028426364064216614,
+					1
+				],
 				"metallicFactor":0
 			}
 		}
 	],
 	"meshes":[
 		{
-			"name":"Plane.009",
+			"name":"obj_railings.006",
 			"primitives":[
 				{
 					"attributes":{
@@ -62,95 +54,72 @@
 			]
 		}
 	],
-	"textures":[
-		{
-			"sampler":0,
-			"source":0
-		},
-		{
-			"sampler":0,
-			"source":0
-		}
-	],
-	"images":[
-		{
-			"mimeType":"image/png",
-			"name":"obj_ground",
-			"uri":"textures/obj_ground.png"
-		}
-	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":4,
+			"count":1291,
 			"max":[
-				8,
-				0,
-				8
+				7.874035358428955,
+				0.7933013439178467,
+				7.882829189300537
 			],
 			"min":[
-				-8,
-				0,
-				-8
+				-7.874035358428955,
+				0.10669770836830139,
+				-7.639318943023682
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":4,
+			"count":1291,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":4,
+			"count":1291,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":6,
+			"count":4320,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":48,
+			"byteLength":15492,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":48,
-			"byteOffset":48,
+			"byteLength":15492,
+			"byteOffset":15492,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":32,
-			"byteOffset":96,
+			"byteLength":10328,
+			"byteOffset":30984,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12,
-			"byteOffset":128,
+			"byteLength":8640,
+			"byteOffset":41312,
 			"target":34963
-		}
-	],
-	"samplers":[
-		{
-			"magFilter":9729,
-			"minFilter":9987
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":140,
-			"uri":"obj_ground.bin"
+			"byteLength":49952,
+			"uri":"obj_railings.bin"
 		}
 	]
 }
