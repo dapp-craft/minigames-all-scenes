@@ -12,6 +12,7 @@ import { entityAmount, GAME_ID, rocketCoords, SESSION_DURATION } from './config'
 import { initLibrary } from '@dcl-sdk/mini-games/src'
 import { syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
+import { setupStaticModels } from './staticModels/setupStaticModels'
 
 // initLibrary(engine, syncEntity, players, {
 //   environment: 'dev',
@@ -25,6 +26,7 @@ import players from '@dcl/sdk/players'
 // })
 
 export async function main() {
+  setupStaticModels()
   // Defining behavior. See `src/systems.ts` file.
   engine.addSystem(circularSystem)
   engine.addSystem(changeColorSystem)
