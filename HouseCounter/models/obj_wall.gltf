@@ -75,7 +75,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3
+					"indices":7
 				}
 			]
 		}
@@ -159,6 +159,12 @@
 			"componentType":5126,
 			"count":2388,
 			"type":"VEC2"
+		},
+		{
+			"bufferView":7,
+			"componentType":5123,
+			"count":5832,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -203,6 +209,12 @@
 			"byteLength":19104,
 			"byteOffset":145392,
 			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":11664,
+			"byteOffset":164496,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -213,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":164496,
+			"byteLength":176160,
 			"uri":"obj_wall.bin"
 		}
 	]
