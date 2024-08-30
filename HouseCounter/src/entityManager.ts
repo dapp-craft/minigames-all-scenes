@@ -1,6 +1,6 @@
 import * as utils from "@dcl-sdk/utils"
 import { EasingFunction, engine, Entity, GltfContainer, MeshRenderer, Transform, Tween, TweenLoop, TweenState, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs";
-import { entityConfig, modelPath } from "./config";
+import { entityConfig, finishCoords, modelPath, startCoords } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { Cartridge, CartridgeTest, SpawnEntityDelay } from "./Types";
 import { gameState } from "./state";
@@ -23,11 +23,11 @@ export class gameEntityManager {
 
 
     constructor(roundData: {
-        cartridge: Map<number, CartridgeTest> | false,
+        cartridge: Map<number, CartridgeTest>,
         spawnEntityDelay: { time: number, random?: boolean },
         initialEntityAmount?: number
     }) {
-        this.roundCartrige = roundData.cartridge ? roundData.cartridge : this.generateCartrige()
+        this.roundCartrige = roundData.cartridge
         this.spawnEntityDelay = roundData.spawnEntityDelay
         this.entityCounter = roundData.initialEntityAmount ? roundData.initialEntityAmount : 0
 
@@ -58,21 +58,15 @@ export class gameEntityManager {
         }, 3000)
     }
 
-    private generateCartrige() {
-        // TODO logic
-        const generatedCartrige = new Map([[1, { itemQueue: 3, goOut: false }]])
-        return generatedCartrige
-    }
-
     private spawnEntity(modelName: string, isOut: boolean) {
         const entity = gameState.availableEntity[this.entityIndex]
         VisibilityComponent.createOrReplace(entity, { visible: true })
         console.log(this.entityIndex)
-        this.entityIndex++
+        this.entityIndex++;
         GltfContainer.createOrReplace(entity, { src: modelPath.get(modelName)! })
         Transform.createOrReplace(entity,
             {
-                position: Vector3.create(1, 1, 1),
+                position: Vector3.create(...startCoords),
                 rotation: Quaternion.Zero(),
                 scale: Vector3.create(1, 1, 1)
             })
@@ -82,11 +76,10 @@ export class gameEntityManager {
 
     private moveEntity(entity: Entity, isOut: boolean) {
         console.log("Move");
-        const random = this.getRandomPointOnCircle();
         Tween.createOrReplace(entity, {
             mode: Tween.Mode.Move({
-                start: isOut ? this.rocketCoordinate : random,
-                end: isOut ? random : this.rocketCoordinate,
+                start: isOut ? this.rocketCoordinate : Vector3.create(...startCoords),
+                end: isOut ? Vector3.create(...finishCoords) : this.rocketCoordinate,
             }),
             duration: 2000,
             easingFunction: EasingFunction.EF_LINEAR,
@@ -96,6 +89,14 @@ export class gameEntityManager {
                 engine.removeSystem(`myEntityMove${entity}`)
                 isOut ? this.entityCounter-- : this.entityCounter++
                 this.currentWaveStateEntityCount++
+                Tween.createOrReplace(entity, {
+                    mode: Tween.Mode.Move({
+                        start: Transform.get(entity).position,
+                        end: Vector3.create(...startCoords)
+                    }),
+                    duration: 1,
+                    easingFunction: EasingFunction.EF_LINEAR,
+                })
                 VisibilityComponent.createOrReplace(entity, { visible: false });
                 if (this.currentWaveStateMaxEntity == this.currentWaveStateEntityCount) {
                     this.currentWaveStateEntityCount = 0

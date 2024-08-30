@@ -7,7 +7,7 @@ import { setupUi } from './ui'
 import { gameEntityManager } from './entityManager'
 import { Cartridge, CartridgeTest } from './Types'
 import { gameState } from './state'
-import { entityAmount, GAME_ID, SESSION_DURATION } from './config'
+import { entityAmount, GAME_ID, rocketCoords, SESSION_DURATION } from './config'
 
 import { initLibrary } from '@dcl-sdk/mini-games/src'
 import { syncEntity } from '@dcl/sdk/network'
@@ -67,7 +67,7 @@ const rocket = () => {
   gameState.rocketWindow = engine.addEntity()
   Transform.createOrReplace(gameState.rocketWindow,
     {
-      position: Vector3.create(8, 1.5, 2),
+      position: Vector3.create(...rocketCoords),
       rotation: Quaternion.Zero(),
       scale: Vector3.create(3, 3, 3)
     })
