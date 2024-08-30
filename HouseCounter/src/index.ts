@@ -3,16 +3,16 @@ import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { engine, MeshCollider, MeshRenderer, Transform } from '@dcl/sdk/ecs'
 
 import { changeColorSystem, circularSystem } from './systems'
-import { setupUi } from './ui'
 import { gameEntityManager } from './entityManager'
 import { Cartridge, CartridgeTest } from './Types'
 import { gameState } from './state'
 import { entityAmount, GAME_ID, rocketCoords, SESSION_DURATION } from './config'
 
-import { initLibrary } from '@dcl-sdk/mini-games/src'
+import { initLibrary, queue, sceneParentEntity, ui } from '@dcl-sdk/mini-games/src'
 import { syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
 import { setupStaticModels } from './staticModels/setupStaticModels'
+import { setupUI } from './ui'
 
 // initLibrary(engine, syncEntity, players, {
 //   environment: 'dev',
@@ -32,7 +32,6 @@ export async function main() {
   engine.addSystem(changeColorSystem)
 
   // draw UI. Here is the logic to spawn cubes.
-  // setupUi()
 
   const cartridge: Map<number, CartridgeTest> = new Map([
     [1, { itemQueue: 3, goOut: false }],
@@ -47,8 +46,10 @@ export async function main() {
   ])
 
   const cartridgeLvl1: Map<number, CartridgeTest> = new Map([
-    [1, { itemQueue: 3, goOut: false }],
-    [2, { itemQueue: 2, goOut: false }],
+    [1, { itemQueue: 5, goOut: false }],
+    [2, { itemQueue: 2, goOut: true }],
+    [3, { itemQueue: 3, goOut: false }],
+
   ])
 
   const cartridgeLvl2: Map<number, CartridgeTest> = new Map([
@@ -61,7 +62,7 @@ export async function main() {
 
   rocket()
 
-  const entityManager = new gameEntityManager({ cartridge: generateCartrige(), spawnEntityDelay: { time: 5000, random: true }, initialEntityAmount: 6 })
+  const entityManager = new gameEntityManager({ cartridge: cartridgeLvl1, spawnEntityDelay: { time: 5000, random: true }, initialEntityAmount: 6 })
   await entityManager.startGame()
 }
 
@@ -104,4 +105,53 @@ const generateCartrige = () => {
   gameState.generatedCartrige.forEach((data: any, key: number) => console.log(key, data))
   console.log(generatedData.targetNumber);
   return gameState.generatedCartrige;
+
+  new ui.MenuButton(
+    {
+      parent: sceneParentEntity,
+      position: Vector3.create(0.008361, 1.28328, 2.94125),
+      rotation: Quaternion.fromEulerDegrees(-50, 180, 0),
+      scale: Vector3.create(1.25, 1.25, 1.25)
+    },
+    ui.uiAssets.shapes.RECT_GREEN,
+    ui.uiAssets.icons.playText,
+    'PLAY GAME',
+    () => {
+      queue.addPlayer()
+    }
+  )
+
+  const width = 2.5
+  const height = 2.8
+  const scale = 1.2
+
+  new ui.ScoreBoard(
+    {
+      parent: sceneParentEntity,
+      position: Vector3.create(-7.07, 3.02, 3.25),
+      rotation: Quaternion.fromEulerDegrees(0, -90, 0),
+      scale: Vector3.create(0.875, 0.78, 1)
+    },
+    width,
+    height,
+    scale,
+    {
+      placementStart: 0.06,
+      nameStart: 0.08,
+      timeStart: 0.7,
+      levelStart: 0.96,
+      nameHeader: 'PLAYER',
+      timeHeader: 'TIME',
+      levelHeader: 'LEVEL'
+    }
+  )
+
+  queue.initQueueDisplay({
+    parent: sceneParentEntity,
+    position: Vector3.create(0, 2, 2.53653),
+    rotation: Quaternion.fromEulerDegrees(0, 0, 0),
+    scale: Vector3.create(1, 1, 1)
+  })
+
+  setupUI()
 }

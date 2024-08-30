@@ -7,7 +7,7 @@ export const modelPath = new Map([
     ['test', '']
 ])
 
-export const entityAmount = 20
+export const entityAmount = 40
 
 export const entityConfig = {
     distance: 5,
@@ -17,6 +17,6 @@ export const entityConfig = {
 }
 
 export const rocketCoords = [8, 1.5, 2]
-export const startCoords = [1, 1.5, 2]
-export const finishCoords = [15, 1.5, 2]
+export const startCoords = [15, 1.5, 2]
+export const finishCoords = [1, 1.5, 2]
 

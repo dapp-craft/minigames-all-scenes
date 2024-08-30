@@ -4,6 +4,7 @@ import { entityConfig, finishCoords, modelPath, startCoords } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { Cartridge, CartridgeTest, SpawnEntityDelay } from "./Types";
 import { gameState } from "./state";
+import { kitty } from "./resources/resources";
 
 export class gameEntityManager {
 
@@ -14,7 +15,7 @@ export class gameEntityManager {
     private currentWaveStateMaxEntity = 0
     private currentWaveStateEntityCount = 0
     private entityIndex = 1
-    private rocketCoordinate = Vector3.create(Transform.get(gameState.rocketWindow!).position.x, Transform.get(gameState.rocketWindow!).position.y, Transform.get(gameState.rocketWindow!).position.z)
+    private rocketCoordinate = Vector3.create(Transform.get(gameState.rocketWindow!).position.x, Transform.get(gameState.rocketWindow!).position.y, Transform.get(gameState.rocketWindow!).position.z - 1)
 
     private resolveReady!: () => void
     private entityReady!: () => void
@@ -54,8 +55,10 @@ export class gameEntityManager {
                 this.waveIsDone = new Promise(r => this.resolveReady = r)
                 this.entityIndex = 1
             }
+            this.initialEntity(this.entityCounter)
+            gameState.rocketWindow && VisibilityComponent.createOrReplace(gameState.rocketWindow, { visible: false })
             console.log("Res: ", this.entityCounter)
-        }, 3000)
+        }, 0)
     }
 
     private spawnEntity(modelName: string, isOut: boolean) {
@@ -63,14 +66,13 @@ export class gameEntityManager {
         VisibilityComponent.createOrReplace(entity, { visible: true })
         console.log(this.entityIndex)
         this.entityIndex++;
-        GltfContainer.createOrReplace(entity, { src: modelPath.get(modelName)! })
+        GltfContainer.createOrReplace(entity, { src: kitty.src })
         Transform.createOrReplace(entity,
             {
                 position: Vector3.create(...startCoords),
-                rotation: Quaternion.Zero(),
+                rotation: Quaternion.create(0, -1, 0, 1),
                 scale: Vector3.create(1, 1, 1)
             })
-        MeshRenderer.setBox(entity) ///
         this.moveEntity(entity, isOut);
     }
 
@@ -113,17 +115,19 @@ export class gameEntityManager {
 
         for (let i = 0; i < count; i++) {
             const entity = gameState.availableEntity[i]
+            VisibilityComponent.createOrReplace(entity, { visible: true })
+            GltfContainer.createOrReplace(entity, { src: kitty.src })
             Transform.createOrReplace(entity, {
                 parent: gameState.rocketWindow!,
                 position: Vector3.create((x - 2) * entityConfig.spacing, (y - 2) * entityConfig.spacing, -.2),
                 scale: Vector3.create(entityConfig.initialEntitySize, entityConfig.initialEntitySize, entityConfig.initialEntitySize)
             })
-            MeshRenderer.setBox(entity)
             x++
             if (x * (entityConfig.initialEntitySize + entityConfig.spacing) > entityConfig.maxRowLength) {
                 x = 0
                 y++
             }
+            console.log(count, entity)
         }
     }
 
