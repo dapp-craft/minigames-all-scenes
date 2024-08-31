@@ -24,7 +24,7 @@ import { GameData, Tile } from './components/definitions'
 import { getTilePosition } from './gameLogic/tileCalculation'
 import { Color4, Matrix, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { shuffleMatrix } from './gameLogic/shuffle'
-import { syncEntity } from '@dcl/sdk/network'
+import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { MAX_BOARD_SIZE, MAX_LEVEL, mainEntityId, tileEntityBaseId } from './config'
 import { tileShape } from '../resources/resources'
 import { progress, queue, ui } from '@dcl-sdk/mini-games/src'
@@ -227,32 +227,34 @@ function initTiles() {
       // Hack to avoid z-flickering
       position: Vector3.create(0, 0, i * 0.001),
       scale: Vector3.create(1, 1, 1),
-      parent: boardEntity
+      // parent: boardEntity
     })
     Tile.create(tile, { number: i })
+    syncEntity(tile, [Transform.componentId], tileEntityBaseId + i * 10 + 1)
+    // parentEntity(tile, boardEntity)
 
     // Create the tile model
     const shape = engine.addEntity()
     GltfContainer.create(shape, tileShape)
     Transform.create(shape, { parent: tile })
     tilesShape[i] = shape
+    // syncEntity(shape, [Transform.componentId], tileEntityBaseId + i * 10 + 2)
+    // parentEntity(shape, tile)
 
     // Image
     const image = engine.addEntity()
     Transform.create(image, {
       position: { x: 0, y: 0, z: -0.015 },
-      parent: tile
+      // parent: tile
     })
     MeshRenderer.setPlane(image, getImageUV(3, i))
     tileImages[i] = image
-
-    syncEntity(tile, [Transform.componentId], tileEntityBaseId + i * 10 + 1)
-    // syncEntity(shape, [Transform.componentId], tileEntityBaseId + i * 10 + 2)
     syncEntity(
       image,
       [Transform.componentId, MeshRenderer.componentId, Material.componentId],
       tileEntityBaseId + i * 10 + 3
     )
+    parentEntity(image, tile)
   }
 }
 
@@ -302,6 +304,8 @@ function setTiles() {
   const size = gameState.size
   for (let i = 1; i < size * size; i++) {
     Transform.getMutable(tiles[i]).scale = Vector3.create(3 / size, 3 / size, 1)
+    Transform.getMutable(tiles[i]).position = Transform.get(boardEntity).position
+    Transform.getMutable(tiles[i]).rotation = Transform.get(boardEntity).rotation
   }
 }
 
@@ -312,11 +316,14 @@ function updateTile(tileNumber: any, animDuration=500) {
 
   const { row, column } = getRowColumn(tileNumber)
 
-  const position = getTilePosition(gameState.size, row, column)
+  const position = Vector3.add(
+    Transform.get(boardEntity).position,
+    Vector3.rotate(getTilePosition(gameState.size, row, column), Transform.get(boardEntity).rotation)
+  )
 
   Tween.createOrReplace(tile, {
     mode: Tween.Mode.Move({
-      start: Transform.getMutable(tile).position,
+      start: Transform.get(tile).position,
       end: position
     }),
     duration: animDuration,
