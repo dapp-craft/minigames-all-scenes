@@ -58,7 +58,7 @@ export class gameEntityManager {
             this.initialEntity(this.entityCounter)
             gameState.rocketWindow && VisibilityComponent.createOrReplace(gameState.rocketWindow, { visible: false })
             console.log("Res: ", this.entityCounter)
-        }, 0)
+        }, 3000)
     }
 
     private spawnEntity(modelName: string, isOut: boolean) {

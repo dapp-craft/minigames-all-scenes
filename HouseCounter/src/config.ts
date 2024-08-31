@@ -16,7 +16,7 @@ export const entityConfig = {
     maxRowLength: 1,
 }
 
-export const rocketCoords = [8, 1.5, 2]
-export const startCoords = [15, 1.5, 2]
-export const finishCoords = [1, 1.5, 2]
+export const rocketCoords = [8, 2, 2]
+export const startCoords = [15, 2, 2]
+export const finishCoords = [1, 2, 2]
 
