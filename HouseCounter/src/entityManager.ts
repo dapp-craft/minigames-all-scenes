@@ -24,11 +24,11 @@ export class gameEntityManager {
 
 
     constructor(roundData: {
-        cartridge: Map<number, CartridgeTest>,
+        waves: Map<number, CartridgeTest>,
         spawnEntityDelay: { time: number, random?: boolean },
         initialEntityAmount?: number
     }) {
-        this.roundCartrige = roundData.cartridge
+        this.roundCartrige = roundData.waves
         this.spawnEntityDelay = roundData.spawnEntityDelay
         this.entityCounter = roundData.initialEntityAmount ? roundData.initialEntityAmount : 0
 
@@ -54,6 +54,7 @@ export class gameEntityManager {
                 await this.waveIsDone;
                 this.waveIsDone = new Promise(r => this.resolveReady = r)
                 this.entityIndex = 1
+                console.log(this.entityCounter)
             }
             this.initialEntity(this.entityCounter)
             gameState.rocketWindow && VisibilityComponent.createOrReplace(gameState.rocketWindow, { visible: false })

@@ -2,7 +2,6 @@
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { engine, MeshCollider, MeshRenderer, Transform } from '@dcl/sdk/ecs'
 
-import { changeColorSystem, circularSystem } from './systems'
 import { gameEntityManager } from './entityManager'
 import { Cartridge, CartridgeTest } from './Types'
 import { gameState } from './state'
@@ -13,6 +12,7 @@ import { syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
 import { setupStaticModels } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
+import { lvl0 } from './leavels'
 
 // initLibrary(engine, syncEntity, players, {
 //   environment: 'dev',
@@ -27,43 +27,15 @@ import { setupUI } from './ui'
 
 export async function main() {
   setupStaticModels()
-  // Defining behavior. See `src/systems.ts` file.
-  engine.addSystem(circularSystem)
-  engine.addSystem(changeColorSystem)
-
-  // draw UI. Here is the logic to spawn cubes.
-
-  const cartridge: Map<number, CartridgeTest> = new Map([
-    [1, { itemQueue: 3, goOut: false }],
-    [2, { itemQueue: 1, goOut: true }],
-    [3, { itemQueue: 3, goOut: false }]
-  ])
-
-  const cartridgeTest: Map<number, CartridgeTest> = new Map([
-    [1, { itemQueue: 3, goOut: false }],
-    [2, { itemQueue: 1, goOut: true }],
-    [3, { itemQueue: 3, goOut: false }]
-  ])
-
-  const cartridgeLvl1: Map<number, CartridgeTest> = new Map([
-    [1, { itemQueue: 5, goOut: false }],
-    [2, { itemQueue: 2, goOut: true }],
-    [3, { itemQueue: 3, goOut: false }],
-
-  ])
-
-  const cartridgeLvl2: Map<number, CartridgeTest> = new Map([
-    [1, { itemQueue: 2, goOut: false }],
-    [2, { itemQueue: 4, goOut: false }],
-    [3, { itemQueue: 3, goOut: false }],
-  ])
-
-  for (let i = 0; i <= entityAmount; i++) gameState.availableEntity.push(engine.addEntity());
-
+  spawnInitialEntityPull()
   rocket()
 
-  const entityManager = new gameEntityManager({ cartridge: cartridgeLvl1, spawnEntityDelay: { time: 5000, random: true }, initialEntityAmount: 6 })
+  const entityManager = new gameEntityManager(lvl0);
   await entityManager.startGame()
+}
+
+const spawnInitialEntityPull = () => {
+  for (let i = 0; i <= entityAmount; i++) gameState.availableEntity.push(engine.addEntity());
 }
 
 const rocket = () => {
@@ -79,15 +51,15 @@ const rocket = () => {
 
 function generateRandomNumberAndIterations() {
   const targetNumber = Math.floor(Math.random() * 30) + 1;
-  
+
   let currentSum = 0;
   const iterations = [];
-  
+
   while (currentSum < targetNumber) {
     const maxIteration = targetNumber - currentSum
-    
+
     let iteration = Math.floor(Math.random() * (Math.min(maxIteration, 10) + Math.min(currentSum, 5) + 1)) - Math.min(currentSum, 5);
-    
+
     if (iteration == 0) iteration++
     iterations.push(iteration);
     currentSum += iteration
