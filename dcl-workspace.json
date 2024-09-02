@@ -5,6 +5,12 @@
     },
     {
       "path": "SLidingPuzzle"
+    },
+    {
+      "path": "MatchTwo"
+    },
+    {
+      "path": "SpotTheDifference"
     }
   ]
 }

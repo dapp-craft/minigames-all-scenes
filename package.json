@@ -16,6 +16,8 @@
   "license": "ISC",
   "workspaces": [
     "SlidingPuzzle",
-    "HouseCounter"
+    "HouseCounter",
+    "MatchTwo",
+    "SpotTheDifference"
   ]
 }
