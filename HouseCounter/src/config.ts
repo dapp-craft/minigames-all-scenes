@@ -12,11 +12,15 @@ export const entityAmount = 40
 export const entityConfig = {
     distance: 5,
     initialEntitySize: .1,
-    spacing: .2,
+    spacing: -.2,
     maxRowLength: 1,
 }
 
 export const rocketCoords = [8, 2, 2]
 export const startCoords = [15, 2, 2]
 export const finishCoords = [1, 2, 2]
+
+export const MAX_LEVEL = 9
+export const mainEntityId = 5000
+
 

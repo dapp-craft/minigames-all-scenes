@@ -1,6 +1,6 @@
 import * as utils from "@dcl-sdk/utils"
 import { EasingFunction, engine, Entity, GltfContainer, MeshRenderer, Transform, Tween, TweenLoop, TweenState, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs";
-import { entityConfig, finishCoords, modelPath, startCoords } from "./config";
+import { entityAmount, entityConfig, finishCoords, modelPath, startCoords } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { Cartridge, CartridgeTest, SpawnEntityDelay } from "./Types";
 import { gameState } from "./state";
@@ -38,16 +38,14 @@ export class gameEntityManager {
 
     public async startGame() {
         console.log("Start")
-        gameState.rocketWindow && VisibilityComponent.createOrReplace(gameState.rocketWindow, { visible: false })
         this.initialEntity(this.entityCounter)
         utils.timers.setTimeout(async () => {
-            gameState.rocketWindow && VisibilityComponent.createOrReplace(gameState.rocketWindow, { visible: true })
             for (let i = 1; i <= this.roundCartrige.size; i++) {
                 let waveData = this.roundCartrige.get(i)!
                 this.currentWaveStateMaxEntity = waveData.itemQueue;
                 for (let j = 0; j < waveData.itemQueue; j++) {
                     this.spawnEntity("test", waveData.goOut);
-                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? (Math.random() * (this.spawnEntityDelay.time / 10)) + 500 : this.spawnEntityDelay.time);
+                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? (Math.random() * (this.spawnEntityDelay.time / 10)) + 300 : this.spawnEntityDelay.time);
                     await this.entityMoved;
                     this.entityMoved = new Promise(r => this.entityReady = r);
                 }
@@ -57,7 +55,6 @@ export class gameEntityManager {
                 console.log(this.entityCounter)
             }
             this.initialEntity(this.entityCounter)
-            gameState.rocketWindow && VisibilityComponent.createOrReplace(gameState.rocketWindow, { visible: false })
             console.log("Res: ", this.entityCounter)
         }, 3000)
     }
@@ -113,18 +110,21 @@ export class gameEntityManager {
     private initialEntity(count: number) {
         let x = 0
         let y = 0
-
+        if (gameState.entityInRoket.length == 0) {
+            for(let i = 0; i <= entityAmount; i++) gameState.entityInRoket.push(engine.addEntity())
+        }
         for (let i = 0; i < count; i++) {
-            const entity = gameState.availableEntity[i]
+            console.log(gameState.entityInRoket.length)
+            const entity = gameState.entityInRoket[i]
             VisibilityComponent.createOrReplace(entity, { visible: true })
             GltfContainer.createOrReplace(entity, { src: kitty.src })
             Transform.createOrReplace(entity, {
                 parent: gameState.rocketWindow!,
-                position: Vector3.create((x - 2) * entityConfig.spacing, (y - 2) * entityConfig.spacing, -.2),
+                position: Vector3.create((x - 2) * entityConfig.spacing, (y - 2) * entityConfig.spacing, +.2),
                 scale: Vector3.create(entityConfig.initialEntitySize, entityConfig.initialEntitySize, entityConfig.initialEntitySize)
             })
             x++
-            if (x * (entityConfig.initialEntitySize + entityConfig.spacing) > entityConfig.maxRowLength) {
+            if (x * (Math.abs(entityConfig.initialEntitySize) + Math.abs(entityConfig.spacing)) > entityConfig.maxRowLength) {
                 x = 0
                 y++
             }
