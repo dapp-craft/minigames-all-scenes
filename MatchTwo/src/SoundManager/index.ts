@@ -10,13 +10,11 @@ import {
 } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { Vector3 } from '@dcl/sdk/math'
-import { mainTheme, slideSound } from '../resources/resources'
 
 export let SOUNDS: { [key: string]: string } = {
-  "slide": slideSound
 }
 
-export let THEME = mainTheme
+export let THEME = ''
 export const THEME_VOLUME = 0.7
 
 // export const mainThereme = engine.addEntity()

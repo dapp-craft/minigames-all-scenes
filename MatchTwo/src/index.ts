@@ -1,15 +1,23 @@
 // We define the empty imports so the auto-complete feature works as expected.
-import {} from '@dcl/sdk/math'
+import { Vector3 } from '@dcl/sdk/math'
 import { engine } from '@dcl/sdk/ecs'
+import { initLibrary, sceneParentEntity, ui, queue } from '@dcl-sdk/mini-games/src'
+import { syncEntity } from '@dcl/sdk/network'
+import { GAME_ID, SESSION_DURATION } from './config'
+import players, { getPlayer } from '@dcl/sdk/players'
+import { setupGameUI } from './game/UiObjects'
 
-import { changeColorSystem, circularSystem } from './systems'
-import { setupUi } from './ui'
+initLibrary(engine, syncEntity, players, {
+  environment: 'dev',
+  gameId: GAME_ID,
+  gameTimeoutMs: SESSION_DURATION,
+  gameArea: {
+    topLeft: Vector3.create(1, 0, 0),
+    bottomRight: Vector3.create(15, 5, 9),
+    exitSpawnPoint: Vector3.create(8, 1, 13)
+  }
+})
 
 export function main() {
-  // Defining behavior. See `src/systems.ts` file.
-  engine.addSystem(circularSystem)
-  engine.addSystem(changeColorSystem)
-
-  // draw UI. Here is the logic to spawn cubes.
-  setupUi()
+  setupGameUI()
 }
