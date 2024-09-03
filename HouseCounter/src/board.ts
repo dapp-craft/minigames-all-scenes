@@ -7,6 +7,7 @@ import { kitty } from "./resources/resources";
 export class board {
 
     private numberOfBoardElements: number = 0
+    private position
 
     constructor(position: Vector3) {
         gameState.rocketWindow = engine.addEntity()
@@ -17,7 +18,7 @@ export class board {
                 scale: Vector3.create(3, 3, 3)
             })
         MeshRenderer.setPlane(gameState.rocketWindow)
-
+        this.position = position
     }
 
     private initBoardElements() {
@@ -49,7 +50,7 @@ export class board {
         Tween.createOrReplace(gameState.rocketWindow!, {
             mode: Tween.Mode.Move({
                 start: Transform.get(gameState.rocketWindow!).position,
-                end: Vector3.create(Transform.get(gameState.rocketWindow!).position.x, 2, Transform.get(gameState.rocketWindow!).position.z),
+                end: Vector3.create(this.position.x, this.position.y + 5, this.position.z),
             }),
             duration: 500,
             easingFunction: EasingFunction.EF_LINEAR,
@@ -61,7 +62,7 @@ export class board {
         Tween.createOrReplace(gameState.rocketWindow!, {
             mode: Tween.Mode.Move({
                 start: Transform.get(gameState.rocketWindow!).position,
-                end: Vector3.create(Transform.get(gameState.rocketWindow!).position.x, -2, Transform.get(gameState.rocketWindow!).position.z),
+                end: Vector3.create(this.position.x, this.position.y - 5, this.position.z),
             }),
             duration: 500,
             easingFunction: EasingFunction.EF_LINEAR,
