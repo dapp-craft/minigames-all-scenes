@@ -8,7 +8,7 @@ export const lvl0 = {
         [4, { itemQueue: 3, goOut: false }]
     ]),
     spawnEntityDelay: { time: 3000, random: true },
-    initialEntityAmount: 7
+    initialEntityAmount: 1
 }
 
 export const lvl1 = {
