@@ -49,7 +49,7 @@ export class board {
         Tween.createOrReplace(gameState.rocketWindow!, {
             mode: Tween.Mode.Move({
                 start: Transform.get(gameState.rocketWindow!).position,
-                end: Vector3.create(Transform.get(gameState.rocketWindow!).position.x, Transform.get(gameState.rocketWindow!).position.y + 5, Transform.get(gameState.rocketWindow!).position.z),
+                end: Vector3.create(Transform.get(gameState.rocketWindow!).position.x, 2, Transform.get(gameState.rocketWindow!).position.z),
             }),
             duration: 500,
             easingFunction: EasingFunction.EF_LINEAR,
@@ -61,7 +61,7 @@ export class board {
         Tween.createOrReplace(gameState.rocketWindow!, {
             mode: Tween.Mode.Move({
                 start: Transform.get(gameState.rocketWindow!).position,
-                end: Vector3.create(Transform.get(gameState.rocketWindow!).position.x, Transform.get(gameState.rocketWindow!).position.y - 5, Transform.get(gameState.rocketWindow!).position.z),
+                end: Vector3.create(Transform.get(gameState.rocketWindow!).position.x, -2, Transform.get(gameState.rocketWindow!).position.z),
             }),
             duration: 500,
             easingFunction: EasingFunction.EF_LINEAR,
