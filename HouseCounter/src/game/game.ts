@@ -65,30 +65,35 @@ async function startGame() {
     const localPlayer = getPlayer()
     sessionStartedAt = Date.now()
 
+    gameButtons.forEach((button, i) => button.disable())
+
     entityCounter = -1
     initialEntity(lvl0.initialEntityAmount)
     const entityManager = new gameEntityManager(lvl0);
     entityCounter = await entityManager.startGame()
 
+    gameButtons.forEach((button, i) => button.enable())
+
     GameData.createOrReplace(gameDataEntity, {
         playerAddress: localPlayer?.userId,
         playerName: localPlayer?.name
     })
-    console.log('Max progress', maxProgress)
-    const levelToStart = maxProgress?.level ? Math.min(maxProgress?.level + 1, MAX_LEVEL) : 1
-    console.log('Starting level', levelToStart)
 
-    gameButtons.forEach((button, i) => {
-        if (i <= MAX_LEVEL - 1) {
-            if (i < maxProgress?.level + 1 || i == 0) {
-                button.enable()
-            } else {
-                button.disable()
-            }
-        } else {
-            button.enable()
-        }
-    })
+    // console.log('Max progress', maxProgress)
+    // const levelToStart = maxProgress?.level ? Math.min(maxProgress?.level + 1, MAX_LEVEL) : 1
+    // console.log('Starting level', levelToStart)
+
+    // gameButtons.forEach((button, i) => {
+    //     if (i <= MAX_LEVEL - 1) {
+    //         if (i < maxProgress?.level + 1 || i == 0) {
+    //             button.enable()
+    //         } else {
+    //             button.disable()
+    //         }
+    //     } else {
+    //         button.enable()
+    //     }
+    // })
 }
 
 function initBoard() {
@@ -137,7 +142,7 @@ const initGameButtons = () => {
         )
     )
 
-    new ui.MenuButton({
+    gameButtons.push(new ui.MenuButton({
         parent: sceneParentEntity,
         position: Vector3.create(-1, 1, 3),
         scale: Vector3.create(1.5, 1.5, 1.5),
@@ -149,9 +154,9 @@ const initGameButtons = () => {
         () => {
             playerAnswer--
         }
-    )
+    ))
 
-    new ui.MenuButton({
+    gameButtons.push(new ui.MenuButton({
         parent: sceneParentEntity,
         position: Vector3.create(-3, 1, 3),
         scale: Vector3.create(1.5, 1.5, 1.5),
@@ -163,9 +168,9 @@ const initGameButtons = () => {
         () => {
             playerAnswer++
         }
-    )
+    ))
 
-    new ui.MenuButton({
+    gameButtons.push(new ui.MenuButton({
         parent: sceneParentEntity,
         position: Vector3.create(-4, 1, 3),
         scale: Vector3.create(1.5, 1.5, 1.5),
@@ -182,7 +187,7 @@ const initGameButtons = () => {
             }
             else console.log("LOSE")
         }
-    )
+    ))
 
     const sign = engine.addEntity()
 
@@ -208,9 +213,7 @@ const initGameButtons = () => {
 const initialEntity = (count: number) => {
     let x = 0
     let y = 0
-    if (gameState.entityInRoket.length == 0) {
-        for (let i = 0; i <= entityAmount; i++) gameState.entityInRoket.push(engine.addEntity())
-    }
+        
     gameState.entityInRoket.forEach(entity => {
         VisibilityComponent.createOrReplace(entity, { visible: false })
     })

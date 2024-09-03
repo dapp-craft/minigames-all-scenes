@@ -22,5 +22,9 @@ export const finishCoords = [1, 2, 2]
 
 export const MAX_LEVEL = 9
 export const mainEntityId = 5000
+export const catEntityId = 3000
+export const catInRocketEntityId = 4000
+
+
 
 

@@ -1,18 +1,14 @@
 // We define the empty imports so the auto-complete feature works as expected.
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { engine, MeshCollider, MeshRenderer, Transform } from '@dcl/sdk/ecs'
-
-import { gameEntityManager } from './entityManager'
-import { Cartridge, CartridgeTest } from './Types'
-import { gameState } from './state'
-import { entityAmount, GAME_ID, rocketCoords, SESSION_DURATION } from './config'
+import { engine, MeshRenderer, Transform } from '@dcl/sdk/ecs'
+import { GameData, gameState } from './state'
+import { catEntityId, catInRocketEntityId, entityAmount, GAME_ID, mainEntityId, rocketCoords, SESSION_DURATION } from './config'
 
 import { initLibrary, queue, sceneParentEntity, ui } from '@dcl-sdk/mini-games/src'
 import { syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
 import { setupStaticModels } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
-import { lvl0 } from './leavels'
 import { initGame } from './game/game'
 
 initLibrary(engine, syncEntity, players, {
@@ -51,7 +47,7 @@ export async function main() {
       timeStart: 0.7,
       levelStart: 0.96,
       nameHeader: 'PLAYER',
-      // timeHeader: 'TIME',
+      timeHeader: 'TIME',
       levelHeader: 'LEVEL'
     }
   )
@@ -70,7 +66,16 @@ export async function main() {
 }
 
 const spawnInitialEntityPull = () => {
-  for (let i = 0; i <= entityAmount; i++) gameState.availableEntity.push(engine.addEntity());
+  for (let i = 0; i <= entityAmount; i++) {
+    const entity = engine.addEntity()
+    gameState.availableEntity.push(entity)
+    syncEntity(entity, [GameData.componentId], catEntityId+i) 
+  };
+  for (let i = 0; i <= entityAmount; i++) {
+    const entity = engine.addEntity()
+    gameState.entityInRoket.push(entity)
+    syncEntity(entity, [GameData.componentId], catInRocketEntityId + i)
+}
 }
 
 const rocket = () => {
@@ -112,6 +117,4 @@ const generateCartrige = () => {
   gameState.generatedCartrige.forEach((data: any, key: number) => console.log(key, data))
   console.log(generatedData.targetNumber);
   return gameState.generatedCartrige;
-
-
 }
