@@ -25,4 +25,5 @@ export const GameData = engine.defineComponent('game-data', {
     level: Schemas.Int,
   })
 
-export const rocketBoard = new board(Vector3.create(8, -3, 3))
+export const rocketCoords = Vector3.create(8, -3, 3)
+export const rocketBoard = new board(rocketCoords)

@@ -5,7 +5,7 @@ import { engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponen
 import { syncEntity } from "@dcl/sdk/network"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
-import { GameData, gameState, rocketBoard } from "../state"
+import { GameData, gameState, rocketBoard, rocketCoords } from "../state"
 import { movePlayerTo } from "~system/RestrictedActions"
 import { gameEntityManager } from "../entityManager"
 import { lvl0 } from "../leavels"
@@ -127,6 +127,7 @@ const initGameButtons = () => {
             ui.uiAssets.icons.play,
             `START LEVEL 1`,
             async () => {
+                if (gameState.rocketWindow) {Transform.getMutable(gameState.rocketWindow).position = rocketCoords}
                 queue.addPlayer()
             }
         )
