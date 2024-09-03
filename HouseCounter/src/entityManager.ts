@@ -5,6 +5,7 @@ import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { Cartridge, CartridgeTest, SpawnEntityDelay } from "./Types";
 import { gameState } from "./state";
 import { kitty } from "./resources/resources";
+import { initialEntity } from "./game/game";
 
 export class gameEntityManager {
 
@@ -42,6 +43,7 @@ export class gameEntityManager {
     public async startGame() {
         console.log("Start")
         utils.timers.setTimeout(async () => {
+            initialEntity(0)
             for (let i = 1; i <= this.roundCartrige.size; i++) {
                 let waveData = this.roundCartrige.get(i)!
                 this.currentWaveStateMaxEntity = waveData.itemQueue;

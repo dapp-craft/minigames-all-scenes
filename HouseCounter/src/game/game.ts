@@ -210,7 +210,7 @@ const initGameButtons = () => {
     })
 }
 
-const initialEntity = (count: number) => {
+export const initialEntity = (count: number) => {
     let x = 0
     let y = 0
         
