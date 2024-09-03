@@ -7,7 +7,6 @@ const staticModels = [
     ground,
     railings,
     gameZone,
-    kitty
 ]
 
 export const setupStaticModels = () => {

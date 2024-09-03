@@ -1,6 +1,6 @@
 // We define the empty imports so the auto-complete feature works as expected.
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { engine, MeshRenderer, Transform } from '@dcl/sdk/ecs'
+import { engine, GltfContainer, MeshRenderer, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { GameData, gameState } from './state'
 import { catEntityId, catInRocketEntityId, entityAmount, GAME_ID, mainEntityId, rocketCoords, SESSION_DURATION } from './config'
 
@@ -25,7 +25,6 @@ initLibrary(engine, syncEntity, players, {
 export async function main() {
   setupStaticModels()
   spawnInitialEntityPull()
-  rocket()
 
   const width = 2.5
   const height = 2.8
@@ -69,24 +68,13 @@ const spawnInitialEntityPull = () => {
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
     gameState.availableEntity.push(entity)
-    syncEntity(entity, [GameData.componentId], catEntityId+i) 
+    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catEntityId + i)
   };
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
     gameState.entityInRoket.push(entity)
-    syncEntity(entity, [GameData.componentId], catInRocketEntityId + i)
-}
-}
-
-const rocket = () => {
-  gameState.rocketWindow = engine.addEntity()
-  Transform.createOrReplace(gameState.rocketWindow,
-    {
-      position: Vector3.create(...rocketCoords),
-      rotation: Quaternion.Zero(),
-      scale: Vector3.create(3, 3, 3)
-    })
-  MeshRenderer.setPlane(gameState.rocketWindow)
+    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catInRocketEntityId + i)
+  }
 }
 
 function generateRandomNumberAndIterations() {

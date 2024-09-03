@@ -13,7 +13,7 @@ export const entityConfig = {
     distance: 5,
     initialEntitySize: .1,
     spacing: -.2,
-    maxRowLength: 1,
+    maxRowLength: 1.5,
 }
 
 export const rocketCoords = [8, 2, 2]

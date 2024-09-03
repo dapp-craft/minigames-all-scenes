@@ -5,11 +5,12 @@ import { engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponen
 import { syncEntity } from "@dcl/sdk/network"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
-import { GameData, gameState } from "../state"
+import { GameData, gameState, rocketBoard } from "../state"
 import { movePlayerTo } from "~system/RestrictedActions"
 import { gameEntityManager } from "../entityManager"
 import { lvl0 } from "../leavels"
 import { kitty } from "../resources/resources"
+import { board } from "../board"
 
 const BOARD_TRANSFORM = {
     position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -65,10 +66,15 @@ async function startGame() {
     const localPlayer = getPlayer()
     sessionStartedAt = Date.now()
 
+    movePlayerTo({
+        newRelativePosition: Vector3.create(8, 1, 5),
+        cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
+    })
+
     gameButtons.forEach((button, i) => button.disable())
 
     entityCounter = -1
-    initialEntity(lvl0.initialEntityAmount)
+    rocketBoard.showBoard(lvl0.initialEntityAmount)
     const entityManager = new gameEntityManager(lvl0);
     entityCounter = await entityManager.startGame()
 
@@ -78,22 +84,6 @@ async function startGame() {
         playerAddress: localPlayer?.userId,
         playerName: localPlayer?.name
     })
-
-    // console.log('Max progress', maxProgress)
-    // const levelToStart = maxProgress?.level ? Math.min(maxProgress?.level + 1, MAX_LEVEL) : 1
-    // console.log('Starting level', levelToStart)
-
-    // gameButtons.forEach((button, i) => {
-    //     if (i <= MAX_LEVEL - 1) {
-    //         if (i < maxProgress?.level + 1 || i == 0) {
-    //             button.enable()
-    //         } else {
-    //             button.disable()
-    //         }
-    //     } else {
-    //         button.enable()
-    //     }
-    // })
 }
 
 function initBoard() {
@@ -143,36 +133,35 @@ const initGameButtons = () => {
     )
 
     gameButtons.push(new ui.MenuButton({
-        parent: sceneParentEntity,
-        position: Vector3.create(-1, 1, 3),
+        // parent: sceneParentEntity,
+        position: Vector3.create(9, 1, 4),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
         ui.uiAssets.shapes.SQUARE_RED,
         ui.uiAssets.icons.leftArrow,
-        "1 CAT",
+        "-1",
         () => {
             playerAnswer--
         }
     ))
 
     gameButtons.push(new ui.MenuButton({
-        parent: sceneParentEntity,
-        position: Vector3.create(-3, 1, 3),
+        // parent: sceneParentEntity,
+        position: Vector3.create(7, 1, 4),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
         ui.uiAssets.shapes.SQUARE_RED,
         ui.uiAssets.icons.rightArrow,
-        "2 CAT",
+        "+1",
         () => {
             playerAnswer++
         }
     ))
 
     gameButtons.push(new ui.MenuButton({
-        parent: sceneParentEntity,
-        position: Vector3.create(-4, 1, 3),
+        position: Vector3.create(6, 1, 4),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
@@ -183,7 +172,7 @@ const initGameButtons = () => {
             console.log(entityCounter, playerAnswer)
             if (entityCounter == playerAnswer) {
                 console.log("WIN WIN WIN WIN WIN")
-                initialEntity(entityCounter)
+                rocketBoard.showBoard(entityCounter)
             }
             else console.log("LOSE")
         }
@@ -192,7 +181,7 @@ const initGameButtons = () => {
     const sign = engine.addEntity()
 
     Transform.create(sign, {
-        position: Vector3.create(6, 1, 11),
+        position: Vector3.create(8, 1, 4),
         rotation: { x: 0, y: 1, z: 0, w: 0 }
     })
 
@@ -211,25 +200,5 @@ const initGameButtons = () => {
 }
 
 export const initialEntity = (count: number) => {
-    let x = 0
-    let y = 0
-        
-    gameState.entityInRoket.forEach(entity => {
-        VisibilityComponent.createOrReplace(entity, { visible: false })
-    })
-    for (let i = 0; i < count; i++) {
-        const entity = gameState.entityInRoket[i]
-        VisibilityComponent.createOrReplace(entity, { visible: true })
-        GltfContainer.createOrReplace(entity, { src: kitty.src })
-        Transform.createOrReplace(entity, {
-            parent: gameState.rocketWindow!,
-            position: Vector3.create((x - 2) * entityConfig.spacing, (y - 2) * entityConfig.spacing, +.2),
-            scale: Vector3.create(entityConfig.initialEntitySize, entityConfig.initialEntitySize, entityConfig.initialEntitySize)
-        })
-        x++
-        if (x * (Math.abs(entityConfig.initialEntitySize) + Math.abs(entityConfig.spacing)) > entityConfig.maxRowLength) {
-            x = 0
-            y++
-        }
-    }
+
 }

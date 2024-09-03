@@ -3,7 +3,7 @@ import { EasingFunction, engine, Entity, GltfContainer, MeshRenderer, Transform,
 import { entityAmount, entityConfig, finishCoords, modelPath, startCoords } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { Cartridge, CartridgeTest, SpawnEntityDelay } from "./Types";
-import { gameState } from "./state";
+import { gameState, rocketBoard } from "./state";
 import { kitty } from "./resources/resources";
 import { initialEntity } from "./game/game";
 
@@ -16,7 +16,7 @@ export class gameEntityManager {
     private currentWaveStateMaxEntity = 0
     private currentWaveStateEntityCount = 0
     private entityIndex = 1
-    private rocketCoordinate = Vector3.create(Transform.get(gameState.rocketWindow!).position.x, Transform.get(gameState.rocketWindow!).position.y, Transform.get(gameState.rocketWindow!).position.z - 1)
+    private rocketCoordinate = Vector3.create(8, 2, 1)
 
     private resolveReady!: () => void
     private entityReady!: () => void
@@ -44,12 +44,13 @@ export class gameEntityManager {
         console.log("Start")
         utils.timers.setTimeout(async () => {
             initialEntity(0)
+            rocketBoard.hideBoard()
             for (let i = 1; i <= this.roundCartrige.size; i++) {
                 let waveData = this.roundCartrige.get(i)!
                 this.currentWaveStateMaxEntity = waveData.itemQueue;
                 for (let j = 0; j < waveData.itemQueue; j++) {
                     this.spawnEntity("test", waveData.goOut);
-                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? (Math.random() * (this.spawnEntityDelay.time / 10)) + 300 : this.spawnEntityDelay.time);
+                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? (Math.random() * (this.spawnEntityDelay.time / 100)) + 200 : this.spawnEntityDelay.time);
                     await this.entityMoved;
                     this.entityMoved = new Promise(r => this.entityReady = r);
                 }
