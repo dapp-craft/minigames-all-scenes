@@ -19,8 +19,10 @@ export class gameEntityManager {
 
     private resolveReady!: () => void
     private entityReady!: () => void
+    private answerReady!: () => void
     private waveIsDone: Promise<void>
     private entityMoved: Promise<void>
+    private answerIsDone: Promise<void>
 
 
     constructor(roundData: {
@@ -34,11 +36,11 @@ export class gameEntityManager {
 
         this.waveIsDone = new Promise((res) => { this.resolveReady = res })
         this.entityMoved = new Promise((res) => { this.entityReady = res })
+        this.answerIsDone = new Promise((res) => { this.answerReady = res })
     }
 
     public async startGame() {
         console.log("Start")
-        this.initialEntity(this.entityCounter)
         utils.timers.setTimeout(async () => {
             for (let i = 1; i <= this.roundCartrige.size; i++) {
                 let waveData = this.roundCartrige.get(i)!
@@ -54,9 +56,14 @@ export class gameEntityManager {
                 this.entityIndex = 1
                 console.log(this.entityCounter)
             }
-            this.initialEntity(this.entityCounter)
-            console.log("Res: ", this.entityCounter)
+            this.answerReady()
+            console.log("Res: ", this.entityCounter);
+
         }, 3000)
+        await this.answerIsDone
+        this.answerIsDone = new Promise(r => this.answerReady = r)
+        console.log(this.entityCounter, this.entityCounter)
+        return this.entityCounter;
     }
 
     private spawnEntity(modelName: string, isOut: boolean) {
@@ -105,31 +112,6 @@ export class gameEntityManager {
                 }
             }
         }, 1, `myEntityMove${entity}`);
-    }
-
-    private initialEntity(count: number) {
-        let x = 0
-        let y = 0
-        if (gameState.entityInRoket.length == 0) {
-            for(let i = 0; i <= entityAmount; i++) gameState.entityInRoket.push(engine.addEntity())
-        }
-        for (let i = 0; i < count; i++) {
-            console.log(gameState.entityInRoket.length)
-            const entity = gameState.entityInRoket[i]
-            VisibilityComponent.createOrReplace(entity, { visible: true })
-            GltfContainer.createOrReplace(entity, { src: kitty.src })
-            Transform.createOrReplace(entity, {
-                parent: gameState.rocketWindow!,
-                position: Vector3.create((x - 2) * entityConfig.spacing, (y - 2) * entityConfig.spacing, +.2),
-                scale: Vector3.create(entityConfig.initialEntitySize, entityConfig.initialEntitySize, entityConfig.initialEntitySize)
-            })
-            x++
-            if (x * (Math.abs(entityConfig.initialEntitySize) + Math.abs(entityConfig.spacing)) > entityConfig.maxRowLength) {
-                x = 0
-                y++
-            }
-            console.log(count, entity)
-        }
     }
 
     private getRandomPointOnCircle() {

@@ -1,14 +1,15 @@
 import { progress, queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
-import { mainEntityId, MAX_LEVEL } from "../config"
-import { Quaternion, Vector3 } from "@dcl/sdk/math"
-import { engine, Entity, Transform } from "@dcl/sdk/ecs"
+import { entityAmount, entityConfig, mainEntityId, MAX_LEVEL } from "../config"
+import { Color4, Quaternion, Vector3 } from "@dcl/sdk/math"
+import { engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { syncEntity } from "@dcl/sdk/network"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
-import { GameData } from "../state"
+import { GameData, gameState } from "../state"
 import { movePlayerTo } from "~system/RestrictedActions"
 import { gameEntityManager } from "../entityManager"
 import { lvl0 } from "../leavels"
+import { kitty } from "../resources/resources"
 
 const BOARD_TRANSFORM = {
     position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -22,6 +23,8 @@ export let boardEntity: Entity
 let gameButtons: ui.MenuButton[] = []
 let maxProgress: progress.IProgress
 let timer: ui.Timer3D
+let playerAnswer = 0
+let entityCounter = -1
 export let sessionStartedAt: number
 
 export const initGame = async () => {
@@ -62,35 +65,30 @@ async function startGame() {
     const localPlayer = getPlayer()
     sessionStartedAt = Date.now()
 
+    entityCounter = -1
+    initialEntity(lvl0.initialEntityAmount)
+    const entityManager = new gameEntityManager(lvl0);
+    entityCounter = await entityManager.startGame()
+
     GameData.createOrReplace(gameDataEntity, {
         playerAddress: localPlayer?.userId,
         playerName: localPlayer?.name
     })
-
-    // movePlayerTo({
-    //     newRelativePosition: Vector3.create(8, 1, 5),
-    //     cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
-    // })
     console.log('Max progress', maxProgress)
     const levelToStart = maxProgress?.level ? Math.min(maxProgress?.level + 1, MAX_LEVEL) : 1
     console.log('Starting level', levelToStart)
 
     gameButtons.forEach((button, i) => {
         if (i <= MAX_LEVEL - 1) {
-          //set level buttons according to currentLevel
-          //TODO: check max level played on progress
-          if (i < maxProgress?.level + 1 || i == 0) {
-            button.enable()
-          } else {
-            button.disable()
-          }
+            if (i < maxProgress?.level + 1 || i == 0) {
+                button.enable()
+            } else {
+                button.disable()
+            }
         } else {
-          button.enable()
+            button.enable()
         }
-      })
-
-    // setTilesPointerEvents()
-    // startNewLevel(levelToStart)
+    })
 }
 
 function initBoard() {
@@ -126,134 +124,109 @@ const initGameButtons = () => {
         new ui.MenuButton(
             {
                 parent: sceneParentEntity,
-                // position: levelButtons[i + 1].position,
                 position: Vector3.create(0, 1, 3),
                 scale: Vector3.create(1.5, 1.5, 1.5),
                 rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
             },
             ui.uiAssets.shapes.SQUARE_GREEN,
-            ui.uiAssets.numbers[1],
+            ui.uiAssets.icons.play,
             `START LEVEL 1`,
             async () => {
-                // startNewLevel(i + 1)
-                // console.log("New lvl")
-                // button.enable()
                 queue.addPlayer()
-                const entityManager = new gameEntityManager(lvl0);
-                await entityManager.startGame()
-                
             }
         )
     )
 
-    // gameButtons.push(new ui.MenuButton({
-    //     parent: sceneParentEntity,
-    //     position: Vector3.create(-1, 1, 3),
-    //     scale: Vector3.create(1.5, 1.5, 1.5),
-    //     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    // },
-    //     ui.uiAssets.shapes.SQUARE_RED,
-    //     ui.uiAssets.numbers[1],
-    //     "1 CAT",
-    //     () => {
-    //         console.log("1")
-    //     }
-    // ))
-
-    // gameButtons.push(new ui.MenuButton({
-    //     parent: sceneParentEntity,
-    //     position: Vector3.create(-2, 1, 3),
-    //     scale: Vector3.create(1.5, 1.5, 1.5),
-    //     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    // },
-    //     ui.uiAssets.shapes.SQUARE_RED,
-    //     ui.uiAssets.numbers[2],
-    //     "2 CAT",
-    //     () => {
-    //         console.log("2")
-    //     }
-    // ))
-    
-    // for (let i = 1; i <= 9; i++) {
-    //     gameButtons.push(new ui.MenuButton({
-    //         parent: sceneParentEntity,
-    //         position: Vector3.create((((-i-1)/2)), 1, 3),
-    //         scale: Vector3.create(1.5, 1.5, 1.5),
-    //         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    //     },
-    //         ui.uiAssets.shapes.SQUARE_RED,
-    //         ui.uiAssets.numbers[i],
-    //         `${i} CAT`,
-    //         () => {
-    //             console.log(i)
-    //         }
-    //     ))
-    // }
-
-    gameButtons.push(new ui.MenuButton({
+    new ui.MenuButton({
         parent: sceneParentEntity,
-        //   position: restartButton.position,
-        position: Vector3.create(1, 1, 3),
-
+        position: Vector3.create(-1, 1, 3),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
         ui.uiAssets.shapes.SQUARE_RED,
-        ui.uiAssets.icons.restart,
-        "RESTART LEVEL",
+        ui.uiAssets.icons.leftArrow,
+        "1 CAT",
         () => {
-            // startNewLevel(gameState.lvl)
-            console.log("Restart lvl")
+            playerAnswer--
         }
-    ))
-
-    gameButtons.push(new ui.MenuButton({
-        parent: sceneParentEntity,
-        // position: sfxButton.position,
-        position: Vector3.create(2, 1, 3),
-
-        scale: Vector3.create(1.5, 1.5, 1.5),
-        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    },
-        ui.uiAssets.shapes.SQUARE_RED,
-        ui.uiAssets.icons.sound,
-        'Sound FX',
-        () => {
-            // sfxEnable = !sfxEnable 
-        }
-    ))
-
-    gameButtons.push(new ui.MenuButton({
-        parent: sceneParentEntity,
-        // position: exitButton.position,
-        position: Vector3.create(6, 1, 3),
-
-        scale: Vector3.create(1.5, 1.5, 1.5),
-        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    },
-        ui.uiAssets.shapes.RECT_RED,
-        ui.uiAssets.icons.exitText,
-        'Exit from game area',
-        () => {
-            // exitGame() 
-            console.log("Exit game")
-        }
-    ))
+    )
 
     new ui.MenuButton({
         parent: sceneParentEntity,
-        // position: musicButton.position,
-        position: Vector3.create(3, 1, 3),
-
+        position: Vector3.create(-3, 1, 3),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
         ui.uiAssets.shapes.SQUARE_RED,
-        ui.uiAssets.icons.music,
-        'Play/Stop Music',
+        ui.uiAssets.icons.rightArrow,
+        "2 CAT",
         () => {
-            // soundManager.themePlaying(!soundManager.getThemeStatus()) 
-            console.log("Sound")
+            playerAnswer++
         }
     )
+
+    new ui.MenuButton({
+        parent: sceneParentEntity,
+        position: Vector3.create(-4, 1, 3),
+        scale: Vector3.create(1.5, 1.5, 1.5),
+        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+    },
+        ui.uiAssets.shapes.SQUARE_RED,
+        ui.uiAssets.icons.hint,
+        "CONFIRM",
+        () => {
+            console.log(entityCounter, playerAnswer)
+            if (entityCounter == playerAnswer) {
+                console.log("WIN WIN WIN WIN WIN")
+                initialEntity(entityCounter)
+            }
+            else console.log("LOSE")
+        }
+    )
+
+    const sign = engine.addEntity()
+
+    Transform.create(sign, {
+        position: Vector3.create(6, 1, 11),
+        rotation: { x: 0, y: 1, z: 0, w: 0 }
+    })
+
+    TextShape.create(sign, {
+        text: `${playerAnswer}`,
+        fontSize: 5,
+    })
+
+    engine.addSystem(() => {
+        if (playerAnswer < 0) {
+            playerAnswer = 0
+            return
+        }
+        TextShape.getMutable(sign).text = `${playerAnswer}`
+    })
+}
+
+const initialEntity = (count: number) => {
+    let x = 0
+    let y = 0
+    if (gameState.entityInRoket.length == 0) {
+        for (let i = 0; i <= entityAmount; i++) gameState.entityInRoket.push(engine.addEntity())
+    }
+    gameState.entityInRoket.forEach(entity => {
+        VisibilityComponent.createOrReplace(entity, { visible: false })
+    })
+    for (let i = 0; i < count; i++) {
+        const entity = gameState.entityInRoket[i]
+        VisibilityComponent.createOrReplace(entity, { visible: true })
+        GltfContainer.createOrReplace(entity, { src: kitty.src })
+        Transform.createOrReplace(entity, {
+            parent: gameState.rocketWindow!,
+            position: Vector3.create((x - 2) * entityConfig.spacing, (y - 2) * entityConfig.spacing, +.2),
+            scale: Vector3.create(entityConfig.initialEntitySize, entityConfig.initialEntitySize, entityConfig.initialEntitySize)
+        })
+        x++
+        if (x * (Math.abs(entityConfig.initialEntitySize) + Math.abs(entityConfig.spacing)) > entityConfig.maxRowLength) {
+            x = 0
+            y++
+        }
+    }
 }
