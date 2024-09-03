@@ -16,7 +16,7 @@ export class gameEntityManager {
     private currentWaveStateMaxEntity = 0
     private currentWaveStateEntityCount = 0
     private entityIndex = 1
-    private rocketCoordinate = Vector3.create(8, 2, 1)
+    private rocketCoordinate = Vector3.create(8, 1, 4)
 
     private resolveReady!: () => void
     private entityReady!: () => void

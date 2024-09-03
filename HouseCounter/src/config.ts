@@ -16,9 +16,9 @@ export const entityConfig = {
     maxRowLength: 1.5,
 }
 
-export const rocketCoords = [8, 2, 2]
-export const startCoords = [15, 2, 2]
-export const finishCoords = [1, 2, 2]
+export const rocketCoords = [8, 2, 8]
+export const startCoords = [15, .5, 5]
+export const finishCoords = [1, .5, 5]
 
 export const MAX_LEVEL = 9
 export const mainEntityId = 5000

@@ -67,7 +67,7 @@ async function startGame() {
     sessionStartedAt = Date.now()
 
     movePlayerTo({
-        newRelativePosition: Vector3.create(8, 1, 5),
+        newRelativePosition: Vector3.create(8, 1, 7),
         cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
     })
 
@@ -135,7 +135,7 @@ const initGameButtons = () => {
 
     gameButtons.push(new ui.MenuButton({
         // parent: sceneParentEntity,
-        position: Vector3.create(9, 1, 4),
+        position: Vector3.create(9.5, 1, 6),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
@@ -149,7 +149,7 @@ const initGameButtons = () => {
 
     gameButtons.push(new ui.MenuButton({
         // parent: sceneParentEntity,
-        position: Vector3.create(7, 1, 4),
+        position: Vector3.create(6.5, 1, 6),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
@@ -162,7 +162,7 @@ const initGameButtons = () => {
     ))
 
     gameButtons.push(new ui.MenuButton({
-        position: Vector3.create(6, 1, 4),
+        position: Vector3.create(6, 1, 6),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
@@ -182,7 +182,7 @@ const initGameButtons = () => {
     const sign = engine.addEntity()
 
     Transform.create(sign, {
-        position: Vector3.create(8, 1, 4),
+        position: Vector3.create(8, 1, 6),
         rotation: { x: 0, y: 1, z: 0, w: 0 }
     })
 
