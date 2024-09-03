@@ -1,5 +1,5 @@
 import { GltfContainer, MeshCollider, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
-import { floor, wall, ground, railings, gameZone, kitty } from '../resources/resources'
+import { floor, wall, ground, railings, gameZone, kitty, bus, rocket } from '../resources/resources'
 
 const staticModels = [
     floor,
@@ -7,6 +7,8 @@ const staticModels = [
     ground,
     railings,
     gameZone,
+    bus,
+    rocket,
 ]
 
 export const setupStaticModels = () => {

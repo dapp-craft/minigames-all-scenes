@@ -9,6 +9,8 @@ export const wall: PBGltfContainer = { src: modelsFolder + 'obj_wall.gltf' };
 export const ground: PBGltfContainer = { src: modelsFolder + 'obj_ground.gltf' };
 export const railings: PBGltfContainer = { src: modelsFolder + 'obj_railings.gltf' };
 export const kitty: PBGltfContainer = { src: modelsFolder + 'npc_kitty.gltf' };
+export const bus: PBGltfContainer = { src: modelsFolder + 'obj_bus.gltf' };
+export const rocket: PBGltfContainer = { src: modelsFolder + 'obj_rocket.gltf' };
 
 //Game Zone Collider
 export const gameZone: PBGltfContainer = { src: modelsFolder + 'obj_gamezone.gltf' };
