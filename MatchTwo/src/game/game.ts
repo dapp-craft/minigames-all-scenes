@@ -113,24 +113,6 @@ function createTile(tileNumber: number) {
     shapeEntity: tileShapeEntity
   }
 
-  // cooldown is needed to avoild multiple clicks on the same tile that will cause the wrong tile rotation
-  const cb = () => {
-    onTileClick(tile)
-    pointerEventsSystem.removeOnPointerDown(tileShapeEntity)
-    utils.timers.setTimeout(() => {
-      pointerEventsSystem.onPointerDown(
-        {
-          entity: tileShapeEntity,
-          opts: {
-            button: InputAction.IA_POINTER,
-            hoverText: 'Click to flip the tile'
-          }
-        },
-        cb
-      )
-    }, FLIP_DURATION)
-  }
-
   pointerEventsSystem.onPointerDown(
     {
       entity: tileShapeEntity,
@@ -139,7 +121,7 @@ function createTile(tileNumber: number) {
         hoverText: 'Click to flip the tile'
       }
     },
-    cb
+    () => onTileClick(tile)
   )
 
   tiles.push(tile)
@@ -165,6 +147,7 @@ async function flipTile(tile: TileType) {
   
   const newTileState = !Tile.get(tile.mainEntity).isFlipped
   Tile.getMutable(tile.mainEntity).isFlipped = newTileState
+  pointerEventsSystem.removeOnPointerDown(tile.shapeEntity)
 
   return new Promise<void>((resolve) => {
     utils.timers.setTimeout(() => {
@@ -228,5 +211,26 @@ function checkIfMatch() {
     console.log('No match')
     flipTile(tile1)
     flipTile(tile2)
+    pointerEventsSystem.onPointerDown(
+      {
+        entity: tile1.shapeEntity,
+        opts: {
+          button: InputAction.IA_POINTER,
+          hoverText: 'Click to flip the tile'
+        }
+      },
+      () => onTileClick(tile1)
+    )
+    pointerEventsSystem.onPointerDown(
+      {
+        entity: tile2.shapeEntity,
+        opts: {
+          button: InputAction.IA_POINTER,
+          hoverText: 'Click to flip the tile'
+        }
+      },
+      () => onTileClick(tile2)
+    )
+
   }
 }
