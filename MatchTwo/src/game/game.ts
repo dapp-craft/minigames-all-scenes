@@ -21,14 +21,23 @@ import { setupGameUI } from './UiObjects'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { tileShape, tileImages } from '../resources/resources'
 import * as utils from '@dcl-sdk/utils'
+import { init } from '@dcl-sdk/mini-games/src/config'
+
+
+type TileType = {
+  mainEntity: Entity,
+  imageEntity: Entity,
+  shapeEntity: Entity
+}
 
 let gameDataEntity: Entity
 
-let tiles: Entity[] = []
-let imageTiles: Entity[] = []
+let tiles: TileType[] = []
+export let flippedTileQueue: TileType[] = []
+
 
 const gameState = {
-  tilesCount: 1
+  tilesCount: 10
 }
 
 export function initGame() {
@@ -50,7 +59,7 @@ export function initGame() {
     }
   }
 
-  createTile(0)
+  initTiles()
   setImages()
 }
 
@@ -61,36 +70,48 @@ function initGameDataEntity() {
 }
 
 function getReadyToStart() {
-  console.log('Get ready to start')
+  // console.log('Get ready to start')
 }
 
-function createTile(imageNumber: number) {
-  const image = tileImages[imageNumber]
-  const tile = engine.addEntity()
-  Transform.create(tile, {
-    position: Vector3.create(8, 1, 8)
+function initTiles() {
+  const tilesCount = gameState.tilesCount
+  for (let i = 0; i < tilesCount; i++) {
+    createTile(i)
+  }
+}
+
+function createTile(tileNumber: number) {
+  const mainTileEntity = engine.addEntity()
+  Transform.create(mainTileEntity, {
+    position: Vector3.create(4 + (tileNumber % 5) * 1.2, 1 + (Math.floor(tileNumber / 5) * 1.2), 8)
   })
-  Tile.create(tile, {
+  Tile.create(mainTileEntity, {
     isFlipped: false,
-    image: image.src
+    image: '',
+    matched: false
   })
 
   // Image
   const tileImage = engine.addEntity()
   Transform.create(tileImage, {
-    parent: tile,
+    parent: mainTileEntity,
     position: Vector3.create(0, 0, 0)
   })
   MeshRenderer.setPlane(tileImage)
-  imageTiles.push(tileImage)
 
   // SHape
   const tileShapeEntity = engine.addEntity()
   Transform.create(tileShapeEntity, {
-    parent: tile,
+    parent: mainTileEntity,
     position: { x: 0, y: 0, z: -0.015 }
   })
   GltfContainer.create(tileShapeEntity, tileShape)
+
+  const tile = {
+    mainEntity: mainTileEntity,
+    imageEntity: tileImage,
+    shapeEntity: tileShapeEntity
+  }
 
   // cooldown is needed to avoild multiple clicks on the same tile that will cause the wrong tile rotation
   const cb = () => {
@@ -120,19 +141,36 @@ function createTile(imageNumber: number) {
     },
     cb
   )
+
+  tiles.push(tile)
 }
 
-function onTileClick(tile: Entity) {
+async function onTileClick(tile: TileType) {
   // TODO use board rotation to define start and end rotation
-  const startRotation = Transform.get(tile).rotation
+  await flipTile(tile)
+  checkIfMatch()
+}
+
+async function flipTile(tile: TileType) {
+  const startRotation = Transform.get(tile.mainEntity).rotation
   const endRotation = Quaternion.multiply(startRotation, Quaternion.fromEulerDegrees(0, 180, 0))
-  Tween.createOrReplace(tile, {
+  Tween.createOrReplace(tile.mainEntity, {
     mode: Tween.Mode.Rotate({
       start: startRotation,
       end: endRotation
     }),
     duration: FLIP_DURATION,
     easingFunction: EasingFunction.EF_EASECUBIC
+  })
+  
+  const newTileState = !Tile.get(tile.mainEntity).isFlipped
+  Tile.getMutable(tile.mainEntity).isFlipped = newTileState
+
+  return new Promise<void>((resolve) => {
+    utils.timers.setTimeout(() => {
+      if (newTileState) flippedTileQueue.push(tile)
+      resolve()
+    }, FLIP_DURATION)
   })
 }
 
@@ -142,8 +180,11 @@ function setImages() {
   for (let i = 0; i < tilesCount; i++) {
     const image = tileImages[Math.floor(i / 2)].src
 
-    const imageEntity = imageTiles[i]
+    const tile = tiles[i]
+    const imageEntity = tile.imageEntity
+    const tileEntity = tile.mainEntity
 
+    Tile.getMutable(tileEntity).image = image
     console.log(imageEntity, image, i)
     Material.createOrReplace(imageEntity, {
       material: {
@@ -170,5 +211,22 @@ function setImages() {
         }
       }
     })
+  }
+}
+
+function checkIfMatch() {
+  if (flippedTileQueue.length < 2) {
+    return
+  }
+  const tile1 = flippedTileQueue.shift() as TileType
+  const tile2 = flippedTileQueue.shift() as TileType
+  if (Tile.get(tile1.mainEntity).image === Tile.get(tile2.mainEntity).image) {
+    console.log('Match!')
+    Tile.getMutable(tile1.mainEntity).matched = true
+    Tile.getMutable(tile2.mainEntity).matched = true
+  } else {
+    console.log('No match')
+    flipTile(tile1)
+    flipTile(tile2)
   }
 }

@@ -6,6 +6,7 @@ import { syncEntity } from '@dcl/sdk/network'
 import { GAME_ID, SESSION_DURATION } from './config'
 import players from '@dcl/sdk/players'
 import { initGame } from './game/game'
+import { setupUI } from './ui'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
@@ -20,4 +21,6 @@ initLibrary(engine, syncEntity, players, {
 
 export function main() {
   initGame()
+
+  setupUI()
 }
