@@ -153,7 +153,7 @@ async function flipTile(tile: TileType) {
     utils.timers.setTimeout(() => {
       if (newTileState) flippedTileQueue.push(tile)
       resolve()
-    }, FLIP_DURATION)
+    }, FLIP_DURATION + 200)
   })
 }
 
@@ -209,28 +209,32 @@ function checkIfMatch() {
     Tile.getMutable(tile2.mainEntity).matched = true
   } else {
     console.log('No match')
-    flipTile(tile1)
-    flipTile(tile2)
-    pointerEventsSystem.onPointerDown(
-      {
-        entity: tile1.shapeEntity,
-        opts: {
-          button: InputAction.IA_POINTER,
-          hoverText: 'Click to flip the tile'
-        }
-      },
-      () => onTileClick(tile1)
-    )
-    pointerEventsSystem.onPointerDown(
-      {
-        entity: tile2.shapeEntity,
-        opts: {
-          button: InputAction.IA_POINTER,
-          hoverText: 'Click to flip the tile'
-        }
-      },
-      () => onTileClick(tile2)
-    )
+    flipTile(tile1).then(() => {
+      pointerEventsSystem.onPointerDown(
+        {
+          entity: tile1.shapeEntity,
+          opts: {
+            button: InputAction.IA_POINTER,
+            hoverText: 'Click to flip the tile'
+          }
+        },
+        () => onTileClick(tile1)
+      )
+    })
+    flipTile(tile2).then(() => {
+      pointerEventsSystem.onPointerDown(
+        {
+          entity: tile2.shapeEntity,
+          opts: {
+            button: InputAction.IA_POINTER,
+            hoverText: 'Click to flip the tile'
+          }
+        },
+        () => onTileClick(tile2)
+      )
+    })
+    
+    
 
   }
 }
