@@ -9,6 +9,6 @@ export const SESSION_DURATION = 5 * MIN_
 export const SYNC_ENTITY_OFFSET = 5000
 
 export const MAX_IMAGES = 32
-export const FLIP_DURATION = 2 * SEC_
+export const FLIP_DURATION = 0.5 * SEC_
 
 export const DEBUG_MODE_UI = true
