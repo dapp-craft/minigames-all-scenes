@@ -1,4 +1,17 @@
-import { EasingFunction, Entity, GltfContainer, InputAction, Material, MaterialTransparencyMode, MeshRenderer, TextureFilterMode, Transform, Tween, engine, pointerEventsSystem } from '@dcl/sdk/ecs'
+import {
+  EasingFunction,
+  Entity,
+  GltfContainer,
+  InputAction,
+  Material,
+  MaterialTransparencyMode,
+  MeshRenderer,
+  TextureFilterMode,
+  Transform,
+  Tween,
+  engine,
+  pointerEventsSystem
+} from '@dcl/sdk/ecs'
 import { GameData, Tile } from './components/idnex'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { FLIP_DURATION, SYNC_ENTITY_OFFSET } from '../config'
@@ -11,12 +24,11 @@ import * as utils from '@dcl-sdk/utils'
 
 let gameDataEntity: Entity
 
-
 let tiles: Entity[] = []
 let imageTiles: Entity[] = []
 
 const gameState = {
-  tilesCount: 1,
+  tilesCount: 1
 }
 
 export function initGame() {
@@ -48,12 +60,9 @@ function initGameDataEntity() {
   syncEntity(gameDataEntity, [GameData.componentId], SYNC_ENTITY_OFFSET)
 }
 
-
-
 function getReadyToStart() {
-  console.log("Get ready to start")
+  console.log('Get ready to start')
 }
-
 
 function createTile(imageNumber: number) {
   const image = tileImages[imageNumber]
@@ -65,7 +74,6 @@ function createTile(imageNumber: number) {
     isFlipped: false,
     image: image.src
   })
-
 
   // Image
   const tileImage = engine.addEntity()
@@ -80,31 +88,48 @@ function createTile(imageNumber: number) {
   const tileShapeEntity = engine.addEntity()
   Transform.create(tileShapeEntity, {
     parent: tile,
-    position: { x: 0, y: 0, z: -0.015 },
+    position: { x: 0, y: 0, z: -0.015 }
   })
   GltfContainer.create(tileShapeEntity, tileShape)
 
-  pointerEventsSystem.onPointerDown({
-    entity: tileShapeEntity,
-    opts: {
-      button: InputAction.IA_POINTER,
-      hoverText: 'Click to flip the tile'
-    }
-  }, (e) => {
+  // cooldown is needed to avoild multiple clicks on the same tile that will cause the wrong tile rotation
+  const cb = () => {
     onTileClick(tile)
-  })
+    pointerEventsSystem.removeOnPointerDown(tileShapeEntity)
+    utils.timers.setTimeout(() => {
+      pointerEventsSystem.onPointerDown(
+        {
+          entity: tileShapeEntity,
+          opts: {
+            button: InputAction.IA_POINTER,
+            hoverText: 'Click to flip the tile'
+          }
+        },
+        cb
+      )
+    }, FLIP_DURATION)
+  }
+
+  pointerEventsSystem.onPointerDown(
+    {
+      entity: tileShapeEntity,
+      opts: {
+        button: InputAction.IA_POINTER,
+        hoverText: 'Click to flip the tile'
+      }
+    },
+    cb
+  )
 }
 
-
 function onTileClick(tile: Entity) {
-  
   // TODO use board rotation to define start and end rotation
   const startRotation = Transform.get(tile).rotation
   const endRotation = Quaternion.multiply(startRotation, Quaternion.fromEulerDegrees(0, 180, 0))
   Tween.createOrReplace(tile, {
     mode: Tween.Mode.Rotate({
       start: startRotation,
-      end: endRotation,
+      end: endRotation
     }),
     duration: FLIP_DURATION,
     easingFunction: EasingFunction.EF_EASECUBIC
@@ -112,11 +137,9 @@ function onTileClick(tile: Entity) {
 }
 
 function setImages() {
-  
   const tilesCount = gameState.tilesCount
 
   for (let i = 0; i < tilesCount; i++) {
-
     const image = tileImages[Math.floor(i / 2)].src
 
     const imageEntity = imageTiles[i]
