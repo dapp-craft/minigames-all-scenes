@@ -1,6 +1,6 @@
 // We define the empty imports so the auto-complete feature works as expected.
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { engine, GltfContainer, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
+import { engine, GltfContainer, MeshRenderer, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState, rocketCoords } from './state'
 import { catEntityId, catInRocketEntityId, entityAmount, GAME_ID, SESSION_DURATION } from './config'
 
@@ -11,6 +11,7 @@ import { setupStaticModels } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
 import { initGame } from './game/game'
 import { board } from './board'
+import { readGltfLocators } from '../../common/locators'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
@@ -64,6 +65,15 @@ export async function main() {
   setupUI()
 
   rocketBoard = new board(rocketCoords);
+  
+  readGltfLocators(`locators/obj_background.gltf`).then(data => {
+    data.forEach((l, n) => {
+      const entity = engine.addEntity()
+      Transform.create(entity, {...l, parent: gameState.rocketWindow})
+      MeshRenderer.setSphere(entity)
+    })
+  })
+  rocketBoard.showBoard()
 }
 
 
