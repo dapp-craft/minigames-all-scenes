@@ -3,6 +3,7 @@ import { gameState } from "./state";
 import { EasingFunction, engine, GltfContainer, MeshRenderer, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
 import { entityConfig } from "./config";
 import { kitty } from "./resources/resources";
+import { parentEntity, syncEntity } from "@dcl/sdk/network";
 
 export class board {
 
@@ -10,15 +11,21 @@ export class board {
     private position
 
     constructor(position: Vector3) {
+        
+        this.position = position
+        this.init()
+    }
+
+    private init () {
         gameState.rocketWindow = engine.addEntity()
         Transform.createOrReplace(gameState.rocketWindow,
             {
-                position: position,
+                position: this.position,
                 rotation: Quaternion.Zero(),
                 scale: Vector3.create(3, 3, 3)
             })
         MeshRenderer.setPlane(gameState.rocketWindow)
-        this.position = position
+        syncEntity(gameState.rocketWindow, [Transform.componentId], 5000)
     }
 
     private initBoardElements() {
@@ -33,7 +40,6 @@ export class board {
             VisibilityComponent.createOrReplace(entity, { visible: true })
             GltfContainer.createOrReplace(entity, { src: kitty.src })
             Transform.createOrReplace(entity, {
-                parent: gameState.rocketWindow!,
                 position: Vector3.create((x - 2) * entityConfig.spacing, (y - 2) * entityConfig.spacing, +.2),
                 scale: Vector3.create(entityConfig.initialEntitySize, entityConfig.initialEntitySize, entityConfig.initialEntitySize)
             })
@@ -42,6 +48,7 @@ export class board {
                 x = 0
                 y++
             }
+            parentEntity(entity, gameState.rocketWindow!)
         }
     }
 

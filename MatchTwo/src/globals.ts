@@ -1,4 +1,4 @@
-import { GltfContainer, MeshRenderer, Transform, TransformType, engine } from '@dcl/sdk/ecs'
+import { Transform, engine } from '@dcl/sdk/ecs'
 import { SoundManager } from './SoundManager'
 
 export const sceneParentEntity = engine.addEntity()

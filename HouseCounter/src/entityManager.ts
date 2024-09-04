@@ -3,9 +3,10 @@ import { EasingFunction, engine, Entity, GltfContainer, MeshRenderer, Transform,
 import { entityAmount, entityConfig, finishCoords, modelPath, startCoords } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { Cartridge, CartridgeTest, SpawnEntityDelay } from "./Types";
-import { gameState, rocketBoard } from "./state";
+import { gameState } from "./state";
 import { kitty } from "./resources/resources";
 import { initialEntity } from "./game/game";
+import { rocketBoard } from ".";
 
 export class gameEntityManager {
 

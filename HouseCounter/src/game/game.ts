@@ -1,16 +1,15 @@
 import { progress, queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
-import { entityAmount, entityConfig, mainEntityId, MAX_LEVEL } from "../config"
-import { Color4, Quaternion, Vector3 } from "@dcl/sdk/math"
-import { engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
+import { mainEntityId } from "../config"
+import { Quaternion, Vector3 } from "@dcl/sdk/math"
+import { engine, Entity, TextShape, Transform } from "@dcl/sdk/ecs"
 import { syncEntity } from "@dcl/sdk/network"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
-import { GameData, gameState, rocketBoard, rocketCoords } from "../state"
+import { GameData, gameState, rocketCoords } from "../state"
 import { movePlayerTo } from "~system/RestrictedActions"
 import { gameEntityManager } from "../entityManager"
 import { lvl0 } from "../leavels"
-import { kitty } from "../resources/resources"
-import { board } from "../board"
+import { rocketBoard } from ".."
 
 const BOARD_TRANSFORM = {
     position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -102,7 +101,7 @@ function initCountdownNumbers() {
     timer = new ui.Timer3D(
         {
             parent: sceneParentEntity,
-            position: Vector3.create(0, 3, -6),
+            position: Vector3.create(5, 3, -6),
             rotation: Quaternion.fromEulerDegrees(0, 0, 0)
         },
         1,
@@ -118,8 +117,7 @@ const initGameButtons = () => {
     gameButtons.push(
         new ui.MenuButton(
             {
-                parent: sceneParentEntity,
-                position: Vector3.create(0, 1, 3),
+                position: Vector3.create(8, 1, 11),
                 scale: Vector3.create(1.5, 1.5, 1.5),
                 rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
             },
@@ -134,7 +132,6 @@ const initGameButtons = () => {
     )
 
     gameButtons.push(new ui.MenuButton({
-        // parent: sceneParentEntity,
         position: Vector3.create(9.5, 1, 6),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
@@ -148,7 +145,6 @@ const initGameButtons = () => {
     ))
 
     gameButtons.push(new ui.MenuButton({
-        // parent: sceneParentEntity,
         position: Vector3.create(6.5, 1, 6),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)

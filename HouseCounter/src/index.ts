@@ -1,15 +1,16 @@
 // We define the empty imports so the auto-complete feature works as expected.
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { engine, GltfContainer, MeshRenderer, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
-import { GameData, gameState } from './state'
-import { catEntityId, catInRocketEntityId, entityAmount, GAME_ID, mainEntityId, rocketCoords, SESSION_DURATION } from './config'
+import { engine, GltfContainer, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
+import { gameState, rocketCoords } from './state'
+import { catEntityId, catInRocketEntityId, entityAmount, GAME_ID, SESSION_DURATION } from './config'
 
-import { initLibrary, queue, sceneParentEntity, ui } from '@dcl-sdk/mini-games/src'
-import { syncEntity } from '@dcl/sdk/network'
+import { initLibrary, queue, ui } from '@dcl-sdk/mini-games/src'
+import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
 import { setupStaticModels } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
 import { initGame } from './game/game'
+import { board } from './board'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
@@ -22,6 +23,8 @@ initLibrary(engine, syncEntity, players, {
   }
 })
 
+export let rocketBoard: any
+
 export async function main() {
   setupStaticModels()
   spawnInitialEntityPull()
@@ -32,8 +35,7 @@ export async function main() {
 
   new ui.ScoreBoard(
     {
-      parent: sceneParentEntity,
-      position: Vector3.create(-7.07, 3.02, 3.25),
+      position: Vector3.create(1.07, 2.5, 11.1),
       rotation: Quaternion.fromEulerDegrees(0, -90, 0),
       scale: Vector3.create(0.875, 0.78, 1)
     },
@@ -52,8 +54,7 @@ export async function main() {
   )
 
   queue.initQueueDisplay({
-    parent: sceneParentEntity,
-    position: Vector3.create(0, 2, 2.53653),
+    position: Vector3.create(8, 2, 10.53653),
     rotation: Quaternion.fromEulerDegrees(0, 0, 0),
     scale: Vector3.create(1, 1, 1)
   })
@@ -62,7 +63,10 @@ export async function main() {
 
   setupUI()
 
+  rocketBoard = new board(rocketCoords);
 }
+
+
 
 const spawnInitialEntityPull = () => {
   for (let i = 0; i <= entityAmount; i++) {
