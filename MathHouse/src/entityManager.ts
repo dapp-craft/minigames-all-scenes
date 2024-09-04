@@ -5,7 +5,6 @@ import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { Cartridge, CartridgeTest, SpawnEntityDelay } from "./Types";
 import { gameState } from "./state";
 import { kitty } from "./resources/resources";
-import { initialEntity } from "./game/game";
 import { rocketBoard } from ".";
 import { board } from "./board";
 
@@ -45,7 +44,6 @@ export class gameEntityManager {
     public async startGame() {
         console.log("Start")
         utils.timers.setTimeout(async () => {
-            initialEntity(0)
             rocketBoard.hideBoard()
             for (let i = 1; i <= this.roundCartrige.size; i++) {
                 if (this.gameEnd) return
@@ -128,11 +126,4 @@ export class gameEntityManager {
             VisibilityComponent.createOrReplace(entity, { visible: false })
         })
     }
-
-    // private getRandomPointOnCircle() {
-    //     const angle = Math.random() * 2 * Math.PI
-    //     const x = Transform.get(gameState.rocketWindow!).position.x + entityConfig.distance * Math.cos(angle)
-    //     const y = Math.abs(Transform.get(gameState.rocketWindow!).position.y * Math.sin(angle)) + entityConfig.distance
-    //     return Vector3.create(x, y, Transform.get(gameState.rocketWindow!).position.z)
-    // }
 }

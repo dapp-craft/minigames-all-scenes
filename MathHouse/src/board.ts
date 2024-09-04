@@ -2,8 +2,9 @@ import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { gameState } from "./state";
 import { EasingFunction, engine, GltfContainer, MeshRenderer, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
 import { entityConfig } from "./config";
-import { kitty } from "./resources/resources";
+import { background, cat01, cat02, kitty } from "./resources/resources";
 import { parentEntity, syncEntity } from "@dcl/sdk/network";
+import { readGltfLocators } from "../../common/locators";
 
 export class board {
 
@@ -11,48 +12,34 @@ export class board {
     private position
 
     constructor(position: Vector3) {
-        
+
         this.position = position
         this.init()
     }
 
-    private init () {
+    private async init() {
+        const data = await readGltfLocators(`locators/obj_background.gltf`)
         gameState.rocketWindow = engine.addEntity()
-        Transform.createOrReplace(gameState.rocketWindow,
-            {
-                position: this.position,
-                rotation: Quaternion.Zero(),
-                scale: Vector3.create(2, 2, 2)
-            })
-        MeshRenderer.setPlane(gameState.rocketWindow)
+        Transform.createOrReplace(gameState.rocketWindow, data.get('background'))
+        GltfContainer.createOrReplace(gameState.rocketWindow, { src: background.src })
         syncEntity(gameState.rocketWindow, [Transform.componentId], 5000)
     }
 
-    private initBoardElements() {
-        let x = 0
-        let y = 0
-
-        gameState.entityInRoket.forEach(entity => {
-            VisibilityComponent.createOrReplace(entity, { visible: false })
-        })
+    private async initBoardElements() {
+        const data = await readGltfLocators(`locators/obj_background.gltf`)
+        for (let i = 0; i < gameState.entityInRoket.length - 1; i++) {
+            const entity = gameState.entityInRoket[i]
+            GltfContainer.createOrReplace(entity, { src: cat01.src })
+            Transform.createOrReplace(entity, data.get(`cat0${i + 1}`))
+            parentEntity(entity, gameState.rocketWindow!)
+        }
         for (let i = 0; i < this.numberOfBoardElements; i++) {
             const entity = gameState.entityInRoket[i]
-            VisibilityComponent.createOrReplace(entity, { visible: true })
-            GltfContainer.createOrReplace(entity, { src: kitty.src })
-            Transform.createOrReplace(entity, {
-                position: Vector3.create((x - 2) * entityConfig.spacing, (y - 2) * entityConfig.spacing, +.2),
-                scale: Vector3.create(entityConfig.initialEntitySize, entityConfig.initialEntitySize, entityConfig.initialEntitySize)
-            })
-            x++
-            if (x * (Math.abs(entityConfig.initialEntitySize) + Math.abs(entityConfig.spacing)) > entityConfig.maxRowLength) {
-                x = 0
-                y++
-            }
-            parentEntity(entity, gameState.rocketWindow!)
+            GltfContainer.createOrReplace(entity, { src: cat02.src })
         }
     }
 
-    public showBoard(numberOfBoardElements: number) {
+    public async showBoard(numberOfBoardElements: number) {
         this.numberOfBoardElements = numberOfBoardElements
         Tween.createOrReplace(gameState.rocketWindow!, {
             mode: Tween.Mode.Move({
@@ -62,7 +49,7 @@ export class board {
             duration: 500,
             easingFunction: EasingFunction.EF_LINEAR,
         })
-        this.initBoardElements()
+        await this.initBoardElements()
     }
 
     public hideBoard() {

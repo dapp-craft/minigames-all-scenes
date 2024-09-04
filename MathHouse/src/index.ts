@@ -11,7 +11,6 @@ import { setupStaticModels } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
 import { initGame } from './game/game'
 import { board } from './board'
-import { readGltfLocators } from '../../common/locators'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
@@ -65,15 +64,16 @@ export async function main() {
   setupUI()
 
   rocketBoard = new board(rocketCoords);
-  
-  readGltfLocators(`locators/obj_background.gltf`).then(data => {
-    data.forEach((l, n) => {
-      const entity = engine.addEntity()
-      Transform.create(entity, {...l, parent: gameState.rocketWindow})
-      MeshRenderer.setSphere(entity)
-    })
-  })
-  rocketBoard.showBoard()
+
+  // readGltfLocators(`locators/obj_background.gltf`).then(data => {
+  //   data.forEach((l, n) => {
+  //     const entity = engine.addEntity()
+  //     Transform.create(entity, {...l, parent: gameState.rocketWindow})
+  //     console.log(n)
+  //     MeshRenderer.setSphere(entity)
+  //   })
+  // })
+  // rocketBoard.showBoard()
 }
 
 

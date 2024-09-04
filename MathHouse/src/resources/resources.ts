@@ -11,6 +11,9 @@ export const railings: PBGltfContainer = { src: modelsFolder + 'obj_railings.glt
 export const kitty: PBGltfContainer = { src: modelsFolder + 'npc_kitty.gltf' };
 export const bus: PBGltfContainer = { src: modelsFolder + 'obj_bus.gltf' };
 export const rocket: PBGltfContainer = { src: modelsFolder + 'obj_rocket.gltf' };
+export const cat01: PBGltfContainer = {src: modelsFolder + 'obj_cat01.gltf'}
+export const cat02: PBGltfContainer = {src: modelsFolder + 'obj_cat02.gltf'}
+export const background: PBGltfContainer = {src: modelsFolder + 'obj_background.gltf'}
 
 //Game Zone Collider
 export const gameZone: PBGltfContainer = { src: modelsFolder + 'obj_gamezone.gltf' };

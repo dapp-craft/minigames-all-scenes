@@ -1,7 +1,7 @@
 import { progress, queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
 import { mainEntityId } from "../config"
 import { Quaternion, Vector3 } from "@dcl/sdk/math"
-import { engine, Entity, TextShape, Transform } from "@dcl/sdk/ecs"
+import { Animator, engine, Entity, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { syncEntity } from "@dcl/sdk/network"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
@@ -41,7 +41,7 @@ export const initGame = async () => {
         if (player?.address === localPlayer?.userId) {
             getReadyToStart()
         } else {
-            entityManager.stopGame()
+            entityManager?.stopGame()
             GameData.createOrReplace(gameDataEntity, {
                 playerAddress: '',
                 playerName: '',
@@ -76,7 +76,7 @@ async function startGame() {
     rocketBoard.showBoard(lvl0.initialEntityAmount)
     entityManager = new gameEntityManager(lvl0);
     entityCounter = await entityManager.startGame()
-
+    // startWinAnimation()
     gameButtons.forEach((button, i) => button.enable())
 
     GameData.createOrReplace(gameDataEntity, {
@@ -125,7 +125,7 @@ const initGameButtons = () => {
             ui.uiAssets.icons.play,
             `START LEVEL 1`,
             async () => {
-                if (gameState.rocketWindow) {Transform.getMutable(gameState.rocketWindow).position = rocketCoords}
+                if (gameState.rocketWindow) { Transform.getMutable(gameState.rocketWindow).position = rocketCoords }
                 queue.addPlayer()
             }
         )
@@ -211,6 +211,18 @@ const initGameButtons = () => {
     })
 }
 
-export const initialEntity = (count: number) => {
+// function startWinAnimation() {
+//     const animations = engine.getEntitiesWith(Animator, VisibilityComponent)
+//     for (const [entity] of animations) {
+//         VisibilityComponent.getMutable(entity).visible = true
+//         Animator.getMutable(entity).states[0].playing = true
+//     }
 
-}
+//     utils.timers.setTimeout(() => {
+
+//         const animations = engine.getEntitiesWith(Animator, VisibilityComponent)
+//         for (const [entity] of animations) {
+//             VisibilityComponent.getMutable(entity).visible = false
+//         }
+//     }, 3000)
+// }
