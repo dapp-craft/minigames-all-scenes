@@ -15,7 +15,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Plane.009"
+			"name":"obj_bus"
 		}
 	],
 	"materials":[
@@ -36,7 +36,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.006",
+			"name":"B\u00e9zierCircle.003",
 			"primitives":[
 				{
 					"attributes":{
@@ -54,67 +54,67 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":5018,
+			"count":5216,
 			"max":[
-				6.5506415367126465,
+				6.709690570831299,
 				2.0870933532714844,
-				-2.0885045528411865
+				-3.1299948692321777
 			],
 			"min":[
-				-6.5506415367126465,
+				-6.709690570831299,
 				0.16693828999996185,
-				-4.999668598175049
+				-6.041159152984619
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":5018,
+			"count":5216,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":5018,
+			"count":5216,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":29016,
+			"count":29568,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":60216,
+			"byteLength":62592,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":60216,
-			"byteOffset":60216,
+			"byteLength":62592,
+			"byteOffset":62592,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":40144,
-			"byteOffset":120432,
+			"byteLength":41728,
+			"byteOffset":125184,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":58032,
-			"byteOffset":160576,
+			"byteLength":59136,
+			"byteOffset":166912,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":218608,
+			"byteLength":226048,
 			"uri":"obj_bus.bin"
 		}
 	]

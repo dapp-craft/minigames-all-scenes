@@ -15,7 +15,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Cube.001"
+			"name":"obj_rocket"
 		}
 	],
 	"materials":[
@@ -50,7 +50,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.001",
+			"name":"Cube.002",
 			"primitives":[
 				{
 					"attributes":{
@@ -77,29 +77,29 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":653,
+			"count":652,
 			"max":[
 				1.038373351097107,
 				4.432305335998535,
-				-2.51072096824646
+				-3.552211284637451
 			],
 			"min":[
 				-1.038373351097107,
 				0.17678403854370117,
-				-4.676632881164551
+				-5.718122959136963
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":653,
+			"count":652,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":653,
+			"count":652,
 			"type":"VEC2"
 		},
 		{
@@ -115,12 +115,12 @@
 			"max":[
 				1.3449375629425049,
 				3.460893154144287,
-				-2.5373456478118896
+				-3.57883620262146
 			],
 			"min":[
-				-1.3449373245239258,
+				-1.3449374437332153,
 				0.011878609657287598,
-				-4.650008678436279
+				-5.691497802734375
 			],
 			"type":"VEC3"
 		},
@@ -146,56 +146,56 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":7836,
+			"byteLength":7824,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":7836,
-			"byteOffset":7836,
+			"byteLength":7824,
+			"byteOffset":7824,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5224,
-			"byteOffset":15672,
+			"byteLength":5216,
+			"byteOffset":15648,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":4128,
-			"byteOffset":20896,
+			"byteOffset":20864,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":4560,
-			"byteOffset":25024,
+			"byteOffset":24992,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":4560,
-			"byteOffset":29584,
+			"byteOffset":29552,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":3040,
-			"byteOffset":34144,
+			"byteOffset":34112,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1536,
-			"byteOffset":37184,
+			"byteOffset":37152,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":38720,
+			"byteLength":38688,
 			"uri":"obj_rocket.bin"
 		}
 	]
