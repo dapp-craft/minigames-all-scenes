@@ -7,6 +7,7 @@ import { gameState } from "./state";
 import { kitty } from "./resources/resources";
 import { initialEntity } from "./game/game";
 import { rocketBoard } from ".";
+import { board } from "./board";
 
 export class gameEntityManager {
 
@@ -17,7 +18,7 @@ export class gameEntityManager {
     private currentWaveStateMaxEntity = 0
     private currentWaveStateEntityCount = 0
     private entityIndex = 1
-    private rocketCoordinate = Vector3.create(8, 1, 4)
+    private rocketCoordinate = Vector3.create(8, 1, 3)
 
     private resolveReady!: () => void
     private entityReady!: () => void
@@ -25,7 +26,7 @@ export class gameEntityManager {
     private waveIsDone: Promise<void>
     private entityMoved: Promise<void>
     private answerIsDone: Promise<void>
-
+    private gameEnd: boolean = false
 
     constructor(roundData: {
         waves: Map<number, CartridgeTest>,
@@ -47,6 +48,7 @@ export class gameEntityManager {
             initialEntity(0)
             rocketBoard.hideBoard()
             for (let i = 1; i <= this.roundCartrige.size; i++) {
+                if (this.gameEnd) return
                 let waveData = this.roundCartrige.get(i)!
                 this.currentWaveStateMaxEntity = waveData.itemQueue;
                 for (let j = 0; j < waveData.itemQueue; j++) {
@@ -118,10 +120,19 @@ export class gameEntityManager {
         }, 1, `myEntityMove${entity}`);
     }
 
-    private getRandomPointOnCircle() {
-        const angle = Math.random() * 2 * Math.PI
-        const x = Transform.get(gameState.rocketWindow!).position.x + entityConfig.distance * Math.cos(angle)
-        const y = Math.abs(Transform.get(gameState.rocketWindow!).position.y * Math.sin(angle)) + entityConfig.distance
-        return Vector3.create(x, y, Transform.get(gameState.rocketWindow!).position.z)
+    public stopGame() {
+        rocketBoard.hideBoard()
+        this.gameEnd = true
+        this.answerReady()
+        gameState.availableEntity.forEach(entity => {
+            VisibilityComponent.createOrReplace(entity, { visible: false })
+        })
     }
+
+    // private getRandomPointOnCircle() {
+    //     const angle = Math.random() * 2 * Math.PI
+    //     const x = Transform.get(gameState.rocketWindow!).position.x + entityConfig.distance * Math.cos(angle)
+    //     const y = Math.abs(Transform.get(gameState.rocketWindow!).position.y * Math.sin(angle)) + entityConfig.distance
+    //     return Vector3.create(x, y, Transform.get(gameState.rocketWindow!).position.z)
+    // }
 }

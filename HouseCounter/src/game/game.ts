@@ -26,6 +26,7 @@ let timer: ui.Timer3D
 let playerAnswer = 0
 let entityCounter = -1
 export let sessionStartedAt: number
+let entityManager: any
 
 export const initGame = async () => {
     await initMaxProgress()
@@ -35,12 +36,12 @@ export const initGame = async () => {
     initGameButtons()
 
     initCountdownNumbers()
-
     queue.listeners.onActivePlayerChange = (player) => {
         const localPlayer = getPlayer()
         if (player?.address === localPlayer?.userId) {
             getReadyToStart()
         } else {
+            entityManager.stopGame()
             GameData.createOrReplace(gameDataEntity, {
                 playerAddress: '',
                 playerName: '',
@@ -50,14 +51,13 @@ export const initGame = async () => {
             })
         }
     }
-
 }
 
 function getReadyToStart() {
     console.log('Get Ready to start!')
 
     utils.timers.setTimeout(() => {
-        startGame()
+        startGame();
     }, 2000)
 }
 
@@ -66,7 +66,7 @@ async function startGame() {
     sessionStartedAt = Date.now()
 
     movePlayerTo({
-        newRelativePosition: Vector3.create(8, 1, 7),
+        newRelativePosition: Vector3.create(8, 1, 8),
         cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
     })
 
@@ -74,7 +74,7 @@ async function startGame() {
 
     entityCounter = -1
     rocketBoard.showBoard(lvl0.initialEntityAmount)
-    const entityManager = new gameEntityManager(lvl0);
+    entityManager = new gameEntityManager(lvl0);
     entityCounter = await entityManager.startGame()
 
     gameButtons.forEach((button, i) => button.enable())
@@ -131,8 +131,23 @@ const initGameButtons = () => {
         )
     )
 
+    // for (let i = 1; i <= 9; i++) {
+    //     gameButtons.push(new ui.MenuButton({
+    //         position: Vector3.create(9.5, 1, 5),
+    //         scale: Vector3.create(1.5, 1.5, 1.5),
+    //         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+    //     },
+    //         ui.uiAssets.shapes.SQUARE_RED,
+    //         ui.uiAssets.numbers[i],
+    //         `${i}`,
+    //         () => {
+    //             playerAnswer = i
+    //         }
+    //     ))
+    // }
+
     gameButtons.push(new ui.MenuButton({
-        position: Vector3.create(9.5, 1, 6),
+        position: Vector3.create(9.5, 1, 5),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
@@ -145,7 +160,7 @@ const initGameButtons = () => {
     ))
 
     gameButtons.push(new ui.MenuButton({
-        position: Vector3.create(6.5, 1, 6),
+        position: Vector3.create(6.5, 1, 5),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
@@ -158,7 +173,7 @@ const initGameButtons = () => {
     ))
 
     gameButtons.push(new ui.MenuButton({
-        position: Vector3.create(6, 1, 6),
+        position: Vector3.create(6, 1, 5),
         scale: Vector3.create(1.5, 1.5, 1.5),
         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
     },
@@ -178,7 +193,7 @@ const initGameButtons = () => {
     const sign = engine.addEntity()
 
     Transform.create(sign, {
-        position: Vector3.create(8, 1, 6),
+        position: Vector3.create(8, 1, 5),
         rotation: { x: 0, y: 1, z: 0, w: 0 }
     })
 

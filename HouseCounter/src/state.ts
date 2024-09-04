@@ -25,4 +25,4 @@ export const GameData = engine.defineComponent('game-data', {
     level: Schemas.Int,
   })
 
-export const rocketCoords = Vector3.create(8, -3, 5.8)
+export const rocketCoords = Vector3.create(8, -3, 4.8)

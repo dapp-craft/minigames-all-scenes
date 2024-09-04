@@ -22,7 +22,7 @@ export class board {
             {
                 position: this.position,
                 rotation: Quaternion.Zero(),
-                scale: Vector3.create(3, 3, 3)
+                scale: Vector3.create(2, 2, 2)
             })
         MeshRenderer.setPlane(gameState.rocketWindow)
         syncEntity(gameState.rocketWindow, [Transform.componentId], 5000)
