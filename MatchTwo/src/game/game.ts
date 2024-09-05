@@ -14,7 +14,7 @@ import {
 } from '@dcl/sdk/ecs'
 import { GameData, Tile } from './components/idnex'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
-import { FLIP_DURATION, SYNC_ENTITY_OFFSET } from '../config'
+import { FLIP_DURATION, TILES_LEVEL, SYNC_ENTITY_OFFSET, MAX_IMAGES } from '../config'
 import { ui, queue } from '@dcl-sdk/mini-games/src'
 import { getPlayer } from '@dcl/sdk/players'
 import { setupGameUI } from './UiObjects'
@@ -23,10 +23,9 @@ import { tileShape, tileImages } from '../resources/resources'
 import * as utils from '@dcl-sdk/utils'
 import { init } from '@dcl-sdk/mini-games/src/config'
 
-
 type TileType = {
-  mainEntity: Entity,
-  imageEntity: Entity,
+  mainEntity: Entity
+  imageEntity: Entity
   shapeEntity: Entity
 }
 
@@ -35,9 +34,9 @@ let gameDataEntity: Entity
 let tiles: TileType[] = []
 export let flippedTileQueue: TileType[] = []
 
-
 const gameState = {
-  tilesCount: 10
+  tilesCount: 32,
+  level: 5
 }
 
 export function initGame() {
@@ -60,7 +59,6 @@ export function initGame() {
   }
 
   initTiles()
-  setImages()
 }
 
 function initGameDataEntity() {
@@ -69,12 +67,8 @@ function initGameDataEntity() {
   syncEntity(gameDataEntity, [GameData.componentId], SYNC_ENTITY_OFFSET)
 }
 
-function getReadyToStart() {
-  // console.log('Get ready to start')
-}
-
 function initTiles() {
-  const tilesCount = gameState.tilesCount
+  const tilesCount = MAX_IMAGES
   for (let i = 0; i < tilesCount; i++) {
     createTile(i)
   }
@@ -83,12 +77,14 @@ function initTiles() {
 function createTile(tileNumber: number) {
   const mainTileEntity = engine.addEntity()
   Transform.create(mainTileEntity, {
-    position: Vector3.create(4 + (tileNumber % 5) * 1.2, 1 + (Math.floor(tileNumber / 5) * 1.2), 8)
+    position: Vector3.create(4 + (tileNumber % 8) * 1.2, 1 + Math.floor(tileNumber / 8) * 1.2, 2),
+    rotation: Quaternion.fromEulerDegrees(0, 180, 0)
   })
   Tile.create(mainTileEntity, {
     isFlipped: false,
     image: '',
-    matched: false
+    matched: false,
+    tileNumber: tileNumber
   })
 
   // Image
@@ -121,7 +117,9 @@ function createTile(tileNumber: number) {
         hoverText: 'Click to flip the tile'
       }
     },
-    () => onTileClick(tile)
+    () => {
+      onTileClick(tile)
+    }
   )
 
   tiles.push(tile)
@@ -144,7 +142,7 @@ async function flipTile(tile: TileType) {
     duration: FLIP_DURATION,
     easingFunction: EasingFunction.EF_EASECUBIC
   })
-  
+
   const newTileState = !Tile.get(tile.mainEntity).isFlipped
   Tile.getMutable(tile.mainEntity).isFlipped = newTileState
   pointerEventsSystem.removeOnPointerDown(tile.shapeEntity)
@@ -157,44 +155,72 @@ async function flipTile(tile: TileType) {
   })
 }
 
+function getReadyToStart() {
+  console.log('Get ready to start')
+
+  startLevel(gameState.level as keyof typeof TILES_LEVEL)
+}
+
+async function startLevel(level: keyof typeof TILES_LEVEL) {
+  
+  await Promise.all(tiles.map((tile) => resetTile(tile)))
+
+  const tilesInUse = tiles.filter((tile) => TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
+  const tilesNotInUse = tiles.filter((tile) => !TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
+  gameState.tilesCount = TILES_LEVEL[level].length
+
+
+  tilesNotInUse.forEach((tile) => {
+    disableTile(tile)
+  })
+
+  const images = getImages(level)
+  shuffleArray(images)
+
+  tilesInUse.forEach((tile, index) => {
+    setTileImage(tile, images[index].src)
+  })
+  
+
+}
+
 function setImages() {
   const tilesCount = gameState.tilesCount
 
   for (let i = 0; i < tilesCount; i++) {
     const image = tileImages[Math.floor(i / 2)].src
-
     const tile = tiles[i]
-    const imageEntity = tile.imageEntity
-    const tileEntity = tile.mainEntity
-
-    Tile.getMutable(tileEntity).image = image
-    console.log(imageEntity, image, i)
-    Material.createOrReplace(imageEntity, {
-      material: {
-        $case: 'pbr',
-        pbr: {
-          texture: {
-            tex: {
-              $case: 'texture',
-              texture: { src: image, filterMode: TextureFilterMode.TFM_TRILINEAR }
-            }
-          },
-          emissiveColor: Color4.White(),
-          emissiveIntensity: 0.9,
-          emissiveTexture: {
-            tex: {
-              $case: 'texture',
-              texture: { src: image, filterMode: TextureFilterMode.TFM_TRILINEAR }
-            }
-          },
-          roughness: 1.0,
-          specularIntensity: 0,
-          metallic: 0,
-          transparencyMode: MaterialTransparencyMode.MTM_AUTO
-        }
-      }
-    })
+    setTileImage(tile, image)
   }
+}
+
+function setTileImage(tile: TileType, image: string) {
+  Tile.getMutable(tile.mainEntity).image = image
+  Material.createOrReplace(tile.imageEntity, {
+    material: {
+      $case: 'pbr',
+      pbr: {
+        texture: {
+          tex: {
+            $case: 'texture',
+            texture: { src: image, filterMode: TextureFilterMode.TFM_TRILINEAR }
+          }
+        },
+        emissiveColor: Color4.White(),
+        emissiveIntensity: 0.9,
+        emissiveTexture: {
+          tex: {
+            $case: 'texture',
+            texture: { src: image, filterMode: TextureFilterMode.TFM_TRILINEAR }
+          }
+        },
+        roughness: 1.0,
+        specularIntensity: 0,
+        metallic: 0,
+        transparencyMode: MaterialTransparencyMode.MTM_AUTO
+      }
+    }
+  })
 }
 
 function checkIfMatch() {
@@ -207,6 +233,11 @@ function checkIfMatch() {
     console.log('Match!')
     Tile.getMutable(tile1.mainEntity).matched = true
     Tile.getMutable(tile2.mainEntity).matched = true
+
+    if (tiles.filter((tile => Tile.get(tile.mainEntity).inGame)).filter((tile) => !Tile.get(tile.mainEntity).matched).length === 0) {
+      console.log('Game over')
+      finishLevel()
+    }
   } else {
     console.log('No match')
     flipTile(tile1).then(() => {
@@ -218,7 +249,9 @@ function checkIfMatch() {
             hoverText: 'Click to flip the tile'
           }
         },
-        () => onTileClick(tile1)
+        () => {
+          onTileClick(tile1)
+        }
       )
     })
     flipTile(tile2).then(() => {
@@ -230,11 +263,65 @@ function checkIfMatch() {
             hoverText: 'Click to flip the tile'
           }
         },
-        () => onTileClick(tile2)
+        () => {
+          onTileClick(tile2)
+        }
       )
     })
-    
-    
-
   }
+}
+
+function disableTile(tile: TileType) {
+  pointerEventsSystem.removeOnPointerDown(tile.shapeEntity)
+  Transform.getMutable(tile.mainEntity).scale = Vector3.create(0.1, 0.1, 0.1)
+  Tile.getMutable(tile.mainEntity).inGame = false
+}
+
+function finishLevel() {
+  console.log('Level finished')
+  gameState.level = (gameState.level + 1) % Object.keys(TILES_LEVEL).length
+  startLevel(gameState.level as keyof typeof TILES_LEVEL)
+}
+
+function resetTile(tile: TileType){
+  Tile.getMutable(tile.mainEntity).isFlipped = false
+  Tile.getMutable(tile.mainEntity).matched = false
+  Tile.getMutable(tile.mainEntity).inGame = true
+  setTileImage(tile, '')
+  pointerEventsSystem.onPointerDown(
+    {
+      entity: tile.shapeEntity,
+      opts: {
+        button: InputAction.IA_POINTER,
+        hoverText: 'Click to flip the tile'
+      }
+    },
+    () => {
+      onTileClick(tile)
+    }
+  )
+  Tween.createOrReplace(tile.mainEntity, {
+    mode: Tween.Mode.Rotate({
+      start: Transform.get(tile.mainEntity).rotation,
+      end: Quaternion.fromEulerDegrees(0, 180, 0)
+    }),
+    duration: FLIP_DURATION,
+    easingFunction: EasingFunction.EF_EASECUBIC
+  })
+    
+}
+
+function getImages(level: keyof typeof TILES_LEVEL) {
+  const tilesCount = gameState.tilesCount
+  const images = tileImages.slice(0, tilesCount / 2)
+  images.push(...images)
+  return images
+}
+
+function shuffleArray(array: any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
+  }
+  return array
 }

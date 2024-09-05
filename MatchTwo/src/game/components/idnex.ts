@@ -11,4 +11,6 @@ export const Tile = engine.defineComponent('tile', {
   isFlipped: Schemas.Boolean,
   image: Schemas.String,
   matched: Schemas.Boolean,
+  tileNumber: Schemas.Int64,
+  inGame: Schemas.Boolean,
 })
