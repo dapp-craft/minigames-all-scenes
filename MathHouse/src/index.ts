@@ -63,20 +63,8 @@ export async function main() {
 
   setupUI()
 
-  rocketBoard = new board(rocketCoords);
-
-  // readGltfLocators(`locators/obj_background.gltf`).then(data => {
-  //   data.forEach((l, n) => {
-  //     const entity = engine.addEntity()
-  //     Transform.create(entity, {...l, parent: gameState.rocketWindow})
-  //     console.log(n)
-  //     MeshRenderer.setSphere(entity)
-  //   })
-  // })
-  // rocketBoard.showBoard()
+  rocketBoard = new board()
 }
-
-
 
 const spawnInitialEntityPull = () => {
   for (let i = 0; i <= entityAmount; i++) {

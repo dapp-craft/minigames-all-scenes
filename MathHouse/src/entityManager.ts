@@ -43,6 +43,7 @@ export class gameEntityManager {
 
     public async startGame() {
         console.log("Start")
+        this.gameEnd = false
         utils.timers.setTimeout(async () => {
             rocketBoard.hideBoard()
             for (let i = 1; i <= this.roundCartrige.size; i++) {

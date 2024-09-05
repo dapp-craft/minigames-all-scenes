@@ -1,5 +1,5 @@
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
-import { gameState } from "./state";
+import { gameState, rocketCoords } from "./state";
 import { EasingFunction, engine, GltfContainer, MeshRenderer, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
 import { entityConfig } from "./config";
 import { background, cat01, cat02, kitty } from "./resources/resources";
@@ -9,18 +9,15 @@ import { readGltfLocators } from "../../common/locators";
 export class board {
 
     private numberOfBoardElements: number = 0
-    private position
 
-    constructor(position: Vector3) {
-
-        this.position = position
+    constructor() {
         this.init()
     }
 
     private async init() {
         const data = await readGltfLocators(`locators/obj_background.gltf`)
         gameState.rocketWindow = engine.addEntity()
-        Transform.createOrReplace(gameState.rocketWindow, data.get('background'))
+        Transform.createOrReplace(gameState.rocketWindow, {position: rocketCoords, scale: data.get('background')?.scale})
         GltfContainer.createOrReplace(gameState.rocketWindow, { src: background.src })
         syncEntity(gameState.rocketWindow, [Transform.componentId], 5000)
     }
@@ -44,19 +41,19 @@ export class board {
         Tween.createOrReplace(gameState.rocketWindow!, {
             mode: Tween.Mode.Move({
                 start: Transform.get(gameState.rocketWindow!).position,
-                end: Vector3.create(this.position.x, this.position.y + 5, this.position.z),
+                end: Vector3.create(Transform.get(gameState.rocketWindow!).position.x, Transform.get(gameState.rocketWindow!).position.y + 5, Transform.get(gameState.rocketWindow!).position.z),
             }),
             duration: 500,
             easingFunction: EasingFunction.EF_LINEAR,
         })
-        await this.initBoardElements()
+        await this.initBoardElements();
     }
 
     public hideBoard() {
         Tween.createOrReplace(gameState.rocketWindow!, {
             mode: Tween.Mode.Move({
                 start: Transform.get(gameState.rocketWindow!).position,
-                end: Vector3.create(this.position.x, this.position.y - 5, this.position.z),
+                end: Vector3.create(Transform.get(gameState.rocketWindow!).position.x, Transform.get(gameState.rocketWindow!).position.y - 5, Transform.get(gameState.rocketWindow!).position.z),
             }),
             duration: 500,
             easingFunction: EasingFunction.EF_LINEAR,

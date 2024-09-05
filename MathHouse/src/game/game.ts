@@ -2,7 +2,7 @@ import { progress, queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
 import { mainEntityId } from "../config"
 import { Quaternion, Vector3 } from "@dcl/sdk/math"
 import { Animator, engine, Entity, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
-import { syncEntity } from "@dcl/sdk/network"
+import { parentEntity, syncEntity } from "@dcl/sdk/network"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
 import { GameData, gameState, rocketCoords } from "../state"
@@ -10,6 +10,7 @@ import { movePlayerTo } from "~system/RestrictedActions"
 import { gameEntityManager } from "../entityManager"
 import { lvl0 } from "../leavels"
 import { rocketBoard } from ".."
+import { readGltfLocators } from "../../../common/locators"
 
 const BOARD_TRANSFORM = {
     position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -113,7 +114,20 @@ function initCountdownNumbers() {
     timer.hide()
 }
 
-const initGameButtons = () => {
+const initGameButtons = async () => {
+    const data = await readGltfLocators(`locators/obj_buttons.gltf`)
+
+    // new ui.MenuButton(
+    //     {...data.get('level09'), parent: data.get('level09')?.parent},
+    //     ui.uiAssets.shapes.SQUARE_GREEN,
+    //     ui.uiAssets.icons.play,
+    //     `START LEVEL 1`,
+    //     async () => {
+    //         // if (gameState.rocketWindow) { Transform.getMutable(gameState.rocketWindow).position = rocketCoords }
+    //         queue.addPlayer()
+    //     }
+    // )
+
     gameButtons.push(
         new ui.MenuButton(
             {
@@ -125,70 +139,78 @@ const initGameButtons = () => {
             ui.uiAssets.icons.play,
             `START LEVEL 1`,
             async () => {
-                if (gameState.rocketWindow) { Transform.getMutable(gameState.rocketWindow).position = rocketCoords }
                 queue.addPlayer()
             }
         )
     )
 
-    // for (let i = 1; i <= 9; i++) {
-    //     gameButtons.push(new ui.MenuButton({
-    //         position: Vector3.create(9.5, 1, 5),
-    //         scale: Vector3.create(1.5, 1.5, 1.5),
-    //         rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    //     },
-    //         ui.uiAssets.shapes.SQUARE_RED,
-    //         ui.uiAssets.numbers[i],
-    //         `${i}`,
-    //         () => {
-    //             playerAnswer = i
+    for (let i = 1; i <= 9; i++) {
+        gameButtons.push(
+            new ui.MenuButton(
+                { position: data.get(`level0${i}`)?.position, parent: sceneParentEntity, rotation: Quaternion.create(0, -2, -1, 0) },
+                ui.uiAssets.shapes.SQUARE_RED,
+                ui.uiAssets.numbers[i],
+                `${i}`,
+                () => {
+                    playerAnswer = i
+                    console.log(entityCounter, playerAnswer)
+                    rocketBoard.showBoard(playerAnswer)
+                    if (entityCounter == playerAnswer) {
+                        console.log("WIN WIN WIN WIN WIN")
+                    }
+                    else {
+                        console.log("LOSE")
+                        utils.timers.setTimeout(async () => {
+                            rocketBoard.hideBoard()
+                        }, 1500)
+                    }
+                }
+            ))
+    }
+
+    // gameButtons.push(new ui.MenuButton({
+    //     position: Vector3.create(9.5, 1, 5),
+    //     scale: Vector3.create(1.5, 1.5, 1.5),
+    //     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+    // },
+    //     ui.uiAssets.shapes.SQUARE_RED,
+    //     ui.uiAssets.icons.leftArrow,
+    //     "-1",
+    //     () => {
+    //         playerAnswer--
+    //     }
+    // ))
+
+    // gameButtons.push(new ui.MenuButton({
+    //     position: Vector3.create(6.5, 1, 5),
+    //     scale: Vector3.create(1.5, 1.5, 1.5),
+    //     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+    // },
+    //     ui.uiAssets.shapes.SQUARE_RED,
+    //     ui.uiAssets.icons.rightArrow,
+    //     "+1",
+    //     () => {
+    //         playerAnswer++
+    //     }
+    // ))
+
+    // gameButtons.push(new ui.MenuButton({
+    //     position: Vector3.create(6, 1, 5),
+    //     scale: Vector3.create(1.5, 1.5, 1.5),
+    //     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+    // },
+    //     ui.uiAssets.shapes.SQUARE_RED,
+    //     ui.uiAssets.icons.hint,
+    //     "CONFIRM",
+    //     () => {
+    //         console.log(entityCounter, playerAnswer)
+    //         if (entityCounter == playerAnswer) {
+    //             console.log("WIN WIN WIN WIN WIN")
+    //             rocketBoard.showBoard(entityCounter)
     //         }
-    //     ))
-    // }
-
-    gameButtons.push(new ui.MenuButton({
-        position: Vector3.create(9.5, 1, 5),
-        scale: Vector3.create(1.5, 1.5, 1.5),
-        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    },
-        ui.uiAssets.shapes.SQUARE_RED,
-        ui.uiAssets.icons.leftArrow,
-        "-1",
-        () => {
-            playerAnswer--
-        }
-    ))
-
-    gameButtons.push(new ui.MenuButton({
-        position: Vector3.create(6.5, 1, 5),
-        scale: Vector3.create(1.5, 1.5, 1.5),
-        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    },
-        ui.uiAssets.shapes.SQUARE_RED,
-        ui.uiAssets.icons.rightArrow,
-        "+1",
-        () => {
-            playerAnswer++
-        }
-    ))
-
-    gameButtons.push(new ui.MenuButton({
-        position: Vector3.create(6, 1, 5),
-        scale: Vector3.create(1.5, 1.5, 1.5),
-        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    },
-        ui.uiAssets.shapes.SQUARE_RED,
-        ui.uiAssets.icons.hint,
-        "CONFIRM",
-        () => {
-            console.log(entityCounter, playerAnswer)
-            if (entityCounter == playerAnswer) {
-                console.log("WIN WIN WIN WIN WIN")
-                rocketBoard.showBoard(entityCounter)
-            }
-            else console.log("LOSE")
-        }
-    ))
+    //         else console.log("LOSE")
+    //     }
+    // ))
 
     const sign = engine.addEntity()
 
