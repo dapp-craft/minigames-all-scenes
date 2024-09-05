@@ -1,7 +1,7 @@
 import { progress, queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
 import { mainEntityId } from "../config"
 import { Quaternion, Vector3 } from "@dcl/sdk/math"
-import { Animator, engine, Entity, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
+import { Animator, Billboard, engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { parentEntity, syncEntity } from "@dcl/sdk/network"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
@@ -37,6 +37,9 @@ export const initGame = async () => {
     initGameButtons()
 
     initCountdownNumbers()
+
+    setupWinAnimations()
+
     queue.listeners.onActivePlayerChange = (player) => {
         const localPlayer = getPlayer()
         if (player?.address === localPlayer?.userId) {
@@ -117,17 +120,6 @@ function initCountdownNumbers() {
 const initGameButtons = async () => {
     const data = await readGltfLocators(`locators/obj_buttons.gltf`)
 
-    // new ui.MenuButton(
-    //     {...data.get('level09'), parent: data.get('level09')?.parent},
-    //     ui.uiAssets.shapes.SQUARE_GREEN,
-    //     ui.uiAssets.icons.play,
-    //     `START LEVEL 1`,
-    //     async () => {
-    //         // if (gameState.rocketWindow) { Transform.getMutable(gameState.rocketWindow).position = rocketCoords }
-    //         queue.addPlayer()
-    //     }
-    // )
-
     gameButtons.push(
         new ui.MenuButton(
             {
@@ -157,6 +149,7 @@ const initGameButtons = async () => {
                     rocketBoard.showBoard(playerAnswer)
                     if (entityCounter == playerAnswer) {
                         console.log("WIN WIN WIN WIN WIN")
+                        startWinAnimation()
                     }
                     else {
                         console.log("LOSE")
@@ -165,52 +158,23 @@ const initGameButtons = async () => {
                         }, 1500)
                     }
                 }
-            ))
+            )
+        )
     }
 
-    // gameButtons.push(new ui.MenuButton({
-    //     position: Vector3.create(9.5, 1, 5),
-    //     scale: Vector3.create(1.5, 1.5, 1.5),
-    //     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    // },
-    //     ui.uiAssets.shapes.SQUARE_RED,
-    //     ui.uiAssets.icons.leftArrow,
-    //     "-1",
-    //     () => {
-    //         playerAnswer--
-    //     }
-    // ))
-
-    // gameButtons.push(new ui.MenuButton({
-    //     position: Vector3.create(6.5, 1, 5),
-    //     scale: Vector3.create(1.5, 1.5, 1.5),
-    //     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    // },
-    //     ui.uiAssets.shapes.SQUARE_RED,
-    //     ui.uiAssets.icons.rightArrow,
-    //     "+1",
-    //     () => {
-    //         playerAnswer++
-    //     }
-    // ))
-
-    // gameButtons.push(new ui.MenuButton({
-    //     position: Vector3.create(6, 1, 5),
-    //     scale: Vector3.create(1.5, 1.5, 1.5),
-    //     rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-    // },
-    //     ui.uiAssets.shapes.SQUARE_RED,
-    //     ui.uiAssets.icons.hint,
-    //     "CONFIRM",
-    //     () => {
-    //         console.log(entityCounter, playerAnswer)
-    //         if (entityCounter == playerAnswer) {
-    //             console.log("WIN WIN WIN WIN WIN")
-    //             rocketBoard.showBoard(entityCounter)
-    //         }
-    //         else console.log("LOSE")
-    //     }
-    // ))
+    new ui.MenuButton(
+        { position: data.get(`restart`)?.position, parent: sceneParentEntity, rotation: Quaternion.create(0, -2, -1, 0) },
+        ui.uiAssets.shapes.SQUARE_RED,
+        ui.uiAssets.icons.restart,
+        `RESTART`,
+        () => {
+            console.log("Yo")
+            entityManager?.stopGame()
+            // entityManager?.startGame()
+            getReadyToStart()
+            // entityManager.start()
+        }
+    )
 
     const sign = engine.addEntity()
 
@@ -233,18 +197,147 @@ const initGameButtons = async () => {
     })
 }
 
-// function startWinAnimation() {
-//     const animations = engine.getEntitiesWith(Animator, VisibilityComponent)
-//     for (const [entity] of animations) {
-//         VisibilityComponent.getMutable(entity).visible = true
-//         Animator.getMutable(entity).states[0].playing = true
-//     }
+function setupWinAnimations() {
+    let winAnimA = engine.addEntity()
+    let winAnimB = engine.addEntity()
+    let winAnimC = engine.addEntity()
+    let winAnimFollow = engine.addEntity()
+    let winAnimText = engine.addEntity()
 
-//     utils.timers.setTimeout(() => {
+    GltfContainer.create(winAnimA, {
+        src: "mini-game-assets/models/winAnim.glb",
 
-//         const animations = engine.getEntitiesWith(Animator, VisibilityComponent)
-//         for (const [entity] of animations) {
-//             VisibilityComponent.getMutable(entity).visible = false
-//         }
-//     }, 3000)
-// }
+    })
+
+    Transform.create(winAnimA, {
+        parent: sceneParentEntity,
+        position: Vector3.create(0, 3, -6),
+        scale: Vector3.create(1, 1, 1),
+        rotation: Quaternion.fromEulerDegrees(0, 45, 0)
+    })
+
+    Animator.create(winAnimA, {
+        states: [
+            {
+                clip: 'armature_psAction',
+                playing: false,
+                loop: false
+            }
+        ]
+    })
+
+    GltfContainer.create(winAnimB, {
+        src: "mini-game-assets/models/winAnim.glb"
+
+    })
+
+    Transform.create(winAnimB, {
+        parent: sceneParentEntity,
+        position: Vector3.create(0, 3, -6),
+        scale: Vector3.create(1, 1, 1),
+        rotation: Quaternion.fromEulerDegrees(0, 0, 0)
+    })
+
+    Animator.create(winAnimB, {
+        states: [
+            {
+                clip: 'armature_psAction',
+                playing: false,
+                loop: false
+            }
+        ]
+    })
+
+    GltfContainer.create(winAnimC, {
+        src: "mini-game-assets/models/winAnim.glb"
+    })
+
+    Transform.create(winAnimC, {
+        parent: sceneParentEntity,
+        position: Vector3.create(0, 3, -6),
+        scale: Vector3.create(1, 1, 1),
+        rotation: Quaternion.fromEulerDegrees(0, -45, 0)
+    })
+
+    Animator.create(winAnimC, {
+        states: [
+            {
+                clip: 'armature_psAction',
+                playing: false,
+                loop: false
+            }
+        ]
+    })
+
+    GltfContainer.create(winAnimFollow, {
+        src: "mini-game-assets/models/winAnimFollow.glb"
+    })
+
+    Transform.create(winAnimFollow, {
+        parent: sceneParentEntity,
+        position: Vector3.create(0, 3, -6),
+        scale: Vector3.create(0.3, 0.3, 0.3),
+        rotation: Quaternion.fromEulerDegrees(0, -90, 0)
+    })
+    Billboard.create(winAnimFollow, {})
+
+    Animator.create(winAnimFollow, {
+        states: [
+            {
+                clip: 'RaysAnim',
+                playing: false,
+                loop: false
+            }
+        ]
+    })
+
+    GltfContainer.create(winAnimText, {
+        src: "mini-game-assets/models/winAnimText.glb"
+    })
+
+    Animator.create(winAnimText, {
+        states: [
+            {
+                clip: 'Animation',
+                playing: false,
+                loop: false
+            }
+        ]
+    })
+
+    Transform.create(winAnimText, {
+        parent: sceneParentEntity,
+        position: Vector3.create(0, 3, -3),
+        scale: Vector3.create(0.8, 0.8, 0.8),
+        rotation: Quaternion.fromEulerDegrees(0, -90, 0)
+    })
+    Billboard.create(winAnimText, {})
+
+    VisibilityComponent.create(winAnimA, { visible: false })
+    VisibilityComponent.create(winAnimB, { visible: false })
+    VisibilityComponent.create(winAnimC, { visible: false })
+    VisibilityComponent.create(winAnimFollow, { visible: false })
+    VisibilityComponent.create(winAnimText, { visible: false })
+
+    syncEntity(winAnimA, [VisibilityComponent.componentId, Animator.componentId])
+    syncEntity(winAnimB, [VisibilityComponent.componentId, Animator.componentId])
+    syncEntity(winAnimC, [VisibilityComponent.componentId, Animator.componentId])
+    syncEntity(winAnimFollow, [VisibilityComponent.componentId, Animator.componentId])
+    syncEntity(winAnimText, [VisibilityComponent.componentId, Animator.componentId])
+}
+
+function startWinAnimation() {
+    const animations = engine.getEntitiesWith(Animator, VisibilityComponent)
+    for (const [entity] of animations) {
+        VisibilityComponent.getMutable(entity).visible = true
+        Animator.getMutable(entity).states[0].playing = true
+    }
+
+    utils.timers.setTimeout(() => {
+
+        const animations = engine.getEntitiesWith(Animator, VisibilityComponent)
+        for (const [entity] of animations) {
+            VisibilityComponent.getMutable(entity).visible = false
+        }
+    }, 8000)
+}
