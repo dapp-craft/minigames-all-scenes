@@ -22,6 +22,7 @@ import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { tileShape, tileImages } from '../resources/resources'
 import * as utils from '@dcl-sdk/utils'
 import { init } from '@dcl-sdk/mini-games/src/config'
+import { movePlayerTo } from '~system/RestrictedActions'
 
 type TileType = {
   mainEntity: Entity
@@ -36,7 +37,7 @@ export let flippedTileQueue: TileType[] = []
 
 const gameState = {
   tilesCount: 32,
-  level: 5
+  level: 1
 }
 
 export function initGame() {
@@ -109,18 +110,25 @@ function createTile(tileNumber: number) {
     shapeEntity: tileShapeEntity
   }
 
-  pointerEventsSystem.onPointerDown(
-    {
-      entity: tileShapeEntity,
-      opts: {
-        button: InputAction.IA_POINTER,
-        hoverText: 'Click to flip the tile'
-      }
-    },
-    () => {
-      onTileClick(tile)
-    }
+  syncEntity(
+    mainTileEntity,
+    [Tile.componentId, Transform.componentId],
+    SYNC_ENTITY_OFFSET + 100 + tileNumber * 2 + 0
   )
+  syncEntity(tileImage, [Material.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 2 + 1)
+
+  // pointerEventsSystem.onPointerDown(
+  //   {
+  //     entity: tileShapeEntity,
+  //     opts: {
+  //       button: InputAction.IA_POINTER,
+  //       hoverText: 'Click to flip the tile'
+  //     }
+  //   },
+  //   () => {
+  //     onTileClick(tile)
+  //   }
+  // )
 
   tiles.push(tile)
 }
@@ -151,24 +159,29 @@ async function flipTile(tile: TileType) {
     utils.timers.setTimeout(() => {
       if (newTileState) flippedTileQueue.push(tile)
       resolve()
-    }, FLIP_DURATION + 200)
+    }, FLIP_DURATION + 100)
   })
 }
 
 function getReadyToStart() {
   console.log('Get ready to start')
-
-  startLevel(gameState.level as keyof typeof TILES_LEVEL)
+  utils.timers.setTimeout(() => {
+    movePlayerTo({
+      newRelativePosition: { x: 8, y: 1, z: 7 }
+    })
+    startLevel(gameState.level as keyof typeof TILES_LEVEL)
+  }, 2000)
 }
 
 async function startLevel(level: keyof typeof TILES_LEVEL) {
-  
+  console.log('Start level', level)
+
   await Promise.all(tiles.map((tile) => resetTile(tile)))
 
   const tilesInUse = tiles.filter((tile) => TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
   const tilesNotInUse = tiles.filter((tile) => !TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
   gameState.tilesCount = TILES_LEVEL[level].length
-
+  gameState.level = level
 
   tilesNotInUse.forEach((tile) => {
     disableTile(tile)
@@ -180,8 +193,6 @@ async function startLevel(level: keyof typeof TILES_LEVEL) {
   tilesInUse.forEach((tile, index) => {
     setTileImage(tile, images[index].src)
   })
-  
-
 }
 
 function setImages() {
@@ -234,7 +245,10 @@ function checkIfMatch() {
     Tile.getMutable(tile1.mainEntity).matched = true
     Tile.getMutable(tile2.mainEntity).matched = true
 
-    if (tiles.filter((tile => Tile.get(tile.mainEntity).inGame)).filter((tile) => !Tile.get(tile.mainEntity).matched).length === 0) {
+    if (
+      tiles.filter((tile) => Tile.get(tile.mainEntity).inGame).filter((tile) => !Tile.get(tile.mainEntity).matched)
+        .length === 0
+    ) {
       console.log('Game over')
       finishLevel()
     }
@@ -279,11 +293,15 @@ function disableTile(tile: TileType) {
 
 function finishLevel() {
   console.log('Level finished')
-  gameState.level = (gameState.level + 1) % Object.keys(TILES_LEVEL).length
-  startLevel(gameState.level as keyof typeof TILES_LEVEL)
+  if (queue.getQueue().length > 1) {
+    queue.setNextPlayer()
+  } else {
+    const level = (gameState.level + 1) % Object.keys(TILES_LEVEL).length
+    startLevel(level as keyof typeof TILES_LEVEL)
+  }
 }
 
-function resetTile(tile: TileType){
+async function resetTile(tile: TileType) {
   Tile.getMutable(tile.mainEntity).isFlipped = false
   Tile.getMutable(tile.mainEntity).matched = false
   Tile.getMutable(tile.mainEntity).inGame = true
@@ -306,9 +324,9 @@ function resetTile(tile: TileType){
       end: Quaternion.fromEulerDegrees(0, 180, 0)
     }),
     duration: FLIP_DURATION,
-    easingFunction: EasingFunction.EF_EASECUBIC
+    easingFunction: EasingFunction.EF_EASECUBIC,
   })
-    
+  Transform.getMutable(tile.mainEntity).scale = Vector3.create(1, 1, 1)
 }
 
 function getImages(level: keyof typeof TILES_LEVEL) {

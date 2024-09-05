@@ -12,11 +12,11 @@ initLibrary(engine, syncEntity, players, {
   environment: 'dev',
   gameId: GAME_ID,
   gameTimeoutMs: SESSION_DURATION,
-  // gameArea: {
-  //   topLeft: Vector3.create(1, 0, 0),
-  //   bottomRight: Vector3.create(15, 5, 9),
-  //   exitSpawnPoint: Vector3.create(8, 1, 13)
-  // }
+  gameArea: {
+    topLeft: Vector3.create(1, 0, 0),
+    bottomRight: Vector3.create(15, 5, 9),
+    exitSpawnPoint: Vector3.create(8, 1, 13)
+  }
 })
 
 export function main() {
