@@ -28,11 +28,11 @@ export class gameEntityManager {
     private gameEnd: boolean = false
 
     constructor(roundData: {
-        waves: Map<number, CartridgeTest>,
+        wave: Map<number, CartridgeTest>,
         spawnEntityDelay: { time: number, random?: boolean },
         initialEntityAmount?: number
     }) {
-        this.roundCartrige = roundData.waves
+        this.roundCartrige = roundData.wave
         this.spawnEntityDelay = roundData.spawnEntityDelay
         this.entityCounter = roundData.initialEntityAmount ? roundData.initialEntityAmount : 0
 

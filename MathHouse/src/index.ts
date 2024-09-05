@@ -11,6 +11,7 @@ import { setupStaticModels } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
 import { initGame } from './game/game'
 import { board } from './board'
+import { randomLvl } from './leavels'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
@@ -63,7 +64,7 @@ export async function main() {
 
   setupUI()
 
-  rocketBoard = new board()
+  rocketBoard = new board();
 }
 
 const spawnInitialEntityPull = () => {
@@ -79,32 +80,25 @@ const spawnInitialEntityPull = () => {
   }
 }
 
-function generateRandomNumberAndIterations() {
-  const targetNumber = Math.floor(Math.random() * 30) + 1;
-
+const generateArray = (length: number) => {
+  const array = [];
   let currentSum = 0;
-  const iterations = [];
-
-  while (currentSum < targetNumber) {
-    const maxIteration = targetNumber - currentSum
-
-    let iteration = Math.floor(Math.random() * (Math.min(maxIteration, 10) + Math.min(currentSum, 5) + 1)) - Math.min(currentSum, 5);
-
-    if (iteration == 0) iteration++
-    iterations.push(iteration);
-    currentSum += iteration
+  
+  while (array.length < length) {
+      let num;
+      do {
+          num = Math.floor(Math.random() * 19) - 9
+      } while (num === 0);
+      
+      if (currentSum + num <= 0 || currentSum + num > 9) {
+          continue;
+      }
+      
+      array.push(num);
+      currentSum += num;
   }
-  return { targetNumber, iterations };
-}
-
-const generateCartrige = () => {
-  let generatedData = generateRandomNumberAndIterations()
-  let i = 1
-  generatedData.iterations.forEach((data => {
-    gameState.generatedCartrige.set(i, { itemQueue: Math.abs(data), goOut: data < 0 ? true : false })
-    i++
-  }))
-  gameState.generatedCartrige.forEach((data: any, key: number) => console.log(key, data))
-  console.log(generatedData.targetNumber);
-  return gameState.generatedCartrige;
+  
+  for (let i = 1; i <= array.length; i++) {
+    randomLvl.wave.set(i, {itemQueue: array[i-1], goOut: array[i-1] > 0 ? false : true}) 
+  }
 }

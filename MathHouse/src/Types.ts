@@ -12,3 +12,9 @@ export type SpawnEntityDelay = {
     time: number;
     random?: boolean;
 };
+
+export type LvlType = {
+    wave: Map<number, CartridgeTest>,
+    spawnEntityDelay: SpawnEntityDelay,
+    initialEntityAmount: number
+}

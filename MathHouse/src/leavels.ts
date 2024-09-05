@@ -1,7 +1,13 @@
-import { CartridgeTest } from "./Types"
+import { LvlType } from "./Types"
 
-export const lvl0 = {
-    waves: new Map([
+export const randomLvl: LvlType = {
+    wave: new Map(),
+    spawnEntityDelay: { time: 3000, random: true },
+    initialEntityAmount: 1
+}
+
+export const lvl0: LvlType = {
+    wave: new Map([
         [1, { itemQueue: 4, goOut: false }],
         [2, { itemQueue: 3, goOut: true }],
         [3, { itemQueue: 1, goOut: false }],
