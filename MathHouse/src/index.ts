@@ -11,7 +11,7 @@ import { setupStaticModels } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
 import { initGame } from './game/game'
 import { board } from './board'
-import { randomLvl } from './leavels'
+import { randomLvl } from './levels'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',

@@ -1,16 +1,16 @@
 import { progress, queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
 import { mainEntityId } from "../config"
 import { Quaternion, Vector3 } from "@dcl/sdk/math"
-import { Animator, Billboard, engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
-import { parentEntity, syncEntity } from "@dcl/sdk/network"
+import { Animator, Billboard, engine, Entity, GltfContainer, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
+import { syncEntity } from "@dcl/sdk/network"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
-import { GameData, gameState, rocketCoords } from "../state"
+import { GameData } from "../state"
 import { movePlayerTo } from "~system/RestrictedActions"
 import { gameEntityManager } from "../entityManager"
-import { lvl0 } from "../leavels"
 import { rocketBoard } from ".."
 import { readGltfLocators } from "../../../common/locators"
+import { levelArray } from "../levels"
 
 const BOARD_TRANSFORM = {
     position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -28,6 +28,8 @@ let playerAnswer = 0
 let entityCounter = -1
 export let sessionStartedAt: number
 let entityManager: gameEntityManager
+let playerLevelIndex = 0
+let playerLevel = levelArray[playerLevelIndex]
 
 export const initGame = async () => {
     await initMaxProgress()
@@ -77,10 +79,14 @@ async function startGame() {
     gameButtons.forEach((button, i) => button.disable())
 
     entityCounter = -1
-    rocketBoard.showBoard(lvl0.initialEntityAmount)
+    rocketBoard.showBoard(playerLevel.initialEntityAmount)
+    rocketBoard.setLeftCounter(0)
+    rocketBoard.setRightCounter(playerLevel.initialEntityAmount)
 
-    entityManager = new gameEntityManager(lvl0);
+    entityManager = new gameEntityManager(playerLevel);
     entityCounter = await entityManager.startGame()
+
+    rocketBoard.showBoard(playerLevel.initialEntityAmount)
 
     gameButtons.forEach((button, i) => button.enable())
 
@@ -147,18 +153,30 @@ const initGameButtons = async () => {
                 () => {
                     playerAnswer = i
                     console.log(entityCounter, playerAnswer)
-                    rocketBoard.showBoard(playerAnswer)
                     rocketBoard.setLeftCounter(playerAnswer)
                     rocketBoard.setRightCounter(entityCounter)
+                    rocketBoard.showBoard(playerAnswer)
                     if (entityCounter == playerAnswer) {
                         console.log("WIN WIN WIN WIN WIN")
                         startWinAnimation()
-                        afterGame()
+                        // afterGame()
+                        utils.timers.setTimeout(async () => {
+                            if (playerLevelIndex == levelArray.length - 1) {
+                                afterGame()
+                                return
+                            }
+                            playerLevel = levelArray[++playerLevelIndex]
+                            startGame()
+                        }, 8000)
                     }
                     else {
                         console.log("LOSE")
+                        rocketBoard.setLeftCounter(playerAnswer)
+                        rocketBoard.setRightCounter(entityCounter)
                         utils.timers.setTimeout(async () => {
                             rocketBoard.hideBoard()
+                            entityManager?.stopGame()
+                            getReadyToStart()
                         }, 1500)
                     }
                 }

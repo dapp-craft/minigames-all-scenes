@@ -1,7 +1,7 @@
+import * as utils from '@dcl-sdk/utils'
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { gameState, rocketCoords } from "./state";
 import { EasingFunction, engine, GltfContainer, MeshRenderer, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
-import { entityConfig } from "./config";
 import { background, cat01, cat02, kitty } from "./resources/resources";
 import { parentEntity, syncEntity } from "@dcl/sdk/network";
 import { readGltfLocators } from "../../common/locators";
@@ -17,13 +17,14 @@ export class board {
     private async init() {
         const data = await readGltfLocators(`locators/obj_background.gltf`)
         gameState.rocketWindow = engine.addEntity()
-        Transform.createOrReplace(gameState.rocketWindow, {position: rocketCoords, scale: data.get('background')?.scale})
+        Transform.createOrReplace(gameState.rocketWindow, { position: rocketCoords, scale: data.get('background')?.scale })
         GltfContainer.createOrReplace(gameState.rocketWindow, { src: background.src })
         syncEntity(gameState.rocketWindow, [Transform.componentId], 5000)
     }
 
     private async initBoardElements() {
         const data = await readGltfLocators(`locators/obj_background.gltf`)
+        let delay = 400
         for (let i = 0; i < gameState.entityInRoket.length - 1; i++) {
             const entity = gameState.entityInRoket[i]
             GltfContainer.createOrReplace(entity, { src: cat01.src })
@@ -32,7 +33,19 @@ export class board {
         }
         for (let i = 0; i < this.numberOfBoardElements; i++) {
             const entity = gameState.entityInRoket[i]
-            GltfContainer.createOrReplace(entity, { src: cat02.src })
+            utils.timers.setTimeout(() => {
+                GltfContainer.createOrReplace(entity, { src: cat02.src })
+                Tween.createOrReplace(entity, {
+                    mode: Tween.Mode.Scale({
+                        start: Vector3.create(.2, .2, .2),
+                        end: data.get(`cat01`)?.scale,
+                    }),
+                    duration: 300,
+                    easingFunction: EasingFunction.EF_LINEAR,
+                    playing: true
+                })
+            }, delay)
+            delay = delay + 100
         }
     }
 
@@ -61,18 +74,33 @@ export class board {
     }
 
     public async setLeftCounter(showNumber: number) {
-        const data = await readGltfLocators(`locators/obj_background.gltf`)
-        const entity = gameState.counterEntity[0]
-        Transform.createOrReplace(entity, data.get(`number01`))
-        GltfContainer.createOrReplace(entity, { src: `models/obj_0${showNumber}.gltf`})
-        parentEntity(entity, gameState.rocketWindow!)
+        this.showNumber(true, showNumber)
     }
 
     public async setRightCounter(showNumber: number) {
-        const data = await readGltfLocators(`locators/obj_background.gltf`)
-        const entity = gameState.counterEntity[1]
-        Transform.createOrReplace(entity, data.get(`number02`))
-        GltfContainer.createOrReplace(entity, { src: `models/obj_0${showNumber}.gltf`})
-        parentEntity(entity, gameState.rocketWindow!)
+        this.showNumber(false, showNumber)
     }
+
+    private async showNumber (leftCounter: boolean, showNumber: number) {
+        let delay = 200
+        const data = await readGltfLocators(`locators/obj_background.gltf`)
+        const entity = gameState.counterEntity[leftCounter ? 0 : 1]
+        Transform.createOrReplace(entity, data.get(leftCounter ? `number01` : `number02`))
+        for (let i = 0; i <= showNumber; i++) {
+            utils.timers.setTimeout(() => {
+                GltfContainer.createOrReplace(entity, { src: `models/obj_0${i}.gltf` });
+                // Tween.createOrReplace(entity, {
+                //     mode: Tween.Mode.Scale({
+                //         start: Vector3.create(1, 1, 1),
+                //         end: data.get(`number01`)?.scale,
+                //     }),
+                //     duration: 100,
+                //     easingFunction: EasingFunction.EF_LINEAR,
+                //     playing: true
+                // })
+            }, delay)
+            delay = delay + 100
+        } parentEntity(entity, gameState.rocketWindow!)
+    }
+
 }
