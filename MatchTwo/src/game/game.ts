@@ -8,6 +8,7 @@ import {
   MeshRenderer,
   TextureFilterMode,
   Transform,
+  TransformType,
   Tween,
   engine,
   pointerEventsSystem
@@ -19,15 +20,16 @@ import { ui, queue } from '@dcl-sdk/mini-games/src'
 import { getPlayer } from '@dcl/sdk/players'
 import { setupGameUI } from './UiObjects'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { tileShape, tileImages } from '../resources/resources'
+import { defaulToyModel, tileDoorShape, tileShape, toysModels } from '../resources/resources'
 import * as utils from '@dcl-sdk/utils'
 import { init } from '@dcl-sdk/mini-games/src/config'
 import { movePlayerTo } from '~system/RestrictedActions'
+import { setTilesPositions, tilesPositions } from './tilesPositions'
 
 type TileType = {
   mainEntity: Entity
-  imageEntity: Entity
-  shapeEntity: Entity
+  toyEntity: Entity
+  doorEntity: Entity
 }
 
 let gameDataEntity: Entity
@@ -40,10 +42,12 @@ const gameState = {
   level: 1
 }
 
-export function initGame() {
+export async function initGame() {
   initGameDataEntity()
 
   setupGameUI()
+
+  await setTilesPositions()
 
   queue.listeners.onActivePlayerChange = (player) => {
     const localPlayer = getPlayer()
@@ -77,37 +81,28 @@ function initTiles() {
 
 function createTile(tileNumber: number) {
   const mainTileEntity = engine.addEntity()
-  Transform.create(mainTileEntity, {
-    position: Vector3.create(4 + (tileNumber % 8) * 1.2, 1 + Math.floor(tileNumber / 8) * 1.2, 2),
-    rotation: Quaternion.fromEulerDegrees(0, 180, 0)
-  })
+  Transform.create(mainTileEntity, tilesPositions.toys[tileNumber])
   Tile.create(mainTileEntity, {
     isFlipped: false,
-    image: '',
+    toyModel: defaulToyModel.src,
     matched: false,
     tileNumber: tileNumber
   })
 
   // Image
-  const tileImage = engine.addEntity()
-  Transform.create(tileImage, {
-    parent: mainTileEntity,
-    position: Vector3.create(0, 0, 0)
-  })
-  MeshRenderer.setPlane(tileImage)
+  const tileToy = engine.addEntity()
+  Transform.create(tileToy, tilesPositions.toys[tileNumber])
+  GltfContainer.create(tileToy, toysModels[tileNumber % toysModels.length])
 
   // SHape
-  const tileShapeEntity = engine.addEntity()
-  Transform.create(tileShapeEntity, {
-    parent: mainTileEntity,
-    position: { x: 0, y: 0, z: -0.015 }
-  })
-  GltfContainer.create(tileShapeEntity, tileShape)
+  const tileDoorEntity = engine.addEntity()
+  Transform.create(tileDoorEntity, tilesPositions.doors[tileNumber])
+  GltfContainer.create(tileDoorEntity, tileDoorShape)
 
   const tile = {
     mainEntity: mainTileEntity,
-    imageEntity: tileImage,
-    shapeEntity: tileShapeEntity
+    toyEntity: tileToy,
+    doorEntity: tileDoorEntity
   }
 
   syncEntity(
@@ -115,34 +110,21 @@ function createTile(tileNumber: number) {
     [Tile.componentId, Transform.componentId],
     SYNC_ENTITY_OFFSET + 100 + tileNumber * 2 + 0
   )
-  syncEntity(tileImage, [Material.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 2 + 1)
-
-  // pointerEventsSystem.onPointerDown(
-  //   {
-  //     entity: tileShapeEntity,
-  //     opts: {
-  //       button: InputAction.IA_POINTER,
-  //       hoverText: 'Click to flip the tile'
-  //     }
-  //   },
-  //   () => {
-  //     onTileClick(tile)
-  //   }
-  // )
+  syncEntity(tileToy, [Material.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 2 + 1)
 
   tiles.push(tile)
 }
 
 async function onTileClick(tile: TileType) {
   // TODO use board rotation to define start and end rotation
-  await flipTile(tile)
+  await openTile(tile)
   checkIfMatch()
 }
 
-async function flipTile(tile: TileType) {
-  const startRotation = Transform.get(tile.mainEntity).rotation
-  const endRotation = Quaternion.multiply(startRotation, Quaternion.fromEulerDegrees(0, 180, 0))
-  Tween.createOrReplace(tile.mainEntity, {
+async function openTile(tile: TileType) {
+  const startRotation = Transform.get(tile.doorEntity).rotation
+  const endRotation = Quaternion.multiply(startRotation, Quaternion.fromEulerDegrees(0, 90, 0))
+  Tween.createOrReplace(tile.doorEntity, {
     mode: Tween.Mode.Rotate({
       start: startRotation,
       end: endRotation
@@ -151,13 +133,43 @@ async function flipTile(tile: TileType) {
     easingFunction: EasingFunction.EF_EASECUBIC
   })
 
-  const newTileState = !Tile.get(tile.mainEntity).isFlipped
-  Tile.getMutable(tile.mainEntity).isFlipped = newTileState
-  pointerEventsSystem.removeOnPointerDown(tile.shapeEntity)
+  Tile.getMutable(tile.mainEntity).isFlipped = true
+  pointerEventsSystem.removeOnPointerDown(tile.doorEntity)
 
   return new Promise<void>((resolve) => {
     utils.timers.setTimeout(() => {
-      if (newTileState) flippedTileQueue.push(tile)
+      flippedTileQueue.push(tile)
+      resolve()
+    }, FLIP_DURATION + 100)
+  })
+}
+
+async function closeTile(tile: TileType) {
+  const startRotation = Transform.get(tile.doorEntity).rotation
+  const endRotation = tilesPositions.doors[Tile.get(tile.mainEntity).tileNumber].rotation
+  Tween.createOrReplace(tile.doorEntity, {
+    mode: Tween.Mode.Rotate({
+      start: startRotation,
+      end: endRotation
+    }),
+    duration: FLIP_DURATION,
+    easingFunction: EasingFunction.EF_EASECUBIC
+  })
+  Tile.getMutable(tile.mainEntity).isFlipped = false
+  pointerEventsSystem.onPointerDown(
+    {
+      entity: tile.doorEntity,
+      opts: {
+        button: InputAction.IA_POINTER,
+        hoverText: 'Click to flip the tile'
+      }
+    },
+    () => {
+      onTileClick(tile)
+    }
+  )
+  return new Promise<void>((resolve) => {
+    utils.timers.setTimeout(() => {
       resolve()
     }, FLIP_DURATION + 100)
   })
@@ -187,11 +199,13 @@ async function startLevel(level: keyof typeof TILES_LEVEL) {
     disableTile(tile)
   })
 
-  const images = getImages(level)
-  shuffleArray(images)
+
+  const toys = getToys(level)
+  shuffleArray(toys)
+
 
   tilesInUse.forEach((tile, index) => {
-    setTileImage(tile, images[index].src)
+    setTileToy(tile, toys[index].src)
   })
 }
 
@@ -199,39 +213,15 @@ function setImages() {
   const tilesCount = gameState.tilesCount
 
   for (let i = 0; i < tilesCount; i++) {
-    const image = tileImages[Math.floor(i / 2)].src
+    const image = toysModels[Math.floor(i / 2)].src
     const tile = tiles[i]
-    setTileImage(tile, image)
+    setTileToy(tile, image)
   }
 }
 
-function setTileImage(tile: TileType, image: string) {
-  Tile.getMutable(tile.mainEntity).image = image
-  Material.createOrReplace(tile.imageEntity, {
-    material: {
-      $case: 'pbr',
-      pbr: {
-        texture: {
-          tex: {
-            $case: 'texture',
-            texture: { src: image, filterMode: TextureFilterMode.TFM_TRILINEAR }
-          }
-        },
-        emissiveColor: Color4.White(),
-        emissiveIntensity: 0.9,
-        emissiveTexture: {
-          tex: {
-            $case: 'texture',
-            texture: { src: image, filterMode: TextureFilterMode.TFM_TRILINEAR }
-          }
-        },
-        roughness: 1.0,
-        specularIntensity: 0,
-        metallic: 0,
-        transparencyMode: MaterialTransparencyMode.MTM_AUTO
-      }
-    }
-  })
+function setTileToy(tile: TileType, toyModel: string) {
+  Tile.getMutable(tile.mainEntity).toyModel = toyModel
+  GltfContainer.createOrReplace(tile.toyEntity, { src: toyModel })
 }
 
 function checkIfMatch() {
@@ -240,7 +230,7 @@ function checkIfMatch() {
   }
   const tile1 = flippedTileQueue.shift() as TileType
   const tile2 = flippedTileQueue.shift() as TileType
-  if (Tile.get(tile1.mainEntity).image === Tile.get(tile2.mainEntity).image) {
+  if (Tile.get(tile1.mainEntity).toyModel === Tile.get(tile2.mainEntity).toyModel) {
     console.log('Match!')
     Tile.getMutable(tile1.mainEntity).matched = true
     Tile.getMutable(tile2.mainEntity).matched = true
@@ -254,13 +244,13 @@ function checkIfMatch() {
     }
   } else {
     console.log('No match')
-    flipTile(tile1).then(() => {
+    closeTile(tile1).then(() => {
       pointerEventsSystem.onPointerDown(
         {
-          entity: tile1.shapeEntity,
+          entity: tile1.doorEntity,
           opts: {
             button: InputAction.IA_POINTER,
-            hoverText: 'Click to flip the tile'
+            hoverText: 'Click to open the tile'
           }
         },
         () => {
@@ -268,13 +258,13 @@ function checkIfMatch() {
         }
       )
     })
-    flipTile(tile2).then(() => {
+    closeTile(tile2).then(() => {
       pointerEventsSystem.onPointerDown(
         {
-          entity: tile2.shapeEntity,
+          entity: tile2.doorEntity,
           opts: {
             button: InputAction.IA_POINTER,
-            hoverText: 'Click to flip the tile'
+            hoverText: 'Click to open the tile'
           }
         },
         () => {
@@ -286,8 +276,8 @@ function checkIfMatch() {
 }
 
 function disableTile(tile: TileType) {
-  pointerEventsSystem.removeOnPointerDown(tile.shapeEntity)
-  Transform.getMutable(tile.mainEntity).scale = Vector3.create(0.1, 0.1, 0.1)
+  pointerEventsSystem.removeOnPointerDown(tile.doorEntity)
+  Transform.getMutable(tile.doorEntity).scale = Vector3.create(0.1, 0.1, 0.1)
   Tile.getMutable(tile.mainEntity).inGame = false
 }
 
@@ -305,10 +295,10 @@ async function resetTile(tile: TileType) {
   Tile.getMutable(tile.mainEntity).isFlipped = false
   Tile.getMutable(tile.mainEntity).matched = false
   Tile.getMutable(tile.mainEntity).inGame = true
-  setTileImage(tile, '')
+  setTileToy(tile, defaulToyModel.src)
   pointerEventsSystem.onPointerDown(
     {
-      entity: tile.shapeEntity,
+      entity: tile.doorEntity,
       opts: {
         button: InputAction.IA_POINTER,
         hoverText: 'Click to flip the tile'
@@ -318,22 +308,22 @@ async function resetTile(tile: TileType) {
       onTileClick(tile)
     }
   )
-  Tween.createOrReplace(tile.mainEntity, {
+  Tween.createOrReplace(tile.doorEntity, {
     mode: Tween.Mode.Rotate({
-      start: Transform.get(tile.mainEntity).rotation,
-      end: Quaternion.fromEulerDegrees(0, 180, 0)
+      start: Transform.get(tile.doorEntity).rotation,
+      end: tilesPositions.doors[Tile.get(tile.mainEntity).tileNumber].rotation
     }),
     duration: FLIP_DURATION,
     easingFunction: EasingFunction.EF_EASECUBIC,
   })
-  Transform.getMutable(tile.mainEntity).scale = Vector3.create(1, 1, 1)
+  Transform.getMutable(tile.doorEntity).scale = Vector3.create(1, 1, 1)
 }
 
-function getImages(level: keyof typeof TILES_LEVEL) {
+function getToys(level: keyof typeof TILES_LEVEL) {
   const tilesCount = gameState.tilesCount
-  const images = tileImages.slice(0, tilesCount / 2)
-  images.push(...images)
-  return images
+  const toys = toysModels.slice(0, tilesCount / 2)
+  toys.push(...toys)
+  return toys
 }
 
 function shuffleArray(array: any[]) {

@@ -6,24 +6,24 @@ const imagesFolder = 'images/'
 
 export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' }
 
-export const tileImages: PBGltfContainer[] = [
-  { src: imagesFolder + 'tileImages/adidas.png' },
-  { src: imagesFolder + 'tileImages/amd.png' },
-  { src: imagesFolder + 'tileImages/apple.png' },
-  { src: imagesFolder + 'tileImages/discord.png' },
-  { src: imagesFolder + 'tileImages/docker.png' },
-  { src: imagesFolder + 'tileImages/ibm.png' },
-  { src: imagesFolder + 'tileImages/intel.png' },
-  { src: imagesFolder + 'tileImages/linux.png' },
-  { src: imagesFolder + 'tileImages/mcdonalds.png' },
-  { src: imagesFolder + 'tileImages/messenger.png' },
-  { src: imagesFolder + 'tileImages/netflix.png' },
-  { src: imagesFolder + 'tileImages/nike.png' },
-  { src: imagesFolder + 'tileImages/oracle.png' },
-  { src: imagesFolder + 'tileImages/samsung.png' },
-  { src: imagesFolder + 'tileImages/telegram.png' },
-  { src: imagesFolder + 'tileImages/twitch.png' },
-  { src: imagesFolder + 'tileImages/unity.png' },
-  { src: imagesFolder + 'tileImages/windows.png' },
-  { src: imagesFolder + 'tileImages/xbox.png' }
+export const toysModels: PBGltfContainer[] = [
+  { src: modelsFolder + 'obj_toy01.gltf' },
+  { src: modelsFolder + 'obj_toy02.gltf' },
+  { src: modelsFolder + 'obj_toy03.gltf' },
+  { src: modelsFolder + 'obj_toy04.gltf' },
+  { src: modelsFolder + 'obj_toy05.gltf' },
+  { src: modelsFolder + 'obj_toy06.gltf' },
+  { src: modelsFolder + 'obj_toy07.gltf' },
+  { src: modelsFolder + 'obj_toy08.gltf' },
+  { src: modelsFolder + 'obj_toy09.gltf' },
+  { src: modelsFolder + 'obj_toy10.gltf' },
+  { src: modelsFolder + 'obj_toy11.gltf' },
+  { src: modelsFolder + 'obj_toy12.gltf' },
+  { src: modelsFolder + 'obj_toy13.gltf' },
+  { src: modelsFolder + 'obj_toy14.gltf' },
+  { src: modelsFolder + 'obj_toy15.gltf' },
+  { src: modelsFolder + 'obj_toy16.gltf' },
 ]
+
+export const tileDoorShape: PBGltfContainer = { src: modelsFolder + 'obj_door.gltf' }
+export const defaulToyModel: PBGltfContainer = { src: modelsFolder + 'obj_toy01.gltf' }
