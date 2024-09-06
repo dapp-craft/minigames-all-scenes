@@ -107,10 +107,11 @@ function createTile(tileNumber: number) {
 
   syncEntity(
     mainTileEntity,
-    [Tile.componentId, Transform.componentId],
-    SYNC_ENTITY_OFFSET + 100 + tileNumber * 2 + 0
+    [Tile.componentId],
+    SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 0
   )
-  syncEntity(tileToy, [Material.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 2 + 1)
+  syncEntity(tileToy, [GltfContainer.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 1)
+  syncEntity(tileDoorEntity, [Transform.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 2)
 
   tiles.push(tile)
 }
