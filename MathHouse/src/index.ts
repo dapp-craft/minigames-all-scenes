@@ -2,7 +2,7 @@
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { engine, GltfContainer, MeshRenderer, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState, rocketCoords } from './state'
-import { catEntityId, catInRocketEntityId, entityAmount, GAME_ID, SESSION_DURATION } from './config'
+import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, SESSION_DURATION } from './config'
 
 import { initLibrary, queue, ui } from '@dcl-sdk/mini-games/src'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
@@ -78,27 +78,32 @@ const spawnInitialEntityPull = () => {
     gameState.entityInRoket.push(entity)
     syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catInRocketEntityId + i)
   }
+  for (let i = 0; i <= counterEntity; i++) {
+    const entity = engine.addEntity()
+    gameState.counterEntity.push(entity)
+    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catInRocketEntityId + entityAmount + 10 + i)
+  }
 }
 
 const generateArray = (length: number) => {
   const array = [];
   let currentSum = 0;
-  
+
   while (array.length < length) {
-      let num;
-      do {
-          num = Math.floor(Math.random() * 19) - 9
-      } while (num === 0);
-      
-      if (currentSum + num <= 0 || currentSum + num > 9) {
-          continue;
-      }
-      
-      array.push(num);
-      currentSum += num;
+    let num;
+    do {
+      num = Math.floor(Math.random() * 19) - 9
+    } while (num === 0);
+
+    if (currentSum + num <= 0 || currentSum + num > 9) {
+      continue;
+    }
+
+    array.push(num);
+    currentSum += num;
   }
-  
+
   for (let i = 1; i <= array.length; i++) {
-    randomLvl.wave.set(i, {itemQueue: array[i-1], goOut: array[i-1] > 0 ? false : true}) 
+    randomLvl.wave.set(i, { itemQueue: array[i - 1], goOut: array[i - 1] > 0 ? false : true })
   }
 }

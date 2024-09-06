@@ -59,4 +59,20 @@ export class board {
             easingFunction: EasingFunction.EF_LINEAR,
         })
     }
+
+    public async setLeftCounter(showNumber: number) {
+        const data = await readGltfLocators(`locators/obj_background.gltf`)
+        const entity = gameState.counterEntity[0]
+        Transform.createOrReplace(entity, data.get(`number01`))
+        GltfContainer.createOrReplace(entity, { src: `models/obj_0${showNumber}.gltf`})
+        parentEntity(entity, gameState.rocketWindow!)
+    }
+
+    public async setRightCounter(showNumber: number) {
+        const data = await readGltfLocators(`locators/obj_background.gltf`)
+        const entity = gameState.counterEntity[1]
+        Transform.createOrReplace(entity, data.get(`number02`))
+        GltfContainer.createOrReplace(entity, { src: `models/obj_0${showNumber}.gltf`})
+        parentEntity(entity, gameState.rocketWindow!)
+    }
 }

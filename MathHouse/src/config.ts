@@ -8,6 +8,7 @@ export const modelPath = new Map([
 ])
 
 export const entityAmount = 9
+export const counterEntity = 2
 
 export const entityConfig = {
     distance: 5,

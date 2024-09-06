@@ -5,6 +5,7 @@ import { Vector3 } from "@dcl/sdk/math";
 type GameState = {
     availableEntity: Array<Entity>
     entityInRoket: Array<Entity>
+    counterEntity: Array<Entity>
     rocketWindow: Entity | undefined
     generatedCartrige: any
 }
@@ -12,6 +13,7 @@ type GameState = {
 export let gameState: GameState = {
     availableEntity: [],
     entityInRoket: [],
+    counterEntity: [],
     rocketWindow: undefined,
     generatedCartrige: new Map()
 }

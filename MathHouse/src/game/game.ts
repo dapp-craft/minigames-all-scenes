@@ -27,7 +27,7 @@ let timer: ui.Timer3D
 let playerAnswer = 0
 let entityCounter = -1
 export let sessionStartedAt: number
-let entityManager: any
+let entityManager: gameEntityManager
 
 export const initGame = async () => {
     await initMaxProgress()
@@ -78,9 +78,10 @@ async function startGame() {
 
     entityCounter = -1
     rocketBoard.showBoard(lvl0.initialEntityAmount)
+
     entityManager = new gameEntityManager(lvl0);
     entityCounter = await entityManager.startGame()
-    // startWinAnimation()
+
     gameButtons.forEach((button, i) => button.enable())
 
     GameData.createOrReplace(gameDataEntity, {
@@ -147,9 +148,12 @@ const initGameButtons = async () => {
                     playerAnswer = i
                     console.log(entityCounter, playerAnswer)
                     rocketBoard.showBoard(playerAnswer)
+                    rocketBoard.setLeftCounter(playerAnswer)
+                    rocketBoard.setRightCounter(entityCounter)
                     if (entityCounter == playerAnswer) {
                         console.log("WIN WIN WIN WIN WIN")
                         startWinAnimation()
+                        afterGame()
                     }
                     else {
                         console.log("LOSE")
@@ -175,26 +179,6 @@ const initGameButtons = async () => {
             // entityManager.start()
         }
     )
-
-    const sign = engine.addEntity()
-
-    Transform.create(sign, {
-        position: Vector3.create(8, 1, 5),
-        rotation: { x: 0, y: 1, z: 0, w: 0 }
-    })
-
-    TextShape.create(sign, {
-        text: `${playerAnswer}`,
-        fontSize: 5,
-    })
-
-    engine.addSystem(() => {
-        if (playerAnswer < 0) {
-            playerAnswer = 0
-            return
-        }
-        TextShape.getMutable(sign).text = `${playerAnswer}`
-    })
 }
 
 function setupWinAnimations() {
@@ -326,6 +310,15 @@ function setupWinAnimations() {
     syncEntity(winAnimText, [VisibilityComponent.componentId, Animator.componentId])
 }
 
+const afterGame = () => {
+    utils.timers.setTimeout(() => {
+        movePlayerTo({
+            newRelativePosition: Vector3.create(8, 1, 13),
+            cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
+        })
+    }, 5000)
+}
+
 function startWinAnimation() {
     const animations = engine.getEntitiesWith(Animator, VisibilityComponent)
     for (const [entity] of animations) {
@@ -334,7 +327,6 @@ function startWinAnimation() {
     }
 
     utils.timers.setTimeout(() => {
-
         const animations = engine.getEntitiesWith(Animator, VisibilityComponent)
         for (const [entity] of animations) {
             VisibilityComponent.getMutable(entity).visible = false
