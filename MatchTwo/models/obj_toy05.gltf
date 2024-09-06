@@ -29,7 +29,7 @@
 			"name":"material2",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
-					0.1,
+					1,
 					0.1,
 					1,
 					1
