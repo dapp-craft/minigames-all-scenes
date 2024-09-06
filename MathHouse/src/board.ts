@@ -33,6 +33,7 @@ export class board {
         }
         for (let i = 0; i < this.numberOfBoardElements; i++) {
             const entity = gameState.entityInRoket[i]
+            Tween.deleteFrom(entity)
             utils.timers.setTimeout(() => {
                 GltfContainer.createOrReplace(entity, { src: cat02.src })
                 Tween.createOrReplace(entity, {
@@ -82,22 +83,22 @@ export class board {
     }
 
     private async showNumber (leftCounter: boolean, showNumber: number) {
-        let delay = 200
+        let delay = 400
         const data = await readGltfLocators(`locators/obj_background.gltf`)
         const entity = gameState.counterEntity[leftCounter ? 0 : 1]
         Transform.createOrReplace(entity, data.get(leftCounter ? `number01` : `number02`))
         for (let i = 0; i <= showNumber; i++) {
+            Tween.deleteFrom(entity)
             utils.timers.setTimeout(() => {
                 GltfContainer.createOrReplace(entity, { src: `models/obj_0${i}.gltf` });
-                // Tween.createOrReplace(entity, {
-                //     mode: Tween.Mode.Scale({
-                //         start: Vector3.create(1, 1, 1),
-                //         end: data.get(`number01`)?.scale,
-                //     }),
-                //     duration: 100,
-                //     easingFunction: EasingFunction.EF_LINEAR,
-                //     playing: true
-                // })
+                Tween.createOrReplace(entity, {
+                    mode: Tween.Mode.Scale({
+                        start: Vector3.create(.5 + i/20, .5 + i/20, .5 + i/20),
+                        end: data.get(`number01`)?.scale,
+                    }),
+                    duration: 100,
+                    easingFunction: EasingFunction.EF_LINEAR,
+                })
             }, delay)
             delay = delay + 100
         } parentEntity(entity, gameState.rocketWindow!)

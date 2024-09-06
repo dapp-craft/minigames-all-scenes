@@ -86,7 +86,9 @@ async function startGame() {
     entityManager = new gameEntityManager(playerLevel);
     entityCounter = await entityManager.startGame()
 
-    rocketBoard.showBoard(playerLevel.initialEntityAmount)
+    rocketBoard.showBoard(0)
+    rocketBoard.setRightCounter(0)
+
 
     gameButtons.forEach((button, i) => button.enable())
 
