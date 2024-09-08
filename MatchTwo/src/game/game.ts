@@ -25,6 +25,7 @@ import * as utils from '@dcl-sdk/utils'
 import { init } from '@dcl-sdk/mini-games/src/config'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { setTilesPositions, tilesPositions } from './tilesPositions'
+import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 
 type TileType = {
   mainEntity: Entity
@@ -46,6 +47,9 @@ export const gameState = {
 }
 
 export async function initGame() {
+
+  await fetchPlayerProgress()
+
   initGameDataEntity()
 
   setupGameUI()
@@ -185,7 +189,8 @@ function getReadyToStart() {
     movePlayerTo({
       newRelativePosition: { x: 8, y: 1, z: 7 }
     })
-    startLevel(1)
+    const levetToStart = (playerProgress?.level ?? 0) + 1
+    startLevel(levetToStart as keyof typeof TILES_LEVEL)
   }, 2000)
 }
 
@@ -295,12 +300,13 @@ function finishLevel() {
   console.log('Level finished')
 
   gameState.levelFinishTime = Date.now()
+  updatePlayerProgress(gameState)
 
   if (queue.getQueue().length > 1) {
     queue.setNextPlayer()
   } else {
-    const level = (gameState.level + 1) % Object.keys(TILES_LEVEL).length
-    startLevel(level as keyof typeof TILES_LEVEL)
+    const levelToStart = gameState.level == Object.keys(TILES_LEVEL).length ? 1 : gameState.level + 1
+    startLevel(levelToStart as keyof typeof TILES_LEVEL)
   }
 }
 
