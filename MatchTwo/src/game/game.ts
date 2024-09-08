@@ -37,9 +37,12 @@ let gameDataEntity: Entity
 let tiles: TileType[] = []
 export let flippedTileQueue: TileType[] = []
 
-const gameState = {
+export const gameState = {
   tilesCount: 32,
-  level: 1
+  level: 1,
+  moves: 0,
+  levelStartTime: 0,
+  levelFinishTime: 0
 }
 
 export async function initGame() {
@@ -182,7 +185,7 @@ function getReadyToStart() {
     movePlayerTo({
       newRelativePosition: { x: 8, y: 1, z: 7 }
     })
-    startLevel(gameState.level as keyof typeof TILES_LEVEL)
+    startLevel(1)
   }, 2000)
 }
 
@@ -193,8 +196,12 @@ async function startLevel(level: keyof typeof TILES_LEVEL) {
 
   const tilesInUse = tiles.filter((tile) => TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
   const tilesNotInUse = tiles.filter((tile) => !TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
+
   gameState.tilesCount = TILES_LEVEL[level].length
   gameState.level = level
+  gameState.levelStartTime = Date.now()
+  gameState.moves = 0
+  gameState.levelFinishTime = 0
 
   tilesNotInUse.forEach((tile) => {
     disableTile(tile)
@@ -229,6 +236,8 @@ function checkIfMatch() {
   if (flippedTileQueue.length < 2) {
     return
   }
+
+  gameState.moves++
   const tile1 = flippedTileQueue.shift() as TileType
   const tile2 = flippedTileQueue.shift() as TileType
   if (Tile.get(tile1.mainEntity).toyModel === Tile.get(tile2.mainEntity).toyModel) {
@@ -284,6 +293,9 @@ function disableTile(tile: TileType) {
 
 function finishLevel() {
   console.log('Level finished')
+
+  gameState.levelFinishTime = Date.now()
+
   if (queue.getQueue().length > 1) {
     queue.setNextPlayer()
   } else {

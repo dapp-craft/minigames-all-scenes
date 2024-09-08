@@ -2,7 +2,7 @@ import ReactEcs, { Button, Dropdown, Input, Label, UiEntity } from '@dcl/sdk/rea
 import { Color4 } from '@dcl/sdk/math'
 import { DEBUG_MODE_UI } from '../config'
 import { queue } from '@dcl-sdk/mini-games/src'
-import { flippedTileQueue } from './game'
+import { flippedTileQueue, gameState } from './game'
 import { Tile } from './components/idnex'
 import { tilesPositions } from './tilesPositions'
 
@@ -57,6 +57,18 @@ export const debugUi = () => (
         <Label value="TilesPositionOrigin:" fontSize={FONT_SIZE} />
         {getTilePositions()}
       </UiEntity> */}
+      
+      {/* Moves */}
+
+      <UiEntity
+        uiTransform={{
+          width: '100%',
+          height: '30px',
+          flexDirection: 'row',
+          justifyContent: 'flex-end'
+        }}
+        uiText={{ value: `Moves: ${gameState.moves}`, fontSize: FONT_SIZE }}
+      ></UiEntity>
 
     </UiEntity>
   </UiEntity>
