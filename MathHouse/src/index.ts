@@ -87,13 +87,14 @@ const spawnInitialEntityPull = () => {
 
 const generateArray = (length: number) => {
   const array = [];
-  let currentSum = 0;
+  const catsInRocket = Math.floor(Math.random() * 9)
+  let currentSum = 0 + catsInRocket
 
   while (array.length < length) {
     let num;
     do {
       num = Math.floor(Math.random() * 19) - 9
-    } while (num === 0);
+    } while (num == 0);
 
     if (currentSum + num <= 0 || currentSum + num > 9) {
       continue;
@@ -102,8 +103,9 @@ const generateArray = (length: number) => {
     array.push(num);
     currentSum += num;
   }
-
   for (let i = 1; i <= array.length; i++) {
-    randomLvl.wave.set(i, { itemQueue: array[i - 1], goOut: array[i - 1] > 0 ? false : true })
+    randomLvl.wave.set(i, { itemQueue: Math.abs(array[i - 1]), goOut: array[i - 1] > 0 ? false : true })
   }
+  randomLvl.initialEntityAmount = catsInRocket
+  return array
 }

@@ -98,17 +98,10 @@ export class gameEntityManager {
         })
         engine.addSystem(() => {
             if (tweenSystem.tweenCompleted(entity)) {
+                Tween.deleteFrom(entity)
                 engine.removeSystem(`myEntityMove${entity}`)
                 isOut ? this.entityCounter-- : this.entityCounter++
                 this.currentWaveStateEntityCount++
-                Tween.createOrReplace(entity, {
-                    mode: Tween.Mode.Move({
-                        start: Transform.get(entity).position,
-                        end: Vector3.create(...startCoords)
-                    }),
-                    duration: 1,
-                    easingFunction: EasingFunction.EF_LINEAR,
-                })
                 VisibilityComponent.createOrReplace(entity, { visible: false });
                 if (this.currentWaveStateMaxEntity == this.currentWaveStateEntityCount) {
                     this.currentWaveStateEntityCount = 0
