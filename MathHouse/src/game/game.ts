@@ -144,7 +144,7 @@ const initGameButtons = async () => {
             }
         )
     )
-
+    
     for (let i = 1; i <= 9; i++) {
         gameButtons.push(
             new ui.MenuButton(
@@ -153,6 +153,8 @@ const initGameButtons = async () => {
                 ui.uiAssets.numbers[i],
                 `${i}`,
                 () => {
+                    console.log(gameButtons.length)
+                    gameButtons.forEach((button, i) => button.disable())
                     playerAnswer = i
                     console.log(entityCounter, playerAnswer)
                     rocketBoard.setLeftCounter(playerAnswer)
@@ -161,7 +163,6 @@ const initGameButtons = async () => {
                     if (entityCounter == playerAnswer) {
                         console.log("WIN WIN WIN WIN WIN")
                         startWinAnimation()
-                        // afterGame()
                         utils.timers.setTimeout(async () => {
                             if (playerLevelIndex == levelArray.length - 1) {
                                 afterGame()
@@ -181,22 +182,26 @@ const initGameButtons = async () => {
                             getReadyToStart()
                         }, 1500)
                     }
+                    utils.timers.setTimeout(() => {
+                        gameButtons.forEach((button, i) => button.enable())
+                    }, 2000)
                 }
             )
         )
     }
 
-    new ui.MenuButton(
+    let restartButton = new ui.MenuButton(
         { position: data.get(`restart`)?.position, parent: sceneParentEntity, rotation: Quaternion.create(0, -2, -1, 0) },
         ui.uiAssets.shapes.SQUARE_RED,
         ui.uiAssets.icons.restart,
         `RESTART`,
         () => {
-            console.log("Yo")
+            restartButton.disable()
             entityManager?.stopGame()
-            // entityManager?.startGame()
             getReadyToStart()
-            // entityManager.start()
+            utils.timers.setTimeout(() => {
+                restartButton.enable()
+            }, 2000)
         }
     )
 }
