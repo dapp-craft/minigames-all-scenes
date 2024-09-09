@@ -1,6 +1,6 @@
 // We define the empty imports so the auto-complete feature works as expected.
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { engine, GltfContainer, MeshRenderer, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
+import { engine, GltfContainer, MeshRenderer, Transform, Tween, TweenLoop, TweenStateStatus, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState, rocketCoords } from './state'
 import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, SESSION_DURATION, startCoords } from './config'
 
@@ -81,12 +81,12 @@ const spawnInitialEntityPull = () => {
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
     gameState.entityInRoket.push(entity)
-    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catInRocketEntityId + i)
+    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], catInRocketEntityId + i)
   }
   for (let i = 0; i <= counterEntity; i++) {
     const entity = engine.addEntity()
     gameState.counterEntity.push(entity)
-    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catInRocketEntityId + entityAmount + 10 + i)
+    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], catInRocketEntityId + entityAmount + 10 + i)
   }
 }
 
