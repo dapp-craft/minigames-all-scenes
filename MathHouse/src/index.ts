@@ -2,7 +2,7 @@
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { engine, GltfContainer, MeshRenderer, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState, rocketCoords } from './state'
-import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, SESSION_DURATION } from './config'
+import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, SESSION_DURATION, startCoords } from './config'
 
 import { initLibrary, queue, ui } from '@dcl-sdk/mini-games/src'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
@@ -12,6 +12,7 @@ import { setupUI } from './ui'
 import { initGame } from './game/game'
 import { board } from './board'
 import { randomLvl } from './levels'
+import { kitty } from './resources/resources'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
@@ -70,6 +71,10 @@ export async function main() {
 const spawnInitialEntityPull = () => {
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
+    GltfContainer.createOrReplace(entity, { src: kitty.src })
+    Transform.createOrReplace(entity, {
+      position: Vector3.create(...startCoords),
+    })
     gameState.availableEntity.push(entity)
     syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catEntityId + i)
   };

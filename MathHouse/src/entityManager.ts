@@ -1,12 +1,10 @@
 import * as utils from "@dcl-sdk/utils"
-import { EasingFunction, engine, Entity, GltfContainer, MeshRenderer, Transform, Tween, TweenLoop, TweenState, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs";
-import { entityAmount, entityConfig, finishCoords, modelPath, startCoords } from "./config";
+import { EasingFunction, engine, Entity, Transform, Tween, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs";
+import { finishCoords, startCoords } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
-import { Cartridge, CartridgeTest, SpawnEntityDelay } from "./Types";
+import { CartridgeTest, SpawnEntityDelay } from "./Types";
 import { gameState } from "./state";
-import { kitty } from "./resources/resources";
 import { rocketBoard } from ".";
-import { board } from "./board";
 
 export class gameEntityManager {
 
@@ -76,7 +74,6 @@ export class gameEntityManager {
         VisibilityComponent.createOrReplace(entity, { visible: true })
         console.log(this.entityIndex)
         this.entityIndex++;
-        GltfContainer.createOrReplace(entity, { src: kitty.src })
         Transform.createOrReplace(entity,
             {
                 position: Vector3.create(...startCoords),
