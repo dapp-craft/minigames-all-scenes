@@ -7,6 +7,7 @@ import { GAME_ID, SESSION_DURATION } from './config'
 import players from '@dcl/sdk/players'
 import { initGame } from './game/game'
 import { setupUI } from './ui'
+import { setupStaticModels } from './staticModels'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
@@ -20,7 +21,9 @@ initLibrary(engine, syncEntity, players, {
 })
 
 export function main() {
-  initGame()
+  setupStaticModels()
 
+  initGame()
+ 
   setupUI()
 }

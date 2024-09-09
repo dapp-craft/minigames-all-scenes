@@ -4,6 +4,20 @@ const modelsFolder = 'models/'
 const imagesFolder = 'images/'
 
 
+
+export const staticModels: PBGltfContainer[] = [
+  { src: modelsFolder +'obj_balloon.gltf' },
+  { src: modelsFolder +'obj_bench.gltf' },
+  { src: modelsFolder +'obj_door.gltf' },
+  { src: modelsFolder +'obj_fence.gltf' },
+  { src: modelsFolder +'obj_floor.gltf' },
+  { src: modelsFolder +'obj_frame.gltf' },
+  { src: modelsFolder +'obj_ground.gltf' },
+  { src: modelsFolder +'obj_terminal.gltf' },
+  { src: modelsFolder +'obj_wall.gltf' },
+  { src: modelsFolder +'obj_tower.gltf' },
+]
+
 export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' }
 
 export const toysModels: PBGltfContainer[] = [
@@ -27,3 +41,5 @@ export const toysModels: PBGltfContainer[] = [
 
 export const tileDoorShape: PBGltfContainer = { src: modelsFolder + 'obj_door.gltf' }
 export const defaulToyModel: PBGltfContainer = { src: modelsFolder + 'obj_toy01.gltf' }
+
+export const openTileSound = "sounds/open_tile.mp3"
