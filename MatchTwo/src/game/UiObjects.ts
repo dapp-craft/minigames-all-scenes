@@ -10,7 +10,7 @@ export function setupGameUI() {
   new ui.ScoreBoard(
     {
       parent: sceneParentEntity,
-      position: Vector3.create(-7.07, 3.02, 3.25),
+      position: Vector3.create(-6.07, 3.02, 3.25),
       rotation: Quaternion.fromEulerDegrees(0, -90, 0),
       scale: Vector3.create(0.875, 0.78, 1)
     },
@@ -42,5 +42,7 @@ export function setupGameUI() {
       queue.addPlayer()
     }
   )
+
+  // new ui.MenuButton()
 
 }
