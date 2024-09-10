@@ -11,6 +11,7 @@ import { gameEntityManager } from "../entityManager"
 import { rocketBoard } from ".."
 import { readGltfLocators } from "../../../common/locators"
 import { levelArray } from "../levels"
+import { soundManager } from "../globals"
 
 const BOARD_TRANSFORM = {
     position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -47,6 +48,7 @@ export const initGame = async () => {
         if (player?.address === localPlayer?.userId) {
             getReadyToStart()
         } else {
+            soundManager.playSound('exitSounds')
             entityManager?.stopGame()
             GameData.createOrReplace(gameDataEntity, {
                 playerAddress: '',
@@ -63,14 +65,14 @@ function getReadyToStart() {
     console.log('Get Ready to start!')
 
     utils.timers.setTimeout(() => {
-        startGame();
+        startGame()
     }, 2000)
 }
 
 async function startGame() {
     const localPlayer = getPlayer()
     sessionStartedAt = Date.now()
-
+    soundManager.playSound('enterSounds')
     movePlayerTo({
         newRelativePosition: Vector3.create(8, 1, 8),
         cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
@@ -161,6 +163,7 @@ const initGameButtons = async () => {
                     rocketBoard.setRightCounter(entityCounter)
                     rocketBoard.showBoard(playerAnswer)
                     if (entityCounter == playerAnswer) {
+                        soundManager.playSound('correctAnswerSound')                        
                         console.log("WIN WIN WIN WIN WIN")
                         startWinAnimation()
                         utils.timers.setTimeout(async () => {
@@ -174,6 +177,7 @@ const initGameButtons = async () => {
                     }
                     else {
                         console.log("LOSE")
+                        soundManager.playSound('wrongAnswerSound')
                         rocketBoard.setLeftCounter(playerAnswer)
                         rocketBoard.setRightCounter(entityCounter)
                         utils.timers.setTimeout(async () => {

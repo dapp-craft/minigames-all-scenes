@@ -25,7 +25,13 @@ export const gameZone: PBGltfContainer = { src: modelsFolder + 'obj_gamezone.glt
 export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' };
 
 // Game sounds
-export const slideSound = 'sounds/game/slide.mp3';
+export const enterSound = 'sounds/game/enter.mp3';
+export const exitSound = 'sounds/game/exit.mp3';
+export const wrongAnswerSound = 'sounds/game/not-true.mp3';
+export const correctAnswerSound = 'sounds/game/true.mp3';
+
+// export const slideSound = 'sounds/game/slide.mp3';
+
 
 // Theme sounds
 export const mainTheme = 'sounds/main_theme.mp3';
