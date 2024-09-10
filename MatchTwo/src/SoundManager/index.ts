@@ -10,8 +10,10 @@ import {
 } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { Vector3 } from '@dcl/sdk/math'
+import { openTileSound } from '../resources/resources'
 
 export let SOUNDS: { [key: string]: string } = {
+  openTile: openTileSound
 }
 
 export let THEME = ''
@@ -48,7 +50,7 @@ export class SoundManager {
     })
   }
 
-  public playSound(soundName: keyof typeof SOUNDS, volume: number = 0.5) {
+  public playSound(soundName: keyof typeof SOUNDS, volume: number = 0.8) {
     console.log('Play sound', soundName)
     console.log('audioClipUrl: ', `${SOUNDS[soundName as keyof typeof SOUNDS]}`)
     let soundEntity = engine.addEntity()
@@ -57,7 +59,7 @@ export class SoundManager {
       audioClipUrl: `${SOUNDS[soundName as keyof typeof SOUNDS]}`,
       loop: false,
       playing: false,
-      pitch: Math.random() * 0.2 + 0.8
+      pitch: Math.random() * 0.4 + 0.8
     })
     let audioSource = AudioSource.getMutable(soundEntity)
     audioSource.volume = volume

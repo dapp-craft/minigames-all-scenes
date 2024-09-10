@@ -26,6 +26,7 @@ import { init } from '@dcl-sdk/mini-games/src/config'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { setTilesPositions, tilesPositions } from './tilesPositions'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
+import { soundManager } from '../globals'
 
 type TileType = {
   mainEntity: Entity
@@ -132,6 +133,7 @@ async function onTileClick(tile: TileType) {
 async function openTile(tile: TileType) {
   const startRotation = Transform.get(tile.doorEntity).rotation
   const endRotation = Quaternion.multiply(startRotation, Quaternion.fromEulerDegrees(0, 90, 0))
+  soundManager.playSound('openTile')
   Tween.createOrReplace(tile.doorEntity, {
     mode: Tween.Mode.Rotate({
       start: startRotation,
@@ -155,6 +157,7 @@ async function openTile(tile: TileType) {
 async function closeTile(tile: TileType) {
   const startRotation = Transform.get(tile.doorEntity).rotation
   const endRotation = tilesPositions.doors[Tile.get(tile.mainEntity).tileNumber].rotation
+  soundManager.playSound('openTile')
   Tween.createOrReplace(tile.doorEntity, {
     mode: Tween.Mode.Rotate({
       start: startRotation,
