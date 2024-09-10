@@ -11,7 +11,7 @@ export const FLIP_DURATION = 0.5 * SEC_
 
 export const DEBUG_MODE_UI = true
 
-export const TILES_LEVEL = {
+export const TILES_LEVEL: {[key: number]: number[]} = {
   1: [10, 11, 12, 13, 18, 19, 20, 21],
   2: [3, 4, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20, 21, 22],
   3: [2, 3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],

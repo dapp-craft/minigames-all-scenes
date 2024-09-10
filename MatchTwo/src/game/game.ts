@@ -18,7 +18,7 @@ import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { FLIP_DURATION, TILES_LEVEL, SYNC_ENTITY_OFFSET, MAX_IMAGES } from '../config'
 import { ui, queue } from '@dcl-sdk/mini-games/src'
 import { getPlayer } from '@dcl/sdk/players'
-import { setupGameUI } from './UiObjects'
+import { levelButtons, setupGameUI } from './UiObjects'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { defaulToyModel, tileDoorShape, tileShape, toysModels } from '../resources/resources'
 import * as utils from '@dcl-sdk/utils'
@@ -185,19 +185,26 @@ async function closeTile(tile: TileType) {
 
 function getReadyToStart() {
   console.log('Get ready to start')
+
+  const levetToStart = (playerProgress?.level ?? 0) + 1
+  for (let i = 0; i < levetToStart; i++) {
+    levelButtons[i].enable()
+  }
+
   utils.timers.setTimeout(() => {
     movePlayerTo({
       newRelativePosition: { x: 8, y: 1, z: 7 }
     })
-    const levetToStart = (playerProgress?.level ?? 0) + 1
     startLevel(levetToStart as keyof typeof TILES_LEVEL)
   }, 2000)
 }
 
-async function startLevel(level: keyof typeof TILES_LEVEL) {
+export async function startLevel(level: keyof typeof TILES_LEVEL) {
   console.log('Start level', level)
 
   await Promise.all(tiles.map((tile) => resetTile(tile)))
+
+  console.log("TILES LEVEL", TILES_LEVEL)
 
   const tilesInUse = tiles.filter((tile) => TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
   const tilesNotInUse = tiles.filter((tile) => !TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
@@ -280,6 +287,7 @@ function finishLevel() {
     queue.setNextPlayer()
   } else {
     const levelToStart = gameState.level == Object.keys(TILES_LEVEL).length ? 1 : gameState.level + 1
+    levelButtons[gameState.level].enable()
     startLevel(levelToStart as keyof typeof TILES_LEVEL)
   }
 }
