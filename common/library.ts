@@ -138,14 +138,14 @@ function gameAreaChecker(topLeft: Vector3, bottomRight: Vector3, exitSpawn: Vect
       // TODO: center should be a config ?
       const center = Vector3.create(8, 0, 8)
       const sceneRotation = Transform.get(sceneParentEntity).rotation
-      const areaPt1 = rotateVectorAroundCenter(topLeft, center, sceneRotation)
-      const areaPt2 = rotateVectorAroundCenter(bottomRight, center, sceneRotation)
+      const areaPt1 = rotateVectorAroundCenter(Vector3.add(topLeft, center), center, sceneRotation)
+      const areaPt2 = rotateVectorAroundCenter(Vector3.add(bottomRight, center), center, sceneRotation)
 
       // If the player is inside the game-area but its not the active player.
       if (utilities.isVectorInsideArea(playerTransform.position, areaPt1, areaPt2)) {
         if (!queue.isActive()) {
           void movePlayerTo({
-            newRelativePosition: rotateVectorAroundCenter(exitSpawn, center, sceneRotation)
+            newRelativePosition: rotateVectorAroundCenter(Vector3.add(exitSpawn, center), center, sceneRotation)
           })
         }
         // Active player left game area
