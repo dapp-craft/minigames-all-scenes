@@ -98,8 +98,8 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_global_steampunk",
-			"uri":"textures/obj_global_steampunk.png"
+			"name":"obj_global_steampunk02",
+			"uri":"textures/obj_global_steampunk02.png"
 		}
 	],
 	"accessors":[
