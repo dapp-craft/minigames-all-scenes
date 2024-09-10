@@ -164,21 +164,21 @@ async function closeTile(tile: TileType) {
     easingFunction: EasingFunction.EF_EASECUBIC
   })
   Tile.getMutable(tile.mainEntity).isFlipped = false
-  pointerEventsSystem.onPointerDown(
-    {
-      entity: tile.doorEntity,
-      opts: {
-        button: InputAction.IA_POINTER,
-        hoverText: 'Click to flip the tile'
-      }
-    },
-    () => {
-      onTileClick(tile)
-    }
-  )
   return new Promise<void>((resolve) => {
     utils.timers.setTimeout(() => {
       resolve()
+      pointerEventsSystem.onPointerDown(
+        {
+          entity: tile.doorEntity,
+          opts: {
+            button: InputAction.IA_POINTER,
+            hoverText: 'Click to flip the tile'
+          }
+        },
+        () => {
+          onTileClick(tile)
+        }
+      )
     }, FLIP_DURATION + 100)
   })
 }
@@ -259,34 +259,8 @@ function checkIfMatch() {
     }
   } else {
     console.log('No match')
-    closeTile(tile1).then(() => {
-      pointerEventsSystem.onPointerDown(
-        {
-          entity: tile1.doorEntity,
-          opts: {
-            button: InputAction.IA_POINTER,
-            hoverText: 'Click to open the tile'
-          }
-        },
-        () => {
-          onTileClick(tile1)
-        }
-      )
-    })
-    closeTile(tile2).then(() => {
-      pointerEventsSystem.onPointerDown(
-        {
-          entity: tile2.doorEntity,
-          opts: {
-            button: InputAction.IA_POINTER,
-            hoverText: 'Click to open the tile'
-          }
-        },
-        () => {
-          onTileClick(tile2)
-        }
-      )
-    })
+    closeTile(tile1)
+    closeTile(tile2)
   }
 }
 
