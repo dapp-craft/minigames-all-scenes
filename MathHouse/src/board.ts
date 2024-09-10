@@ -9,28 +9,53 @@ import { readGltfLocators } from "../../common/locators";
 export class board {
 
     private numberOfBoardElements: number = 0
+    private data: any
+
+    private resolveReady!: () => void
+    private dataIsDone: Promise<void>
+
 
     constructor() {
+        this.dataIsDone = new Promise((res) => { this.resolveReady = res })
         this.init()
+
     }
 
     private async init() {
-        const data = await readGltfLocators(`locators/obj_background.gltf`)
+        this.data = await readGltfLocators(`locators/obj_background.gltf`)
+        this.resolveReady()
         gameState.rocketWindow = engine.addEntity()
-        Transform.createOrReplace(gameState.rocketWindow, { position: rocketCoords, scale: data.get('background')?.scale })
+        Transform.createOrReplace(gameState.rocketWindow, { position: rocketCoords, scale: this.data.get('background')?.scale })
         GltfContainer.createOrReplace(gameState.rocketWindow, { src: background.src })
         syncEntity(gameState.rocketWindow, [Transform.componentId, GltfContainer.componentId, Tween.componentId], 5000)
-        gameState.entityInRoket.forEach((entity: Entity) => parentEntity(entity, gameState.rocketWindow!))
-        gameState.counterEntity.forEach((entity: Entity) => parentEntity(entity, gameState.rocketWindow!))
+        for (let i = 0; i < gameState.entityInRoket.length - 1; i++) {
+            const entity = gameState.entityInRoket[i]
+            let entityTransform = this.data.get(`cat0${i + 1}`)
+            engine.addSystem(() => Transform.createOrReplace(entity, {
+                position: Vector3.add(Vector3.scale(entityTransform.position, 1.7), Transform.get(gameState.rocketWindow!).position),
+                scale: Vector3.create(0.2, 0.2, 0.2)
+            }))
+        }
+        for (let i = 0; i < gameState.counterEntity.length - 1; i++) {
+            const entity = gameState.counterEntity[i]
+            let entityTransform = this.data.get(`number0${i + 1}`)
+            engine.addSystem(() => Transform.createOrReplace(entity, {
+                position: Vector3.add(Vector3.scale(entityTransform.position, 2), Transform.get(gameState.rocketWindow!).position),
+                scale: Vector3.create(0.5, 0.5, 0.5)
+            }))
+        }
     }
 
     private async initBoardElements() {
-        const data = await readGltfLocators(`locators/obj_background.gltf`)
         let delay = 400
         for (let i = 0; i < gameState.entityInRoket.length - 1; i++) {
             const entity = gameState.entityInRoket[i]
             GltfContainer.createOrReplace(entity, { src: cat01.src })
-            Transform.createOrReplace(entity, data.get(`cat0${i + 1}`))
+            let entityTransform = this.data.get(`cat0${i + 1}`)
+            engine.addSystem(() => Transform.createOrReplace(entity, {
+                position: Vector3.add(Vector3.scale(entityTransform.position, 1.7), Transform.get(gameState.rocketWindow!).position),
+                scale: Vector3.create(0.2, 0.2, 0.2)
+            }))
         }
         for (let i = 0; i < this.numberOfBoardElements; i++) {
             const entity = gameState.entityInRoket[i]
@@ -39,8 +64,8 @@ export class board {
                 GltfContainer.createOrReplace(entity, { src: cat02.src })
                 Tween.createOrReplace(entity, {
                     mode: Tween.Mode.Scale({
-                        start: Vector3.create(.2, .2, .2),
-                        end: data.get(`cat01`)?.scale,
+                        start: Vector3.create(.3, .3, .3),
+                        end: this.data.get(`cat01`)?.scale,
                     }),
                     duration: 300,
                     easingFunction: EasingFunction.EF_LINEAR,
@@ -52,6 +77,7 @@ export class board {
     }
 
     public async showBoard(numberOfBoardElements: number) {
+        await this.dataIsDone;
         this.numberOfBoardElements = numberOfBoardElements
         Tween.createOrReplace(gameState.rocketWindow!, {
             mode: Tween.Mode.Move({
@@ -64,7 +90,7 @@ export class board {
         await this.initBoardElements();
     }
 
-    public hideBoard() {
+    public async hideBoard() {
         Tween.createOrReplace(gameState.rocketWindow!, {
             mode: Tween.Mode.Move({
                 start: Transform.get(gameState.rocketWindow!).position,
@@ -84,10 +110,10 @@ export class board {
     }
 
     private async showNumber(leftCounter: boolean, showNumber: number) {
+        await this.dataIsDone;
         let delay = 400
-        const data = await readGltfLocators(`locators/obj_background.gltf`)
         const entity = gameState.counterEntity[leftCounter ? 0 : 1]
-        Transform.createOrReplace(entity, data.get(leftCounter ? `number01` : `number02`))
+        // Transform.createOrReplace(entity, this.data.get(leftCounter ? `number01` : `number02`))
         for (let i = 0; i <= showNumber; i++) {
             Tween.deleteFrom(entity)
             utils.timers.setTimeout(() => {
@@ -95,7 +121,7 @@ export class board {
                 Tween.createOrReplace(entity, {
                     mode: Tween.Mode.Scale({
                         start: Vector3.create(.5 + i / 20, .5 + i / 20, .5 + i / 20),
-                        end: data.get(`number01`)?.scale,
+                        end: this.data.get(`number01`)?.scale,
                     }),
                     duration: 100,
                     easingFunction: EasingFunction.EF_LINEAR,
