@@ -3,6 +3,10 @@
 		"generator":"Khronos glTF Blender I/O v4.2.57",
 		"version":"2.0"
 	},
+	"extensionsUsed":[
+		"KHR_materials_specular",
+		"KHR_materials_ior"
+	],
 	"scene":0,
 	"scenes":[
 		{
@@ -26,22 +30,26 @@
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"Objects",
+			"extensions":{
+				"KHR_materials_specular":{
+					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
+				}
+			},
+			"name":"obj_circus05",
 			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.5,
-					0.5,
-					0.5,
-					1
-				],
-				"metallicFactor":0,
-				"roughnessFactor":0.5527864098548889
+				"baseColorTexture":{
+					"index":0
+				},
+				"metallicFactor":0
 			}
 		}
 	],
 	"meshes":[
 		{
-			"name":"Mesh.190",
+			"name":"Mesh.172",
 			"primitives":[
 				{
 					"attributes":{
@@ -55,7 +63,7 @@
 			]
 		},
 		{
-			"name":"Mesh.315",
+			"name":"Mesh.174",
 			"primitives":[
 				{
 					"attributes":{
@@ -68,13 +76,26 @@
 			]
 		}
 	],
+	"textures":[
+		{
+			"sampler":0,
+			"source":0
+		}
+	],
+	"images":[
+		{
+			"mimeType":"image/png",
+			"name":"obj_circus05",
+			"uri":"textures/obj_circus05.png"
+		}
+	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
 			"count":2400,
 			"max":[
-				6.015509605407715,
+				6.015511512756348,
 				4.258884429931641,
 				6.396462440490723
 			],
@@ -108,7 +129,7 @@
 			"componentType":5126,
 			"count":2400,
 			"max":[
-				6.015509605407715,
+				6.015511512756348,
 				4.258884429931641,
 				6.396462440490723
 			],
@@ -174,6 +195,12 @@
 			"byteLength":19200,
 			"byteOffset":152352,
 			"target":34962
+		}
+	],
+	"samplers":[
+		{
+			"magFilter":9729,
+			"minFilter":9987
 		}
 	],
 	"buffers":[
