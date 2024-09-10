@@ -34,6 +34,12 @@
 			},
 			"name":"FloorBaseGrass_01_MAT_alt",
 			"pbrMetallicRoughness":{
+				"baseColorFactor":[
+					0.11002063751220703,
+					0,
+					0.5247394442558289,
+					1
+				],
 				"baseColorTexture":{
 					"index":0
 				},
