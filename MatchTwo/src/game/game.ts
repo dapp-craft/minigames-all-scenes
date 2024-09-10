@@ -186,7 +186,7 @@ async function closeTile(tile: TileType) {
 function getReadyToStart() {
   console.log('Get ready to start')
 
-  const levetToStart = (playerProgress?.level ?? 0) + 1
+  const levetToStart = ((playerProgress?.level ?? 0) + 1) > Object.keys(TILES_LEVEL).length ? Object.keys(TILES_LEVEL).length : (playerProgress?.level ?? 0) + 1
   for (let i = 0; i < levetToStart; i++) {
     levelButtons[i].enable()
   }
