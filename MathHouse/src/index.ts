@@ -29,7 +29,7 @@ export let rocketBoard: any
 
 export async function main() {
   setupStaticModels()
-  spawnInitialEntityPull()
+  spawnInitialEntityPoll()
 
   const width = 2.5
   const height = 2.8
@@ -66,9 +66,11 @@ export async function main() {
   setupUI()
 
   rocketBoard = new board();
+
+  // generateArray(5)
 }
 
-const spawnInitialEntityPull = () => {
+const spawnInitialEntityPoll = () => {
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
     GltfContainer.createOrReplace(entity, { src: kitty.src })
@@ -98,7 +100,7 @@ const generateArray = (length: number) => {
   while (array.length < length) {
     let num;
     do {
-      num = Math.floor(Math.random() * 19) - 9
+      num = Math.floor(Math.random() * 13) - 6;
     } while (num == 0);
 
     if (currentSum + num <= 0 || currentSum + num > 9) {
@@ -112,5 +114,12 @@ const generateArray = (length: number) => {
     randomLvl.wave.set(i, { itemQueue: Math.abs(array[i - 1]), goOut: array[i - 1] > 0 ? false : true })
   }
   randomLvl.initialEntityAmount = catsInRocket
+  console.log(`
+    \nRandom level generated, with: 
+    answer:                   ${currentSum}
+    number of waves:          ${length}
+    cats in rocket on start:  ${catsInRocket}
+    waves: ${array}
+    `)
   return array
 }
