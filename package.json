@@ -19,5 +19,8 @@
     "HouseCounter",
     "MatchTwo",
     "SpotTheDifference"
-  ]
+  ],
+  "dependencies": {
+    "@dcl-sdk/mini-games": "^1.0.0-20240905070353.commit-c042ca1"
+  }
 }
