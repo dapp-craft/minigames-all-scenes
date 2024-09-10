@@ -28,6 +28,8 @@ enum NODE_NAME {
     BUTTON_MUSIC = 'button_music'
 }
 export interface MiniGameCallbacks {
+    start: () => void
+    exit: () => void
     restart: () => void
     toggleMusic: () => void
     toggleSfx: () => void
@@ -40,7 +42,23 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
         gameTimeoutMs: SESSION_DURATION,
         inactiveTimeoutMs: INACTIVITY_TIMEOUT,
     })
-    const positionData = validatePositionData(await data)
+    const positionData = validatePositionData(await data) // TODO: account for rotation with rotateVectorAroundCenter
+    let isActive = false
+    queue.listeners.onActivePlayerChange = player => {
+        const center = Transform.get(sceneParentEntity).position
+        const sceneRotation = Transform.get(sceneParentEntity).rotation
+        
+        if (player?.active) {
+            isActive = true
+            movePlayerTo({
+                newRelativePosition: Vector3.add(positionData.get(NODE_NAME.AREA_PLAYSPAWN)!.position, center)
+            })
+            callbacks.start()
+        } else if (isActive) {
+            isActive = false
+            callbacks.exit()
+        }
+    }
     engine.addSystem(gameAreaChecker(
         positionData.get(NODE_NAME.AREA_TOPLEFT)!.position,
         positionData.get(NODE_NAME.AREA_BOTTOMRIGHT)!.position,
@@ -49,66 +67,51 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
     
     
     new ui.ScoreBoard(
-        {
-            ...positionData.get(NODE_NAME.SCOREBOARD)!,
-            parent: sceneParentEntity,
-        },
+        {...positionData.get(NODE_NAME.SCOREBOARD)!, parent: sceneParentEntity},
         SCOREBOARD_WIDTH,
         SCOREBOARD_HEIGHT,
         SCOREBOARD_SCALE,
         scoreboardPreset
     )
     
-    queue.initQueueDisplay({
-        ...positionData.get(NODE_NAME.QUEUE_DISPLAY)!,
-        parent: sceneParentEntity,
-    })
+    queue.initQueueDisplay(
+        {...positionData.get(NODE_NAME.QUEUE_DISPLAY)!, parent: sceneParentEntity}
+    )
     
     new ui.MenuButton(
-        {
-            ...positionData.get(NODE_NAME.BUTTON_PLAY)!,
-            parent: sceneParentEntity,
-        },
+        {...positionData.get(NODE_NAME.BUTTON_PLAY)!, parent: sceneParentEntity},
         ui.uiAssets.shapes.RECT_GREEN,
         ui.uiAssets.icons.playText,
         'PLAY GAME',
         () => queue.addPlayer()
     )
-
-    new ui.MenuButton({
-        ...positionData.get(NODE_NAME.BUTTON_RESTART)!,
-        parent: sceneParentEntity,
-      },
+    
+    new ui.MenuButton(
+        {...positionData.get(NODE_NAME.BUTTON_RESTART)!, parent: sceneParentEntity},
         ui.uiAssets.shapes.SQUARE_RED,
         ui.uiAssets.icons.restart,
         "RESTART LEVEL",
         callbacks.restart
     )
-
-    new ui.MenuButton({
-        ...positionData.get(NODE_NAME.BUTTON_EXIT)!,
-        parent: sceneParentEntity
-      },
+    
+    new ui.MenuButton(
+        {...positionData.get(NODE_NAME.BUTTON_EXIT)!, parent: sceneParentEntity},
         ui.uiAssets.shapes.RECT_RED,
         ui.uiAssets.icons.exitText,
         'Exit from game area',
         () => queue.setNextPlayer()
     )
     
-    new ui.MenuButton({
-        ...positionData.get(NODE_NAME.BUTTON_SFX)!,
-        parent: sceneParentEntity,
-      },
+    new ui.MenuButton(
+        {...positionData.get(NODE_NAME.BUTTON_SFX)!, parent: sceneParentEntity},
         ui.uiAssets.shapes.SQUARE_RED,
         ui.uiAssets.icons.sound,
         'Sound FX',
         callbacks.toggleSfx
     )
     
-    new ui.MenuButton({
-        ...positionData.get(NODE_NAME.BUTTON_MUSIC)!,
-        parent: sceneParentEntity
-    },
+    new ui.MenuButton(
+        {...positionData.get(NODE_NAME.BUTTON_MUSIC)!, parent: sceneParentEntity},
         ui.uiAssets.shapes.SQUARE_RED,
         ui.uiAssets.icons.music,
         'Play/Stop Music',
@@ -126,33 +129,30 @@ function validatePositionData(positionData: Map<String, TransformType>) {
 }
 
 function gameAreaChecker(topLeft: Vector3, bottomRight: Vector3, exitSpawn: Vector3) {
-  let areaCheckTimer = 0
-  return function gameAreaCheck(dt: number) {
-    areaCheckTimer += dt
-
-    if (areaCheckTimer >= 1) {
-      areaCheckTimer = 0
-
-      const playerTransform = Transform.get(engine.PlayerEntity)
-
-      // TODO: center should be a config ?
-      const center = Vector3.create(8, 0, 8)
-      const sceneRotation = Transform.get(sceneParentEntity).rotation
-      const areaPt1 = rotateVectorAroundCenter(Vector3.add(topLeft, center), center, sceneRotation)
-      const areaPt2 = rotateVectorAroundCenter(Vector3.add(bottomRight, center), center, sceneRotation)
-
-      // If the player is inside the game-area but its not the active player.
-      if (utilities.isVectorInsideArea(playerTransform.position, areaPt1, areaPt2)) {
-        if (!queue.isActive()) {
-          void movePlayerTo({
-            newRelativePosition: rotateVectorAroundCenter(Vector3.add(exitSpawn, center), center, sceneRotation)
-          })
+    let areaCheckTimer = 0
+    return function gameAreaCheck(dt: number) {
+        areaCheckTimer += dt
+        
+        if (areaCheckTimer >= 1) {
+            areaCheckTimer = 0
+            
+            const playerTransform = Transform.get(engine.PlayerEntity)
+            
+            const center = Transform.get(sceneParentEntity).position
+            const sceneRotation = Transform.get(sceneParentEntity).rotation
+            const areaPt1 = Vector3.add(topLeft, center)
+            const areaPt2 = Vector3.add(bottomRight, center)
+            
+            // If the player is inside the game-area but its not the active player.
+            if (utilities.isVectorInsideArea(playerTransform.position, areaPt1, areaPt2)) {
+                if (!queue.isActive()) {
+                    void movePlayerTo({
+                        newRelativePosition: Vector3.add(exitSpawn, center)
+                    })
+                }
+            } else if (queue.isActive() && Date.now() - getQueue()[0]!.player.startPlayingAt > 500) {
+                queue.setNextPlayer()
+            }
         }
-        // Active player left game area
-        // (we put a 2s grace period because the movePlayer takes time)
-      } else if (queue.isActive() && Date.now() - getQueue()[0]!.player.startPlayingAt > 4500) {
-        queue.setNextPlayer()
-      }
     }
-  }
 }
