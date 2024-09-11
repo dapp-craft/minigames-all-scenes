@@ -9,7 +9,7 @@ export const SYNC_ENTITY_OFFSET = 5000
 export const MAX_IMAGES = 32
 export const FLIP_DURATION = 0.5 * SEC_
 
-export const DEBUG_MODE_UI = true
+export const DEBUG_MODE_UI = false
 
 export const TILES_LEVEL: {[key: number]: number[]} = {
   1: [10, 11, 12, 13, 18, 19, 20, 21],
