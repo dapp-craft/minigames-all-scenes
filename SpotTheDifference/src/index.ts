@@ -31,7 +31,7 @@ const handlers = {
     toggleSfx: () => {}
 }
 
-initMiniGame('059739aa-376f-4bcd-adc5-4081d808bc9a', TIME_LEVEL, readGltfLocators(`locators/obj_locators.gltf`), handlers)
+initMiniGame('059739aa-376f-4bcd-adc5-4081d808bc9a', TIME_LEVEL, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
 let gameObjects: GameObject[] = []
 
 const STATIC_MODELS = {
