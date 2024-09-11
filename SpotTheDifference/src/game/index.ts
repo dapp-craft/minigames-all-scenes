@@ -4,10 +4,26 @@ import { SIZE, VARIANT } from './types'
 import { GameObject } from './object'
 import { randomSample, randomChoice, randomInt } from '../../../common/utils/random'
 import { readGltfLocators } from '../../../common/locators'
-import { Entity, TransformType } from '@dcl/sdk/ecs'
+import { engine, Entity, GltfContainer, GltfContainerLoadingState, LoadingState, Transform, TransformType, VisibilityComponent } from '@dcl/sdk/ecs'
+import * as utils from '@dcl-sdk/utils'
 
 const MODEL_LOCATORS = new Map<SIZE, TransformType[]>()
 let root: Entity
+
+Promise.all(Object.entries(SETTINGS).flatMap(([model, data]) => 
+    [VARIANT.BASE, VARIANT.ALT, ...data.variants].map(variant => new Promise<Entity>(async resolve => {
+        const entity = engine.addEntity()
+        GltfContainer.create(entity, {src: `models/${model}_${variant}.gltf`})
+        Transform.create(entity, {parent: root})
+        VisibilityComponent.create(entity, {visible: false})
+        do await new Promise<void>(resolve => utils.timers.setTimeout(resolve, 100))
+        while (GltfContainerLoadingState.get(entity).currentState !== LoadingState.FINISHED)
+        resolve(entity)
+    })
+))).then(entities => {
+    console.log(`Preloaded ${entities.length} models`)
+    entities.forEach(entity => engine.removeEntity(entity))
+})
 
 export async function init(rootEntity: Entity) {
     root = rootEntity
