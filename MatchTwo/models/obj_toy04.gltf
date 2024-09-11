@@ -3,10 +3,14 @@
 		"generator":"Khronos glTF Blender I/O v4.2.57",
 		"version":"2.0"
 	},
+	"extensionsUsed":[
+		"KHR_materials_specular",
+		"KHR_materials_ior"
+	],
 	"scene":0,
 	"scenes":[
 		{
-			"name":"Scene",
+			"name":"obj_toy04",
 			"nodes":[
 				0
 			]
@@ -15,33 +19,40 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_toy01",
-			"scale":[
-				0.4911380410194397,
-				0.6388821005821228,
-				0.6388821005821228
-			]
+			"name":"obj_toy04"
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"material2",
+			"emissiveFactor":[
+				0.15000000596046448,
+				0.15000000596046448,
+				0.15000000596046448
+			],
+			"emissiveTexture":{
+				"index":0
+			},
+			"extensions":{
+				"KHR_materials_specular":{
+					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
+				}
+			},
+			"name":"obj_toy",
 			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					1,
-					1,
-					0.1,
-					1
-				],
-				"metallicFactor":0,
-				"roughnessFactor":0.5527864098548889
+				"baseColorTexture":{
+					"index":1
+				},
+				"metallicFactor":0
 			}
 		}
 	],
 	"meshes":[
 		{
-			"name":"Mesh.364",
+			"name":"Mesh.007",
 			"primitives":[
 				{
 					"attributes":{
@@ -55,71 +66,94 @@
 			]
 		}
 	],
+	"textures":[
+		{
+			"sampler":0,
+			"source":0
+		},
+		{
+			"sampler":0,
+			"source":0
+		}
+	],
+	"images":[
+		{
+			"mimeType":"image/png",
+			"name":"obj_toy",
+			"uri":"textures/obj_toy.png"
+		}
+	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":16,
+			"count":189,
 			"max":[
-				0.446857213973999,
-				0.2942957580089569,
-				0.31301116943359375
+				0.1582276076078415,
+				0.2973553538322449,
+				0.15822772681713104
 			],
 			"min":[
-				-0.4468564987182617,
-				-4.76837158203125e-07,
-				-0.31301021575927734
+				-0.15822799503803253,
+				-0.2918349802494049,
+				-0.1582278311252594
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":16,
+			"count":189,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":16,
+			"count":189,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":36,
+			"count":864,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":192,
+			"byteLength":2268,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":192,
-			"byteOffset":192,
+			"byteLength":2268,
+			"byteOffset":2268,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":128,
-			"byteOffset":384,
+			"byteLength":1512,
+			"byteOffset":4536,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":72,
-			"byteOffset":512,
+			"byteLength":1728,
+			"byteOffset":6048,
 			"target":34963
+		}
+	],
+	"samplers":[
+		{
+			"magFilter":9729,
+			"minFilter":9987
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":584,
+			"byteLength":7776,
 			"uri":"obj_toy04.bin"
 		}
 	]

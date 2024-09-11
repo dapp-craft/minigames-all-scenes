@@ -31,6 +31,14 @@
 		{
 			"alphaMode":"MASK",
 			"doubleSided":true,
+			"emissiveFactor":[
+				0.05000000074505806,
+				0.05000000074505806,
+				0.05000000074505806
+			],
+			"emissiveTexture":{
+				"index":0
+			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
@@ -42,13 +50,21 @@
 			"name":"obj_circus03",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":0
+					"index":1
 				},
 				"metallicFactor":0
 			}
 		},
 		{
 			"doubleSided":true,
+			"emissiveFactor":[
+				0.05000000074505806,
+				0.05000000074505806,
+				0.05000000074505806
+			],
+			"emissiveTexture":{
+				"index":2
+			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
@@ -60,7 +76,7 @@
 			"name":"obj_circus01",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":1
+					"index":3
 				},
 				"metallicFactor":0
 			}
@@ -68,6 +84,14 @@
 		{
 			"alphaMode":"MASK",
 			"doubleSided":true,
+			"emissiveFactor":[
+				0.05000000074505806,
+				0.05000000074505806,
+				0.05000000074505806
+			],
+			"emissiveTexture":{
+				"index":4
+			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
@@ -79,7 +103,7 @@
 			"name":"obj_circus02",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":2
+					"index":5
 				},
 				"metallicFactor":0
 			}
@@ -167,7 +191,19 @@
 		},
 		{
 			"sampler":0,
+			"source":0
+		},
+		{
+			"sampler":0,
 			"source":1
+		},
+		{
+			"sampler":0,
+			"source":1
+		},
+		{
+			"sampler":0,
+			"source":2
 		},
 		{
 			"sampler":0,
