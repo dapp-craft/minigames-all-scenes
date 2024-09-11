@@ -37,11 +37,14 @@ let gameObjects: GameObject[] = []
 const STATIC_MODELS = {
     [VARIANT.BASE]: [
         'models/obj_exterior_base.gltf',
-        'models/obj_floor_base.gltf'
+        'models/obj_floor_base.gltf',
+        'models/obj_panel_base.gltf',
+        'models/obj_gamezone.gltf'
     ],
     [VARIANT.ALT]: [
         'models/obj_exterior_alt.gltf',
-        'models/obj_floor_alt.gltf'
+        'models/obj_floor_alt.gltf',
+        'models/obj_panel_alt.gltf'
     ]
 }
 
