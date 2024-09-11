@@ -1,6 +1,7 @@
 export enum SIZE {
     MEDIUM = 'medium',
-    LARGE = 'large'
+    LARGE = 'large',
+    SMALL = 'small'
 }
 
 export enum VARIANT {
