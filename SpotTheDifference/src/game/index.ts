@@ -29,15 +29,18 @@ export function generateLevelObjects(difficulty: { [key in keyof typeof DIFFICUL
         )
     )
     while (setup.length < total) setup.push([randomChoice(Object.keys(SETTINGS)) as MODEL, VARIANT.ALT])
-        const setupMap = setup.reduce(
+    const setupMap = setup.reduce(
         (acc, [model, variation]) => acc.get(model)?.push(variation) && acc || acc.set(model, [variation]),
         new Map<MODEL, VARIANT[]>()
     )
+    let locatorsPool = new Map(
+        Array.from(MODEL_LOCATORS.entries()).map(([key, value]) => [key, randomSample(value, value.length)])
+    )
     for (const [model, variations] of setupMap) {
-        const locs = randomSample(MODEL_LOCATORS.get(SETTINGS[model].size)!, variations.length)
+        const locs = locatorsPool.get(SETTINGS[model].size)!
         console.log(model, variations)
         variations.forEach((variation, i) => objects.push(new GameObject(model, VARIANT.BASE, variation, {
-            ...locs[i],
+            ...locs.pop()!,
             rotation: Quaternion.fromEulerDegrees(0, randomInt(0, 180), 0),
             parent: root
         })))
