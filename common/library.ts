@@ -19,8 +19,8 @@ enum NODE_NAME {
     AREA_BOTTOMRIGHT = 'area_bottomRight',
     AREA_EXITSPAWN = 'area_exitSpawn',
     AREA_PLAYSPAWN = 'area_playSpawn',
-    SCOREBOARD = 'scoreboard',
-    QUEUE_DISPLAY = 'queue_display',
+    SCOREBOARD = 'display_scoreboard',
+    QUEUE = 'display_queue',
     BUTTON_PLAY = 'button_play',
     BUTTON_RESTART = 'button_restart',
     BUTTON_EXIT = 'button_exit',
@@ -75,7 +75,7 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
     )
     
     queue.initQueueDisplay(
-        {...positionData.get(NODE_NAME.QUEUE_DISPLAY)!, parent: sceneParentEntity}
+        {...positionData.get(NODE_NAME.QUEUE)!, parent: sceneParentEntity}
     )
     
     new ui.MenuButton(
