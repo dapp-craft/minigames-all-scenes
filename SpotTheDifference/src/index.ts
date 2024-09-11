@@ -7,6 +7,7 @@ import { LEVELS } from './game/levels'
 import { GameObject } from './game/object'
 import { generateLevelObjects, init } from './game'
 import { VARIANT } from './game/types'
+import { queue } from '@dcl-sdk/mini-games/src'
 
 const root = engine.addEntity()
 Transform.create(root, {position: {x: 8, y: 0, z: 8}})
@@ -62,6 +63,7 @@ export async function main() {
     await init(root)
     
     engine.addSystem(() => {
+        if (!queue.isActive()) return
         if (inputSystem.isTriggered(InputAction.IA_PRIMARY, PointerEventType.PET_DOWN)) {
             // objects.forEach((o, i) => utils.timers.setTimeout(() => o.toggle(), Math.random() * 1000))
             alt = !alt
