@@ -101,29 +101,29 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1512,
+			"count":1514,
 			"max":[
-				0.5948003530502319,
-				0.3059074878692627,
-				0.5929741263389587
+				0.16279089450836182,
+				0.08372381329536438,
+				0.16229107975959778
 			],
 			"min":[
-				-0.594645619392395,
-				0.004087895154953003,
-				-0.5964691638946533
+				-0.1627485454082489,
+				0.0011188159696757793,
+				-0.16324763000011444
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1512,
+			"count":1514,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1512,
+			"count":1514,
 			"type":"VEC2"
 		},
 		{
@@ -137,14 +137,14 @@
 			"componentType":5126,
 			"count":60,
 			"max":[
-				0.6951087117195129,
-				0.2956852912902832,
-				0.6054905652999878
+				0.19024428725242615,
+				0.08092610538005829,
+				0.16571670770645142
 			],
 			"min":[
-				-0.6951087117195129,
-				0.008940760046243668,
-				-0.598473072052002
+				-0.19024428725242615,
+				0.0024469965137541294,
+				-0.1637960821390152
 			],
 			"type":"VEC3"
 		},
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":18144,
+			"byteLength":18168,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":18144,
-			"byteOffset":18144,
+			"byteLength":18168,
+			"byteOffset":18168,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12096,
-			"byteOffset":36288,
+			"byteLength":12112,
+			"byteOffset":36336,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":4284,
-			"byteOffset":48384,
+			"byteOffset":48448,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":720,
-			"byteOffset":52668,
+			"byteOffset":52732,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":720,
-			"byteOffset":53388,
+			"byteOffset":53452,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":480,
-			"byteOffset":54108,
+			"byteOffset":54172,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":192,
-			"byteOffset":54588,
+			"byteOffset":54652,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":54780,
+			"byteLength":54844,
 			"uri":"obj_gear06_base.bin"
 		}
 	]

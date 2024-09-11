@@ -53,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.089",
+			"name":"Cylinder.201",
 			"primitives":[
 				{
 					"attributes":{
@@ -67,7 +67,7 @@
 			]
 		},
 		{
-			"name":"Cylinder.090",
+			"name":"Cylinder.202",
 			"primitives":[
 				{
 					"attributes":{
@@ -101,29 +101,29 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":751,
+			"count":753,
 			"max":[
-				0.9668704271316528,
-				0.5,
-				0.9657177329063416
+				0.1458262950181961,
+				0.07541149854660034,
+				0.14565244317054749
 			],
 			"min":[
-				-0.9650231599807739,
-				0.003164529800415039,
-				-0.9660431742668152
+				-0.14554768800735474,
+				0.0004772838728968054,
+				-0.14570152759552002
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":751,
+			"count":753,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":751,
+			"count":753,
 			"type":"VEC2"
 		},
 		{
@@ -137,14 +137,14 @@
 			"componentType":5126,
 			"count":36,
 			"max":[
-				0.9763432145118713,
-				0.4985480308532715,
-				1.1273839473724365
+				0.14725500345230103,
+				0.07519251108169556,
+				0.17003542184829712
 			],
 			"min":[
-				-0.9763432145118713,
+				-0.14725500345230103,
 				0,
-				-1.1273839473724365
+				-0.17003542184829712
 			],
 			"type":"VEC3"
 		},
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":9012,
+			"byteLength":9036,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9012,
-			"byteOffset":9012,
+			"byteLength":9036,
+			"byteOffset":9036,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6008,
-			"byteOffset":18024,
+			"byteLength":6024,
+			"byteOffset":18072,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":2280,
-			"byteOffset":24032,
+			"byteOffset":24096,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":432,
-			"byteOffset":26312,
+			"byteOffset":26376,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":432,
-			"byteOffset":26744,
+			"byteOffset":26808,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":27176,
+			"byteOffset":27240,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":120,
-			"byteOffset":27464,
+			"byteOffset":27528,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":27584,
+			"byteLength":27648,
 			"uri":"obj_gear03_alt.bin"
 		}
 	]

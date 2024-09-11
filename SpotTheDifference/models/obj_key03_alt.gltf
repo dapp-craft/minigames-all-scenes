@@ -53,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Torus.004",
+			"name":"Torus.007",
 			"primitives":[
 				{
 					"attributes":{
@@ -67,7 +67,7 @@
 			]
 		},
 		{
-			"name":"Cube.013",
+			"name":"Cube.066",
 			"primitives":[
 				{
 					"attributes":{
@@ -101,29 +101,29 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":356,
+			"count":358,
 			"max":[
-				0.3185417652130127,
-				0.1993391364812851,
-				0.16091039776802063
+				0.19665686786174774,
+				0.12306521087884903,
+				0.09934061020612717
 			],
 			"min":[
-				-0.5256841778755188,
-				-0.10617721080780029,
-				-0.1479817032814026
+				-0.32453954219818115,
+				-0.06555020064115524,
+				-0.09135887771844864
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":356,
+			"count":358,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":356,
+			"count":358,
 			"type":"VEC2"
 		},
 		{
@@ -137,14 +137,14 @@
 			"componentType":5126,
 			"count":24,
 			"max":[
-				0.5166037678718567,
-				0.21564768254756927,
-				0.2063940018415451
+				0.3189336061477661,
+				0.13313354551792145,
+				0.12742064893245697
 			],
 			"min":[
-				-0.5687832236289978,
-				-0.11564759910106659,
-				-0.2063940018415451
+				-0.35114744305610657,
+				-0.07139689475297928,
+				-0.12742064893245697
 			],
 			"type":"VEC3"
 		},
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":4272,
+			"byteLength":4296,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4272,
-			"byteOffset":4272,
+			"byteLength":4296,
+			"byteOffset":4296,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2848,
-			"byteOffset":8544,
+			"byteLength":2864,
+			"byteOffset":8592,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1056,
-			"byteOffset":11392,
+			"byteOffset":11456,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":12448,
+			"byteOffset":12512,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":12736,
+			"byteOffset":12800,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":192,
-			"byteOffset":13024,
+			"byteOffset":13088,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":72,
-			"byteOffset":13216,
+			"byteOffset":13280,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":13288,
+			"byteLength":13352,
 			"uri":"obj_key03_alt.bin"
 		}
 	]

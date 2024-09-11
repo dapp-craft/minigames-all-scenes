@@ -53,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.132",
+			"name":"Cylinder.224",
 			"primitives":[
 				{
 					"attributes":{
@@ -67,7 +67,7 @@
 			]
 		},
 		{
-			"name":"Cylinder.136",
+			"name":"Cylinder.225",
 			"primitives":[
 				{
 					"attributes":{
@@ -101,29 +101,29 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1003,
+			"count":1001,
 			"max":[
-				0.29216840863227844,
-				0.8010420203208923,
-				0.25949668884277344
+				0.3063969910144806,
+				0.8400527238845825,
+				0.2721341848373413
 			],
 			"min":[
-				-0.23304879665374756,
-				-0.007277497090399265,
-				-0.25864002108573914
+				-0.24439826607704163,
+				-0.007631910964846611,
+				-0.27123579382896423
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1003,
+			"count":1001,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1003,
+			"count":1001,
 			"type":"VEC2"
 		},
 		{
@@ -137,14 +137,14 @@
 			"componentType":5126,
 			"count":30,
 			"max":[
-				0.30363765358924866,
-				0.8038503527641296,
-				0.258289635181427
+				0.318424791097641,
+				0.8429978489875793,
+				0.27086833119392395
 			],
 			"min":[
-				-0.30363762378692627,
+				-0.3184247612953186,
 				0,
-				-0.3192635178565979
+				-0.33481165766716003
 			],
 			"type":"VEC3"
 		},
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":12036,
+			"byteLength":12012,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12036,
-			"byteOffset":12036,
+			"byteLength":12012,
+			"byteOffset":12012,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8024,
-			"byteOffset":24072,
+			"byteLength":8008,
+			"byteOffset":24024,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":2592,
-			"byteOffset":32096,
+			"byteOffset":32032,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":360,
-			"byteOffset":34688,
+			"byteOffset":34624,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":360,
-			"byteOffset":35048,
+			"byteOffset":34984,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":240,
-			"byteOffset":35408,
+			"byteOffset":35344,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":96,
-			"byteOffset":35648,
+			"byteOffset":35584,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":35744,
+			"byteLength":35680,
 			"uri":"obj_bench02_alt.bin"
 		}
 	]

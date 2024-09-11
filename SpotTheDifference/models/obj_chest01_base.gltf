@@ -101,29 +101,29 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1412,
+			"count":1414,
 			"max":[
-				0.6415244340896606,
-				1.1164780855178833,
-				0.6317495703697205
+				0.5780532956123352,
+				1.0060160160064697,
+				0.5692455172538757
 			],
 			"min":[
-				-0.5634442567825317,
+				-0.5076982378959656,
 				0,
-				-0.6139645576477051
+				-0.5532201528549194
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1412,
+			"count":1414,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1412,
+			"count":1414,
 			"type":"VEC2"
 		},
 		{
@@ -137,14 +137,14 @@
 			"componentType":5126,
 			"count":50,
 			"max":[
-				0.6757612824440002,
-				1.1141899824142456,
-				0.5748369097709656
+				0.6089028120040894,
+				1.003954291343689,
+				0.517963707447052
 			],
 			"min":[
-				-0.6757612824440002,
+				-0.6089028120040894,
 				0,
-				-0.7105373740196228
+				-0.6402382254600525
 			],
 			"type":"VEC3"
 		},
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":16944,
+			"byteLength":16968,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":16944,
-			"byteOffset":16944,
+			"byteLength":16968,
+			"byteOffset":16968,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":11296,
-			"byteOffset":33888,
+			"byteLength":11312,
+			"byteOffset":33936,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":3594,
-			"byteOffset":45184,
+			"byteOffset":45248,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":600,
-			"byteOffset":48780,
+			"byteOffset":48844,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":600,
-			"byteOffset":49380,
+			"byteOffset":49444,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":400,
-			"byteOffset":49980,
+			"byteOffset":50044,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":156,
-			"byteOffset":50380,
+			"byteOffset":50444,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":50536,
+			"byteLength":50600,
 			"uri":"obj_chest01_base.bin"
 		}
 	]

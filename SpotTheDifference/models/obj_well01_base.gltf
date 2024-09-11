@@ -23,12 +23,7 @@
 		},
 		{
 			"mesh":1,
-			"name":"obj_well01_base_collider",
-			"scale":[
-				1,
-				1.077573299407959,
-				1
-			]
+			"name":"obj_well01_base_collider"
 		}
 	],
 	"materials":[
@@ -106,29 +101,29 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":2946,
+			"count":2944,
 			"max":[
-				1.5950212478637695,
-				2.995037317276001,
-				1.217652440071106
+				0.8065416812896729,
+				1.5144766569137573,
+				0.6157205700874329
 			],
 			"min":[
-				-0.9839147925376892,
-				-0.0030796017963439226,
-				-1.2053507566452026
+				-0.4975283443927765,
+				-0.0015572377014905214,
+				-0.6095001101493835
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":2946,
+			"count":2944,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":2946,
+			"count":2944,
 			"type":"VEC2"
 		},
 		{
@@ -142,14 +137,14 @@
 			"componentType":5126,
 			"count":70,
 			"max":[
-				1.5940563678741455,
-				2.7703397274017334,
-				1.0051265954971313
+				0.8060537576675415,
+				1.400855541229248,
+				0.50825434923172
 			],
 			"min":[
-				-1.1815969944000244,
+				-0.5974887013435364,
 				0,
-				-1.2424046993255615
+				-0.6282368898391724
 			],
 			"type":"VEC3"
 		},
@@ -175,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":35352,
+			"byteLength":35328,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":35352,
-			"byteOffset":35352,
+			"byteLength":35328,
+			"byteOffset":35328,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":23568,
-			"byteOffset":70704,
+			"byteLength":23552,
+			"byteOffset":70656,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":8520,
-			"byteOffset":94272,
+			"byteOffset":94208,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":840,
-			"byteOffset":102792,
+			"byteOffset":102728,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":840,
-			"byteOffset":103632,
+			"byteOffset":103568,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":560,
-			"byteOffset":104472,
+			"byteOffset":104408,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":204,
-			"byteOffset":105032,
+			"byteOffset":104968,
 			"target":34963
 		}
 	],
@@ -230,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":105236,
+			"byteLength":105172,
 			"uri":"obj_well01_base.bin"
 		}
 	]

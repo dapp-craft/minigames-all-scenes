@@ -53,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.123",
+			"name":"Cylinder.217",
 			"primitives":[
 				{
 					"attributes":{
@@ -67,7 +67,7 @@
 			]
 		},
 		{
-			"name":"Cube.075",
+			"name":"Cube.073",
 			"primitives":[
 				{
 					"attributes":{
