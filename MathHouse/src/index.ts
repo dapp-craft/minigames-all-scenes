@@ -13,6 +13,7 @@ import { initGame } from './game/game'
 import { board } from './board'
 import { randomLvl } from './levels'
 import { kitty } from './resources/resources'
+import { generatedData } from './Types'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
@@ -59,7 +60,7 @@ export async function main() {
     position: Vector3.create(8, 2, 10.53653),
     rotation: Quaternion.fromEulerDegrees(0, 0, 0),
     scale: Vector3.create(1, 1, 1)
-  })
+  });
 
   initGame()
 
@@ -67,7 +68,11 @@ export async function main() {
 
   rocketBoard = new board();
 
-  // generateArray(5)
+  // generateArray({ length: 5, positive: true, initialNumber: 0 })
+  generateArray({ length: 3, positive: false, initialNumber: 9 })
+  // generateArray({ length: 5 })
+
+
 }
 
 const spawnInitialEntityPoll = () => {
@@ -101,34 +106,59 @@ const spawnInitialEntityPoll = () => {
   syncEntity(gameState.levelCounter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, TextShape.componentId], 4010)
 }
 
-const generateArray = (length: number) => {
-  const array = [];
-  const catsInRocket = Math.floor(Math.random() * 9)
+const generateArray = (data: generatedData) => {
+  let array = [];
+  let catsInRocket = data.initialNumber != null ? data.initialNumber : Math.floor(Math.random() * 9) + 1
   let currentSum = 0 + catsInRocket
 
-  while (array.length < length) {
-    let num;
-    do {
-      num = Math.floor(Math.random() * 13) - 6;
-    } while (num == 0);
+  const generateNumber = (min: number, max: number) => { return Math.floor(Math.random() * (max - min + 1)) + min }
 
-    if (currentSum + num <= 0 || currentSum + num > 9) {
-      continue;
+  if (data.positive != null) {
+
+    while (array.length < data.length) {
+      let availableSum = data.positive ? 9 - currentSum : currentSum - 1
+      let remainingSlots = data.length - array.length
+
+      if (availableSum < remainingSlots) {
+        array = []
+        currentSum = data.initialNumber != null ? data.initialNumber : Math.floor(Math.random() * 9) + 1
+        continue
+      }
+
+      let num: number;
+      if (array.length === data.length - 1) num = data.positive ? availableSum : -availableSum
+      else {
+        let maxNum = Math.min(availableSum - (remainingSlots - 1), 6)
+        num = generateNumber(1, maxNum)
+        if (!data.positive) num = -num
+      }
+
+      array.push(num)
+      currentSum += num;
     }
+  } else {
+    while (array.length < data.length) {
+      let num
+      do num = Math.floor(Math.random() * 13) - 6;
+      while (num == 0)
 
-    array.push(num);
-    currentSum += num;
+      if (currentSum + num <= 0 || currentSum + num > 9) continue;
+
+      array.push(num);
+      currentSum += num;
+    }
   }
+  
   for (let i = 1; i <= array.length; i++) {
     randomLvl.wave.set(i, { itemQueue: Math.abs(array[i - 1]), goOut: array[i - 1] > 0 ? false : true })
   }
   randomLvl.initialEntityAmount = catsInRocket
+
   console.log(`
-    \nRandom level generated, with: 
+    Random level generated, with: 
     answer:                   ${currentSum}
-    number of waves:          ${length}
+    number of waves:          ${data.length}
     cats in rocket on start:  ${catsInRocket}
     waves: ${array}
-    `)
-  return array
+  `);
 }

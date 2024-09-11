@@ -18,3 +18,9 @@ export type LvlType = {
     spawnEntityDelay: SpawnEntityDelay,
     initialEntityAmount: number
 }
+
+export interface generatedData {
+    length: number
+    positive?: boolean;
+    initialNumber?: number;
+  }
