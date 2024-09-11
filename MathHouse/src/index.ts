@@ -1,6 +1,6 @@
 // We define the empty imports so the auto-complete feature works as expected.
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { engine, GltfContainer, MeshRenderer, Transform, Tween, TweenLoop, TweenStateStatus, VisibilityComponent } from '@dcl/sdk/ecs'
+import { engine, GltfContainer, MeshRenderer, TextShape, Transform, Tween, TweenLoop, TweenStateStatus, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState, rocketCoords } from './state'
 import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, SESSION_DURATION, startCoords } from './config'
 
@@ -90,6 +90,15 @@ const spawnInitialEntityPoll = () => {
     gameState.counterEntity.push(entity)
     syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], catInRocketEntityId + entityAmount + 10 + i)
   }
+
+  TextShape.create(gameState.levelCounter, {
+    text: '0',
+  })
+  Transform.create(gameState.levelCounter, {
+    position: Vector3.create(4, 2, 2),
+    rotation: Quaternion.create(0, 100, 0.5, 0)
+  })
+  syncEntity(gameState.levelCounter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, TextShape.componentId], 4010)
 }
 
 const generateArray = (length: number) => {

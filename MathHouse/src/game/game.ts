@@ -1,11 +1,11 @@
 import { progress, queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
 import { mainEntityId } from "../config"
 import { Quaternion, Vector3 } from "@dcl/sdk/math"
-import { Animator, Billboard, engine, Entity, GltfContainer, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
+import { Animator, Billboard, engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { syncEntity } from "@dcl/sdk/network"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
-import { GameData } from "../state"
+import { GameData, gameState } from "../state"
 import { movePlayerTo } from "~system/RestrictedActions"
 import { gameEntityManager } from "../entityManager"
 import { rocketBoard } from ".."
@@ -146,7 +146,7 @@ const initGameButtons = async () => {
             }
         )
     )
-    
+
     for (let i = 1; i <= 9; i++) {
         gameButtons.push(
             new ui.MenuButton(
@@ -163,7 +163,7 @@ const initGameButtons = async () => {
                     rocketBoard.setRightCounter(entityCounter)
                     rocketBoard.showBoard(playerAnswer)
                     if (entityCounter == playerAnswer) {
-                        soundManager.playSound('correctAnswerSound')                        
+                        soundManager.playSound('correctAnswerSound')
                         console.log("WIN WIN WIN WIN WIN")
                         startWinAnimation()
                         utils.timers.setTimeout(async () => {
@@ -172,6 +172,7 @@ const initGameButtons = async () => {
                                 return
                             }
                             playerLevel = levelArray[++playerLevelIndex]
+                            TextShape.getMutable(gameState.levelCounter).text = `${playerLevelIndex}`
                             startGame()
                         }, 8000)
                     }
