@@ -50,6 +50,9 @@ export const initGame = async () => {
         } else {
             soundManager.playSound('exitSounds')
             entityManager?.stopGame()
+            playerLevelIndex = 0
+            playerLevel = levelArray[playerLevelIndex]
+            TextShape.getMutable(gameState.levelCounter).text = `${playerLevelIndex}`
             GameData.createOrReplace(gameDataEntity, {
                 playerAddress: '',
                 playerName: '',
