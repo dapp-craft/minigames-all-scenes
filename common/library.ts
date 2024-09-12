@@ -10,8 +10,6 @@ import { movePlayerTo } from '~system/RestrictedActions'
 const SESSION_DURATION = 1000 * 60 * 5 // 5 minutes
 const INACTIVITY_TIMEOUT = 1000 * 15 * 1 // 15 seconds
 
-const SCOREBOARD_WIDTH = 2.5
-const SCOREBOARD_HEIGHT = 2.8
 const SCOREBOARD_SCALE = 1.2
 
 enum NODE_NAME {
@@ -67,9 +65,9 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
     
     
     new ui.ScoreBoard(
-        {...positionData.get(NODE_NAME.SCOREBOARD)!, parent: sceneParentEntity},
-        SCOREBOARD_WIDTH,
-        SCOREBOARD_HEIGHT,
+        {...positionData.get(NODE_NAME.SCOREBOARD)!, scale: Vector3.One(), parent: sceneParentEntity},
+        positionData.get(NODE_NAME.SCOREBOARD)!.scale.x,
+        positionData.get(NODE_NAME.SCOREBOARD)!.scale.y,
         SCOREBOARD_SCALE,
         scoreboardPreset
     )
