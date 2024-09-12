@@ -2,7 +2,7 @@ import { ui, queue } from '@dcl-sdk/mini-games/src'
 import { sceneParentEntity } from '../globals'
 import { Vector3, Quaternion } from '@dcl/sdk/math'
 import { TILES_LEVEL } from '../config'
-import { startLevel } from './game'
+import { exitGame, startLevel } from './game'
 import * as utils from '@dcl-sdk/utils'
 
 const width = 2
@@ -66,7 +66,22 @@ export function setupGameUI() {
     )
     button.disable()
     levelButtons.push(button)
-    })
+  })
 
+
+    new ui.MenuButton(
+      {
+        parent: sceneParentEntity,
+        position: Vector3.create(-5, 4.02 , -4),
+        scale: Vector3.create(1.5, 1.5, 1.5),
+        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+      },
+      ui.uiAssets.shapes.RECT_RED,
+      ui.uiAssets.icons.exitText,
+      'Exit from game area',
+      () => {
+        exitGame()
+      }
+    )
 
 }

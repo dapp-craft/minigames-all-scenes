@@ -285,12 +285,19 @@ function finishLevel() {
   updatePlayerProgress(gameState)
 
   if (queue.getQueue().length > 1) {
-    queue.setNextPlayer()
+    exitGame()
   } else {
     const levelToStart = gameState.level == Object.keys(TILES_LEVEL).length ? 1 : gameState.level + 1
     levelButtons[gameState.level].enable()
     startLevel(levelToStart as keyof typeof TILES_LEVEL)
   }
+}
+
+export function exitGame(){
+  movePlayerTo({
+    newRelativePosition: Vector3.create(8, 1, 14)
+  })
+  queue.setNextPlayer()
 }
 
 async function resetTile(tile: TileType) {
