@@ -46,7 +46,7 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
         const center = Transform.get(sceneParentEntity).position
         const sceneRotation = Transform.get(sceneParentEntity).rotation
         
-        if (player?.active) {
+        if (queue.isActive()) {
             isActive = true
             movePlayerTo({
                 newRelativePosition: Vector3.add(positionData.get(NODE_NAME.AREA_PLAYSPAWN)!.position, center)
