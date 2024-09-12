@@ -30,3 +30,7 @@ export const GameData = engine.defineComponent('game-data', {
   })
 
 export const rocketCoords = Vector3.create(8, -3, 4.8)
+
+export const progressState = {
+    level: 1,
+}

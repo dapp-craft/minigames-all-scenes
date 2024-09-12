@@ -110,7 +110,7 @@ export class gameEntityManager {
     }
 
     public stopGame() {
-        rocketBoard.hideBoard()
+        // rocketBoard.hideBoard()
         this.gameEnd = true
         this.answerReady()
         gameState.availableEntity.forEach(entity => {

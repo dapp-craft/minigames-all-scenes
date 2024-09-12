@@ -24,6 +24,13 @@ export const mainEntityId = 5000
 export const catEntityId = 3000
 export const catInRocketEntityId = 4000
 
+export const initialLevels = new Map([
+  [1, { length: 3, positive: true, initialNumber: 0 }],
+  [2, { length: 3, positive: true, initialNumber: 3 }],
+  [3, { length: 3, positive: false, initialNumber: 7 }],
+  [4, { length: 3, positive: false, initialNumber: 9 }],
+])
+
 
 
 

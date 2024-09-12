@@ -67,12 +67,6 @@ export async function main() {
   setupUI()
 
   rocketBoard = new board();
-
-  // generateArray({ length: 5, positive: true, initialNumber: 0 })
-  generateArray({ length: 3, positive: false, initialNumber: 9 })
-  // generateArray({ length: 5 })
-
-
 }
 
 const spawnInitialEntityPoll = () => {
@@ -106,7 +100,7 @@ const spawnInitialEntityPoll = () => {
   syncEntity(gameState.levelCounter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, TextShape.componentId], 4010)
 }
 
-const generateArray = (data: generatedData) => {
+export const generateArray = (data: generatedData) => {
   let array = [];
   let catsInRocket = data.initialNumber != null ? data.initialNumber : Math.floor(Math.random() * 9) + 1
   let currentSum = 0 + catsInRocket

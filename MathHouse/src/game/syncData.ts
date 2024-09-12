@@ -1,6 +1,6 @@
 import { progress } from '@dcl-sdk/mini-games/src'
 import { IProgress } from '@dcl-sdk/mini-games/src/progress'
-import { progressState } from './game'
+import { progressState } from '../state'
 
 
 export let playerProgress: IProgress

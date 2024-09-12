@@ -1,16 +1,16 @@
 import { progress, queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
-import { mainEntityId } from "../config"
+import { initialLevels, mainEntityId } from "../config"
 import { Quaternion, Vector3 } from "@dcl/sdk/math"
 import { Animator, Billboard, engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { syncEntity } from "@dcl/sdk/network"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
-import { GameData, gameState } from "../state"
+import { GameData, gameState, progressState } from "../state"
 import { movePlayerTo } from "~system/RestrictedActions"
 import { gameEntityManager } from "../entityManager"
-import { rocketBoard } from ".."
+import { generateArray, rocketBoard } from ".."
 import { readGltfLocators } from "../../../common/locators"
-import { levelArray } from "../levels"
+import { levelArray, randomLvl } from "../levels"
 import { soundManager } from "../globals"
 import { fetchPlayerProgress, updatePlayerProgress } from "./syncData"
 
@@ -21,21 +21,16 @@ const BOARD_TRANSFORM = {
 }
 
 export let gameDataEntity: Entity
-
-export const progressState = {
-    level: 0,
-}
-
 export let boardEntity: Entity
+
 let gameButtons: ui.MenuButton[] = []
 let maxProgress: progress.IProgress
 let timer: ui.Timer3D
 let playerAnswer = 0
 let entityCounter = -1
-export let sessionStartedAt: number
 let entityManager: gameEntityManager
-let playerLevel = levelArray[progressState.level]
 
+const WIN_DURATION = 2000
 
 export const initGame = async () => {
     await initMaxProgress()
@@ -58,7 +53,6 @@ export const initGame = async () => {
             soundManager.playSound('exitSounds')
             entityManager?.stopGame()
             progressState.level = 0
-            playerLevel = levelArray[progressState.level]
             TextShape.getMutable(gameState.levelCounter).text = `${progressState.level}`
             GameData.createOrReplace(gameDataEntity, {
                 playerAddress: '',
@@ -73,7 +67,6 @@ export const initGame = async () => {
 
 function getReadyToStart() {
     console.log('Get Ready to start!')
-
     utils.timers.setTimeout(() => {
         movePlayerTo({
             newRelativePosition: Vector3.create(8, 1, 8),
@@ -85,22 +78,21 @@ function getReadyToStart() {
 
 async function startGame() {
     const localPlayer = getPlayer()
-    sessionStartedAt = Date.now()
     soundManager.playSound('enterSounds')
 
     gameButtons.forEach((button, i) => button.disable())
+    generateLevel()
 
     entityCounter = -1
-    rocketBoard.showBoard(playerLevel.initialEntityAmount)
+    rocketBoard.showBoard(randomLvl.initialEntityAmount)
     rocketBoard.setLeftCounter(0)
-    rocketBoard.setRightCounter(playerLevel.initialEntityAmount)
+    rocketBoard.setRightCounter(randomLvl.initialEntityAmount)
 
-    entityManager = new gameEntityManager(playerLevel);
+    entityManager = new gameEntityManager(randomLvl);
     entityCounter = await entityManager.startGame()
 
     rocketBoard.showBoard(0)
     rocketBoard.setRightCounter(0)
-
 
     gameButtons.forEach((button, i) => button.enable())
 
@@ -150,10 +142,8 @@ const initGameButtons = async () => {
             },
             ui.uiAssets.shapes.SQUARE_GREEN,
             ui.uiAssets.icons.play,
-            `START LEVEL 1`,
-            async () => {
-                queue.addPlayer()
-            }
+            `START`,
+            () => queue.addPlayer()
         )
     )
 
@@ -165,42 +155,30 @@ const initGameButtons = async () => {
                 ui.uiAssets.numbers[i],
                 `${i}`,
                 () => {
-                    console.log(gameButtons.length)
-                    gameButtons.forEach((button, i) => button.disable())
                     playerAnswer = i
+                    gameButtons.forEach((button, i) => button.disable())
                     console.log(entityCounter, playerAnswer)
                     rocketBoard.setLeftCounter(playerAnswer)
                     rocketBoard.setRightCounter(entityCounter)
                     rocketBoard.showBoard(playerAnswer)
                     if (entityCounter == playerAnswer) {
+                        console.log("WIN")
                         soundManager.playSound('correctAnswerSound')
-                        console.log("WIN WIN WIN WIN WIN")
                         startWinAnimation()
                         utils.timers.setTimeout(async () => {
-                            if (progressState.level == levelArray.length - 1) {
-                                afterGame()
-                                return
-                            }
-                            playerLevel = levelArray[++progressState.level]
-                            TextShape.getMutable(gameState.levelCounter).text = `${progressState.level}`
-                            await updatePlayerProgress(progressState)
+                            if (progressState.level == levelArray.length - 1) return afterGame()
+                            await incrementUserProgress()
                             startGame()
-                        }, 8000)
+                        }, 1500)
                     }
                     else {
                         console.log("LOSE")
                         soundManager.playSound('wrongAnswerSound')
-                        rocketBoard.setLeftCounter(playerAnswer)
-                        rocketBoard.setRightCounter(entityCounter)
-                        utils.timers.setTimeout(async () => {
-                            rocketBoard.hideBoard()
+                        utils.timers.setTimeout(() => {
                             entityManager?.stopGame()
-                            getReadyToStart()
+                            startGame()
                         }, 1500)
                     }
-                    utils.timers.setTimeout(() => {
-                        gameButtons.forEach((button, i) => button.enable())
-                    }, 2000)
                 }
             )
         )
@@ -215,9 +193,8 @@ const initGameButtons = async () => {
             restartButton.disable()
             entityManager?.stopGame()
             getReadyToStart()
-            utils.timers.setTimeout(() => {
-                restartButton.enable()
-            }, 2000)
+            gameButtons.forEach((button, i) => button.disable())
+            utils.timers.setTimeout(() => restartButton.enable(), 2000)
         }
     )
 }
@@ -231,7 +208,6 @@ function setupWinAnimations() {
 
     GltfContainer.create(winAnimA, {
         src: "mini-game-assets/models/winAnim.glb",
-
     })
 
     Transform.create(winAnimA, {
@@ -253,7 +229,6 @@ function setupWinAnimations() {
 
     GltfContainer.create(winAnimB, {
         src: "mini-game-assets/models/winAnim.glb"
-
     })
 
     Transform.create(winAnimB, {
@@ -357,7 +332,7 @@ const afterGame = () => {
             newRelativePosition: Vector3.create(8, 1, 13),
             cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
         })
-    }, 5000)
+    }, WIN_DURATION)
 }
 
 function startWinAnimation() {
@@ -372,5 +347,19 @@ function startWinAnimation() {
         for (const [entity] of animations) {
             VisibilityComponent.getMutable(entity).visible = false
         }
-    }, 8000)
+    }, WIN_DURATION)
+}
+
+const incrementUserProgress = async () => {
+    progressState.level++
+    TextShape.getMutable(gameState.levelCounter).text = `${progressState.level - 1}`
+    await updatePlayerProgress(progressState)
+}
+
+const generateLevel = () => {
+    if (progressState.level <= 4) return generateArray(initialLevels.has(progressState.level) ? initialLevels.get(progressState.level)! : { length: 5 })
+    let levelDifficulty = progressState.level + 2
+    console.log("levelDifficulty: ", levelDifficulty)
+    if (levelDifficulty % 2 == 0) {generateArray({length: levelDifficulty / 2})} 
+    else {generateArray({length: (levelDifficulty - 1) / 2})}
 }
