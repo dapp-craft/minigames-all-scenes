@@ -12,6 +12,7 @@ import { rocketBoard } from ".."
 import { readGltfLocators } from "../../../common/locators"
 import { levelArray } from "../levels"
 import { soundManager } from "../globals"
+import { fetchPlayerProgress, updatePlayerProgress } from "./syncData"
 
 const BOARD_TRANSFORM = {
     position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
@@ -21,6 +22,10 @@ const BOARD_TRANSFORM = {
 
 export let gameDataEntity: Entity
 
+export const progressState = {
+    level: 0,
+}
+
 export let boardEntity: Entity
 let gameButtons: ui.MenuButton[] = []
 let maxProgress: progress.IProgress
@@ -29,11 +34,13 @@ let playerAnswer = 0
 let entityCounter = -1
 export let sessionStartedAt: number
 let entityManager: gameEntityManager
-let playerLevelIndex = 0
-let playerLevel = levelArray[playerLevelIndex]
+let playerLevel = levelArray[progressState.level]
+
 
 export const initGame = async () => {
     await initMaxProgress()
+
+    await fetchPlayerProgress()
 
     initBoard()
 
@@ -50,9 +57,9 @@ export const initGame = async () => {
         } else {
             soundManager.playSound('exitSounds')
             entityManager?.stopGame()
-            playerLevelIndex = 0
-            playerLevel = levelArray[playerLevelIndex]
-            TextShape.getMutable(gameState.levelCounter).text = `${playerLevelIndex}`
+            progressState.level = 0
+            playerLevel = levelArray[progressState.level]
+            TextShape.getMutable(gameState.levelCounter).text = `${progressState.level}`
             GameData.createOrReplace(gameDataEntity, {
                 playerAddress: '',
                 playerName: '',
@@ -68,6 +75,10 @@ function getReadyToStart() {
     console.log('Get Ready to start!')
 
     utils.timers.setTimeout(() => {
+        movePlayerTo({
+            newRelativePosition: Vector3.create(8, 1, 8),
+            cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
+        })
         startGame()
     }, 2000)
 }
@@ -76,10 +87,6 @@ async function startGame() {
     const localPlayer = getPlayer()
     sessionStartedAt = Date.now()
     soundManager.playSound('enterSounds')
-    movePlayerTo({
-        newRelativePosition: Vector3.create(8, 1, 8),
-        cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
-    })
 
     gameButtons.forEach((button, i) => button.disable())
 
@@ -170,12 +177,13 @@ const initGameButtons = async () => {
                         console.log("WIN WIN WIN WIN WIN")
                         startWinAnimation()
                         utils.timers.setTimeout(async () => {
-                            if (playerLevelIndex == levelArray.length - 1) {
+                            if (progressState.level == levelArray.length - 1) {
                                 afterGame()
                                 return
                             }
-                            playerLevel = levelArray[++playerLevelIndex]
-                            TextShape.getMutable(gameState.levelCounter).text = `${playerLevelIndex}`
+                            playerLevel = levelArray[++progressState.level]
+                            TextShape.getMutable(gameState.levelCounter).text = `${progressState.level}`
+                            await updatePlayerProgress(progressState)
                             startGame()
                         }, 8000)
                     }
