@@ -27,6 +27,7 @@ import { movePlayerTo } from '~system/RestrictedActions'
 import { setTilesPositions, tilesPositions } from './tilesPositions'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { playCloseTileSound, playLevelCompleteSound, playOpenTileSound, playPairFoundSound } from './sound'
+import { initStatusBoard } from './statusBoard'
 
 type TileType = {
   mainEntity: Entity
@@ -38,6 +39,12 @@ let gameDataEntity: Entity
 
 let tiles: TileType[] = []
 export let flippedTileQueue: TileType[] = []
+
+export const sessionState = {
+  startTime: 0,
+  playerName: '',
+  playerAddress: ''
+}
 
 export const gameState = {
   tilesCount: 32,
@@ -51,6 +58,8 @@ export async function initGame() {
   await fetchPlayerProgress()
 
   initGameDataEntity()
+
+  initStatusBoard()
 
   setupGameUI()
 
@@ -191,6 +200,10 @@ function getReadyToStart() {
   for (let i = 0; i < levetToStart; i++) {
     levelButtons[i].enable()
   }
+
+  sessionState.startTime = Date.now()
+  sessionState.playerName = getPlayer()?.name ?? 'Underfined'
+  sessionState.playerAddress = getPlayer()?.userId ?? 'Underfined'
 
   utils.timers.setTimeout(() => {
     movePlayerTo({
