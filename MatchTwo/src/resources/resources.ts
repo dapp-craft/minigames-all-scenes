@@ -43,4 +43,10 @@ export const toysModels: PBGltfContainer[] = [
 export const tileDoorShape: PBGltfContainer = { src: modelsFolder + 'obj_door.gltf' }
 export const defaulToyModel: PBGltfContainer = { src: modelsFolder + 'obj_toy01.gltf' }
 
-export const openTileSound = "sounds/open_tile.mp3"
+export const openTileSound1 = "sounds/open_1.mp3"
+export const openTileSound2 = "sounds/open_2.mp3"
+export const closeTileSound1 = "sounds/close_1.mp3"
+export const closeTileSound2 = "sounds/close_2.mp3"
+export const levelCompleteSound = "sounds/level_up.mp3"
+export const pairFoundSound = "sounds/pair_found.mp3"
+export const mainThemeSound = 'sounds/Carousel_of_Dreams.mp3'

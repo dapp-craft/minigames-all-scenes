@@ -10,18 +10,23 @@ import {
 } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { Vector3 } from '@dcl/sdk/math'
-import { openTileSound } from '../resources/resources'
+import { closeTileSound1, closeTileSound2, levelCompleteSound, mainThemeSound, openTileSound1, openTileSound2, pairFoundSound } from '../resources/resources'
 
 export let SOUNDS: { [key: string]: string } = {
-  openTile: openTileSound
+  openTile1: openTileSound1,
+  openTile2: openTileSound2,
+  closeTile1: closeTileSound1,
+  closeTile2: closeTileSound2,
+  levelComplete: levelCompleteSound,
+  pairFound: pairFoundSound
 }
 
 export let THEME = ''
 export const THEME_VOLUME = 0.7
 
-// export const mainThereme = engine.addEntity()
-// Transform.create(mainThereme, {parent: engine.PlayerEntity})
-// AudioSource.create(mainThereme, {audioClipUrl: `sounds/futuristic-abstract-chill.mp3`, loop: true, playing: true, volume: 0.07})
+export const mainThereme = engine.addEntity()
+Transform.create(mainThereme, {parent: engine.PlayerEntity})
+AudioSource.create(mainThereme, {audioClipUrl: mainThemeSound, loop: true, playing: true, volume: 0.07})
 
 export class SoundManager {
   private soundsStorage: Entity[] = []
@@ -50,7 +55,7 @@ export class SoundManager {
     })
   }
 
-  public playSound(soundName: keyof typeof SOUNDS, volume: number = 0.8) {
+  public playSound(soundName: keyof typeof SOUNDS, volume: number = 0.5) {
     console.log('Play sound', soundName)
     console.log('audioClipUrl: ', `${SOUNDS[soundName as keyof typeof SOUNDS]}`)
     let soundEntity = engine.addEntity()

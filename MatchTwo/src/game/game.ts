@@ -26,7 +26,7 @@ import { init } from '@dcl-sdk/mini-games/src/config'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { setTilesPositions, tilesPositions } from './tilesPositions'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
-import { soundManager } from '../globals'
+import { playCloseTileSound, playLevelCompleteSound, playOpenTileSound, playPairFoundSound } from './sound'
 
 type TileType = {
   mainEntity: Entity
@@ -48,7 +48,6 @@ export const gameState = {
 }
 
 export async function initGame() {
-
   await fetchPlayerProgress()
 
   initGameDataEntity()
@@ -113,11 +112,7 @@ function createTile(tileNumber: number) {
     doorEntity: tileDoorEntity
   }
 
-  syncEntity(
-    mainTileEntity,
-    [Tile.componentId],
-    SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 0
-  )
+  syncEntity(mainTileEntity, [Tile.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 0)
   syncEntity(tileToy, [GltfContainer.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 1)
   syncEntity(tileDoorEntity, [Transform.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 2)
 
@@ -133,7 +128,7 @@ async function onTileClick(tile: TileType) {
 async function openTile(tile: TileType) {
   const startRotation = Transform.get(tile.doorEntity).rotation
   const endRotation = Quaternion.multiply(startRotation, Quaternion.fromEulerDegrees(0, 90, 0))
-  soundManager.playSound('openTile')
+  playOpenTileSound()
   Tween.createOrReplace(tile.doorEntity, {
     mode: Tween.Mode.Rotate({
       start: startRotation,
@@ -157,7 +152,7 @@ async function openTile(tile: TileType) {
 async function closeTile(tile: TileType) {
   const startRotation = Transform.get(tile.doorEntity).rotation
   const endRotation = tilesPositions.doors[Tile.get(tile.mainEntity).tileNumber].rotation
-  soundManager.playSound('openTile')
+  playCloseTileSound()
   Tween.createOrReplace(tile.doorEntity, {
     mode: Tween.Mode.Rotate({
       start: startRotation,
@@ -189,7 +184,10 @@ async function closeTile(tile: TileType) {
 function getReadyToStart() {
   console.log('Get ready to start')
 
-  const levetToStart = ((playerProgress?.level ?? 0) + 1) > Object.keys(TILES_LEVEL).length ? Object.keys(TILES_LEVEL).length : (playerProgress?.level ?? 0) + 1
+  const levetToStart =
+    (playerProgress?.level ?? 0) + 1 > Object.keys(TILES_LEVEL).length
+      ? Object.keys(TILES_LEVEL).length
+      : (playerProgress?.level ?? 0) + 1
   for (let i = 0; i < levetToStart; i++) {
     levelButtons[i].enable()
   }
@@ -207,7 +205,7 @@ export async function startLevel(level: keyof typeof TILES_LEVEL) {
 
   await Promise.all(tiles.map((tile) => resetTile(tile)))
 
-  console.log("TILES LEVEL", TILES_LEVEL)
+  console.log('TILES LEVEL', TILES_LEVEL)
 
   const tilesInUse = tiles.filter((tile) => TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
   const tilesNotInUse = tiles.filter((tile) => !TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
@@ -222,10 +220,8 @@ export async function startLevel(level: keyof typeof TILES_LEVEL) {
     disableTile(tile)
   })
 
-
   const toys = getToys(level)
   shuffleArray(toys)
-
 
   tilesInUse.forEach((tile, index) => {
     setTileToy(tile, toys[index].src)
@@ -257,6 +253,7 @@ function checkIfMatch() {
   const tile2 = flippedTileQueue.shift() as TileType
   if (Tile.get(tile1.mainEntity).toyModel === Tile.get(tile2.mainEntity).toyModel) {
     console.log('Match!')
+    playPairFoundSound()
     Tile.getMutable(tile1.mainEntity).matched = true
     Tile.getMutable(tile2.mainEntity).matched = true
 
@@ -265,6 +262,7 @@ function checkIfMatch() {
         .length === 0
     ) {
       console.log('Game over')
+      playLevelCompleteSound()
       finishLevel()
     }
   } else {
@@ -318,7 +316,7 @@ async function resetTile(tile: TileType) {
       end: tilesPositions.doors[Tile.get(tile.mainEntity).tileNumber].rotation
     }),
     duration: FLIP_DURATION,
-    easingFunction: EasingFunction.EF_EASECUBIC,
+    easingFunction: EasingFunction.EF_EASECUBIC
   })
   Transform.getMutable(tile.doorEntity).scale = Vector3.create(1, 1, 1)
 }
