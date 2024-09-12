@@ -1,3 +1,5 @@
+import { Vector3 } from "@dcl/sdk/math"
+
 export const GAME_ID = "040ff183-c10a-4fba-8800-881cf9bda930"
 
 export const SESSION_DURATION = 1000 * 60 * 5
@@ -31,6 +33,17 @@ export const initialLevels = new Map([
   [4, { length: 3, positive: false, initialNumber: 9 }],
 ])
 
+export const timer = {
+  position: Vector3.create(-2.957981586456299, 4.053521156311035, -6.89)
+}
+
+export const steps = {
+  position: Vector3.create(-2.957981586456299, 3.552783727645874, -6.89)
+}
+
+export const name = {
+  position: Vector3.create(0, 5.161755561828613, -6.905980110168457)
+}
 
 
 

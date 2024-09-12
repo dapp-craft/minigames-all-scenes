@@ -22,6 +22,7 @@ const BOARD_TRANSFORM = {
 
 export let gameDataEntity: Entity
 export let boardEntity: Entity
+export let sessionStartedAt: number
 
 let gameButtons: ui.MenuButton[] = []
 let maxProgress: progress.IProgress
@@ -78,6 +79,8 @@ function getReadyToStart() {
 
 async function startGame() {
     const localPlayer = getPlayer()
+    sessionStartedAt = Date.now()
+
     soundManager.playSound('enterSounds')
 
     gameButtons.forEach((button, i) => button.disable())
@@ -360,6 +363,6 @@ const generateLevel = () => {
     if (progressState.level <= 4) return generateArray(initialLevels.has(progressState.level) ? initialLevels.get(progressState.level)! : { length: 5 })
     let levelDifficulty = progressState.level + 2
     console.log("levelDifficulty: ", levelDifficulty)
-    if (levelDifficulty % 2 == 0) {generateArray({length: levelDifficulty / 2})} 
-    else {generateArray({length: (levelDifficulty - 1) / 2})}
+    if (levelDifficulty % 2 == 0) { generateArray({ length: levelDifficulty / 2 }) }
+    else { generateArray({ length: (levelDifficulty - 1) / 2 }) }
 }

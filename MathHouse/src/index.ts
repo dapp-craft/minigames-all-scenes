@@ -67,6 +67,8 @@ export async function main() {
   setupUI()
 
   rocketBoard = new board();
+
+  // generateArray({ length: 3, positive: false, initialNumber: 9 });
 }
 
 const spawnInitialEntityPoll = () => {
@@ -119,13 +121,9 @@ export const generateArray = (data: generatedData) => {
         continue
       }
 
-      let num: number;
-      if (array.length === data.length - 1) num = data.positive ? availableSum : -availableSum
-      else {
-        let maxNum = Math.min(availableSum - (remainingSlots - 1), 6)
-        num = generateNumber(1, maxNum)
-        if (!data.positive) num = -num
-      }
+      let maxNum = Math.min(availableSum - (remainingSlots - 1), 6)
+      let num = generateNumber(1, maxNum);
+      if (!data.positive) num = -num
 
       array.push(num)
       currentSum += num;
@@ -142,7 +140,7 @@ export const generateArray = (data: generatedData) => {
       currentSum += num;
     }
   }
-  
+
   for (let i = 1; i <= array.length; i++) {
     randomLvl.wave.set(i, { itemQueue: Math.abs(array[i - 1]), goOut: array[i - 1] > 0 ? false : true })
   }

@@ -27,10 +27,13 @@ export const GameData = engine.defineComponent('game-data', {
     levelStartedAt: Schemas.Int64,
     levelFinishedAt: Schemas.Int64,
     level: Schemas.Int,
-  })
+})
 
 export const rocketCoords = Vector3.create(8, -3, 4.8)
 
 export const progressState = {
     level: 1,
+    moves: 0,
+    levelStartTime: 0,
+    levelFinishTime: 0
 }
