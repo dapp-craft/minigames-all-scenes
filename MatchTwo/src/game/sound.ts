@@ -2,6 +2,10 @@ import { soundManager } from '../globals'
 
 export let SFX_ENABLED = true
 
+export function setSfxStatus(enabled: boolean) {
+  SFX_ENABLED = enabled
+}
+
 export function playSound(sound: string) {
   if (!SFX_ENABLED) return
   soundManager.playSound(sound)
@@ -14,7 +18,6 @@ export function playOpenTileSound() {
 
 export function playCloseTileSound() {
   const soundToPlay = Math.random() > 0.5 ? 'closeTile1' : 'closeTile2'
-  console.log("Random", Math.random())
   playSound(soundToPlay)
 }
 

@@ -4,6 +4,7 @@ import { Vector3, Quaternion } from '@dcl/sdk/math'
 import { TILES_LEVEL } from '../config'
 import { exitGame, startLevel } from './game'
 import * as utils from '@dcl-sdk/utils'
+import { SFX_ENABLED, setSfxStatus } from './sound'
 
 const width = 2
 const height = 3
@@ -68,20 +69,33 @@ export function setupGameUI() {
     levelButtons.push(button)
   })
 
+  new ui.MenuButton(
+    {
+      parent: sceneParentEntity,
+      position: Vector3.create(-5, 4.02, -4),
+      scale: Vector3.create(1.5, 1.5, 1.5),
+      rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+    },
+    ui.uiAssets.shapes.RECT_RED,
+    ui.uiAssets.icons.exitText,
+    'Exit from game area',
+    () => {
+      exitGame()
+    }
+  )
 
-    new ui.MenuButton(
-      {
-        parent: sceneParentEntity,
-        position: Vector3.create(-5, 4.02 , -4),
-        scale: Vector3.create(1.5, 1.5, 1.5),
-        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-      },
-      ui.uiAssets.shapes.RECT_RED,
-      ui.uiAssets.icons.exitText,
-      'Exit from game area',
-      () => {
-        exitGame()
-      }
-    )
-
+  new ui.MenuButton(
+    {
+      parent: sceneParentEntity,
+      position: Vector3.create(-5, 4.52, -4),
+      scale: Vector3.create(1.5, 1.5, 1.5),
+      rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+    },
+    ui.uiAssets.shapes.SQUARE_RED,
+    ui.uiAssets.icons.sound,
+    'Sound FX',
+    () => {
+      setSfxStatus(!SFX_ENABLED)
+    }
+  )
 }
