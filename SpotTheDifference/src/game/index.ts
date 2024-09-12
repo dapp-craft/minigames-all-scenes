@@ -1,4 +1,4 @@
-import { Quaternion } from '@dcl/sdk/math'
+import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { DIFFICULTIES, DIFFICULTY, MODEL, SETTINGS } from './settings'
 import { SIZE, VARIANT } from './types'
 import { GameObject } from './object'
@@ -13,11 +13,10 @@ let root: Entity
 Promise.all(Object.entries(SETTINGS).flatMap(([model, data]) => 
     [VARIANT.BASE, VARIANT.ALT, ...data.variants].map(variant => new Promise<Entity>(async resolve => {
         const entity = engine.addEntity()
+        Transform.create(entity, {scale: Vector3.Zero()})
         GltfContainer.create(entity, {src: `models/${model}_${variant}.gltf`})
-        Transform.create(entity, {parent: root})
-        VisibilityComponent.create(entity, {visible: false})
-        do await new Promise<void>(resolve => utils.timers.setTimeout(resolve, 100))
-        while (GltfContainerLoadingState.get(entity).currentState !== LoadingState.FINISHED)
+        do await new Promise<void>(r => utils.timers.setTimeout(r, 100))
+        while (GltfContainerLoadingState.getOrNull(entity)?.currentState !== LoadingState.FINISHED)
         resolve(entity)
     })
 ))).then(entities => {
