@@ -42,7 +42,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_global_steampunk03",
+			"name":"obj_global_steampunk02",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -101,7 +101,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1001,
+			"count":969,
 			"max":[
 				0.3063969910144806,
 				0.8400527238845825,
@@ -117,19 +117,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1001,
+			"count":969,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1001,
+			"count":969,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1296,
+			"count":1242,
 			"type":"SCALAR"
 		},
 		{
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":12012,
+			"byteLength":11628,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12012,
-			"byteOffset":12012,
+			"byteLength":11628,
+			"byteOffset":11628,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8008,
-			"byteOffset":24024,
+			"byteLength":7752,
+			"byteOffset":23256,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2592,
-			"byteOffset":32032,
+			"byteLength":2484,
+			"byteOffset":31008,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":360,
-			"byteOffset":34624,
+			"byteOffset":33492,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":360,
-			"byteOffset":34984,
+			"byteOffset":33852,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":240,
-			"byteOffset":35344,
+			"byteOffset":34212,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":96,
-			"byteOffset":35584,
+			"byteOffset":34452,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":35680,
+			"byteLength":34548,
 			"uri":"obj_bench02_easy.bin"
 		}
 	]

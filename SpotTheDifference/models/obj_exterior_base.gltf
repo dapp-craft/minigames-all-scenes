@@ -101,7 +101,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":17726,
+			"count":17725,
 			"max":[
 				7.9902825355529785,
 				9.660547256469727,
@@ -117,13 +117,13 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":17726,
+			"count":17725,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":17726,
+			"count":17725,
 			"type":"VEC2"
 		},
 		{
@@ -135,7 +135,7 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":80570,
+			"count":80589,
 			"max":[
 				7.941812515258789,
 				9.660547256469727,
@@ -151,13 +151,13 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":80570,
+			"count":80589,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":80570,
+			"count":80589,
 			"type":"VEC2"
 		},
 		{
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":212712,
+			"byteLength":212700,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":212712,
-			"byteOffset":212712,
+			"byteLength":212700,
+			"byteOffset":212700,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":141808,
-			"byteOffset":425424,
+			"byteLength":141800,
+			"byteOffset":425400,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":54330,
-			"byteOffset":567232,
+			"byteOffset":567200,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":966840,
-			"byteOffset":621564,
+			"byteLength":967068,
+			"byteOffset":621532,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":966840,
-			"byteOffset":1588404,
+			"byteLength":967068,
+			"byteOffset":1588600,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":644560,
-			"byteOffset":2555244,
+			"byteLength":644712,
+			"byteOffset":2555668,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":420492,
-			"byteOffset":3199804,
+			"byteOffset":3200380,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":3620296,
+			"byteLength":3620872,
 			"uri":"obj_exterior_base.bin"
 		}
 	]

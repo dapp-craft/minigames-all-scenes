@@ -42,7 +42,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_global_steampunk03",
+			"name":"obj_global_steampunk02",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -101,7 +101,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1197,
+			"count":702,
 			"max":[
 				0.6125966310501099,
 				2.341635227203369,
@@ -117,19 +117,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1197,
+			"count":702,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1197,
+			"count":702,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1527,
+			"count":1032,
 			"type":"SCALAR"
 		},
 		{
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":14364,
+			"byteLength":8424,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":14364,
-			"byteOffset":14364,
+			"byteLength":8424,
+			"byteOffset":8424,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9576,
-			"byteOffset":28728,
+			"byteLength":5616,
+			"byteOffset":16848,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3054,
-			"byteOffset":38304,
+			"byteLength":2064,
+			"byteOffset":22464,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":480,
-			"byteOffset":41360,
+			"byteOffset":24528,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":480,
-			"byteOffset":41840,
+			"byteOffset":25008,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":320,
-			"byteOffset":42320,
+			"byteOffset":25488,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":120,
-			"byteOffset":42640,
+			"byteOffset":25808,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":42760,
+			"byteLength":25928,
 			"uri":"obj_bush02_easy.bin"
 		}
 	]

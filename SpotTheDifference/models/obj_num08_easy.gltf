@@ -43,7 +43,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_global_steampunk03",
+			"name":"obj_global_steampunk02",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -142,7 +142,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":831,
+			"count":819,
 			"max":[
 				0.17434214055538177,
 				0.6323655843734741,
@@ -158,19 +158,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":831,
+			"count":819,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":831,
+			"count":819,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1161,
+			"count":1143,
 			"type":"SCALAR"
 		},
 		{
@@ -245,74 +245,74 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":9972,
+			"byteLength":9828,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9972,
-			"byteOffset":9972,
+			"byteLength":9828,
+			"byteOffset":9828,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6648,
-			"byteOffset":19944,
+			"byteLength":6552,
+			"byteOffset":19656,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2322,
-			"byteOffset":26592,
+			"byteLength":2286,
+			"byteOffset":26208,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":5352,
-			"byteOffset":28916,
+			"byteOffset":28496,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":5352,
-			"byteOffset":34268,
+			"byteOffset":33848,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":3568,
-			"byteOffset":39620,
+			"byteOffset":39200,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1272,
-			"byteOffset":43188,
+			"byteOffset":42768,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":360,
-			"byteOffset":44460,
+			"byteOffset":44040,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":360,
-			"byteOffset":44820,
+			"byteOffset":44400,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":240,
-			"byteOffset":45180,
+			"byteOffset":44760,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":96,
-			"byteOffset":45420,
+			"byteOffset":45000,
 			"target":34963
 		}
 	],
@@ -324,7 +324,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":45516,
+			"byteLength":45096,
 			"uri":"obj_num08_easy.bin"
 		}
 	]

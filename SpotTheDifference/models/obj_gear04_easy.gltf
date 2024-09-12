@@ -42,7 +42,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_global_steampunk01",
+			"name":"obj_global_steampunk02",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -93,15 +93,15 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_global_steampunk",
-			"uri":"textures/obj_global_steampunk.png"
+			"name":"obj_global_steampunk02",
+			"uri":"textures/obj_global_steampunk02.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1028,
+			"count":895,
 			"max":[
 				0.17008920013904572,
 				0.06981050223112106,
@@ -117,19 +117,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1028,
+			"count":895,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1028,
+			"count":895,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1548,
+			"count":1314,
 			"type":"SCALAR"
 		},
 		{
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":12336,
+			"byteLength":10740,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12336,
-			"byteOffset":12336,
+			"byteLength":10740,
+			"byteOffset":10740,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8224,
-			"byteOffset":24672,
+			"byteLength":7160,
+			"byteOffset":21480,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3096,
-			"byteOffset":32896,
+			"byteLength":2628,
+			"byteOffset":28640,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":432,
-			"byteOffset":35992,
+			"byteOffset":31268,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":432,
-			"byteOffset":36424,
+			"byteOffset":31700,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":36856,
+			"byteOffset":32132,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":120,
-			"byteOffset":37144,
+			"byteOffset":32420,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":37264,
+			"byteLength":32540,
 			"uri":"obj_gear04_easy.bin"
 		}
 	]

@@ -42,7 +42,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_global_steampunk01",
+			"name":"obj_global_steampunk02",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -93,15 +93,15 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_global_steampunk",
-			"uri":"textures/obj_global_steampunk.png"
+			"name":"obj_global_steampunk02",
+			"uri":"textures/obj_global_steampunk02.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":776,
+			"count":296,
 			"max":[
 				0.4933025538921356,
 				0.712211549282074,
@@ -117,19 +117,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":776,
+			"count":296,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":776,
+			"count":296,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":912,
+			"count":432,
 			"type":"SCALAR"
 		},
 		{
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":9312,
+			"byteLength":3552,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9312,
-			"byteOffset":9312,
+			"byteLength":3552,
+			"byteOffset":3552,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6208,
-			"byteOffset":18624,
+			"byteLength":2368,
+			"byteOffset":7104,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1824,
-			"byteOffset":24832,
+			"byteLength":864,
+			"byteOffset":9472,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":480,
-			"byteOffset":26656,
+			"byteOffset":10336,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":480,
-			"byteOffset":27136,
+			"byteOffset":10816,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":320,
-			"byteOffset":27616,
+			"byteOffset":11296,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":120,
-			"byteOffset":27936,
+			"byteOffset":11616,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":28056,
+			"byteLength":11736,
 			"uri":"obj_bush01_easy.bin"
 		}
 	]
