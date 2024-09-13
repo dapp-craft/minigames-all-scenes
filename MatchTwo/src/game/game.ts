@@ -29,6 +29,8 @@ import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syn
 import { playCloseTileSound, playLevelCompleteSound, playOpenTileSound, playPairFoundSound } from './sound'
 import { initStatusBoard } from './statusBoard'
 import { initCountdownNumbers, setupWinAnimations, countdown, startWinAnimation } from './gameEfffects'
+import { setLevelButtonPositions } from './locators/levelButtonPositions'
+import { setStatusBoardPositions } from './locators/statusBoardPositions'
 
 
 type TileType = {
@@ -59,6 +61,10 @@ export const gameState = {
 export async function initGame() {
   await fetchPlayerProgress()
 
+  await setLevelButtonPositions()
+  await setTilesPositions()
+  await setStatusBoardPositions()
+  
   initGameDataEntity()
 
   initStatusBoard()
@@ -68,7 +74,6 @@ export async function initGame() {
 
   setupGameUI()
 
-  await setTilesPositions()
 
   initTiles()
 }
