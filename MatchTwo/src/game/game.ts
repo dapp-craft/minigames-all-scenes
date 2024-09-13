@@ -28,6 +28,8 @@ import { setTilesPositions, tilesPositions } from './tilesPositions'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { playCloseTileSound, playLevelCompleteSound, playOpenTileSound, playPairFoundSound } from './sound'
 import { initStatusBoard } from './statusBoard'
+import { initCountdownNumbers, setupWinAnimations, countdown, startWinAnimation } from './gameEfffects'
+
 
 type TileType = {
   mainEntity: Entity
@@ -60,6 +62,9 @@ export async function initGame() {
   initGameDataEntity()
 
   initStatusBoard()
+
+  setupWinAnimations()
+  initCountdownNumbers()
 
   setupGameUI()
 
@@ -216,6 +221,7 @@ function getReadyToStart() {
 export async function startLevel(level: keyof typeof TILES_LEVEL) {
   console.log('Start level', level)
 
+
   await Promise.all(tiles.map((tile) => resetTile(tile)))
 
   console.log('TILES LEVEL', TILES_LEVEL)
@@ -229,16 +235,21 @@ export async function startLevel(level: keyof typeof TILES_LEVEL) {
   gameState.moves = 0
   gameState.levelFinishTime = 0
 
-  tilesNotInUse.forEach((tile) => {
+  tiles.forEach((tile) => {
     disableTile(tile)
   })
 
   const toys = getToys(level)
   shuffleArray(toys)
 
-  tilesInUse.forEach((tile, index) => {
-    setTileToy(tile, toys[index].src)
-  })
+  countdown(() => {
+    // Might couse a bug if player click on the tile vefore it has been reset
+    tilesInUse.forEach(tile => resetTile(tile))
+    tilesInUse.forEach((tile, index) => {
+      setTileToy(tile, toys[index].src)
+    })
+  }, 4)
+  
 }
 
 function setImages() {
@@ -275,8 +286,11 @@ function checkIfMatch() {
         .length === 0
     ) {
       console.log('Game over')
-      playLevelCompleteSound()
-      finishLevel()
+      startWinAnimation(() => {
+        playLevelCompleteSound()
+        finishLevel()
+      })
+      
     }
   } else {
     console.log('No match')
