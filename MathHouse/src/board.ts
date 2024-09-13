@@ -1,9 +1,9 @@
 import * as utils from '@dcl-sdk/utils'
-import { Quaternion, Vector3 } from "@dcl/sdk/math";
+import { Vector3 } from "@dcl/sdk/math";
 import { gameState, rocketCoords } from "./state";
-import { EasingFunction, engine, Entity, GltfContainer, MeshRenderer, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
-import { background, cat01, cat02, kitty } from "./resources/resources";
-import { parentEntity, syncEntity } from "@dcl/sdk/network";
+import { EasingFunction, engine, GltfContainer, Transform, Tween } from "@dcl/sdk/ecs";
+import { background, cat01, cat02 } from "./resources/resources";
+import { syncEntity } from "@dcl/sdk/network";
 import { readGltfLocators } from "../../common/locators";
 
 export class board {

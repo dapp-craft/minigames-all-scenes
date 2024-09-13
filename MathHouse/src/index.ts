@@ -1,30 +1,52 @@
 // We define the empty imports so the auto-complete feature works as expected.
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { engine, GltfContainer, MeshRenderer, TextShape, Transform, Tween, TweenLoop, TweenStateStatus, VisibilityComponent } from '@dcl/sdk/ecs'
-import { gameState, rocketCoords } from './state'
-import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, SESSION_DURATION, startCoords } from './config'
+import { AudioSource, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
+import { gameState } from './state'
+import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, soundConfig, startCoords } from './config'
 
-import { initLibrary, queue, ui } from '@dcl-sdk/mini-games/src'
-import { parentEntity, syncEntity } from '@dcl/sdk/network'
-import players from '@dcl/sdk/players'
+import { syncEntity } from '@dcl/sdk/network'
 import { setupStaticModels } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
-import { initGame } from './game/game'
+import { exitCallback, getReadyToStart, initGame, restartCallback } from './game/game'
 import { board } from './board'
 import { randomLvl } from './levels'
-import { kitty } from './resources/resources'
+import { kitty, ost } from './resources/resources'
 import { generatedData } from './Types'
+import { readGltfLocators } from '../../common/locators'
+import { sceneParentEntity } from './globals'
+import { initMiniGame } from '../../common/library'
+import { mainThereme } from './SoundManager'
 
-initLibrary(engine, syncEntity, players, {
-  environment: 'dev',
-  gameId: GAME_ID,
-  gameTimeoutMs: SESSION_DURATION,
-  gameArea: {
-    topLeft: Vector3.create(1, 0, 0),
-    bottomRight: Vector3.create(15, 5, 9),
-    exitSpawnPoint: Vector3.create(8, 1, 13)
+const preset = {
+  placementStart: 0.06,
+  nameStart: 0.08,
+  timeStart: 0.7,
+  levelStart: 0.96,
+  nameHeader: 'PLAYER',
+  // timeHeader: 'TIME',
+  levelHeader: 'LEVEL'
+}
+
+const handlers = {
+  start: () => getReadyToStart(),
+  exit: () => exitCallback(),
+  restart: () => restartCallback(),
+  toggleMusic: () => playBackgroundMusic(),
+  toggleSfx: () => toggleVolume()
+}
+
+const toggleVolume = () => {
+  if (soundConfig.volume != 0) {
+    soundConfig.volume = 0
+    AudioSource.getMutable(mainThereme).volume = 0
   }
-})
+  else {
+    soundConfig.volume = 0.5
+    AudioSource.getMutable(mainThereme).volume = 0.07
+  }
+}
+
+initMiniGame(GAME_ID, preset, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
 
 export let rocketBoard: any
 
@@ -32,46 +54,14 @@ export async function main() {
   setupStaticModels()
   spawnInitialEntityPoll()
 
-  const width = 2.5
-  const height = 2.8
-  const scale = 1.2
-
-  new ui.ScoreBoard(
-    {
-      position: Vector3.create(1.07, 2.5, 11.1),
-      rotation: Quaternion.fromEulerDegrees(0, -90, 0),
-      scale: Vector3.create(0.875, 0.78, 1)
-    },
-    width,
-    height,
-    scale,
-    {
-      placementStart: 0.06,
-      nameStart: 0.08,
-      timeStart: 0.7,
-      levelStart: 0.96,
-      nameHeader: 'PLAYER',
-      timeHeader: 'TIME',
-      levelHeader: 'LEVEL'
-    }
-  )
-
-  queue.initQueueDisplay({
-    position: Vector3.create(8, 2, 10.53653),
-    rotation: Quaternion.fromEulerDegrees(0, 0, 0),
-    scale: Vector3.create(1, 1, 1)
-  });
-
   initGame()
-
+  
   setupUI()
 
   rocketBoard = new board();
-
-  // generateArray({ length: 3, positive: false, initialNumber: 9 });
 }
 
-const spawnInitialEntityPoll = () => {
+const spawnInitialEntityPoll = async () => {
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
     GltfContainer.createOrReplace(entity, { src: kitty.src })
@@ -92,13 +82,13 @@ const spawnInitialEntityPoll = () => {
     syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], catInRocketEntityId + entityAmount + 10 + i)
   }
 
+  const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+
   TextShape.create(gameState.levelCounter, {
     text: '0',
+    fontSize: 3
   })
-  Transform.create(gameState.levelCounter, {
-    position: Vector3.create(4, 2, 2),
-    rotation: Quaternion.create(0, 100, 0.5, 0)
-  })
+  Transform.create(gameState.levelCounter, { ...data.get('counter_level'), rotation: Quaternion.create(0, -.42, .175, 0), parent: sceneParentEntity })
   syncEntity(gameState.levelCounter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, TextShape.componentId], 4010)
 }
 
@@ -153,4 +143,12 @@ export const generateArray = (data: generatedData) => {
     cats in rocket on start:  ${catsInRocket}
     waves: ${array}
   `);
+}
+
+let i = 1
+const playBackgroundMusic = () => {
+  ++i
+  if(i >= 4) i = 1
+  AudioSource.getMutable(mainThereme).audioClipUrl = ost.get(i)!
+  console.log(ost.get(i))
 }

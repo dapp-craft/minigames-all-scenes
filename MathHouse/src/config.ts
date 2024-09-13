@@ -45,5 +45,9 @@ export const name = {
   position: Vector3.create(0, 5.161755561828613, -6.905980110168457)
 }
 
+export const soundConfig = {
+  volume: 0.5
+}
+
 
 

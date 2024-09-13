@@ -1,5 +1,5 @@
-import { progress, queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
-import { initialLevels, mainEntityId } from "../config"
+import { progress, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
+import { initialLevels, mainEntityId, soundConfig} from "../config"
 import { Quaternion, Vector3 } from "@dcl/sdk/math"
 import { Animator, Billboard, engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { syncEntity } from "@dcl/sdk/network"
@@ -33,6 +33,25 @@ let entityManager: gameEntityManager
 
 const WIN_DURATION = 2000
 
+export const exitCallback = () => {
+    soundManager.playSound('exitSounds', soundConfig.volume)
+    entityManager?.stopGame()
+    progressState.level = 1
+    TextShape.getMutable(gameState.levelCounter).text = `${progressState.level - 1}`
+    GameData.createOrReplace(gameDataEntity, {
+        playerAddress: '',
+        playerName: '',
+        moves: 0,
+        levelStartedAt: 0,
+        levelFinishedAt: 0
+    })
+}
+
+export const restartCallback = () => {
+    entityManager?.stopGame()
+    startGame()
+}
+
 export const initGame = async () => {
     await initMaxProgress()
 
@@ -45,43 +64,19 @@ export const initGame = async () => {
     initCountdownNumbers()
 
     setupWinAnimations()
-
-    queue.listeners.onActivePlayerChange = (player) => {
-        const localPlayer = getPlayer()
-        if (player?.address === localPlayer?.userId) {
-            getReadyToStart()
-        } else {
-            soundManager.playSound('exitSounds')
-            entityManager?.stopGame()
-            progressState.level = 0
-            TextShape.getMutable(gameState.levelCounter).text = `${progressState.level}`
-            GameData.createOrReplace(gameDataEntity, {
-                playerAddress: '',
-                playerName: '',
-                moves: 0,
-                levelStartedAt: 0,
-                levelFinishedAt: 0
-            })
-        }
-    }
 }
 
-function getReadyToStart() {
+export function getReadyToStart() {
     console.log('Get Ready to start!')
-    utils.timers.setTimeout(() => {
-        movePlayerTo({
-            newRelativePosition: Vector3.create(8, 1, 8),
-            cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
-        })
-        startGame()
-    }, 2000)
+    gameButtons.forEach((button, i) => button.disable())
+    utils.timers.setTimeout(() => startGame(), 2000)
 }
 
 async function startGame() {
     const localPlayer = getPlayer()
     sessionStartedAt = Date.now()
 
-    soundManager.playSound('enterSounds')
+    soundManager.playSound('enterSounds', soundConfig.volume)
 
     gameButtons.forEach((button, i) => button.disable())
     generateLevel()
@@ -134,27 +129,13 @@ function initCountdownNumbers() {
 }
 
 const initGameButtons = async () => {
-    const data = await readGltfLocators(`locators/obj_buttons.gltf`)
-
-    gameButtons.push(
-        new ui.MenuButton(
-            {
-                position: Vector3.create(8, 1, 11),
-                scale: Vector3.create(1.5, 1.5, 1.5),
-                rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-            },
-            ui.uiAssets.shapes.SQUARE_GREEN,
-            ui.uiAssets.icons.play,
-            `START`,
-            () => queue.addPlayer()
-        )
-    )
+    const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
 
     for (let i = 1; i <= 9; i++) {
         gameButtons.push(
             new ui.MenuButton(
-                { position: data.get(`level0${i}`)?.position, parent: sceneParentEntity, rotation: Quaternion.create(0, -2, -1, 0) },
-                ui.uiAssets.shapes.SQUARE_RED,
+                { position: data.get(`button_answer_${i}`)?.position, parent: sceneParentEntity, rotation: Quaternion.create(0, -2, -1, 0) },
+                ui.uiAssets.shapes.SQUARE_GREEN,
                 ui.uiAssets.numbers[i],
                 `${i}`,
                 () => {
@@ -166,7 +147,7 @@ const initGameButtons = async () => {
                     rocketBoard.showBoard(playerAnswer)
                     if (entityCounter == playerAnswer) {
                         console.log("WIN")
-                        soundManager.playSound('correctAnswerSound')
+                        soundManager.playSound('correctAnswerSound', soundConfig.volume)
                         startWinAnimation()
                         utils.timers.setTimeout(async () => {
                             if (progressState.level == levelArray.length - 1) return afterGame()
@@ -176,30 +157,13 @@ const initGameButtons = async () => {
                     }
                     else {
                         console.log("LOSE")
-                        soundManager.playSound('wrongAnswerSound')
-                        utils.timers.setTimeout(() => {
-                            entityManager?.stopGame()
-                            startGame()
-                        }, 1500)
+                        soundManager.playSound('wrongAnswerSound', soundConfig.volume)
+                        utils.timers.setTimeout(() => restartCallback(), 1500)
                     }
                 }
             )
         )
     }
-
-    let restartButton = new ui.MenuButton(
-        { position: data.get(`restart`)?.position, parent: sceneParentEntity, rotation: Quaternion.create(0, -2, -1, 0) },
-        ui.uiAssets.shapes.SQUARE_RED,
-        ui.uiAssets.icons.restart,
-        `RESTART`,
-        () => {
-            restartButton.disable()
-            entityManager?.stopGame()
-            getReadyToStart()
-            gameButtons.forEach((button, i) => button.disable())
-            utils.timers.setTimeout(() => restartButton.enable(), 2000)
-        }
-    )
 }
 
 function setupWinAnimations() {

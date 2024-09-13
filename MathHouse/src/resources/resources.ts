@@ -29,6 +29,12 @@ export const enterSound = 'sounds/game/enter.mp3';
 export const exitSound = 'sounds/game/exit.mp3';
 export const wrongAnswerSound = 'sounds/game/not-true.mp3';
 export const correctAnswerSound = 'sounds/game/true.mp3';
+export const ost = new Map([
+    [1, 'sounds/game/OST1.mp3'],
+    [2, 'sounds/game/OST2.mp3'],
+    [3, 'sounds/game/OST3.mp3'],
+]) 
+
 
 // export const slideSound = 'sounds/game/slide.mp3';
 

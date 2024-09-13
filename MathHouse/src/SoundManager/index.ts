@@ -10,15 +10,15 @@ import { correctAnswerSound, enterSound, exitSound, wrongAnswerSound } from '../
     "enterSounds": enterSound, 
     "exitSounds": exitSound,
     "wrongAnswerSound": wrongAnswerSound,
-    "correctAnswerSound": correctAnswerSound
+    "correctAnswerSound": correctAnswerSound,
   }
   
   export let THEME = ''
   export const THEME_VOLUME = 0.7
   
-  // export const mainThereme = engine.addEntity()
-  // Transform.create(mainThereme, {parent: engine.PlayerEntity})
-  // AudioSource.create(mainThereme, {audioClipUrl: `sounds/futuristic-abstract-chill.mp3`, loop: true, playing: true, volume: 0.07})
+  export const mainThereme = engine.addEntity()
+  Transform.create(mainThereme, {parent: engine.PlayerEntity})
+  AudioSource.create(mainThereme, {audioClipUrl: `sounds/game/OST1.mp3`, loop: true, playing: true, volume: 0.07})
   
   export class SoundManager {
     private soundsStorage: Entity[] = []

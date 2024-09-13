@@ -1,5 +1,4 @@
 import { engine, Entity, Schemas } from "@dcl/sdk/ecs";
-import { board } from "./board";
 import { Vector3 } from "@dcl/sdk/math";
 
 type GameState = {
