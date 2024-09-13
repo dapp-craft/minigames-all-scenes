@@ -70,20 +70,6 @@ export async function initGame() {
 
   await setTilesPositions()
 
-  queue.listeners.onActivePlayerChange = (player) => {
-    const localPlayer = getPlayer()
-    if (player?.address === localPlayer?.userId) {
-      getReadyToStart()
-    } else {
-      GameData.createOrReplace(gameDataEntity, {
-        playerAddress: '',
-        playerName: '',
-        levelStartTime: 0,
-        levelEndTime: 0
-      })
-    }
-  }
-
   initTiles()
 }
 
@@ -195,7 +181,7 @@ async function closeTile(tile: TileType) {
   })
 }
 
-function getReadyToStart() {
+export function getReadyToStart() {
   console.log('Get ready to start')
 
   const levetToStart =

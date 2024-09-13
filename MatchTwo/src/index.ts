@@ -5,25 +5,51 @@ import { initLibrary } from '@dcl-sdk/mini-games/src'
 import { syncEntity } from '@dcl/sdk/network'
 import { GAME_ID, SESSION_DURATION } from './config'
 import players from '@dcl/sdk/players'
-import { initGame } from './game/game'
+import { gameState, getReadyToStart, initGame, startLevel, exitGame } from './game/game'
 import { setupUI } from './ui'
 import { setupStaticModels } from './staticModels'
+import { SFX_ENABLED, setSfxStatus } from './game/sound'
+import { readGltfLocators } from '../../common/locators'
+import { initMiniGame } from '../../common/library'
 
-initLibrary(engine, syncEntity, players, {
-  environment: 'dev',
-  gameId: GAME_ID,
-  gameTimeoutMs: SESSION_DURATION,
-  gameArea: {
-    topLeft: Vector3.create(1, 0, 0),
-    bottomRight: Vector3.create(15, 5, 9),
-    exitSpawnPoint: Vector3.create(8, 1, 13)
-  }
-})
+const handlers = {
+  start: () => getReadyToStart(),
+  exit: () => exitGame(),
+  restart: () => startLevel(gameState.level),
+  toggleMusic: () => {},
+  toggleSfx: () => setSfxStatus(!SFX_ENABLED)
+}
+
+initMiniGame(
+  GAME_ID,
+  {
+    placementStart: 0.06,
+    nameStart: 0.08,
+    timeStart: 0.7,
+    levelStart: 0.96,
+    nameHeader: 'PLAYER',
+    timeHeader: 'TIME',
+    levelHeader: 'LEVEL'
+  },
+  readGltfLocators(`locators/obj_locators_default.gltf`),
+  handlers
+)
+
+// initLibrary(engine, syncEntity, players, {
+//   environment: 'dev',
+//   gameId: GAME_ID,
+//   gameTimeoutMs: SESSION_DURATION,
+//   gameArea: {
+//     topLeft: Vector3.create(1, 0, 0),
+//     bottomRight: Vector3.create(15, 5, 9),
+//     exitSpawnPoint: Vector3.create(8, 1, 13)
+//   }
+// })
 
 export function main() {
   setupStaticModels()
 
   initGame()
- 
+
   setupUI()
 }
