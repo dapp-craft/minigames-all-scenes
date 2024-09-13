@@ -15,7 +15,7 @@ import {
 } from '@dcl/sdk/ecs'
 import { GameData, Tile } from './components/idnex'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
-import { FLIP_DURATION, TILES_LEVEL, SYNC_ENTITY_OFFSET, MAX_IMAGES } from '../config'
+import { FLIP_DURATION, TILES_LEVEL, SYNC_ENTITY_OFFSET, MAX_IMAGES, openAngle } from '../config'
 import { ui, queue } from '@dcl-sdk/mini-games/src'
 import { getPlayer } from '@dcl/sdk/players'
 import { levelButtons, setupGameUI } from './UiObjects'
@@ -141,7 +141,7 @@ async function onTileClick(tile: TileType) {
 
 async function openTile(tile: TileType) {
   const startRotation = Transform.get(tile.doorEntity).rotation
-  const endRotation = Quaternion.multiply(startRotation, Quaternion.fromEulerDegrees(0, 90, 0))
+  const endRotation = Quaternion.multiply(startRotation, Quaternion.fromEulerDegrees(openAngle[Math.floor(Tile.get(tile.mainEntity).tileNumber / 8) as keyof typeof openAngle], 0, 0))
   playOpenTileSound()
   Tween.createOrReplace(tile.doorEntity, {
     mode: Tween.Mode.Rotate({
