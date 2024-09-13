@@ -48,7 +48,7 @@ initMiniGame(
 // })
 
 export function main() {
-  // setupStaticModels()
+  setupStaticModels()
 
   initGame()
 
