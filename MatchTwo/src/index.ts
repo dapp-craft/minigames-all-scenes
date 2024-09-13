@@ -11,12 +11,13 @@ import { setupStaticModels } from './staticModels'
 import { SFX_ENABLED, setSfxStatus } from './game/sound'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
+import { toggleBackgroundMusic } from './SoundManager'
 
 const handlers = {
   start: () => getReadyToStart(),
   exit: () => exitGame(),
   restart: () => startLevel(gameState.level),
-  toggleMusic: () => {},
+  toggleMusic: () => toggleBackgroundMusic(),
   toggleSfx: () => setSfxStatus(!SFX_ENABLED)
 }
 
@@ -47,7 +48,7 @@ initMiniGame(
 // })
 
 export function main() {
-  setupStaticModels()
+  // setupStaticModels()
 
   initGame()
 

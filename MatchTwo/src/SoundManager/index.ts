@@ -28,6 +28,11 @@ export const mainThereme = engine.addEntity()
 Transform.create(mainThereme, {parent: engine.PlayerEntity})
 AudioSource.create(mainThereme, {audioClipUrl: mainThemeSound, loop: true, playing: true, volume: 0.07})
 
+export function toggleBackgroundMusic() {
+  let audioSource = AudioSource.getMutable(mainThereme)
+  audioSource.playing = !audioSource.playing
+}
+
 export class SoundManager {
   private soundsStorage: Entity[] = []
   private themeVolume = THEME_VOLUME
