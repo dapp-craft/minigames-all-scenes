@@ -32,7 +32,6 @@ import { initCountdownNumbers, setupWinAnimations, countdown, startWinAnimation 
 import { setLevelButtonPositions } from './locators/levelButtonPositions'
 import { setStatusBoardPositions } from './locators/statusBoardPositions'
 
-
 type TileType = {
   mainEntity: Entity
   toyEntity: Entity
@@ -64,7 +63,7 @@ export async function initGame() {
   await setLevelButtonPositions()
   await setTilesPositions()
   await setStatusBoardPositions()
-  
+
   initGameDataEntity()
 
   initStatusBoard()
@@ -73,7 +72,6 @@ export async function initGame() {
   initCountdownNumbers()
 
   setupGameUI()
-
 
   initTiles()
 }
@@ -132,7 +130,14 @@ async function onTileClick(tile: TileType) {
 
 async function openTile(tile: TileType) {
   const startRotation = Transform.get(tile.doorEntity).rotation
-  const endRotation = Quaternion.multiply(startRotation, Quaternion.fromEulerDegrees(openAngle[Math.floor(Tile.get(tile.mainEntity).tileNumber / 8) as keyof typeof openAngle], 0, 0))
+  const endRotation = Quaternion.multiply(
+    startRotation,
+    Quaternion.fromEulerDegrees(
+      openAngle[Math.floor(Tile.get(tile.mainEntity).tileNumber / 8) as keyof typeof openAngle],
+      0,
+      0
+    )
+  )
   playOpenTileSound()
   Tween.createOrReplace(tile.doorEntity, {
     mode: Tween.Mode.Rotate({
@@ -212,35 +217,32 @@ export function getReadyToStart() {
 export async function startLevel(level: keyof typeof TILES_LEVEL) {
   console.log('Start level', level)
 
+  countdown( async () => {
+    await Promise.all(tiles.map((tile) => resetTile(tile)))
 
-  await Promise.all(tiles.map((tile) => resetTile(tile)))
+    console.log('TILES LEVEL', TILES_LEVEL)
 
-  console.log('TILES LEVEL', TILES_LEVEL)
+    const tilesInUse = tiles.filter((tile) => TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
+    const tilesNotInUse = tiles.filter((tile) => !TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
 
-  const tilesInUse = tiles.filter((tile) => TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
-  const tilesNotInUse = tiles.filter((tile) => !TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
+    gameState.tilesCount = TILES_LEVEL[level].length
+    gameState.level = level
+    gameState.levelStartTime = Date.now()
+    gameState.moves = 0
+    gameState.levelFinishTime = 0
 
-  gameState.tilesCount = TILES_LEVEL[level].length
-  gameState.level = level
-  gameState.levelStartTime = Date.now()
-  gameState.moves = 0
-  gameState.levelFinishTime = 0
+    tiles.forEach((tile) => {
+      disableTile(tile)
+    })
 
-  tiles.forEach((tile) => {
-    disableTile(tile)
-  })
-
-  const toys = getToys(level)
-  shuffleArray(toys)
-
-  countdown(() => {
+    const toys = getToys(level)
+    shuffleArray(toys)
     // Might couse a bug if player click on the tile vefore it has been reset
-    tilesInUse.forEach(tile => resetTile(tile))
+    tilesInUse.forEach((tile) => resetTile(tile))
     tilesInUse.forEach((tile, index) => {
       setTileToy(tile, toys[index].src)
     })
   }, 4)
-  
 }
 
 function setImages() {
@@ -281,7 +283,6 @@ function checkIfMatch() {
         playLevelCompleteSound()
         finishLevel()
       })
-      
     }
   } else {
     console.log('No match')
@@ -311,7 +312,7 @@ function finishLevel() {
   }
 }
 
-export function exitGame(){
+export function exitGame() {
   movePlayerTo({
     newRelativePosition: Vector3.create(8, 1, 14)
   })
