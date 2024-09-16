@@ -36,14 +36,8 @@ const handlers = {
 }
 
 const toggleVolume = () => {
-  if (soundConfig.volume != 0) {
-    soundConfig.volume = 0
-    AudioSource.getMutable(mainThereme).volume = 0
-  }
-  else {
-    soundConfig.volume = 0.5
-    AudioSource.getMutable(mainThereme).volume = 0.07
-  }
+  if (soundConfig.volume != 0) soundConfig.volume = 0
+  else soundConfig.volume = 0.5
 }
 
 initMiniGame(GAME_ID, preset, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
@@ -55,7 +49,7 @@ export async function main() {
   spawnInitialEntityPoll()
 
   initGame()
-  
+
   setupUI()
 
   rocketBoard = new board();
@@ -145,10 +139,7 @@ export const generateArray = (data: generatedData) => {
   `);
 }
 
-let i = 1
 const playBackgroundMusic = () => {
-  ++i
-  if(i >= 4) i = 1
-  AudioSource.getMutable(mainThereme).audioClipUrl = ost.get(i)!
-  console.log(ost.get(i))
+  if (AudioSource.getMutable(mainThereme).volume != 0) AudioSource.getMutable(mainThereme).volume = 0
+  else AudioSource.getMutable(mainThereme).volume = 0.07
 }

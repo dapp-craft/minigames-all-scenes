@@ -5,6 +5,7 @@ import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { CartridgeTest, SpawnEntityDelay } from "./Types";
 import { gameState } from "./state";
 import { rocketBoard } from ".";
+import { gameButtons } from "./game/game";
 
 export class gameEntityManager {
 
@@ -58,10 +59,14 @@ export class gameEntityManager {
                 this.waveIsDone = new Promise(r => this.resolveReady = r)
                 this.entityIndex = 1
                 console.log(this.entityCounter)
+                if (i == this.roundCartrige.size) {
+                    rocketBoard.showBoard(0)
+                    rocketBoard.setRightCounter(0)
+                    gameButtons.forEach((button, i) => button.enable())
+                }
             }
             this.answerReady()
             console.log("Res: ", this.entityCounter);
-
         }, 3000)
         await this.answerIsDone
         this.answerIsDone = new Promise(r => this.answerReady = r)
@@ -112,6 +117,7 @@ export class gameEntityManager {
     public stopGame() {
         // rocketBoard.hideBoard()
         this.gameEnd = true
+        this.resolveReady()
         this.answerReady()
         gameState.availableEntity.forEach(entity => {
             VisibilityComponent.createOrReplace(entity, { visible: false })

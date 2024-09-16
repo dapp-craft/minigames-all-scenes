@@ -23,8 +23,8 @@ const BOARD_TRANSFORM = {
 export let gameDataEntity: Entity
 export let boardEntity: Entity
 export let sessionStartedAt: number
+export let gameButtons: ui.MenuButton[] = []
 
-let gameButtons: ui.MenuButton[] = []
 let maxProgress: progress.IProgress
 let timer: ui.Timer3D
 let playerAnswer = 0
@@ -49,6 +49,7 @@ export const exitCallback = () => {
 
 export const restartCallback = () => {
     entityManager?.stopGame()
+    gameButtons.forEach((button, i) => button.disable())
     startGame()
 }
 
@@ -88,11 +89,6 @@ async function startGame() {
 
     entityManager = new gameEntityManager(randomLvl);
     entityCounter = await entityManager.startGame()
-
-    rocketBoard.showBoard(0)
-    rocketBoard.setRightCounter(0)
-
-    gameButtons.forEach((button, i) => button.enable())
 
     GameData.createOrReplace(gameDataEntity, {
         playerAddress: localPlayer?.userId,
