@@ -1,9 +1,9 @@
 import * as utils from "@dcl-sdk/utils"
-import { EasingFunction, engine, Entity, Transform, Tween, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs";
-import { finishCoords, startCoords } from "./config";
+import { Animator, EasingFunction, engine, Entity, Transform, Tween, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs";
+import { finishCoords, rocketCoords, startCoords } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { CartridgeTest, SpawnEntityDelay } from "./Types";
-import { gameState } from "./state";
+import { entityList, gameState } from "./state";
 import { rocketBoard } from ".";
 import { gameButtons } from "./game/game";
 
@@ -16,7 +16,7 @@ export class gameEntityManager {
     private currentWaveStateMaxEntity = 0
     private currentWaveStateEntityCount = 0
     private entityIndex = 1
-    private rocketCoordinate = Vector3.create(8, 1, 3)
+    private rocketCoordinate = Vector3.create(...rocketCoords)
 
     private resolveReady!: () => void
     private entityReady!: () => void
@@ -48,10 +48,13 @@ export class gameEntityManager {
             for (let i = 1; i <= this.roundCartrige.size; i++) {
                 if (this.gameEnd) return
                 let waveData = this.roundCartrige.get(i)!
+                Animator.playSingleAnimation(entityList.get('rocket')!, waveData.goOut ? 'idle2' : 'idle1')
+                Animator.playSingleAnimation(entityList.get(waveData.goOut ? 'rightBusEntity' : 'leftBusEntity')!, 'idle1')
+
                 this.currentWaveStateMaxEntity = waveData.itemQueue;
                 for (let j = 0; j < waveData.itemQueue; j++) {
                     this.spawnEntity("test", waveData.goOut);
-                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? (Math.random() * (this.spawnEntityDelay.time / 100)) + 200 : this.spawnEntityDelay.time);
+                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? (Math.random() * (this.spawnEntityDelay.time / 120)) + 150 : this.spawnEntityDelay.time);
                     await this.entityMoved;
                     this.entityMoved = new Promise(r => this.entityReady = r);
                 }
@@ -108,6 +111,9 @@ export class gameEntityManager {
                 if (this.currentWaveStateMaxEntity == this.currentWaveStateEntityCount) {
                     this.currentWaveStateEntityCount = 0
                     utils.timers.setTimeout(async () => { this.resolveReady() }, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time - 1000 + 1)) + 1000 : this.spawnEntityDelay.time);
+                    Animator.playSingleAnimation(entityList.get('rocket')!, 'stand')
+                    Animator.playSingleAnimation(entityList.get('leftBusEntity')!, 'stand')
+                    Animator.playSingleAnimation(entityList.get('rightBusEntity')!, 'stand')
                     console.log("Wave is end")
                 }
             }

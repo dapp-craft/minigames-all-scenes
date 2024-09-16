@@ -5,7 +5,7 @@ import { gameState } from './state'
 import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, soundConfig, startCoords } from './config'
 
 import { syncEntity } from '@dcl/sdk/network'
-import { setupStaticModels } from './staticModels/setupStaticModels'
+import { setupStaticModels, setupStaticModelsFromGltf } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
 import { exitCallback, getReadyToStart, initGame, restartCallback } from './game/game'
 import { board } from './board'
@@ -46,7 +46,10 @@ export let rocketBoard: any
 
 export async function main() {
   setupStaticModels()
+
   spawnInitialEntityPoll()
+
+  await setupStaticModelsFromGltf()
 
   initGame()
 
@@ -56,6 +59,7 @@ export async function main() {
 }
 
 const spawnInitialEntityPoll = async () => {
+
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
     GltfContainer.createOrReplace(entity, { src: kitty.src })

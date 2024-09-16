@@ -36,3 +36,5 @@ export const progressState = {
     levelStartTime: 0,
     levelFinishTime: 0
 }
+
+export const entityList: Map<string, Entity> = new Map([])
