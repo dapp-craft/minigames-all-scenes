@@ -1,0 +1,25 @@
+{
+	"asset":{
+		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"version":"2.0"
+	},
+	"scene":0,
+	"scenes":[
+		{
+			"name":"Scene",
+			"nodes":[
+				0
+			]
+		}
+	],
+	"nodes":[
+		{
+			"name":"obj_rocket.001",
+			"translation":[
+				0,
+				0,
+				-4.4041900634765625
+			]
+		}
+	]
+}
