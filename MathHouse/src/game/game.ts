@@ -74,12 +74,12 @@ export function getReadyToStart() {
 }
 
 async function startGame() {
+    gameButtons.forEach((button, i) => button.disable())
     const localPlayer = getPlayer()
     sessionStartedAt = Date.now()
 
     soundManager.playSound('enterSounds', soundConfig.volume)
 
-    gameButtons.forEach((button, i) => button.disable())
     generateLevel()
 
     entityCounter = -1
@@ -156,7 +156,9 @@ const initGameButtons = async () => {
                         soundManager.playSound('wrongAnswerSound', soundConfig.volume)
                         utils.timers.setTimeout(() => restartCallback(), 1500)
                     }
-                }
+                }, 
+                true,
+                0
             )
         )
     }

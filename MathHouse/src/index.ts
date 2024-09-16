@@ -2,7 +2,7 @@
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { AudioSource, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState } from './state'
-import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, soundConfig, startCoords } from './config'
+import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, rocketCoords, soundConfig, startCoords } from './config'
 
 import { syncEntity } from '@dcl/sdk/network'
 import { setupStaticModels, setupStaticModelsFromGltf } from './staticModels/setupStaticModels'
@@ -64,8 +64,9 @@ const spawnInitialEntityPoll = async () => {
     const entity = engine.addEntity()
     GltfContainer.createOrReplace(entity, { src: kitty.src })
     Transform.createOrReplace(entity, {
-      position: Vector3.create(...startCoords),
+      position: Vector3.create(...rocketCoords),
     })
+    VisibilityComponent.createOrReplace(entity, {visible: false})
     gameState.availableEntity.push(entity)
     syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catEntityId + i)
   };

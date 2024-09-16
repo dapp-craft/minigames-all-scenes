@@ -121,7 +121,6 @@ export class gameEntityManager {
     }
 
     public stopGame() {
-        // rocketBoard.hideBoard()
         this.gameEnd = true
         this.resolveReady()
         this.answerReady()
