@@ -1,7 +1,7 @@
 import { TransformType } from '@dcl/sdk/ecs'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { readFile } from '~system/Runtime'
-
+;
 export async function readGltfLocators(fileName: string) {
     const file = await readFile({ fileName })
     
