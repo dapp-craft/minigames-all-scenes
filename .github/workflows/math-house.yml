@@ -1,4 +1,4 @@
-name: spot-the-difference
+name: math-house
 
 on:
   push:
@@ -6,18 +6,18 @@ on:
       - main
       - ci_tests
     paths:
-      - 'SpotTheDifference/**'
+      - 'MathHouse/**'
       - 'common/**'
     tags:
-      - 'stage/steampunk-v*'
+      - 'stage/cats-v*'
 
 jobs:
   testing:
     if: github.ref_type != 'tag'
     uses: ./.github/workflows/deploy_worlds.yml
     with:
-      directory: SpotTheDifference
-      worlds: v01d.crossverse.eth
+      directory: MathHouse
+      worlds: maccoder.crossverse.eth
     secrets:
       DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
 
@@ -25,8 +25,8 @@ jobs:
     if: github.ref_type == 'tag'
     uses: ./.github/workflows/deploy_genesis.yml
     with:
-      directory: SpotTheDifference
+      directory: MathHouse
       server: linker-server.decentraland.today
-      coordinates: '["-138,-94"]'
+      coordinates: '["-85,-97"]'
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}

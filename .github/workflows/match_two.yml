@@ -9,7 +9,7 @@ on:
       - 'MatchTwo/**'
       - 'common/**'
     tags:
-      - 'stage/match-v*'
+      - 'stage/circus-v*'
 
 jobs:
   testing:
