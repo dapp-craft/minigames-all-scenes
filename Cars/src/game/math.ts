@@ -1,6 +1,6 @@
 import { Transform } from '@dcl/sdk/ecs'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { SELL_SIZE_RELATIVE } from '../config'
+import { BOARD_SIZE, SELL_SIZE_RELATIVE } from '../config'
 import { Cell } from './type'
 import { BOARD } from '.'
 
@@ -21,6 +21,13 @@ export function localCoordsToCell(position: Vector3): Cell {
   const zeroPoint = { x: 0, y: 0 }
   zeroPoint.x += Math.floor((position.x + 0.5) / SELL_SIZE_RELATIVE)
   zeroPoint.y += Math.floor((position.y + 0.5) / SELL_SIZE_RELATIVE)
+  
+  // We need this check because the
+  // position of raycast hit point with transformation to local coordinates may be a little bit out of board
+  if (zeroPoint.x < 0) zeroPoint.x = 0
+  if (zeroPoint.y < 0) zeroPoint.y = 0
+  if (zeroPoint.x > BOARD_SIZE - 1) zeroPoint.x = BOARD_SIZE - 1
+  if (zeroPoint.y > BOARD_SIZE - 1) zeroPoint.y = BOARD
   return zeroPoint
 }
 
