@@ -1,0 +1,37 @@
+name: deploy-worlds
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        type: string
+        default: .
+      worlds:
+        required: true
+        type: string
+    secrets:
+      DEPLOY_PKEY:
+        required: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./${{ inputs.directory }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+      - name: install dependencies
+        run: npm install
+      - name: build
+        run: npm run build
+      - name: set worlds name
+        run: node set_worlds_config.mjs ${{ inputs.worlds }}
+      - name: deploy to worlds
+        env:
+          DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
+        run: npm run deploy --skip-build -- --target-content https://worlds-content-server.decentraland.org
