@@ -1,7 +1,7 @@
 {
   "name": "match-two",
   "version": "1.0.0",
-  "description": "SDK7 Template scene",
+  "description": "Minigame 'Match Two'",
   "scripts": {
     "start": "sdk-commands start",
     "deploy": "sdk-commands deploy",
