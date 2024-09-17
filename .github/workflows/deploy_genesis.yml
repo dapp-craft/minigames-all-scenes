@@ -48,9 +48,9 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: project
-      - run: ls -la && echo ${{ vars.SET_DEPLOY_TARGET }}
+      - run: ls -la
       - name: set genesis coordinates
-        run: node -e ${SET_DEPLOY_TARGET} genesis ${{ inputs.coordinates }}
+        run: node -e "${SET_DEPLOY_TARGET}" genesis ${{ inputs.coordinates }}
       - name: deploy to genesis
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
