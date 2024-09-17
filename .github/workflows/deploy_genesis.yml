@@ -14,7 +14,7 @@ on:
         required: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -24,13 +24,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: install dcl
-        run: npm install -g decentraland
       - name: install dependencies
         working-directory: ./
         run: npm install --workspaces=true && pwd && ls ./node_modules/@dcl-sdk
-      - name: build
+      - name: build project
         run: npm run build -- --production --skip-install
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    defaults:
+      run:
+        working-directory: ./${{ inputs.directory }}
+    steps:
+      - name: install decentraland cli
+        run: npm install -g decentraland
       - name: deploy to genesis
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
