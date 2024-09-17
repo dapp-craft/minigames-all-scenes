@@ -27,7 +27,7 @@ jobs:
       DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
 
   deploy-stage:
-    if: github.ref_type == 'tag'
+    if: github.ref_type != 'tag'
     uses: ./.github/workflows/deploy_genesis.yml
     with:
       directory: SpotTheDifference

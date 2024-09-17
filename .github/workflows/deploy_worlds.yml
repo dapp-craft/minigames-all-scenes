@@ -28,9 +28,9 @@ jobs:
       - name: install root dependencies
         if: inputs.directory != '.'
         working-directory: ./
-        run: npm install && ls node_modules
+        run: npm install
       - name: install project dependencies
-        run: npm install && ls node_modules
+        run: npm install
       - name: build
         run: npm run build
       - name: set worlds name
