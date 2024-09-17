@@ -36,6 +36,7 @@ jobs:
           include-hidden-files: true
           name: project
           path: |
+            ../set_deploy_target.mjs
             ./${{ inputs.directory }}
             !./${{ inputs.directory }}/node_modules
   deploy:
