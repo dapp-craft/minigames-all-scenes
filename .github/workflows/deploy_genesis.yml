@@ -26,7 +26,7 @@ jobs:
           node-version: 20
       - name: install dependencies
         working-directory: ./
-        run: npm install --workspaces=true && pwd && ls ./node_modules/@dcl-sdk
+        run: npm install --workspaces=true
       - name: build project
         run: npm run build -- --production --skip-install
   deploy:
@@ -36,6 +36,9 @@ jobs:
       run:
         working-directory: ./${{ inputs.directory }}
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - name: install decentraland cli
         run: npm install -g decentraland
       - name: deploy to genesis
