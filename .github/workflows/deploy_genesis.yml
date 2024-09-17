@@ -26,19 +26,24 @@ jobs:
           node-version: 20
       - name: install dependencies
         working-directory: ./
-        run: npm install --workspaces=true
+        run: npm install
       - name: build project
         run: npm run build -- --production --skip-install
+      - uses: actions/cache@v3
+        with:
+          path: ./${{ inputs.directory }}
+          key: project
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    defaults:
-      run:
-        working-directory: ./${{ inputs.directory }}
     steps:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - uses: actions/cache@v3
+        with:
+          path: ./
+          key: project
       - name: install decentraland cli
         run: npm install -g decentraland
       - name: deploy to genesis
