@@ -30,7 +30,7 @@ jobs:
       - name: install root dependencies
         if: inputs.directory != '.'
         working-directory: ./
-        run: install
+        run: npm install
       - name: install project dependencies
         run: npm install
       - name: build
