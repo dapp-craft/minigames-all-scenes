@@ -36,7 +36,6 @@ jobs:
           include-hidden-files: true
           name: project
           path: |
-            set_deploy_target.mjs
             ./${{ inputs.directory }}
             !./${{ inputs.directory }}/node_modules
   deploy:
@@ -49,9 +48,9 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: project
-      - run: ls -la
+      - run: ls -la && echo ${SET_DEPLOY_TARGET}
       - name: set genesis coordinates
-        run: node ../set_deploy_target.mjs genesis ${{ inputs.coordinates }}
+        run: node -e ${SET_DEPLOY_TARGET} genesis ${{ inputs.coordinates }}
       - name: deploy to genesis
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
