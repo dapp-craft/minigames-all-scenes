@@ -21,10 +21,9 @@ jobs:
         working-directory: ./${{ inputs.directory }}
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 20
       - name: install dcl
         run: npm install -g decentraland
       # - name: install root dependencies
