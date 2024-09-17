@@ -32,7 +32,7 @@ jobs:
       #   working-directory: ./
       #   run: npm install
       - name: install project dependencies
-        run: npm install --workspaces && pwd && ls ../node_modules/@dcl-sdk/mini-games
+        run: npm install --workspaces=true && pwd && ls ../node_modules/@dcl-sdk
       - name: build
         run: npm run build -- --production --skip-install
       - name: deploy to genesis
