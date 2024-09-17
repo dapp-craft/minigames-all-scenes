@@ -25,7 +25,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18.x
-      - name: install dependencies
+      - name: install root dependencies
+        if: inputs.directory != '.'
+        run: npm install
+      - name: install project dependencies
         run: npm install
       - name: build
         run: npm run build
