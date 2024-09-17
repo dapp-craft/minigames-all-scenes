@@ -25,8 +25,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18.x
+      - name: install root dependencies
+        if: inputs.directory != '.'
+        working-directory: ./
+        run: npm install
       - name: install project dependencies
-        run: npm install --workspaces
+        run: npm install
       - name: build
         run: npm run build
       - name: set worlds name
