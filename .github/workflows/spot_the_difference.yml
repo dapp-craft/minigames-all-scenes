@@ -31,6 +31,6 @@ jobs:
     uses: ./.github/workflows/deploy_genesis.yml
     with:
       directory: SpotTheDifference
-      worlds: v01d.dcl.eth
+      server: linker-server.decentraland.today
     secrets:
       DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
