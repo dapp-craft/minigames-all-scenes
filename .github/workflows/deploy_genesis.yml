@@ -27,15 +27,15 @@ jobs:
           node-version: 18.x
       - name: install dcl
         run: npm install -g decentraland
-      - name: install root dependencies
-        if: inputs.directory != '.'
-        working-directory: ./
-        run: npm install
+      # - name: install root dependencies
+      #   if: inputs.directory != '.'
+      #   working-directory: ./
+      #   run: npm install
       - name: install project dependencies
         run: npm install
       - name: build
-        run: npm run build
+        run: npm run build -- --production --skip-install
       - name: deploy to genesis
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
-        run: dcl deploy -t ${{ inputs.server }} --skip-build --skip-validations
+        run: dcl deploy -t ${{ inputs.server }} --skip-build --skip-validations --skip-version-checks
