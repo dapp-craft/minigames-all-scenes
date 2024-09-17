@@ -153,10 +153,10 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":16,
+			"count":20,
 			"max":[
 				1.6552534103393555,
-				0.1550004482269287,
+				0.39877432584762573,
 				6.597631454467773
 			],
 			"min":[
@@ -169,19 +169,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":16,
+			"count":20,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":16,
+			"count":20,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":24,
+			"count":30,
 			"type":"SCALAR"
 		},
 		{
@@ -256,74 +256,74 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":192,
+			"byteLength":240,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":192,
-			"byteOffset":192,
+			"byteLength":240,
+			"byteOffset":240,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":128,
-			"byteOffset":384,
+			"byteLength":160,
+			"byteOffset":480,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":48,
-			"byteOffset":512,
+			"byteLength":60,
+			"byteOffset":640,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":5844,
-			"byteOffset":560,
+			"byteOffset":700,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":5844,
-			"byteOffset":6404,
+			"byteOffset":6544,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":3896,
-			"byteOffset":12248,
+			"byteOffset":12388,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":2646,
-			"byteOffset":16144,
+			"byteOffset":16284,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":48,
-			"byteOffset":18792,
+			"byteOffset":18932,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":48,
-			"byteOffset":18840,
+			"byteOffset":18980,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":32,
-			"byteOffset":18888,
+			"byteOffset":19028,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":12,
-			"byteOffset":18920,
+			"byteOffset":19060,
 			"target":34963
 		}
 	],
@@ -335,7 +335,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":18932,
+			"byteLength":19072,
 			"uri":"obj_text.bin"
 		}
 	]
