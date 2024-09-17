@@ -2,8 +2,8 @@ name: deploy-room-2-scene:test
 
 on:
   push:
-    branches:
-    - main
+    # branches:
+    # - main
     # paths:
     #   - 'SpotTheDifference/**'
     #   - 'common/**'
