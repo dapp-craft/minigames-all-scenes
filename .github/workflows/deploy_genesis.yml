@@ -28,7 +28,7 @@ jobs:
         run: npm install -g decentraland
       - name: install dependencies
         working-directory: ./
-        run: npm install --workspaces=true && pwd && ls ../node_modules/@dcl-sdk
+        run: npm install --workspaces=true && pwd && ls ./node_modules/@dcl-sdk
       - name: build
         run: npm run build -- --production --skip-install
       - name: deploy to genesis
