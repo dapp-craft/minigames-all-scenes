@@ -47,3 +47,18 @@ function inverseQuaternion(quaternion: Quaternion) {
     z: conjugate.z / normSquared
   }
 }
+
+
+export function getDirectionVector(direction: number) {
+  switch (direction) {
+    case 0:
+      return Vector3.Up()
+    case 1:
+      return Vector3.Down()
+    case 2:
+      return Vector3.Left()
+    case 3:
+      return Vector3.Right()
+  }
+  return Vector3.Zero()
+}
