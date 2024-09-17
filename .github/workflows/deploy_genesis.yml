@@ -31,7 +31,6 @@ jobs:
         run: npm run build -- --production --skip-install
       - uses: actions/upload-artifact@v4
         with:
-          working-directory: ./${{ inputs.directory }}
           retention-days: 1
           include-hidden-files: true
           path: |
