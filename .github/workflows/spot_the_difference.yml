@@ -17,14 +17,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "${{ github.ref }} ${{github.ref_name}} ${{github.ref_type}}"
-  deploy-test:
-    if: github.ref_type != 'tag'
-    uses: ./.github/workflows/deploy_worlds.yml
-    with:
-      directory: SpotTheDifference
-      worlds: v01d.dcl.eth
-    secrets:
-      DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
+  # deploy-test:
+  #   if: github.ref_type != 'tag'
+  #   uses: ./.github/workflows/deploy_worlds.yml
+  #   with:
+  #     directory: SpotTheDifference
+  #     worlds: v01d.dcl.eth
+  #   secrets:
+  #     DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
 
   deploy-stage:
     if: github.ref_type != 'tag'
