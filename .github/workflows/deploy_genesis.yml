@@ -50,7 +50,7 @@ jobs:
           name: project
       - run: ls -la
       - name: set genesis coordinates
-        run: node -e "${SET_DEPLOY_TARGET}" genesis ${{ inputs.coordinates }}
+        run: node -e "${{ vars.SET_DEPLOY_TARGET }}" genesis ${{ inputs.coordinates }}
       - name: deploy to genesis
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
