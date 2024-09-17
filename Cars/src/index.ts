@@ -4,31 +4,32 @@ import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
+import { initGame } from './game'
 
+// const handlers = {
+//     start: () => {},
+//     exit: () => {},
+//     restart: () => {},
+//     toggleMusic: () => {},
+//     toggleSfx: () => {}
+// }
 
-const handlers = {
-    start: () => {},
-    exit: () => {},
-    restart: () => {},
-    toggleMusic: () => {},
-    toggleSfx: () => {}
-}
+// const libraryReady = initMiniGame('', TIME_LEVEL_MOVES, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
 
-const libraryReady = initMiniGame('', TIME_LEVEL_MOVES, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
+// const MODELS: string[] = [
+//     'models/obj_floor.gltf'
+// ]
 
-const MODELS: string[] = [
-    'models/obj_floor.gltf'
-]
-
-executeTask(async () => {
-    for (const model of MODELS) {
-        const entity = engine.addEntity()
-        GltfContainer.create(entity, {src: model})
-        Transform.create(entity, {parent: sceneParentEntity})
-    }
-})
+// executeTask(async () => {
+//     for (const model of MODELS) {
+//         const entity = engine.addEntity()
+//         GltfContainer.create(entity, {src: model})
+//         Transform.create(entity, {parent: sceneParentEntity})
+//     }
+// })
 
 
 export async function main() {
-    await libraryReady
+    // await libraryReady
+    initGame()
 }
