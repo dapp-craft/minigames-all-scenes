@@ -1,0 +1,31 @@
+name: cats
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'MathHouse/**'
+      - 'common/**'
+    tags:
+      - 'stage/cats-v*'
+
+jobs:
+  testing:
+    if: github.ref_type != 'tag'
+    uses: ./.github/workflows/.deploy_worlds.yml
+    with:
+      directory: MathHouse
+      worlds: maccoder.crossverse.eth
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
+
+  staging:
+    if: github.ref_type == 'tag'
+    uses: ./.github/workflows/.deploy_genesis.yml
+    with:
+      directory: MathHouse
+      server: linker-server.decentraland.today
+      coordinates: '["-85,-97"]'
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}

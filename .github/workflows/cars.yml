@@ -1,0 +1,31 @@
+name: cars
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Cars/**'
+      - 'common/**'
+    tags:
+      - 'stage/cars-v*'
+
+jobs:
+  testing:
+    if: github.ref_type != 'tag'
+    uses: ./.github/workflows/.deploy_worlds.yml
+    with:
+      directory: Cars
+      worlds: snikes.crossverse.eth
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
+
+  staging:
+    if: github.ref_type == 'tag'
+    uses: ./.github/workflows/.deploy_genesis.yml
+    with:
+      directory: Cars
+      server: linker-server.decentraland.today
+      coordinates: '["-139,-28"]'
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}

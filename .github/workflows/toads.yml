@@ -1,0 +1,31 @@
+name: toads
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Toads/**'
+      - 'common/**'
+    tags:
+      - 'stage/toads-v*'
+
+jobs:
+  testing:
+    if: github.ref_type != 'tag'
+    uses: ./.github/workflows/.deploy_worlds.yml
+    with:
+      directory: Toads
+      worlds: maccoder.crossverse.eth
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
+
+  staging:
+    if: github.ref_type == 'tag'
+    uses: ./.github/workflows/.deploy_genesis.yml
+    with:
+      directory: Toads
+      server: linker-server.decentraland.today
+      coordinates: '["-109,-97"]'
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
