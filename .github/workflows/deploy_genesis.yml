@@ -48,7 +48,6 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: project
-      - run: ls -la
       - name: set genesis coordinates
         run: node -e '${{ vars.SET_DEPLOY_TARGET }}' genesis '${{ inputs.coordinates }}'
       - name: deploy to genesis
