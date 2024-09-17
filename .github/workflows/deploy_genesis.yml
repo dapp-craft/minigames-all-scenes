@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: 18.x
       - name: install dcl
-        run: npm install dcl
+        run: npm install -g dcl
       - name: install root dependencies
         if: inputs.directory != '.'
         working-directory: ./
