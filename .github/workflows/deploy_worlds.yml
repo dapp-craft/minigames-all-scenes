@@ -28,7 +28,7 @@ jobs:
       - name: install root dependencies
         if: inputs.directory != '.'
         working-directory: ./
-        run: npm install
+        run: pwd && npm install
       - name: install project dependencies
         run: npm install
       - name: build
@@ -38,4 +38,4 @@ jobs:
       - name: deploy to worlds
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
-        run: npm run deploy --skip-build -- --target-content https://worlds-content-server.decentraland.org
+        run: npm run deploy -- --skip-build --target-content https://worlds-content-server.decentraland.org
