@@ -34,7 +34,7 @@ jobs:
       - name: build
         run: npm run build
       - name: set worlds name
-        run: node set_worlds_config.mjs ${{ inputs.worlds }}
+        run: node ../set_worlds_config.mjs ${{ inputs.worlds }}
       - name: deploy to worlds
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
