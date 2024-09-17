@@ -1,5 +1,4 @@
-name: spot-the-difference
-
+name: steampunk
 on:
   push:
     branches:
@@ -14,7 +13,7 @@ on:
 jobs:
   testing:
     if: github.ref_type != 'tag'
-    uses: ./.github/workflows/deploy_worlds.yml
+    uses: ./.github/workflows/.deploy_worlds.yml
     with:
       directory: SpotTheDifference
       worlds: v01d.crossverse.eth
@@ -23,7 +22,7 @@ jobs:
 
   staging:
     if: github.ref_type == 'tag'
-    uses: ./.github/workflows/deploy_genesis.yml
+    uses: ./.github/workflows/.deploy_genesis.yml
     with:
       directory: SpotTheDifference
       server: linker-server.decentraland.today
