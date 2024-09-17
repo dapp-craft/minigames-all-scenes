@@ -11,7 +11,7 @@ async function patchSceneConfig(key, value) {
     return jsonData
 }
 
-const [, , target, value] = process.argv
+const [target, value] = process.argv.slice(-2)
 let result
 if (target === 'worlds' && value) {
     result = patchSceneConfig('worldConfiguration', { name: value })
