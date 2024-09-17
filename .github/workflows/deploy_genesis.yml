@@ -36,4 +36,4 @@ jobs:
       - name: deploy to genesis
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
-        run: dcl deploy -t ${{ inputs.server }} --skip-build --skip-validations
+        run: npx dcl deploy -t ${{ inputs.server }} --skip-build --skip-validations
