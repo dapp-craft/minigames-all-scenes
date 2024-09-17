@@ -22,8 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
       - name: install dependencies
         working-directory: ./
         run: npm install
@@ -33,16 +31,13 @@ jobs:
         with:
           retention-days: 1
           include-hidden-files: true
-          path: |
-            ./
-            !src
+          path: ./${{ inputs.directory }}/bin
   deploy:
     runs-on: ubuntu-latest
-    # needs: build
+    needs: build
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
       - name: install decentraland cli
         run: npm install -g decentraland
       - uses: actions/download-artifact@v4
