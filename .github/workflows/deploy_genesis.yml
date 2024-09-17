@@ -22,11 +22,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-      # - name: install dependencies
-      #   working-directory: ./
-      #   run: npm install
-      # - name: build project
-      #   run: npm run build -- --production --skip-install
+      - name: install dependencies
+        working-directory: ./
+        run: npm install
+      - name: build project
+        run: npm run build -- --production --skip-install
       - uses: actions/upload-artifact@v4
         with:
           retention-days: 1
@@ -43,8 +43,6 @@ jobs:
       - name: install decentraland cli
         run: npm install -g decentraland
       - uses: actions/download-artifact@v4
-        with:
-          name: project
       - run: ls -la
       - name: deploy to genesis
         env:
