@@ -43,7 +43,8 @@ jobs:
       - name: install decentraland cli
         run: npm install -g decentraland
       - uses: actions/download-artifact@v4
-      - run: ls -la
+        with:
+          name: project
       - name: deploy to genesis
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
