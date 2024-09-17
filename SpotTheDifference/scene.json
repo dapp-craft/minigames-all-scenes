@@ -16,27 +16,18 @@
   "tags": [],
   "scene": {
     "parcels": [
-      "-138,-94"
+      "0,0"
     ],
-    "base": "-138,-94"
+    "base": "0,0"
   },
   "spawnPoints": [
     {
       "name": "spawn1",
       "default": true,
       "position": {
-        "x": [
-          3,
-          13
-        ],
-        "y": [
-          1,
-          1
-        ],
-        "z": [
-          11,
-          15
-        ]
+        "x": [3, 13],
+        "y": [1, 1],
+        "z": [11, 15]
       },
       "cameraTarget": {
         "x": 8,
