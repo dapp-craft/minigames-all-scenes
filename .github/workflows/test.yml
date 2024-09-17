@@ -12,9 +12,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ github.ref }} ${{github.ref_name}}"
+      - run: echo "${{ github.ref }} ${{github.ref_name}} ${{github.ref_type}}"
   deploy-room-scene-worlds:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref_type == 'tag'
     uses: ./.github/workflows/deploy_worlds.yml
     with:
       directory: SpotTheDifference
