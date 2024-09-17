@@ -15,7 +15,7 @@ jobs:
       - run: echo "${{ github.ref }} ${{github.ref_name}}"
   deploy-room-scene-worlds:
     if: github.ref == 'refs/heads/main'
-    uses: ./common/deploy_worlds.yml@main
+    uses: .github/workflows/common/deploy_worlds.yml@main
     with:
       directory: SpotTheDifference
       worlds: v01d.dcl.eth
