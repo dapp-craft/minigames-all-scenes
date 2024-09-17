@@ -23,10 +23,11 @@ jobs:
       DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
 
   deploy-stage:
-    if: github.ref_type == 'tag'
+    if: github.ref_type != 'tag'
     uses: ./.github/workflows/deploy_genesis.yml
     with:
       directory: SpotTheDifference
       server: linker-server.decentraland.today
+      coordinates: '["-138,-94"]'
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}

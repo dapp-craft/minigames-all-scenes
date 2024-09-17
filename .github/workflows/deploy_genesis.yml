@@ -6,6 +6,9 @@ on:
       directory:
         type: string
         default: .
+      coordinates:
+        required: true
+        type: string
       server:
         required: true
         type: string
@@ -45,6 +48,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: project
+      - name: set genesis coordinates
+        run: node ../set_deploy_target.mjs genesis ${{ inputs.coordinates }}
       - name: deploy to genesis
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
