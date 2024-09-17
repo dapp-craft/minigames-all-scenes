@@ -1,6 +1,6 @@
-import * as process from 'process';
-import * as fs from 'node:fs/promises'
-import * as path from 'path';
+const process = require('process')
+const fs = require('node:fs/promises')
+const path = require('path')
 
 const FILE_PATH = path.join(process.cwd(), 'scene.json')
 
