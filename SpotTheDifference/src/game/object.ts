@@ -1,24 +1,29 @@
 import { Entity, engine, Transform, GltfContainer, ColliderLayer, InputAction, pointerEventsSystem, TransformType, Tween, EasingFunction, TweenSequence, TweenLoop } from "@dcl/sdk/ecs"
 import { VARIANT } from "./types"
 import { Vector3 } from "@dcl/sdk/math"
+import * as utils from '@dcl-sdk/utils'
 
 export class GameObject {
     private entity: Entity
-    private origSrc: string
+    private baseSrc: string
     private altSrc: string
+    private altVarSrc: string
     private differs: boolean
+    private marked: boolean = false
+    private timer: ReturnType<typeof utils.timers.setTimeout> | undefined
     
-    constructor(private model: string, origVar: VARIANT, altVar: VARIANT, transform: TransformType) {
+    constructor(private model: string, base: VARIANT, altVar: VARIANT, transform: TransformType) {
         this.differs = altVar !== VARIANT.ALT
         this.entity = engine.addEntity()
         Transform.create(this.entity, transform)
         
-        this.origSrc = `models/${model}_${origVar}.gltf`
-        this.altSrc = `models/${model}_${altVar}.gltf`
-        console.log(this.origSrc, this.altSrc, origVar, altVar)
+        this.baseSrc = `models/${model}_${base}.gltf`
+        this.altSrc = `models/${model}_alt.gltf`
+        this.altVarSrc = `models/${model}_${altVar}.gltf`
+        // console.log(this.origSrc, this.altSrc, base, altVar)
         
         GltfContainer.create(this.entity, {
-            src: this.origSrc,
+            src: this.baseSrc,
             visibleMeshesCollisionMask: ColliderLayer.CL_POINTER | ColliderLayer.CL_PHYSICS
         })
         
@@ -28,26 +33,42 @@ export class GameObject {
                 opts: { button: InputAction.IA_POINTER, hoverText: 'Click to toggle', showFeedback: false }
             },
             () => {
-                if (!this.differs) return
-                pointerEventsSystem.removeOnPointerDown(this.entity)
-                Tween.createOrReplace(this.entity, {
-                    mode: Tween.Mode.Move({
-                        start: Transform.get(this.entity).position,
-                        end: Vector3.add(Transform.get(this.entity).position, Vector3.create(0, 1, 0)),
-                    }),
-                    duration: 500,
-                    easingFunction: EasingFunction.EF_EASECIRC,
-                })
-                TweenSequence.createOrReplace(this.entity, {
-                    sequence: [],
-                    loop: TweenLoop.TL_YOYO
-                })
+                this.mark()
             }
         )
     }
+
+    private mark() {
+        if (!this.differs) return
+        this.marked = true
+        this.toggle(GltfContainer.get(this.entity).src !== this.baseSrc)
+        pointerEventsSystem.removeOnPointerDown(this.entity)
+        Tween.createOrReplace(this.entity, {
+            mode: Tween.Mode.Move({
+                start: Transform.get(this.entity).position,
+                end: Vector3.add(Transform.get(this.entity).position, Vector3.create(0, 0.05, 0)),
+            }),
+            duration: 1000,
+            easingFunction: EasingFunction.EF_EASESINE,
+        })
+        TweenSequence.createOrReplace(this.entity, {
+            sequence: [],
+            loop: TweenLoop.TL_YOYO
+        })
+    }
     
     public toggle(alt: Boolean) {
-        GltfContainer.getMutable(this.entity).src = alt ? this.altSrc : this.origSrc
+        if (!alt) {
+            if (this.timer) utils.timers.clearTimeout(this.timer)
+            GltfContainer.getMutable(this.entity).src = this.marked ? this.altVarSrc : this.baseSrc
+            console.log('to base')
+        } else if (!this.differs || this.marked) {
+            GltfContainer.getMutable(this.entity).src = this.marked ? this.baseSrc : this.altVarSrc
+            console.log('to alt')
+        } else {
+            GltfContainer.getMutable(this.entity).src = this.altSrc
+            this.timer = utils.timers.setTimeout(() => GltfContainer.getMutable(this.entity).src = this.altVarSrc, Math.random() * 1000)
+        }
     }
     
     public destroy() {
