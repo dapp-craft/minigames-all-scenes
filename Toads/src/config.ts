@@ -1,6 +1,7 @@
 export const toadsGameConfig = {
     initialEntityAmount: 20,
-    ToadsAmount: 9
+    ToadsAmount: 9,
+    gameTime: 30000
 }
 
 export const tempLocators = new Map([
