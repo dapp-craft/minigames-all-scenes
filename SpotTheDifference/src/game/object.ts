@@ -8,8 +8,9 @@ export class GameObject {
     private baseSrc: string
     private altSrc: string
     private altVarSrc: string
-    private differs: boolean
-    private marked: boolean = false
+    public readonly differs: boolean
+    private marked = new Promise<GameObject>(resolve => this.resolveMarked = resolve)
+    private resolveMarked!: (value: GameObject) => void
     private timer: ReturnType<typeof utils.timers.setTimeout> | undefined
     
     constructor(private model: string, base: VARIANT, altVar: VARIANT, transform: TransformType) {
@@ -40,7 +41,7 @@ export class GameObject {
 
     private mark() {
         if (!this.differs) return
-        this.marked = true
+        this.resolveMarked(this)
         this.toggle(GltfContainer.get(this.entity).src !== this.baseSrc)
         pointerEventsSystem.removeOnPointerDown(this.entity)
         Tween.createOrReplace(this.entity, {
@@ -56,14 +57,18 @@ export class GameObject {
             loop: TweenLoop.TL_YOYO
         })
     }
+
+    public get isMarked() {
+        return this.marked
+    }
     
-    public toggle(alt: Boolean) {
+    public async toggle(alt: Boolean) {
         if (!alt) {
             if (this.timer) utils.timers.clearTimeout(this.timer)
-            GltfContainer.getMutable(this.entity).src = this.marked ? this.altVarSrc : this.baseSrc
+            Promise.race([this.marked, undefined]).then(m => GltfContainer.getMutable(this.entity).src = m ? this.altVarSrc : this.baseSrc)
             console.log('to base')
-        } else if (!this.differs || this.marked) {
-            GltfContainer.getMutable(this.entity).src = this.marked ? this.baseSrc : this.altVarSrc
+        } else if (!this.differs || await Promise.race([this.marked, undefined])) {
+            Promise.race([this.marked, undefined]).then(m => GltfContainer.getMutable(this.entity).src = m ? this.baseSrc : this.altVarSrc)
             console.log('to alt')
         } else {
             GltfContainer.getMutable(this.entity).src = this.altSrc

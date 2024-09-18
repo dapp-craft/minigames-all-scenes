@@ -1,4 +1,4 @@
-import { engine, Entity, GltfContainer, GltfContainerLoadingState, InputAction, inputSystem, LoadingState, PointerEventType, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
+import { engine, Entity, executeTask, GltfContainer, GltfContainerLoadingState, InputAction, inputSystem, LoadingState, PointerEventType, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../common/locators'
 import * as utils from '@dcl-sdk/utils'
 import { initMiniGame } from '../../common/library'
@@ -13,11 +13,21 @@ const root = engine.addEntity()
 Transform.create(root, {position: {x: 8, y: 0, z: 8}})
 
 let alt = false
+let currentLevel = 1 as keyof typeof LEVELS
 
 const handlers = {
-    start: () => {
-        gameObjects = generateLevelObjects(LEVELS[1].difficulty, LEVELS[1].total)
+    start: async () => {
+        gameObjects = generateLevelObjects(LEVELS[currentLevel].difficulty, LEVELS[currentLevel].total)
         gameObjects.forEach(o => o.toggle(alt))
+        const targets = new Set(gameObjects.filter(o => o.differs))
+        for (let i = 0; i < LEVELS[currentLevel].goal; i++) {
+            let t = await Promise.race(Array.from(targets).map(t => t.isMarked))
+            targets.delete(t)
+            console.log("found", t)
+        }
+        console.log("win")
+        if (LEVELS[++currentLevel as keyof typeof LEVELS]) handlers.restart()
+        else handlers.exit()
     },
     exit: () => {
         gameObjects.forEach(o => o.destroy())
@@ -67,13 +77,12 @@ export async function main() {
     
     engine.addSystem(() => {
         if (!queue.isActive()) return
-        if (inputSystem.isTriggered(InputAction.IA_PRIMARY, PointerEventType.PET_DOWN)) {
-            // objects.forEach((o, i) => utils.timers.setTimeout(() => o.toggle(), Math.random() * 1000))
+        if (inputSystem.isTriggered(InputAction.IA_PRIMARY, PointerEventType.PET_DOWN)) executeTask(async () => {
             alt = !alt
-            gameObjects.forEach(o => o.toggle(alt))
+            await Promise.all(gameObjects.map(o => o.toggle(alt)))
             staticModels[VARIANT.ALT].forEach(o => VisibilityComponent.getMutable(o).visible = alt)
             staticModels[VARIANT.BASE].forEach(o => VisibilityComponent.getMutable(o).visible = !alt)
-        } else if (inputSystem.isTriggered(InputAction.IA_SECONDARY, PointerEventType.PET_UP)) {
+        }); else if (inputSystem.isTriggered(InputAction.IA_SECONDARY, PointerEventType.PET_UP)) {
             handlers.restart()
         }
     })
