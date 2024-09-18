@@ -8,7 +8,8 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0
+				0,
+				1
 			]
 		}
 	],
@@ -16,6 +17,10 @@
 		{
 			"mesh":0,
 			"name":"obj_car01"
+		},
+		{
+			"mesh":1,
+			"name":"obj_car01_collider"
 		}
 	],
 	"materials":[
@@ -87,6 +92,19 @@
 					},
 					"indices":11,
 					"material":2
+				}
+			]
+		},
+		{
+			"name":"Cube.034",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":12,
+						"NORMAL":13,
+						"TEXCOORD_0":14
+					},
+					"indices":15
 				}
 			]
 		}
@@ -224,6 +242,40 @@
 			"componentType":5123,
 			"count":120,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":12,
+			"componentType":5126,
+			"count":2517,
+			"max":[
+				0.33972492814064026,
+				0.5458112955093384,
+				0.3486214280128479
+			],
+			"min":[
+				-0.3482661247253418,
+				-0.012301536276936531,
+				-1.7793958187103271
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":13,
+			"componentType":5126,
+			"count":2517,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":14,
+			"componentType":5126,
+			"count":2517,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":15,
+			"componentType":5123,
+			"count":8556,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -298,6 +350,30 @@
 			"byteLength":240,
 			"byteOffset":97416,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":30204,
+			"byteOffset":97656,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":30204,
+			"byteOffset":127860,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":20136,
+			"byteOffset":158064,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":17112,
+			"byteOffset":178200,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -308,7 +384,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":97656,
+			"byteLength":195312,
 			"uri":"obj_car01.bin"
 		}
 	]
