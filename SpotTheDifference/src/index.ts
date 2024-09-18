@@ -7,7 +7,10 @@ import { LEVELS } from './game/levels'
 import { GameObject } from './game/object'
 import { generateLevelObjects, init } from './game'
 import { VARIANT } from './game/types'
-import { queue } from '@dcl-sdk/mini-games/src'
+import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
+import { movePlayerTo } from '~system/RestrictedActions'
+import { Vector3 } from '@dcl/sdk/math'
+import { setupWinAnimations, startWinAnimation } from './game/gameEfffects'
 
 const root = engine.addEntity()
 Transform.create(root, {position: {x: 8, y: 0, z: 8}})
@@ -23,11 +26,18 @@ const handlers = {
         for (let i = 0; i < LEVELS[currentLevel].goal; i++) {
             let t = await Promise.race(Array.from(targets).map(t => t.isMarked))
             targets.delete(t)
-            console.log("found", t)
+            console.log("found", t) 
         }
         console.log("win")
-        if (LEVELS[++currentLevel as keyof typeof LEVELS]) handlers.restart()
-        else handlers.exit()
+        let pos = await positions.then(data => Vector3.add(data.get('area_playSpawn')!.position, Transform.get(sceneParentEntity).position))
+        movePlayerTo({newRelativePosition: pos, cameraTarget: Vector3.add(pos, Vector3.scale(Vector3.Backward(), 5))})
+        handlers.exit()
+        await new Promise<void>(r => startWinAnimation(r))
+        if (LEVELS[currentLevel + 1 as keyof typeof LEVELS]) {
+            currentLevel++
+            handlers.start()
+        }
+        else queue.setNextPlayer()
     },
     exit: () => {
         gameObjects.forEach(o => o.destroy())
@@ -40,8 +50,9 @@ const handlers = {
     toggleMusic: () => {},
     toggleSfx: () => {}
 }
+let positions = readGltfLocators(`locators/obj_locators_default.gltf`)
 
-initMiniGame('059739aa-376f-4bcd-adc5-4081d808bc9a', TIME_LEVEL, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
+initMiniGame('059739aa-376f-4bcd-adc5-4081d808bc9a', TIME_LEVEL, positions, handlers)
 let gameObjects: GameObject[] = []
 
 const STATIC_MODELS = {
@@ -74,6 +85,7 @@ export async function main() {
     }
 
     await init(root)
+    setupWinAnimations()
     
     engine.addSystem(() => {
         if (!queue.isActive()) return
