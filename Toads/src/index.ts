@@ -50,9 +50,15 @@ const generateInitialEntity = () => {
         const entity = engine.addEntity()
         toadsGameState.availableEntity.push(entity)
     }
-    let board = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 1]
+    const board = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 1]
+    const hammerEntity = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 2]
+
     Transform.create(board, { ...tempLocators.get(`Board`), parent: sceneParentEntity })
+    
     MeshRenderer.setPlane(board)
     MeshCollider.setPlane(board)
+
     toadsGameState.listOfEntity.set('board', board)
+    toadsGameState.listOfEntity.set('hammer', hammerEntity)
+
 }
