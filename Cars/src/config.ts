@@ -19,9 +19,3 @@ export const CELL_SIZE_PHYSICAL = BOARD_PHYSICAL_SIZE / BOARD_SIZE
  * Offset = BOARD_PHYSICAL_SIZE * COLLIDER_OFFSET_COEFFICIENT
  */
 export const COLLIDER_OFFSET_COEFFICIENT = -0.005
-
-export const BOARD_TRANSFORM: TransformType = {
-  position: Vector3.create(8.5, 0.2, 8.5),
-  scale: Vector3.create(BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE),
-  rotation: Quaternion.fromEulerDegrees(90, 0, 0)
-}

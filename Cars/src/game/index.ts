@@ -19,16 +19,14 @@ import {
 import * as utils from '@dcl-sdk/utils'
 import { Quaternion, Vector3 } from '@dcl/ecs-math'
 import { CarDirection, Cell } from './type'
-import { cellRelativePosition, globalCoordsToLocal, localCoordsToCell, getDirectionVector } from './math'
-import { BOARD_PHYSICAL_SIZE, BOARD_TRANSFORM, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE, COLLIDER_OFFSET_COEFFICIENT } from '../config'
-import { boardTexture, carModels } from '../resources/resources'
+import { globalCoordsToLocal, localCoordsToCell, getDirectionVector } from './math'
+import { CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE } from '../config'
 import { Car } from './components/definitions'
 import { setUpSynchronizer } from './synchronizer'
-import { syncEntity } from '@dcl/sdk/network'
+import { createBoard } from './objects/board'
+import { createCar } from './objects/car'
 
 let lookingAt: Cell | undefined = undefined
-export let BOARD: Entity
-export let BOARD_COLLIDER: Entity
 
 const selectedCar: {
   car: Entity | undefined,
@@ -40,52 +38,13 @@ const selectedCar: {
   currentCell: undefined
 }
 
-function createBoard(tranform: TransformType) {
-  const board = engine.addEntity()
-  Transform.create(board, tranform)
-  Material.setPbrMaterial(board, {
-    texture: Material.Texture.Common({
-      src: boardTexture
-    })
-  })
-  MeshRenderer.setPlane(board)
-  BOARD = board
-
-  const boardCollider = engine.addEntity()
-  Transform.create(boardCollider, {
-    position: Vector3.create(0, 0, BOARD_PHYSICAL_SIZE * COLLIDER_OFFSET_COEFFICIENT),
-    parent: board
-  })
-  MeshCollider.setPlane(boardCollider, [ColliderLayer.CL_PHYSICS, ColliderLayer.CL_CUSTOM1])
-  BOARD_COLLIDER = boardCollider
-
-}
-
-function drawPoint(cell: Cell, id: number) {
-  const point = engine.addEntity()
-  Transform.create(point, {
-    position: cellRelativePosition(cell),
-    scale: Vector3.scale(Vector3.One(), CELL_SIZE_RELATIVE),
-    rotation: Quaternion.Identity(),
-    parent: BOARD
-  })
-  GltfContainer.create(point, carModels[2])
-  Car.create(point, {
-    position: cell,
-    direction: Math.floor(Math.random() * 4) as CarDirection,
-    length: 2,
-    inGame: true
-  })
-  syncEntity(point, [Car.componentId], id)
-  return point
-}
 
 export async function initGame() {
-  createBoard(BOARD_TRANSFORM)
+  createBoard()
 
-  drawPoint({ x: 4, y: 4 }, 1000)
-  drawPoint({ x: 1, y: 1 }, 1001)
-  drawPoint({ x: 3, y: 3 }, 1002)
+  createCar({ x: 4, y: 4 }, 2000)
+  createCar({ x: 1, y: 1 }, 1001)
+  createCar({ x: 3, y: 3 }, 1002)
 
   setUpRaycast()
 

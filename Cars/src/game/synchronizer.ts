@@ -1,8 +1,9 @@
-import { EasingFunction, Entity, Transform, Tween, engine } from '@dcl/sdk/ecs'
+import { EasingFunction, Entity, GltfContainer, Transform, Tween, engine } from '@dcl/sdk/ecs'
 import { CarDirection, Cell } from './type'
 import { Car } from './components/definitions'
 import { cellRelativePosition } from './math'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
+import { carModels } from '../resources/resources'
 
 const CarsLatest: Record<Entity, String> = {}
 
@@ -11,8 +12,8 @@ export function setUpSynchronizer() {
     for (const [carEntirt] of engine.getEntitiesWith(Car)){
         const carDataHash = hash(Car.get(carEntirt))
         if (CarsLatest[carEntirt] !== carDataHash) {
-            CarsLatest[carEntirt] = carDataHash
             updateCar(carEntirt)
+            CarsLatest[carEntirt] = carDataHash
         }
     }
   })
@@ -23,6 +24,8 @@ function updateCar(car: Entity) {
 
     const startPosition = Transform.get(car).position
     const endPosition = cellRelativePosition(carData.position)
+
+    // Position
     if (!Vector3.equals(startPosition, endPosition)) {
     Tween.createOrReplace(car, {
         mode: Tween.Mode.Move({
@@ -33,7 +36,14 @@ function updateCar(car: Entity) {
         easingFunction: Tween.has(car) ? EasingFunction.EF_EASEOUTCUBIC : EasingFunction.EF_EASECUBIC,
     })
     }
+
+    // Rotation
     Transform.getMutable(car).rotation = rotationToQuaterion(carData.direction)
+
+    //Model
+    if (GltfContainer.getOrNull(car)?.src !== carModels[carData.length as keyof typeof carModels].src) {
+        GltfContainer.createOrReplace(car, carModels[carData.length as keyof typeof carModels])
+    }
 }
 
 function hash(data: any) {
