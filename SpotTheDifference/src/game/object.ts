@@ -2,7 +2,12 @@ import { Entity, engine, Transform, GltfContainer, ColliderLayer, InputAction, p
 import { VARIANT } from "./types"
 import { Vector3 } from "@dcl/sdk/math"
 import * as utils from '@dcl-sdk/utils'
+import { cooldown } from "../ui"
 
+let cooldownDefault = 2
+let cooldwnBase = cooldownDefault
+
+engine.addSystem(dt => cooldown.value = Math.max(0, cooldown.value - dt))
 export class GameObject {
     private entity: Entity
     private baseSrc: string
@@ -34,7 +39,15 @@ export class GameObject {
                 opts: { button: InputAction.IA_POINTER, hoverText: 'Click to toggle', showFeedback: false }
             },
             () => {
-                this.mark()
+                if (cooldown.value > 0) console.log("can't click")
+                else if (this.differs) {
+                    this.mark()
+                    cooldwnBase = cooldownDefault
+                } else {
+                    cooldown.value = cooldwnBase
+                    cooldwnBase *= 2
+                }
+                console.log(cooldown.value, cooldwnBase)
             }
         )
     }

@@ -11,6 +11,8 @@ import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { Vector3 } from '@dcl/sdk/math'
 import { setupWinAnimations, startWinAnimation } from './game/gameEfffects'
+import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
+import { ui } from './ui'
 
 const root = engine.addEntity()
 Transform.create(root, {position: {x: 8, y: 0, z: 8}})
@@ -86,6 +88,7 @@ export async function main() {
 
     await init(root)
     setupWinAnimations()
+    ReactEcsRenderer.setUiRenderer(ui)
     
     engine.addSystem(() => {
         if (!queue.isActive()) return
