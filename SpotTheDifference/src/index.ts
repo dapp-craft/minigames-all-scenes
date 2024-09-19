@@ -1,4 +1,4 @@
-import { engine, Entity, executeTask, GltfContainer, GltfContainerLoadingState, InputAction, inputSystem, LoadingState, PointerEventType, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
+import { EasingFunction, engine, Entity, executeTask, GltfContainer, GltfContainerLoadingState, InputAction, inputSystem, LoadingState, Material, MeshCollider, MeshRenderer, PointerEvents, pointerEventsSystem, PointerEventType, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../common/locators'
 import * as utils from '@dcl-sdk/utils'
 import { initMiniGame } from '../../common/library'
@@ -9,7 +9,7 @@ import { generateLevelObjects, init } from './game'
 import { VARIANT } from './game/types'
 import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
-import { Vector3 } from '@dcl/sdk/math'
+import { Color3, Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { setupWinAnimations, startWinAnimation } from './game/gameEfffects'
 import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { ui } from './ui'
@@ -89,14 +89,49 @@ export async function main() {
     await init(root)
     setupWinAnimations()
     ReactEcsRenderer.setUiRenderer(ui)
-    
-    engine.addSystem(() => {
-        if (!queue.isActive()) return
-        if (inputSystem.isTriggered(InputAction.IA_PRIMARY, PointerEventType.PET_DOWN)) executeTask(async () => {
+    const clock = engine.addEntity()
+    MeshRenderer.setCylinder(clock, 0.1, 0.1)
+    MeshCollider.setCylinder(clock, 0.1, 0.1)
+    Transform.create(clock, {position: Vector3.create(8, 2.1, 1.3), scale: Vector3.create(1, 2, 1)})
+    Material.setBasicMaterial(clock, {
+        diffuseColor: Color4.Red()
+    })
+    pointerEventsSystem.onPointerDown({
+        entity: clock,
+        opts: {
+            button: InputAction.IA_PRIMARY,
+            hoverText: "PRESS ME",
+        }
+    }, () => {
+        Tween.createOrReplace(clock, {
+            mode: {
+                $case: 'rotate',
+                rotate: {
+                    start: Quaternion.Identity(),
+                    end: Quaternion.fromEulerDegrees(0, 0, 180)
+                }
+            },
+            duration: 1000,
+            easingFunction: EasingFunction.EF_EASEQUAD,
+            playing: true,
+            currentTime: 0
+        })
+        utils.timers.setTimeout(async () => {
+            Tween.deleteFrom(clock)
             alt = !alt
             await Promise.all(gameObjects.map(o => o.toggle(alt)))
             staticModels[VARIANT.ALT].forEach(o => VisibilityComponent.getMutable(o).visible = alt)
             staticModels[VARIANT.BASE].forEach(o => VisibilityComponent.getMutable(o).visible = !alt)
+        }, 1000);
+    })
+    
+    engine.addSystem(() => {
+        if (!queue.isActive()) return
+        if (inputSystem.isTriggered(InputAction.IA_PRIMARY, PointerEventType.PET_DOWN)) executeTask(async () => {
+            // alt = !alt
+            // await Promise.all(gameObjects.map(o => o.toggle(alt)))
+            // staticModels[VARIANT.ALT].forEach(o => VisibilityComponent.getMutable(o).visible = alt)
+            // staticModels[VARIANT.BASE].forEach(o => VisibilityComponent.getMutable(o).visible = !alt)
         }); else if (inputSystem.isTriggered(InputAction.IA_SECONDARY, PointerEventType.PET_UP)) {
             handlers.restart()
         }
