@@ -20,7 +20,7 @@ import * as utils from '@dcl-sdk/utils'
 import { Quaternion, Vector3 } from '@dcl/ecs-math'
 import { CarDirection, Cell } from './type'
 import { cellRelativePosition, globalCoordsToLocal, localCoordsToCell, getDirectionVector } from './math'
-import { BOARD_TRANSFORM, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE } from '../config'
+import { BOARD_PHYSICAL_SIZE, BOARD_TRANSFORM, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE, COLLIDER_OFFSET_COEFFICIENT } from '../config'
 import { boardTexture, carModels } from '../resources/resources'
 import { Car } from './components/definitions'
 import { setUpSynchronizer } from './synchronizer'
@@ -53,7 +53,7 @@ function createBoard(tranform: TransformType) {
 
   const boardCollider = engine.addEntity()
   Transform.create(boardCollider, {
-    position: Vector3.create(0, 0, -0.025),
+    position: Vector3.create(0, 0, BOARD_PHYSICAL_SIZE * COLLIDER_OFFSET_COEFFICIENT),
     parent: board
   })
   MeshCollider.setPlane(boardCollider, [ColliderLayer.CL_PHYSICS, ColliderLayer.CL_CUSTOM1])
@@ -179,4 +179,33 @@ function movementDelta(start: Cell, end: Cell) {
     x: end.x - start.x,
     y: end.y - start.y
   }
+}
+
+function getAvalabilityMapForCar(carEntity: Entity) {
+  const car = Car.get(carEntity)
+  const map: boolean[][] = []
+  for (let i = 0; i < CELL_SIZE_PHYSICAL; i++){
+    map.push([])
+    for (let j = 0; j < CELL_SIZE_PHYSICAL; j++){
+      map[i].push(true)
+    }
+  }
+  const direction = getDirectionVector(car.direction)
+  for ( const [entity, name] of engine.getEntitiesWith(Car)){
+    const car = Car.get(entity)
+    if (!car.inGame) continue
+    const length = car.length
+    const direction = getDirectionVector(car.direction)
+    const yD = direction.y
+    const xD = direction.x
+    for (let i = 0; i < length; i++){
+      map[car.position.x + xD * i][car.position.y + yD * i] = false
+    }
+  }
+  for (let i = 0; i < car.length; i++){
+    const x = car.position.x + direction.x * i
+    const y = car.position.y + direction.y * i
+    map[x][y] = false
+  }
+  return map
 }

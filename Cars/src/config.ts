@@ -10,12 +10,18 @@ export const BOARD_SIZE = 6
 /**
  * Physical size of the board in meters
  */
-export const BOARD_PHYSICAL_SIZE = 5
+export const BOARD_PHYSICAL_SIZE = 6
 export const CELL_SIZE_RELATIVE = 1 / BOARD_SIZE
 export const CELL_SIZE_PHYSICAL = BOARD_PHYSICAL_SIZE / BOARD_SIZE
 
+/**
+ * Coefficient to set the offset of the collider
+ * Offset = BOARD_PHYSICAL_SIZE * COLLIDER_OFFSET_COEFFICIENT
+ */
+export const COLLIDER_OFFSET_COEFFICIENT = -0.005
+
 export const BOARD_TRANSFORM: TransformType = {
-  position: Vector3.create(8, 0.2, 8),
+  position: Vector3.create(8.5, 0.2, 8.5),
   scale: Vector3.create(BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE),
   rotation: Quaternion.fromEulerDegrees(90, 0, 0)
 }
