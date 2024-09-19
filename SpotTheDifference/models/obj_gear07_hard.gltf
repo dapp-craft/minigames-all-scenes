@@ -101,7 +101,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":752,
+			"count":762,
 			"max":[
 				0.15603500604629517,
 				0.14122965931892395,
@@ -117,19 +117,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":752,
+			"count":762,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":752,
+			"count":762,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1110,
+			"count":1146,
 			"type":"SCALAR"
 		},
 		{
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":9024,
+			"byteLength":9144,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9024,
-			"byteOffset":9024,
+			"byteLength":9144,
+			"byteOffset":9144,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6016,
-			"byteOffset":18048,
+			"byteLength":6096,
+			"byteOffset":18288,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2220,
-			"byteOffset":24064,
+			"byteLength":2292,
+			"byteOffset":24384,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":720,
-			"byteOffset":26284,
+			"byteOffset":26676,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":720,
-			"byteOffset":27004,
+			"byteOffset":27396,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":480,
-			"byteOffset":27724,
+			"byteOffset":28116,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":192,
-			"byteOffset":28204,
+			"byteOffset":28596,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":28396,
+			"byteLength":28788,
 			"uri":"obj_gear07_hard.bin"
 		}
 	]

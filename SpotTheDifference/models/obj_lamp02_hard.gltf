@@ -101,7 +101,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1499,
+			"count":1473,
 			"max":[
 				0.2019052803516388,
 				1.1197998523712158,
@@ -117,19 +117,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1499,
+			"count":1473,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1499,
+			"count":1473,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":2115,
+			"count":2079,
 			"type":"SCALAR"
 		},
 		{
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":17988,
+			"byteLength":17676,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":17988,
-			"byteOffset":17988,
+			"byteLength":17676,
+			"byteOffset":17676,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":11992,
-			"byteOffset":35976,
+			"byteLength":11784,
+			"byteOffset":35352,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4230,
-			"byteOffset":47968,
+			"byteLength":4158,
+			"byteOffset":47136,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":576,
-			"byteOffset":52200,
+			"byteOffset":51296,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":576,
-			"byteOffset":52776,
+			"byteOffset":51872,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":384,
-			"byteOffset":53352,
+			"byteOffset":52448,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":144,
-			"byteOffset":53736,
+			"byteOffset":52832,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":53880,
+			"byteLength":52976,
 			"uri":"obj_lamp02_hard.bin"
 		}
 	]

@@ -101,7 +101,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":490,
+			"count":466,
 			"max":[
 				0.2402958869934082,
 				1.2042672634124756,
@@ -117,19 +117,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":490,
+			"count":466,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":490,
+			"count":466,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":678,
+			"count":654,
 			"type":"SCALAR"
 		},
 		{
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":5880,
+			"byteLength":5592,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5880,
-			"byteOffset":5880,
+			"byteLength":5592,
+			"byteOffset":5592,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3920,
-			"byteOffset":11760,
+			"byteLength":3728,
+			"byteOffset":11184,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1356,
-			"byteOffset":15680,
+			"byteLength":1308,
+			"byteOffset":14912,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":528,
-			"byteOffset":17036,
+			"byteOffset":16220,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":528,
-			"byteOffset":17564,
+			"byteOffset":16748,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":352,
-			"byteOffset":18092,
+			"byteOffset":17276,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":132,
-			"byteOffset":18444,
+			"byteOffset":17628,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":18576,
+			"byteLength":17760,
 			"uri":"obj_lever01_hard.bin"
 		}
 	]

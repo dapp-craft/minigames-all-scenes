@@ -101,7 +101,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1155,
+			"count":1095,
 			"max":[
 				0.49343806505203247,
 				2.262425661087036,
@@ -117,19 +117,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1155,
+			"count":1095,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1155,
+			"count":1095,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1482,
+			"count":1446,
 			"type":"SCALAR"
 		},
 		{
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":13860,
+			"byteLength":13140,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":13860,
-			"byteOffset":13860,
+			"byteLength":13140,
+			"byteOffset":13140,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9240,
-			"byteOffset":27720,
+			"byteLength":8760,
+			"byteOffset":26280,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2964,
-			"byteOffset":36960,
+			"byteLength":2892,
+			"byteOffset":35040,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":672,
-			"byteOffset":39924,
+			"byteOffset":37932,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":672,
-			"byteOffset":40596,
+			"byteOffset":38604,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":448,
-			"byteOffset":41268,
+			"byteOffset":39276,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":168,
-			"byteOffset":41716,
+			"byteOffset":39724,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":41884,
+			"byteLength":39892,
 			"uri":"obj_stone01_alt.bin"
 		}
 	]

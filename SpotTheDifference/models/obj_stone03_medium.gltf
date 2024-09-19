@@ -101,10 +101,10 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":554,
+			"count":546,
 			"max":[
 				0.5181667804718018,
-				1.0503435134887695,
+				0.9660961627960205,
 				0.48127061128616333
 			],
 			"min":[
@@ -117,13 +117,13 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":554,
+			"count":546,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":554,
+			"count":546,
 			"type":"VEC2"
 		},
 		{
@@ -170,50 +170,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":6648,
+			"byteLength":6552,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6648,
-			"byteOffset":6648,
+			"byteLength":6552,
+			"byteOffset":6552,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4432,
-			"byteOffset":13296,
+			"byteLength":4368,
+			"byteOffset":13104,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1440,
-			"byteOffset":17728,
+			"byteOffset":17472,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":19168,
+			"byteOffset":18912,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":19456,
+			"byteOffset":19200,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":192,
-			"byteOffset":19744,
+			"byteOffset":19488,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":72,
-			"byteOffset":19936,
+			"byteOffset":19680,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":20008,
+			"byteLength":19752,
 			"uri":"obj_stone03_medium.bin"
 		}
 	]
