@@ -10,6 +10,7 @@ import {
   MeshCollider,
   MeshRenderer,
   PointerEventType,
+  PointerLock,
   raycastSystem,
   Texture,
   Transform,
@@ -19,14 +20,15 @@ import * as utils from '@dcl-sdk/utils'
 import { Quaternion, Vector3 } from '@dcl/ecs-math'
 import { CarDirection, Cell } from './type'
 import { cellRelativePosition, globalCoordsToLocal, localCoordsToCell, getDirectionVector } from './math'
-import { BOARD_TRANSFORM, SELL_SIZE_RELATIVE } from '../config'
-import { boardTexture } from '../resources/resources'
+import { BOARD_TRANSFORM, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE } from '../config'
+import { boardTexture, carModels } from '../resources/resources'
 import { Car } from './components/definitions'
 import { setUpSynchronizer } from './synchronizer'
 import { syncEntity } from '@dcl/sdk/network'
 
 let lookingAt: Cell | undefined = undefined
 export let BOARD: Entity
+export let BOARD_COLLIDER: Entity
 
 const selectedCar: {
   car: Entity | undefined,
@@ -46,24 +48,32 @@ function createBoard(tranform: TransformType) {
       src: boardTexture
     })
   })
-  MeshCollider.setPlane(board, [ColliderLayer.CL_PHYSICS, ColliderLayer.CL_CUSTOM1])
   MeshRenderer.setPlane(board)
   BOARD = board
+
+  const boardCollider = engine.addEntity()
+  Transform.create(boardCollider, {
+    position: Vector3.create(0, 0, -0.025),
+    parent: board
+  })
+  MeshCollider.setPlane(boardCollider, [ColliderLayer.CL_PHYSICS, ColliderLayer.CL_CUSTOM1])
+  BOARD_COLLIDER = boardCollider
+
 }
 
 function drawPoint(cell: Cell, id: number) {
   const point = engine.addEntity()
   Transform.create(point, {
     position: cellRelativePosition(cell),
-    scale: Vector3.scale(Vector3.One(), SELL_SIZE_RELATIVE),
+    scale: Vector3.scale(Vector3.One(), CELL_SIZE_RELATIVE),
+    rotation: Quaternion.Identity(),
     parent: BOARD
   })
-  MeshRenderer.setSphere(point)
-  MeshCollider.setSphere(point)
+  GltfContainer.create(point, carModels[2])
   Car.create(point, {
     position: cell,
-    direction: CarDirection.left,
-    length: 1,
+    direction: Math.floor(Math.random() * 4) as CarDirection,
+    length: 2,
     inGame: true
   })
   syncEntity(point, [Car.componentId], id)
@@ -73,9 +83,9 @@ function drawPoint(cell: Cell, id: number) {
 export async function initGame() {
   createBoard(BOARD_TRANSFORM)
 
-  drawPoint({ x: 3, y: 3 }, 1000)
+  drawPoint({ x: 4, y: 4 }, 1000)
   drawPoint({ x: 1, y: 1 }, 1001)
-  drawPoint({ x: 2, y: 2 }, 1002)
+  drawPoint({ x: 3, y: 3 }, 1002)
 
   setUpRaycast()
 
@@ -113,7 +123,12 @@ function setUpRaycast() {
       if (selectedCar.car == undefined) return
       if (lookingAt.x == selectedCar.currentCell?.x && lookingAt.y == selectedCar.currentCell?.y) return
       selectedCar.currentCell = lookingAt
-      const {x: xd, y: yd} = movementDelta(selectedCar.startCell as Cell, selectedCar.currentCell as Cell)
+      let {x: xd, y: yd} = movementDelta(selectedCar.startCell as Cell, selectedCar.currentCell as Cell)
+      if (Car.get(selectedCar.car).direction === CarDirection.up || Car.get(selectedCar.car).direction === CarDirection.down){
+        xd = 0
+      } else {
+        yd = 0
+      }
       Car.getMutable(selectedCar.car).position.x += xd
       Car.getMutable(selectedCar.car).position.y += yd
       selectedCar.startCell = selectedCar.currentCell
@@ -124,16 +139,22 @@ function setUpRaycast() {
 function getCarAt(cell: Cell) {
   for (const [entity, name] of engine.getEntitiesWith(Car)){
     const car = Car.get(entity)
-    if (car.position.x === cell.x && car.position.y === cell.y){
-      return entity
-    }
+    if (!car.inGame) continue
+      const length = car.length
+      const direction = getDirectionVector(car.direction)
+      const yD = direction.y
+      const xD = direction.x
+      for (let i = 0; i < length; i++){
+        if (car.position.x + xD * i === cell.x && car.position.y + yD * i === cell.y)
+        return entity
+      }
   }
   return undefined
 }
 
 function setUpInputSystem(){
   engine.addSystem(function(){
-    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN)){
+    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN) && PointerLock.get(engine.CameraEntity).isPointerLocked){
       if (lookingAt){
         const car = getCarAt(lookingAt)
         if (car == undefined) return
@@ -143,7 +164,7 @@ function setUpInputSystem(){
       }
     }
 
-    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_UP)){
+    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_UP) && PointerLock.get(engine.CameraEntity).isPointerLocked){
       selectedCar.car = undefined
       selectedCar.startCell = undefined
       selectedCar.currentCell = undefined

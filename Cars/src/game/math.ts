@@ -1,6 +1,6 @@
 import { Transform } from '@dcl/sdk/ecs'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { BOARD_SIZE, SELL_SIZE_RELATIVE } from '../config'
+import { BOARD_SIZE, CELL_SIZE_RELATIVE } from '../config'
 import { Cell } from './type'
 import { BOARD } from '.'
 
@@ -19,9 +19,9 @@ export function globalCoordsToLocal(position: Vector3) {
 
 export function localCoordsToCell(position: Vector3): Cell {
   const zeroPoint = { x: 0, y: 0 }
-  zeroPoint.x += Math.floor((position.x + 0.5) / SELL_SIZE_RELATIVE)
-  zeroPoint.y += Math.floor((position.y + 0.5) / SELL_SIZE_RELATIVE)
-  
+  zeroPoint.x += Math.floor((position.x + 0.5) / CELL_SIZE_RELATIVE)
+  zeroPoint.y += Math.floor((position.y + 0.5) / CELL_SIZE_RELATIVE)
+
   // We need this check because the
   // position of raycast hit point with transformation to local coordinates may be a little bit out of board
   if (zeroPoint.x < 0) zeroPoint.x = 0
@@ -32,10 +32,10 @@ export function localCoordsToCell(position: Vector3): Cell {
 }
 
 export function cellRelativePosition(cell: Cell): Vector3 {
-  const zeroPoint = Vector3.create(-0.5 + 0.5 * SELL_SIZE_RELATIVE, -0.5 + 0.5 * SELL_SIZE_RELATIVE, 0)
+  const zeroPoint = Vector3.create(-0.5 + 0.5 * CELL_SIZE_RELATIVE, -0.5 + 0.5 * CELL_SIZE_RELATIVE, 0)
   return Vector3.add(
-    Vector3.add(zeroPoint, Vector3.scale(Vector3.create(SELL_SIZE_RELATIVE, 0, 0), cell.x)),
-    Vector3.scale(Vector3.create(0, SELL_SIZE_RELATIVE, 0), cell.y)
+    Vector3.add(zeroPoint, Vector3.scale(Vector3.create(CELL_SIZE_RELATIVE, 0, 0), cell.x)),
+    Vector3.scale(Vector3.create(0, CELL_SIZE_RELATIVE, 0), cell.y)
   )
 }
 
@@ -55,17 +55,16 @@ function inverseQuaternion(quaternion: Quaternion) {
   }
 }
 
-
 export function getDirectionVector(direction: number) {
   switch (direction) {
     case 0:
-      return Vector3.Up()
-    case 1:
       return Vector3.Down()
+    case 1:
+      return Vector3.Up()
     case 2:
-      return Vector3.Left()
-    case 3:
       return Vector3.Right()
+    case 3:
+      return Vector3.Left()
   }
   return Vector3.Zero()
 }

@@ -10,12 +10,12 @@ export const BOARD_SIZE = 6
 /**
  * Physical size of the board in meters
  */
-export const BOARD_PHYSICAL_SIZE = 3
-export const SELL_SIZE_RELATIVE = 1 / BOARD_SIZE
-export const SELL_SIZE_PHYSICAL = BOARD_PHYSICAL_SIZE / BOARD_SIZE
+export const BOARD_PHYSICAL_SIZE = 5
+export const CELL_SIZE_RELATIVE = 1 / BOARD_SIZE
+export const CELL_SIZE_PHYSICAL = BOARD_PHYSICAL_SIZE / BOARD_SIZE
 
 export const BOARD_TRANSFORM: TransformType = {
-  position: Vector3.create(8, 1.5, 8),
+  position: Vector3.create(8, 0.2, 8),
   scale: Vector3.create(BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE),
-  rotation: Quaternion.fromEulerDegrees(0, 0, 0)
+  rotation: Quaternion.fromEulerDegrees(90, 0, 0)
 }
