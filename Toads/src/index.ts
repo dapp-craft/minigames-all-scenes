@@ -1,44 +1,35 @@
-import { engine, executeTask, GltfContainer, MeshCollider, MeshRenderer, Transform } from '@dcl/sdk/ecs'
-import * as utils from '@dcl-sdk/utils'
-import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
+import { engine } from '@dcl/sdk/ecs'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { getReadyToStart, initGame } from './game/game'
-import { tempLocators, toadsGameConfig } from './config'
+import { toadsGameConfig } from './config'
 import { toadsGameState } from './state'
 import { GameLogic } from './game/gameLogic'
+import { setupStaticModels } from './staticModels/setupStaticModels'
 
 
 const handlers = {
     start: () => {getReadyToStart()},
     exit: () => {gameLogic.stopGame()},
-    restart: () => { },
+    restart: () => {
+        gameLogic.stopGame()
+        getReadyToStart()
+    },
     toggleMusic: () => { },
     toggleSfx: () => { }
 }
 
 const libraryReady = initMiniGame('', TIME_LEVEL_MOVES, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
 
-const MODELS: string[] = [
-    'models/obj_floor.gltf'
-]
-
-executeTask(async () => {
-    for (const model of MODELS) {
-        const entity = engine.addEntity()
-        GltfContainer.create(entity, { src: model })
-        Transform.create(entity, { parent: sceneParentEntity })
-    }
-})
-
 export const gameLogic = new GameLogic()
-
 
 export async function main() {
     await libraryReady
 
     generateInitialEntity()
+
+    setupStaticModels()
 
     // gameLogic.startGame()
 
@@ -50,15 +41,15 @@ const generateInitialEntity = () => {
         const entity = engine.addEntity()
         toadsGameState.availableEntity.push(entity)
     }
-    const board = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 1]
+    // const board = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 1]
     const hammerEntity = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 2]
 
-    Transform.create(board, { ...tempLocators.get(`Board`), parent: sceneParentEntity })
+    // Transform.create(board, { ...tempLocators.get(`Board`), parent: sceneParentEntity })
     
-    MeshRenderer.setPlane(board)
-    MeshCollider.setPlane(board)
+    // MeshRenderer.setPlane(board)
+    // MeshCollider.setPlane(board)
 
-    toadsGameState.listOfEntity.set('board', board)
+    // toadsGameState.listOfEntity.set('board', board)
     toadsGameState.listOfEntity.set('hammer', hammerEntity)
 
 }

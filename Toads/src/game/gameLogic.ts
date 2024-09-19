@@ -1,8 +1,10 @@
-import { EasingFunction, engine, Entity, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, tweenSystem } from "@dcl/sdk/ecs"
-import { tempLocators, toadsGameConfig } from "../config"
+import { EasingFunction, engine, Entity, GltfContainer, InputAction, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, Transform, Tween } from "@dcl/sdk/ecs"
+import { toadsGameConfig } from "../config"
 import { sceneParentEntity, toadsGameState } from "../state"
 import * as utils from '@dcl-sdk/utils'
 import { Vector3 } from "@dcl/sdk/math"
+import { readGltfLocators } from "../../../common/locators"
+import { frog01, frog02 } from "../resources/resources"
 
 export class GameLogic {
     private availableEntity = new Map()
@@ -21,11 +23,8 @@ export class GameLogic {
     }
 
     public async startGame() {
-        // engine.addSystem((deltaTime) => {
-
-        // })
         this.resetData()
-        this.initializeEntity()
+        await this.initializeEntity()
         this.calculateToads()
         console.log(this.toadsAmount)
         this.activateHummer()
@@ -36,12 +35,13 @@ export class GameLogic {
         return { correct: this.correctSmashCounter, mistake: this.mistakeSmashCounter, miss: this.miss }
     }
 
-    private initializeEntity() {
+    private async initializeEntity() {
+        const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
         for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) {
             this.availableEntity.set(i + 1, toadsGameState.availableEntity[i])
-            Transform.createOrReplace(toadsGameState.availableEntity[i], { ...tempLocators.get(`Toad${i + 1}`), parent: sceneParentEntity })
-            MeshRenderer.setBox(toadsGameState.availableEntity[i])
-            MeshCollider.setBox(toadsGameState.availableEntity[i])
+            Transform.createOrReplace(toadsGameState.availableEntity[i], {position: data.get(`object_hole_${i + 1}`)?.position, parent: sceneParentEntity})
+            console.log(data.get(`object_hole_${i + 1}`))
+            GltfContainer.createOrReplace(toadsGameState.availableEntity[i], { src: frog01.src })
         }
     }
 
@@ -99,7 +99,7 @@ export class GameLogic {
         Tween.createOrReplace(hammerEntity, {
             mode: Tween.Mode.Move({
                 start: Transform.get(hammerEntity).position,
-                end: { ...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y - 1 }
+                end: { ...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y - .5 }
             }),
             duration: delay,
             easingFunction: EasingFunction.EF_EASEOUTBACK,
@@ -110,7 +110,7 @@ export class GameLogic {
                 Tween.createOrReplace(hammerEntity, {
                     mode: Tween.Mode.Move({
                         start: Transform.get(hammerEntity).position,
-                        end: { ...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y + 1 }
+                        end: { ...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y + .5 }
                     }),
                     duration: delay,
                     easingFunction: EasingFunction.EF_EASEOUTBACK,
@@ -125,7 +125,9 @@ export class GameLogic {
 
         const hideEntity = (entity: Entity, pos: number) => {
             pointerEventsSystem.removeOnPointerDown(entity)
-            MeshRenderer.setBox(entity)
+            // MeshRenderer.setBox(entity)
+            GltfContainer.createOrReplace(entity, { src: frog01.src })
+
             Tween.createOrReplace(entity, {
                 mode: Tween.Mode.Move({
                     start: Transform.get(entity).position,
@@ -157,11 +159,11 @@ export class GameLogic {
             this.toadsTimer.set(i, {
                 start: utils.timers.setTimeout(async () => {
                     toadsAppeared++
-                    if (!isEnemy) MeshRenderer.setSphere(entity)
+                    if (!isEnemy) GltfContainer.createOrReplace(entity, { src: frog02.src })
                     Tween.createOrReplace(entity, {
                         mode: Tween.Mode.Move({
                             start: Transform.get(entity).position,
-                            end: { ...Transform.get(entity).position, y: y + 1 },
+                            end: { ...Transform.get(entity).position, y: y + toadsGameConfig.toadsDistance },
                         }),
                         duration: 100,
                         easingFunction: EasingFunction.EF_EASEOUTBACK,
