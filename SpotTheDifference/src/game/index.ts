@@ -38,27 +38,25 @@ export async function init(rootEntity: Entity) {
 
 export function generateLevelObjects(difficulty: { [key in keyof typeof DIFFICULTIES]: number }, total: number) {
     const objects: GameObject[] = []
+    const unusedModels = new Set(Object.keys(SETTINGS))
     let setup = Object.entries(difficulty).flatMap(
-        ([difficulty, count]) => randomSample(DIFFICULTIES[difficulty as DIFFICULTY], count).map(
-            model => [model, difficulty as VARIANT] as const
-        )
+        ([difficulty, count]) => randomSample(DIFFICULTIES[difficulty as DIFFICULTY], count).map(model => {
+            if (!unusedModels.delete(model)) throw new Error(`Invalid configuration: too many '${difficulty}' objects`)
+            return [model, difficulty as VARIANT] as const
+        })
     )
-    while (setup.length < total) setup.push([randomChoice(Object.keys(SETTINGS)) as MODEL, VARIANT.ALT])
-    const setupMap = setup.reduce(
-        (acc, [model, variation]) => acc.get(model)?.push(variation) && acc || acc.set(model, [variation]),
-        new Map<MODEL, VARIANT[]>()
-    )
+    if (total > unusedModels.size) throw new Error(`Invalid configuration: too many objects in total`)
+    setup.push(...randomSample(unusedModels, Math.max(0, total - setup.length)).map(m => [m as MODEL, VARIANT.ALT] as const))
     let locatorsPool = new Map(
-        Array.from(MODEL_LOCATORS.entries()).map(([key, value]) => [key, randomSample(value, value.length)])
+        Array.from(MODEL_LOCATORS, ([key, value]) => [key, randomSample(value, value.length)])
     )
-    for (const [model, variations] of setupMap) {
+    for (const [model, variation] of setup) {
         const locs = locatorsPool.get(SETTINGS[model].size)!
-        console.log(model, variations)
-        variations.forEach((variation, i) => objects.push(new GameObject(model, VARIANT.BASE, variation, {
+        objects.push(new GameObject(model, VARIANT.BASE, variation, {
             ...locs.pop()!,
             rotation: Quaternion.fromEulerDegrees(0, randomInt(0, 180), 0),
             parent: root
-        })))
+        }))
     }
     return objects
 }
