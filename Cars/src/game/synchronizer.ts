@@ -43,8 +43,7 @@ function updateCar(car: Entity) {
   //Model
   if (carData.isMain && GltfContainer.getOrNull(car)?.src != mainCarModel.src) {
     GltfContainer.createOrReplace(car, mainCarModel)
-
-  } else if (GltfContainer.getOrNull(car)?.src !== carModels[carData.length as keyof typeof carModels].src) {
+  } else if (GltfContainer.getOrNull(car)?.src !== carModels[carData.length as keyof typeof carModels].src && !carData.isMain) {
     GltfContainer.createOrReplace(car, carModels[carData.length as keyof typeof carModels])
   }
 }
