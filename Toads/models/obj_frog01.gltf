@@ -29,15 +29,23 @@
 	"materials":[
 		{
 			"doubleSided":true,
+			"emissiveFactor":[
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
+			],
+			"emissiveTexture":{
+				"index":0
+			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
 				}
 			},
-			"name":"obj_frame",
+			"name":"obj_frog01",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":0
+					"index":1
 				},
 				"metallicFactor":0
 			}
@@ -45,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.011",
+			"name":"Mesh.014",
 			"primitives":[
 				{
 					"attributes":{
@@ -59,7 +67,7 @@
 			]
 		},
 		{
-			"name":"Mesh.008",
+			"name":"Mesh.015",
 			"primitives":[
 				{
 					"attributes":{
@@ -76,13 +84,17 @@
 		{
 			"sampler":0,
 			"source":0
+		},
+		{
+			"sampler":0,
+			"source":0
 		}
 	],
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_frame",
-			"uri":"textures/obj_frame.png"
+			"name":"obj_frog01",
+			"uri":"textures/obj_frog01.png"
 		}
 	],
 	"accessors":[
@@ -91,14 +103,14 @@
 			"componentType":5126,
 			"count":844,
 			"max":[
-				0.42784494161605835,
-				0.42037132382392883,
-				0.43949094414711
+				0.46496284008026123,
+				0.4568823277950287,
+				0.4776778817176819
 			],
 			"min":[
-				-0.42784473299980164,
-				-0.41802436113357544,
-				-0.35402005910873413
+				-0.4649626910686493,
+				-0.45424970984458923,
+				-0.38467562198638916
 			],
 			"type":"VEC3"
 		},
@@ -125,14 +137,14 @@
 			"componentType":5126,
 			"count":844,
 			"max":[
-				0.42784494161605835,
-				0.42037132382392883,
-				0.43949094414711
+				0.46496284008026123,
+				0.4568823277950287,
+				0.4776778817176819
 			],
 			"min":[
-				-0.42784473299980164,
-				-0.41802436113357544,
-				-0.35402005910873413
+				-0.4649626910686493,
+				-0.45424970984458923,
+				-0.38467562198638916
 			],
 			"type":"VEC3"
 		},
