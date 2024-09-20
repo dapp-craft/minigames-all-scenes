@@ -1,12 +1,13 @@
-import { engine } from '@dcl/sdk/ecs'
+import { engine, GltfContainer, Transform } from '@dcl/sdk/ecs'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { getReadyToStart, initGame } from './game/game'
 import { toadsGameConfig } from './config'
-import { toadsGameState } from './state'
+import { sceneParentEntity, toadsGameState } from './state'
 import { GameLogic } from './game/gameLogic'
 import { setupStaticModels } from './staticModels/setupStaticModels'
+import { frog01 } from './resources/resources'
 
 
 const handlers = {
@@ -25,18 +26,21 @@ const libraryReady = initMiniGame('', TIME_LEVEL_MOVES, readGltfLocators(`locato
 export const gameLogic = new GameLogic()
 
 export async function main() {
+    setupStaticModels()
+    
     await libraryReady
 
     generateInitialEntity()
 
-    setupStaticModels()
 
     // gameLogic.startGame()
 
     initGame()
 }
 
-const generateInitialEntity = () => {
+const generateInitialEntity = async () => {
+    const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+    
     for (let i = 0; i <= toadsGameConfig.initialEntityAmount; i++) {
         const entity = engine.addEntity()
         toadsGameState.availableEntity.push(entity)
@@ -51,5 +55,10 @@ const generateInitialEntity = () => {
 
     // toadsGameState.listOfEntity.set('board', board)
     toadsGameState.listOfEntity.set('hammer', hammerEntity)
+
+    for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) {
+        Transform.createOrReplace(toadsGameState.availableEntity[i], {position: data.get(`object_hole_${i + 1}`)?.position, parent: sceneParentEntity})
+        GltfContainer.createOrReplace(toadsGameState.availableEntity[i], { src: frog01.src })
+    }
 
 }
