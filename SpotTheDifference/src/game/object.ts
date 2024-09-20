@@ -80,13 +80,16 @@ export class GameObject {
             if (this.timer) utils.timers.clearTimeout(this.timer)
             Promise.race([this.marked, undefined]).then(m => GltfContainer.getMutable(this.entity).src = m ? this.altVarSrc : this.baseSrc)
             console.log('to base')
-        } else if (!this.differs || await Promise.race([this.marked, undefined])) {
+        } else 
+        // if (!this.differs || await Promise.race([this.marked, undefined])) 
+        {
             Promise.race([this.marked, undefined]).then(m => GltfContainer.getMutable(this.entity).src = m ? this.baseSrc : this.altVarSrc)
             console.log('to alt')
-        } else {
-            GltfContainer.getMutable(this.entity).src = this.altSrc
-            this.timer = utils.timers.setTimeout(() => GltfContainer.getMutable(this.entity).src = this.altVarSrc, Math.random() * 1000)
         }
+        //  else {
+        //     GltfContainer.getMutable(this.entity).src = this.altSrc
+        //     this.timer = utils.timers.setTimeout(() => GltfContainer.getMutable(this.entity).src = this.altVarSrc, Math.random() * 1000)
+        // }
     }
     
     public destroy() {
