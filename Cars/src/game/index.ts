@@ -17,27 +17,26 @@ import {
   TransformType
 } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
-import { Quaternion, Vector3 } from '@dcl/ecs-math'
+import { Quaternion, Vector3, Color4 } from '@dcl/ecs-math'
 import { CarDirection, Cell } from './type'
-import { globalCoordsToLocal, localCoordsToCell, getDirectionVector } from './math'
-import { CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE } from '../config'
+import { globalCoordsToLocal, localCoordsToCell, getDirectionVector, cellRelativePosition } from './math'
+import { BOARD_PHYSICAL_SIZE, BOARD_SIZE, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE } from '../config'
 import { Car } from './components/definitions'
 import { setUpSynchronizer } from './synchronizer'
-import { createBoard } from './objects/board'
-import { createCar } from './objects/car'
+import { BOARD, createBoard } from './objects/board'
+import { createCar, getInGameCars } from './objects/car'
 
 let lookingAt: Cell | undefined = undefined
 
-const selectedCar: {
-  car: Entity | undefined,
+const inputBuffer: {
+  selectedCar: Entity | undefined
   startCell: Cell | undefined
   currentCell: Cell | undefined
 } = {
-  car: undefined,
+  selectedCar: undefined,
   startCell: undefined,
   currentCell: undefined
 }
-
 
 export async function initGame() {
   createBoard()
@@ -64,73 +63,132 @@ function setUpRaycast() {
       }
     },
     (hit) => {
-
       // Update lookingAt
       if (hit.hits.length === 0) {
-        lookingAt = undefined
+        inputBuffer.currentCell = undefined
         return
       }
       const hitPosition = hit.hits[0].position
       if (hitPosition == undefined) {
-        lookingAt = undefined
+        inputBuffer.currentCell = undefined
         return
       }
       const relativePosition = globalCoordsToLocal(hitPosition as Vector3)
       lookingAt = localCoordsToCell(relativePosition)
 
       // Update selectedCar
-      if (selectedCar.car == undefined) return
-      if (lookingAt.x == selectedCar.currentCell?.x && lookingAt.y == selectedCar.currentCell?.y) return
-      selectedCar.currentCell = lookingAt
-      let {x: xd, y: yd} = movementDelta(selectedCar.startCell as Cell, selectedCar.currentCell as Cell)
-      if (Car.get(selectedCar.car).direction === CarDirection.up || Car.get(selectedCar.car).direction === CarDirection.down){
-        xd = 0
-      } else {
-        yd = 0
-      }
-      Car.getMutable(selectedCar.car).position.x += xd
-      Car.getMutable(selectedCar.car).position.y += yd
-      selectedCar.startCell = selectedCar.currentCell
+      if (inputBuffer.startCell == undefined) return
+      inputBuffer.currentCell = lookingAt
+      processMovement(inputBuffer.startCell, inputBuffer.currentCell)
     }
   )
 }
 
 function getCarAt(cell: Cell) {
-  for (const [entity, name] of engine.getEntitiesWith(Car)){
-    const car = Car.get(entity)
-    if (!car.inGame) continue
-      const length = car.length
-      const direction = getDirectionVector(car.direction)
-      const yD = direction.y
-      const xD = direction.x
-      for (let i = 0; i < length; i++){
-        if (car.position.x + xD * i === cell.x && car.position.y + yD * i === cell.y)
-        return entity
-      }
-  }
-  return undefined
+  return getInGameCars().find((car) => {
+    const carComponent = Car.get(car)
+    const direction = getDirectionVector(carComponent.direction)
+    const x = carComponent.position.x
+    const y = carComponent.position.y
+    const length = carComponent.length
+    const xD = direction.x
+    const yD = direction.y
+    for (let i = 0; i < length; i++) {
+      if (x + xD * i === cell.x && y + yD * i === cell.y) return true
+    }
+    return false
+  })
 }
 
-function setUpInputSystem(){
-  engine.addSystem(function(){
-    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN) && PointerLock.get(engine.CameraEntity).isPointerLocked){
-      if (lookingAt){
+function setUpInputSystem() {
+  engine.addSystem(function () {
+    if (
+      inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN) &&
+      PointerLock.get(engine.CameraEntity).isPointerLocked
+    ) {
+      if (lookingAt) {
         const car = getCarAt(lookingAt)
         if (car == undefined) return
         console.log(car)
-        selectedCar.car = car
-        selectedCar.startCell = lookingAt 
+        inputBuffer.selectedCar = car
+        inputBuffer.startCell = lookingAt
       }
     }
 
-    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_UP) && PointerLock.get(engine.CameraEntity).isPointerLocked){
-      selectedCar.car = undefined
-      selectedCar.startCell = undefined
-      selectedCar.currentCell = undefined
+    if (
+      inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_UP) &&
+      PointerLock.get(engine.CameraEntity).isPointerLocked
+    ) {
+      inputBuffer.selectedCar = undefined
+      inputBuffer.startCell = undefined
+      inputBuffer.currentCell = undefined
     }
   })
 }
 
+function processMovement(start: Cell, end: Cell) {
+  if (start == undefined || end == undefined) return
+  if (start.x === end.x && start.y === end.y) return
+  if (inputBuffer.selectedCar == undefined) return
+
+  const car = inputBuffer.selectedCar
+  const carData = Car.get(car)
+
+  const availabilityMap = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(0))
+
+  // Mark all cells occupied by cars
+  getInGameCars().forEach((car_) => {
+    const carData = Car.get(car_)
+    const { x: xd, y: yd } = getDirectionVector(carData.direction)
+    for (let i = 0; i < carData.length; i++) {
+      availabilityMap[carData.position.y + yd * i][carData.position.x + xd * i] = 1
+    }
+  })
+
+  // Mark cells occupied by the selected car as available
+  const { x: xd, y: yd } = getDirectionVector(carData.direction)
+  for (let i = 0; i < carData.length; i++) {
+    availabilityMap[carData.position.y + yd * i][carData.position.x + xd * i] = 0
+  }
+
+  const isPositionAvailable = (cell: Cell) => {
+    const { x: xd, y: yd } = getDirectionVector(carData.direction)
+    for (let i = 0; i < carData.length; i++) {
+      if (cell.y + yd * i < 0 || cell.y + yd * i >= BOARD_SIZE) return false
+      if (cell.x + xd * i < 0 || cell.x + xd * i >= BOARD_SIZE) return false
+      if (availabilityMap[cell.y + yd * i][cell.x + xd * i] == 1) return false
+    }
+    return true
+  }
+
+  const movementD = movementDelta(start, end)
+  if (carData.direction === CarDirection.up || carData.direction === CarDirection.down) movementD.x = 0
+  if (carData.direction === CarDirection.left || carData.direction === CarDirection.right) movementD.y = 0
+  const distance = Math.abs(movementD.x + movementD.y)
+
+  let validFinalPosition = carData.position
+
+  for (let i = 0; i <= distance; i++) {
+    const xd = movementD.x == 0 ? 0 : Math.sign(movementD.x)
+    const yd = movementD.y == 0 ? 0 : Math.sign(movementD.y)
+    const possiblePosition: Cell = {
+      x: carData.position.x + xd * i,
+      y: carData.position.y + yd * i
+    }
+    
+
+    if (isPositionAvailable(possiblePosition)) {
+      validFinalPosition = possiblePosition
+      inputBuffer.startCell = {
+        x: start.x + xd * i,
+        y: start.y + yd * i
+      }
+    } else {
+      break
+    }
+  }
+  Car.getMutable(car).position = validFinalPosition
+}
 
 function movementDelta(start: Cell, end: Cell) {
   // TODO: movement only in direvtion of the car
@@ -138,33 +196,4 @@ function movementDelta(start: Cell, end: Cell) {
     x: end.x - start.x,
     y: end.y - start.y
   }
-}
-
-function getAvalabilityMapForCar(carEntity: Entity) {
-  const car = Car.get(carEntity)
-  const map: boolean[][] = []
-  for (let i = 0; i < CELL_SIZE_PHYSICAL; i++){
-    map.push([])
-    for (let j = 0; j < CELL_SIZE_PHYSICAL; j++){
-      map[i].push(true)
-    }
-  }
-  const direction = getDirectionVector(car.direction)
-  for ( const [entity, name] of engine.getEntitiesWith(Car)){
-    const car = Car.get(entity)
-    if (!car.inGame) continue
-    const length = car.length
-    const direction = getDirectionVector(car.direction)
-    const yD = direction.y
-    const xD = direction.x
-    for (let i = 0; i < length; i++){
-      map[car.position.x + xD * i][car.position.y + yD * i] = false
-    }
-  }
-  for (let i = 0; i < car.length; i++){
-    const x = car.position.x + direction.x * i
-    const y = car.position.y + direction.y * i
-    map[x][y] = false
-  }
-  return map
 }
