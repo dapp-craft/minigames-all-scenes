@@ -16,7 +16,9 @@ import { Car } from '../components/definitions'
 import { CarDirection, Cell } from '../type'
 import { syncEntity } from '@dcl/sdk/network'
 
-export function createCar(cell: Cell, id: number) {
+export let MAIN_CAR: Entity
+
+export function createCar(id: number) {
   const car = engine.addEntity()
   Transform.create(car, {
     position: Vector3.Zero(),
@@ -25,13 +27,36 @@ export function createCar(cell: Cell, id: number) {
     parent: BOARD
   })
   Car.create(car, {
-    position: cell,
-    direction: id % 4 as CarDirection,
-    length: Math.random() > 0.5 ? 2 : 3,
-    inGame: true
+    position: { x: -1, y: -1 },
+    direction: CarDirection.right,
+    length: 2,
+    inGame: true,
+    isMain: false
   })
   syncEntity(car, [Car.componentId], id)
   return car
+}
+
+export function createMainCar(id: number) {
+  if (MAIN_CAR) {
+    throw new Error('Main car already exists')
+  }
+  const car = engine.addEntity()
+  Transform.create(car, {
+    position: Vector3.Zero(),
+    scale: Vector3.scale(Vector3.One(), CELL_SIZE_RELATIVE),
+    rotation: Quaternion.Identity(),
+    parent: BOARD
+  })
+  Car.create(car, {
+    position: { x: -1, y: -1 },
+    direction: CarDirection.right,
+    length: 2,
+    inGame: true,
+    isMain: true
+  })
+  syncEntity(car, [Car.componentId], id)
+  MAIN_CAR = car
 }
 
 export function getInGameCars(): Entity[] {
@@ -40,6 +65,14 @@ export function getInGameCars(): Entity[] {
     if (Car.get(car).inGame) {
       ret.push(car)
     }
+  }
+  return ret
+}
+
+export function getAllCars(): Entity[] {
+  const ret = []
+  for (let [car] of engine.getEntitiesWith(Car)) {
+    ret.push(car)
   }
   return ret
 }

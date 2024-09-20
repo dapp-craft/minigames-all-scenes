@@ -20,12 +20,13 @@ import * as utils from '@dcl-sdk/utils'
 import { Quaternion, Vector3, Color4 } from '@dcl/ecs-math'
 import { CarDirection, Cell } from './type'
 import { globalCoordsToLocal, localCoordsToCell, getDirectionVector, cellRelativePosition } from './logic/math'
-import { BOARD_PHYSICAL_SIZE, BOARD_SIZE, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE } from '../config'
+import { BOARD_PHYSICAL_SIZE, BOARD_SIZE, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE, SYNC_ENTITY_ID } from '../config'
 import { Car } from './components/definitions'
 import { setUpSynchronizer } from './synchronizer'
 import { BOARD, createBoard } from './objects/board'
-import { createCar, getInGameCars } from './objects/car'
+import { createCar, createMainCar, getAllCars, getInGameCars, MAIN_CAR } from './objects/car'
 import { calculateFinalDelta, createAvailabilityMap, getMovementDelta, markCarCellsAsAvailable } from './logic/board'
+import { getLevel } from './levels'
 
 let lookingAt: Cell | undefined = undefined
 
@@ -42,16 +43,50 @@ const inputBuffer: {
 export async function initGame() {
   createBoard()
 
-  createCar({ x: 4, y: 4 }, 2000)
-  createCar({ x: 1, y: 1 }, 1001)
-  createCar({ x: 3, y: 3 }, 1002)
-
   setUpRaycast()
 
   setUpInputSystem()
 
   setUpSynchronizer()
+  
+  createMainCar(SYNC_ENTITY_ID)
+  for (let i = 0; i < BOARD_SIZE * BOARD_SIZE / 2 - 1; i++) {
+    createCar(SYNC_ENTITY_ID + 1 + i)
+  }
+
+  startLevel(1)
 }
+
+function startLevel(level: number) {
+  
+  getAllCars().forEach((car) => {
+    Car.getMutable(car).inGame = false
+  })
+  
+  const loadedLevel = getLevel(level)
+
+  if (!loadedLevel.mainCar) throw new Error(`Could not init level ${level}`)
+  Car.getMutable(MAIN_CAR).inGame = true
+  Car.getMutable(MAIN_CAR).position = loadedLevel.mainCar.position
+  // DIRTY HACK TO ROTATE THE MAIN CAR
+  // TODO: rewrite level loading
+  Car.getMutable(MAIN_CAR).position.x += 1
+  Car.getMutable(MAIN_CAR).direction = CarDirection.right
+  Car.getMutable(MAIN_CAR).length = loadedLevel.mainCar.length
+  
+  getAllCars().forEach((car, i) => {
+    if (Car.get(car).isMain) return
+    if (!loadedLevel.cars[i]) return
+    const carData = loadedLevel.cars[i]
+    Car.getMutable(car).inGame = true
+    Car.getMutable(car).position = carData.position
+    Car.getMutable(car).direction = carData.direction
+    Car.getMutable(car).length = carData.length
+  })
+
+}
+
+
 
 function setUpRaycast() {
   raycastSystem.registerLocalDirectionRaycast(

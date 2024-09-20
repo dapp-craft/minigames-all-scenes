@@ -19,4 +19,5 @@ export const Car = engine.defineComponent('car', {
     direction: Schemas.EnumNumber<CarDirection>(CarDirection, CarDirection.up),
     length: Schemas.Number,
     inGame: Schemas.Boolean,
+    isMain: Schemas.Boolean,
 })
