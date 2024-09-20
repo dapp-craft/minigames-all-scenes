@@ -1,4 +1,4 @@
-import { EasingFunction, engine, Entity, executeTask, GltfContainer, GltfContainerLoadingState, InputAction, inputSystem, LoadingState, Material, MeshCollider, MeshRenderer, PointerEvents, pointerEventsSystem, PointerEventType, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
+import { EasingFunction, engine, Entity, executeTask, GltfContainer, GltfContainerLoadingState, InputAction, inputSystem, LoadingState, Material, MeshCollider, MeshRenderer, PointerEvents, pointerEventsSystem, PointerEventType, Transform, Tween, TweenLoop, TweenSequence, VisibilityComponent } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../common/locators'
 import * as utils from '@dcl-sdk/utils'
 import { initMiniGame } from '../../common/library'
@@ -89,40 +89,82 @@ export async function main() {
     await init(root)
     setupWinAnimations()
     ReactEcsRenderer.setUiRenderer(ui)
+
+    const locators = await readGltfLocators('locators/obj_locators_unique.gltf')
     const clock = engine.addEntity()
-    MeshRenderer.setCylinder(clock, 0.1, 0.1)
-    MeshCollider.setCylinder(clock, 0.1, 0.1)
-    Transform.create(clock, {position: Vector3.create(8, 2.1, 1.3), scale: Vector3.create(1, 2, 1)})
-    Material.setBasicMaterial(clock, {
-        diffuseColor: Color4.Red()
+    const arrowMM = engine.addEntity()
+    const arrowHH = engine.addEntity()
+    GltfContainer.create(clock, { src: 'models/obj_clock_base.gltf' })
+    Transform.create(clock, {...locators.get('obj_clock_base.001'), parent: sceneParentEntity})
+    GltfContainer.create(arrowMM, { src: 'models/obj_arrow01_base.gltf' })
+    Transform.create(arrowMM, {
+        ...locators.get('obj_clock_base.001'), 
+        rotation: Quaternion.fromEulerDegrees(0, 0, 20),
+        parent: sceneParentEntity
     })
+    GltfContainer.create(arrowHH, { src: 'models/obj_arrow02_base.gltf' })
+    Transform.create(arrowHH, {
+        ...locators.get('obj_clock_base.001'), 
+        rotation: Quaternion.fromEulerDegrees(0, 0, 120),
+        parent: sceneParentEntity
+    })
+
+
     pointerEventsSystem.onPointerDown({
         entity: clock,
         opts: {
             button: InputAction.IA_PRIMARY,
-            hoverText: "PRESS ME",
+            hoverText: "PRESS ME"
         }
     }, () => {
-        Tween.createOrReplace(clock, {
+        const events = PointerEvents.get(clock).pointerEvents
+        PointerEvents.getMutable(clock).pointerEvents = []
+        let r = Transform.get(arrowHH).rotation
+        Tween.createOrReplace(arrowHH, {
             mode: {
                 $case: 'rotate',
                 rotate: {
-                    start: Quaternion.Identity(),
-                    end: Quaternion.fromEulerDegrees(0, 0, 180)
+                    start: r,
+                    end: Quaternion.multiply(r, Quaternion.fromEulerDegrees(0, 0, 180))
                 }
             },
-            duration: 1000,
-            easingFunction: EasingFunction.EF_EASEQUAD,
-            playing: true,
-            currentTime: 0
+            duration: 1250,
+            easingFunction: EasingFunction.EF_EASEQUAD
+        })
+        r = Transform.get(arrowMM).rotation
+        Tween.createOrReplace(arrowMM, {
+            mode: {
+                $case: 'rotate',
+                rotate: {start: r, end: r}
+            },
+            duration: 100,
+            easingFunction: EasingFunction.EF_LINEAR
+        })
+        const cycles = 3
+        TweenSequence.createOrReplace(arrowMM, {
+            sequence: Array(cycles*2).fill(0).map((_,i) => ({
+                mode: {
+                    $case: 'rotate',
+                    rotate: {
+                        start: r ,
+                        end: r = Quaternion.multiply(r, Quaternion.fromEulerDegrees(0, 0, 180))
+                    }
+                },
+                duration: 1250/cycles/3,
+                easingFunction: {0: EasingFunction.EF_EASEINQUAD, [cycles*2-1]: EasingFunction.EF_EASEOUTQUAD}[i] ?? EasingFunction.EF_LINEAR
+            }))
         })
         utils.timers.setTimeout(async () => {
-            Tween.deleteFrom(clock)
+            utils.timers.setTimeout(() => {
+                Tween.deleteFrom(arrowHH)
+                Tween.deleteFrom(arrowMM)
+                PointerEvents.getMutable(clock).pointerEvents = Array.from(events)
+            }, 500)
             alt = !alt
             await Promise.all(gameObjects.map(o => o.toggle(alt)))
             staticModels[VARIANT.ALT].forEach(o => VisibilityComponent.getMutable(o).visible = alt)
             staticModels[VARIANT.BASE].forEach(o => VisibilityComponent.getMutable(o).visible = !alt)
-        }, 1000);
+        }, 1250);
     })
     
     engine.addSystem(() => {
