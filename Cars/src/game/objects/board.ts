@@ -16,7 +16,7 @@ import { Quaternion } from '@dcl/sdk/math'
 export let BOARD: Entity
 
 const BOARD_TRANSFORM: TransformType = {
-  position: Vector3.create(8.5, 0.2, 8.5),
+  position: Vector3.create(8, 0.01, 4.2141509056),
   scale: Vector3.create(BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE),
   rotation: Quaternion.fromEulerDegrees(90, 0, 0)
 }
