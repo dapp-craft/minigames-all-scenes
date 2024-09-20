@@ -19,11 +19,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_exterior_alt_collider"
+			"name":"obj_exterior_alt"
 		},
 		{
 			"mesh":1,
-			"name":"obj_exterior_alt"
+			"name":"obj_exterior_alt_collider"
 		}
 	],
 	"materials":[
@@ -53,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.018",
+			"name":"Cylinder.019",
 			"primitives":[
 				{
 					"attributes":{
@@ -61,12 +61,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"indices":3
+					"indices":3,
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Cylinder.019",
+			"name":"Cylinder.026",
 			"primitives":[
 				{
 					"attributes":{
@@ -74,7 +75,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":7,
+					"indices":3,
 					"material":0
 				}
 			]
@@ -101,41 +102,41 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":17725,
+			"count":79825,
 			"max":[
-				7.9902825355529785,
+				7.941812515258789,
 				9.660547256469727,
 				7.911832332611084
 			],
 			"min":[
-				-7.9902825355529785,
+				-7.941812515258789,
 				-0.04576066881418228,
-				-7.992584228515625
+				-7.8988165855407715
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":17725,
+			"count":79825,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":17725,
+			"count":79825,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
-			"componentType":5123,
-			"count":27165,
+			"componentType":5125,
+			"count":104034,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":80590,
+			"count":79825,
 			"max":[
 				7.941812515258789,
 				9.660547256469727,
@@ -151,70 +152,58 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":80590,
+			"count":79825,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":80590,
+			"count":79825,
 			"type":"VEC2"
-		},
-		{
-			"bufferView":7,
-			"componentType":5125,
-			"count":105123,
-			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":212700,
+			"byteLength":957900,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":212700,
-			"byteOffset":212700,
+			"byteLength":957900,
+			"byteOffset":957900,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":141800,
-			"byteOffset":425400,
+			"byteLength":638600,
+			"byteOffset":1915800,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":54330,
-			"byteOffset":567200,
+			"byteLength":416136,
+			"byteOffset":2554400,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":967080,
-			"byteOffset":621532,
+			"byteLength":957900,
+			"byteOffset":2970536,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":967080,
-			"byteOffset":1588612,
+			"byteLength":957900,
+			"byteOffset":3928436,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":644720,
-			"byteOffset":2555692,
+			"byteLength":638600,
+			"byteOffset":4886336,
 			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":420492,
-			"byteOffset":3200412,
-			"target":34963
 		}
 	],
 	"samplers":[
@@ -225,7 +214,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":3620904,
+			"byteLength":5524936,
 			"uri":"obj_exterior_alt.bin"
 		}
 	]

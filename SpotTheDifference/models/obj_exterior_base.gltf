@@ -19,11 +19,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_exterior_base_collider"
+			"name":"obj_exterior_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_exterior_base"
+			"name":"obj_exterior_base_collider"
 		}
 	],
 	"materials":[
@@ -53,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.050",
+			"name":"Cylinder.057",
 			"primitives":[
 				{
 					"attributes":{
@@ -61,12 +61,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"indices":3
+					"indices":3,
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Cylinder.057",
+			"name":"Cylinder.025",
 			"primitives":[
 				{
 					"attributes":{
@@ -74,7 +75,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":7,
+					"indices":3,
 					"material":0
 				}
 			]
@@ -101,41 +102,41 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":17725,
+			"count":79824,
 			"max":[
-				7.9902825355529785,
+				7.941812515258789,
 				9.660547256469727,
 				7.911832332611084
 			],
 			"min":[
-				-7.9902825355529785,
+				-7.941812515258789,
 				-0.04576066881418228,
-				-7.992584228515625
+				-7.8988165855407715
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":17725,
+			"count":79824,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":17725,
+			"count":79824,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
-			"componentType":5123,
-			"count":27165,
+			"componentType":5125,
+			"count":104034,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":80589,
+			"count":79824,
 			"max":[
 				7.941812515258789,
 				9.660547256469727,
@@ -151,70 +152,58 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":80589,
+			"count":79824,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":80589,
+			"count":79824,
 			"type":"VEC2"
-		},
-		{
-			"bufferView":7,
-			"componentType":5125,
-			"count":105123,
-			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":212700,
+			"byteLength":957888,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":212700,
-			"byteOffset":212700,
+			"byteLength":957888,
+			"byteOffset":957888,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":141800,
-			"byteOffset":425400,
+			"byteLength":638592,
+			"byteOffset":1915776,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":54330,
-			"byteOffset":567200,
+			"byteLength":416136,
+			"byteOffset":2554368,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":967068,
-			"byteOffset":621532,
+			"byteLength":957888,
+			"byteOffset":2970504,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":967068,
-			"byteOffset":1588600,
+			"byteLength":957888,
+			"byteOffset":3928392,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":644712,
-			"byteOffset":2555668,
+			"byteLength":638592,
+			"byteOffset":4886280,
 			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":420492,
-			"byteOffset":3200380,
-			"target":34963
 		}
 	],
 	"samplers":[
@@ -225,7 +214,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":3620872,
+			"byteLength":5524872,
 			"uri":"obj_exterior_base.bin"
 		}
 	]
