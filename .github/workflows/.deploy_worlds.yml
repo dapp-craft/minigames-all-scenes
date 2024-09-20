@@ -1,4 +1,4 @@
-name: deploy-worlds
+name: .deploy-worlds
 
 on:
   workflow_call:

@@ -1,4 +1,4 @@
-name: deploy-genesis
+name: .deploy-genesis
 
 on:
   workflow_call:
