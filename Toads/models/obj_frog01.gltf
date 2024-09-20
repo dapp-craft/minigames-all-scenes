@@ -4,8 +4,7 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_specular",
-		"KHR_materials_ior"
+		"KHR_materials_specular"
 	],
 	"scene":0,
 	"scenes":[
@@ -20,33 +19,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_frog01",
-			"rotation":[
-				0.7071068286895752,
-				0,
-				0,
-				0.7071068286895752
-			],
-			"scale":[
-				0.009999999776482582,
-				0.009999999776482582,
-				0.009999999776482582
-			]
+			"name":"obj_frog01"
 		},
 		{
 			"mesh":1,
-			"name":"obj_frog01_collider",
-			"rotation":[
-				0.7071068286895752,
-				0,
-				0,
-				0.7071068286895752
-			],
-			"scale":[
-				0.009999999776482582,
-				0.009999999776482582,
-				0.009999999776482582
-			]
+			"name":"obj_frog01_collider"
 		}
 	],
 	"materials":[
@@ -55,26 +32,20 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
-				},
-				"KHR_materials_ior":{
-					"ior":1.4500000476837158
 				}
 			},
-			"name":"lambert3",
+			"name":"obj_frame",
 			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.04565392807126045,
-					0.7002376317977905,
-					0.04565392807126045,
-					1
-				],
+				"baseColorTexture":{
+					"index":0
+				},
 				"metallicFactor":0
 			}
 		}
 	],
 	"meshes":[
 		{
-			"name":"Mesh.236",
+			"name":"Mesh.011",
 			"primitives":[
 				{
 					"attributes":{
@@ -88,7 +59,7 @@
 			]
 		},
 		{
-			"name":"Mesh.388",
+			"name":"Mesh.008",
 			"primitives":[
 				{
 					"attributes":{
@@ -101,117 +72,136 @@
 			]
 		}
 	],
+	"textures":[
+		{
+			"sampler":0,
+			"source":0
+		}
+	],
+	"images":[
+		{
+			"mimeType":"image/png",
+			"name":"obj_frame",
+			"uri":"textures/obj_frame.png"
+		}
+	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":4547,
+			"count":844,
 			"max":[
-				41.45785903930664,
-				40.8216552734375,
-				44.95698547363281
+				0.42784494161605835,
+				0.42037132382392883,
+				0.43949094414711
 			],
 			"min":[
-				-41.46052932739258,
-				-36.149169921875,
-				-36.553863525390625
+				-0.42784473299980164,
+				-0.41802436113357544,
+				-0.35402005910873413
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":4547,
+			"count":844,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":4547,
+			"count":844,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":24948,
+			"count":3858,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":4547,
+			"count":844,
 			"max":[
-				41.45785903930664,
-				40.8216552734375,
-				44.95698547363281
+				0.42784494161605835,
+				0.42037132382392883,
+				0.43949094414711
 			],
 			"min":[
-				-41.46052932739258,
-				-36.149169921875,
-				-36.553863525390625
+				-0.42784473299980164,
+				-0.41802436113357544,
+				-0.35402005910873413
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":4547,
+			"count":844,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":4547,
+			"count":844,
 			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":54564,
+			"byteLength":10128,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":54564,
-			"byteOffset":54564,
+			"byteLength":10128,
+			"byteOffset":10128,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":36376,
-			"byteOffset":109128,
+			"byteLength":6752,
+			"byteOffset":20256,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":49896,
-			"byteOffset":145504,
+			"byteLength":7716,
+			"byteOffset":27008,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":54564,
-			"byteOffset":195400,
+			"byteLength":10128,
+			"byteOffset":34724,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":54564,
-			"byteOffset":249964,
+			"byteLength":10128,
+			"byteOffset":44852,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":36376,
-			"byteOffset":304528,
+			"byteLength":6752,
+			"byteOffset":54980,
 			"target":34962
+		}
+	],
+	"samplers":[
+		{
+			"magFilter":9729,
+			"minFilter":9987
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":340904,
+			"byteLength":61732,
 			"uri":"obj_frog01.bin"
 		}
 	]

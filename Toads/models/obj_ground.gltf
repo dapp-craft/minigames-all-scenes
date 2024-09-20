@@ -11,7 +11,8 @@
 		{
 			"name":"obj_ground",
 			"nodes":[
-				0
+				0,
+				1
 			]
 		}
 	],
@@ -19,6 +20,10 @@
 		{
 			"mesh":0,
 			"name":"obj_ground"
+		},
+		{
+			"mesh":1,
+			"name":"obj_ground_collider"
 		}
 	],
 	"materials":[
@@ -50,6 +55,19 @@
 					},
 					"indices":3,
 					"material":0
+				}
+			]
+		},
+		{
+			"name":"Mesh.001",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":4,
+						"NORMAL":5,
+						"TEXCOORD_0":6
+					},
+					"indices":3
 				}
 			]
 		}
@@ -101,6 +119,34 @@
 			"componentType":5123,
 			"count":2232,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":632,
+			"max":[
+				8,
+				0.7381060719490051,
+				8
+			],
+			"min":[
+				-8,
+				-1.220703097715159e-06,
+				-7.999998569488525
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":632,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":632,
+			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
@@ -127,6 +173,24 @@
 			"byteLength":4464,
 			"byteOffset":20224,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":7584,
+			"byteOffset":24688,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":7584,
+			"byteOffset":32272,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5056,
+			"byteOffset":39856,
+			"target":34962
 		}
 	],
 	"samplers":[
@@ -137,7 +201,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":24688,
+			"byteLength":44912,
 			"uri":"obj_ground.bin"
 		}
 	]

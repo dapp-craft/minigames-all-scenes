@@ -11,7 +11,8 @@
 		{
 			"name":"obj_grass",
 			"nodes":[
-				0
+				0,
+				1
 			]
 		}
 	],
@@ -19,6 +20,10 @@
 		{
 			"mesh":0,
 			"name":"obj_grass"
+		},
+		{
+			"mesh":1,
+			"name":"obj_grass_collider"
 		}
 	],
 	"materials":[
@@ -50,6 +55,19 @@
 					},
 					"indices":3,
 					"material":0
+				}
+			]
+		},
+		{
+			"name":"Mesh.003",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":4,
+						"NORMAL":5,
+						"TEXCOORD_0":6
+					},
+					"indices":3
 				}
 			]
 		}
@@ -101,6 +119,34 @@
 			"componentType":5123,
 			"count":25734,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":7831,
+			"max":[
+				7.930132865905762,
+				4.591128826141357,
+				7.517632961273193
+			],
+			"min":[
+				-7.930132865905762,
+				-0.09402231872081757,
+				-7.749398231506348
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":7831,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":7831,
+			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
@@ -127,6 +173,24 @@
 			"byteLength":51468,
 			"byteOffset":250592,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":93972,
+			"byteOffset":302060,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":93972,
+			"byteOffset":396032,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":62648,
+			"byteOffset":490004,
+			"target":34962
 		}
 	],
 	"samplers":[
@@ -137,7 +201,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":302060,
+			"byteLength":552652,
 			"uri":"obj_grass.bin"
 		}
 	]
