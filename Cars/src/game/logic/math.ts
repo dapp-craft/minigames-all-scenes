@@ -1,8 +1,8 @@
 import { Transform } from '@dcl/sdk/ecs'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { BOARD_SIZE, CELL_SIZE_RELATIVE } from '../config'
-import { Cell } from './type'
-import { BOARD } from './objects/board'
+import { BOARD_SIZE, CELL_SIZE_RELATIVE } from '../../config'
+import { Cell } from '../type'
+import { BOARD } from '../objects/board'
 
 export function globalCoordsToLocal(position: Vector3) {
   const boardPos = Transform.get(BOARD).position

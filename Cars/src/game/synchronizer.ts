@@ -1,7 +1,7 @@
 import { EasingFunction, Entity, GltfContainer, Transform, Tween, engine } from '@dcl/sdk/ecs'
 import { CarDirection, Cell } from './type'
 import { Car } from './components/definitions'
-import { cellRelativePosition } from './math'
+import { cellRelativePosition } from './logic/math'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { carModels } from '../resources/resources'
 
