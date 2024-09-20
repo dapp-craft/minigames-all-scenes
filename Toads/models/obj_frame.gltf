@@ -9,7 +9,7 @@
 	"scene":0,
 	"scenes":[
 		{
-			"name":"obj_floor",
+			"name":"obj_frame",
 			"nodes":[
 				0
 			]
@@ -18,7 +18,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_floor"
+			"name":"obj_frame"
 		}
 	],
 	"materials":[
@@ -29,7 +29,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_floor",
+			"name":"obj_frame",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":0
@@ -40,7 +40,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.250",
+			"name":"Mesh.390",
 			"primitives":[
 				{
 					"attributes":{
@@ -63,69 +63,69 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_floor",
-			"uri":"textures/obj_floor.png"
+			"name":"obj_frame",
+			"uri":"textures/obj_frame.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1844,
+			"count":1901,
 			"max":[
-				7.656919002532959,
-				0.73961341381073,
-				7.690885543823242
+				7.460275650024414,
+				3.041011095046997,
+				5.386879920959473
 			],
 			"min":[
-				-7.656919002532959,
-				-5.7675372033827443e-08,
-				-6.6080756187438965
+				-7.460275650024414,
+				-0.0775798037648201,
+				-7.289271831512451
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1844,
+			"count":1901,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1844,
+			"count":1901,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":5328,
+			"count":8136,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":22128,
+			"byteLength":22812,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":22128,
-			"byteOffset":22128,
+			"byteLength":22812,
+			"byteOffset":22812,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":14752,
-			"byteOffset":44256,
+			"byteLength":15208,
+			"byteOffset":45624,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10656,
-			"byteOffset":59008,
+			"byteLength":16272,
+			"byteOffset":60832,
 			"target":34963
 		}
 	],
@@ -137,8 +137,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":69664,
-			"uri":"obj_floor.bin"
+			"byteLength":77104,
+			"uri":"obj_frame.bin"
 		}
 	]
 }
