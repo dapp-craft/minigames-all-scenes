@@ -35,6 +35,8 @@ import { movePlayerTo } from '~system/RestrictedActions'
 
 let lookingAt: Cell | undefined = undefined
 
+let inputAvailable = false
+
 export const gameState: {
   playerAddress: string
   playerName: string
@@ -104,7 +106,7 @@ export function startLevel(level: number) {
   countdown(() => {
     gameState.levelStartTime = Date.now()
     gameState.level = level
-
+    inputAvailable = true
     loadLevel(level)
   }, 3)
 }
@@ -136,6 +138,7 @@ function setUpRaycast() {
       }
     },
     (hit) => {
+      if (!inputAvailable) return
       // Update lookingAt
       if (hit.hits.length === 0) {
         inputBuffer.currentCell = undefined
@@ -179,6 +182,7 @@ function setUpInputSystem() {
       inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN) &&
       PointerLock.get(engine.CameraEntity).isPointerLocked
     ) {
+      if (!inputAvailable) return
       if (lookingAt) {
         const car = getCarAt(lookingAt)
         if (car == undefined) return
@@ -192,6 +196,7 @@ function setUpInputSystem() {
       inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_UP) &&
       PointerLock.get(engine.CameraEntity).isPointerLocked
     ) {
+      if (!inputAvailable) return
       inputBuffer.selectedCar = undefined
       inputBuffer.startCell = undefined
       inputBuffer.currentCell = undefined
@@ -216,7 +221,10 @@ function processMovement(start: Cell, end: Cell) {
   Car.getMutable(car).position = { x: carData.position.x + finalDelta.x, y: carData.position.y + finalDelta.y }
   inputBuffer.startCell = { x: start.x + finalDelta.x, y: start.y + finalDelta.y }
 
-  if (isSolved()) startWinAnimation(finishLevel)
+  if (isSolved()) {
+    inputAvailable = false
+    startWinAnimation(finishLevel)
+  }
 }
 
 function isSolved() {
