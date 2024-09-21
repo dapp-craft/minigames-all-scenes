@@ -7,7 +7,13 @@ const levels: Record<number, string> = {
       **0DBC
       00GFEE
       00GF00
-      HH00II`
+      HH00II`,
+  2: `00HHG0
+      0JJFG0
+      **CF00
+      B0CEE0
+      B0C0D0
+      SSS0D0`
 }
 
 export function getLevel(level: number) {
@@ -32,7 +38,6 @@ export function getLevel(level: number) {
     if (column < BOARD_SIZE - 1 && rows[row][column + 1] == rows[row][column]) return CarDirection.left
     return CarDirection.right
   }
-  
   const getLength = (row: number, column: number, direction: CarDirection, carSymbol: string) => {
     let length = 1
     const xD = direction == CarDirection.left ? 1 : direction == CarDirection.right ? -1 : 0
@@ -42,7 +47,6 @@ export function getLevel(level: number) {
       if (column + xD * length < 0 || column + xD * length >= BOARD_SIZE) break
       if (rows[row + yD * length][column + xD * length] != carSymbol) break
       length++
-
     }
     return length
   }
