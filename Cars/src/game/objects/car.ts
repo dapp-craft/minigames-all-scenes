@@ -76,3 +76,13 @@ export function getAllCars(): Entity[] {
   }
   return ret
 }
+
+export function getAllCarsExceptMain(): Entity[] {
+  const ret = []
+  for (let [car] of engine.getEntitiesWith(Car)) {
+    if (!Car.get(car).isMain) {
+      ret.push(car)
+    }
+  }
+  return ret
+}

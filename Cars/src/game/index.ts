@@ -74,7 +74,7 @@ function startLevel(level: number) {
   Car.getMutable(MAIN_CAR).direction = CarDirection.right
   Car.getMutable(MAIN_CAR).length = loadedLevel.mainCar.length
   
-  getAllCars().forEach((car, i) => {
+  getAllCarsExceptMain().forEach((car, i) => {
     if (Car.get(car).isMain) return
     if (!loadedLevel.cars[i]) return
     const carData = loadedLevel.cars[i]
