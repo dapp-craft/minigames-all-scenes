@@ -26,9 +26,28 @@ import { setUpSynchronizer } from './synchronizer'
 import { BOARD, createBoard } from './objects/board'
 import { createCar, createMainCar, getAllCars, getAllCarsExceptMain, getInGameCars, MAIN_CAR } from './objects/car'
 import { calculateFinalDelta, createAvailabilityMap, getMovementDelta, markCarCellsAsAvailable } from './logic/board'
-import { getLevel } from './levels'
+import { getLevel, MAX_LEVEL } from './levels'
+import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
+import { getPlayer } from '@dcl/sdk/players'
+import { countdown, initCountdownNumbers, setupWinAnimations, startWinAnimation } from './gameEffects'
+import { queue } from '@dcl-sdk/mini-games/src'
+import { movePlayerTo } from '~system/RestrictedActions'
 
 let lookingAt: Cell | undefined = undefined
+
+export const gameState: {
+  playerAddress: string
+  playerName: string
+  levelStartTime: number
+  levelFinishTime: number
+  level: number
+} = {
+  playerAddress: '',
+  playerName: '',
+  levelStartTime: 0,
+  levelFinishTime: 0,
+  level: 0
+}
 
 const inputBuffer: {
   selectedCar: Entity | undefined
@@ -41,6 +60,10 @@ const inputBuffer: {
 }
 
 export async function initGame() {
+  initCountdownNumbers()
+
+  setupWinAnimations()
+
   createBoard()
 
   setUpRaycast()
@@ -48,49 +71,58 @@ export async function initGame() {
   setUpInputSystem()
 
   setUpSynchronizer()
-  
+
   createMainCar(SYNC_ENTITY_ID)
-  for (let i = 0; i < BOARD_SIZE * BOARD_SIZE / 2 - 1; i++) {
+
+  for (let i = 0; i < (BOARD_SIZE * BOARD_SIZE) / 2 - 1; i++) {
     createCar(SYNC_ENTITY_ID + 1 + i)
   }
 
-  startLevel(1)
+  await fetchPlayerProgress()
 }
 
-function startLevel(level: number) {
-  
+export function getReadyToStart() {
+  console.log('Get ready to start')
+
+  const levetToStart = (playerProgress?.level ?? 0) + 1 > MAX_LEVEL ? MAX_LEVEL : (playerProgress?.level ?? 0) + 1
+
+  gameState.playerName = getPlayer()?.name ?? 'Underfined'
+  gameState.playerAddress = getPlayer()?.userId ?? 'Underfined'
+
+  utils.timers.setTimeout(() => {
+    startLevel(levetToStart)
+  }, 2000)
+}
+
+export function startLevel(level: number) {
+  console.log('Start level', level)
+
   getAllCars().forEach((car) => {
-    Car.getMutable(car).inGame = false
-  })
-  
-  const loadedLevel = getLevel(level)
-
-  if (!loadedLevel.mainCar) throw new Error(`Could not init level ${level}`)
-  Car.getMutable(MAIN_CAR).inGame = true
-  Car.getMutable(MAIN_CAR).position = loadedLevel.mainCar.position
-  // DIRTY HACK TO ROTATE THE MAIN CAR
-  // TODO: rewrite level loading
-  Car.getMutable(MAIN_CAR).position.x += 1
-  Car.getMutable(MAIN_CAR).direction = CarDirection.right
-  Car.getMutable(MAIN_CAR).length = loadedLevel.mainCar.length
-  
-  getAllCarsExceptMain().forEach((car, i) => {
-    if (Car.get(car).isMain) return
-    if (!loadedLevel.cars[i]) return
-    const carData = loadedLevel.cars[i]
-    Car.getMutable(car).inGame = true
-    Car.getMutable(car).position = carData.position
-    Car.getMutable(car).direction = carData.direction
-    Car.getMutable(car).length = carData.length
+    removeCarFromGame(car)
   })
 
+  countdown(() => {
+    gameState.levelStartTime = Date.now()
+    gameState.level = level
+
+    loadLevel(level)
+  }, 3)
 }
 
 function finishLevel() {
   inputBuffer.selectedCar = undefined
   inputBuffer.startCell = undefined
   inputBuffer.currentCell = undefined
-  startLevel(2)
+
+  gameState.levelFinishTime = Date.now()
+
+  updatePlayerProgress(gameState)
+  if (queue.getQueue().length > 1) {
+    exitGame()
+  } else {
+    const levelToStart = gameState.level == MAX_LEVEL ? 1 : gameState.level + 1
+    startLevel(levelToStart)
+  }
 }
 
 function setUpRaycast() {
@@ -181,16 +213,52 @@ function processMovement(start: Cell, end: Cell) {
 
   const finalDelta = calculateFinalDelta(car, movementD, availabilityMap, start)
 
-  Car.getMutable(car).position = {x: carData.position.x + finalDelta.x, y: carData.position.y + finalDelta.y}
+  Car.getMutable(car).position = { x: carData.position.x + finalDelta.x, y: carData.position.y + finalDelta.y }
   inputBuffer.startCell = { x: start.x + finalDelta.x, y: start.y + finalDelta.y }
 
-  if (isSolved()) finishLevel()
+  if (isSolved()) startWinAnimation(finishLevel)
 }
 
 function isSolved() {
   const mainCar = Car.get(MAIN_CAR)
-  if (mainCar.position.x == 5){
-    return true    
+  if (mainCar.position.x == 5) {
+    return true
   }
   return false
+}
+
+function loadLevel(level: number) {
+  const loadedLevel = getLevel(level)
+
+  if (!loadedLevel.mainCar) throw new Error(`Could not init level ${level}`)
+  Car.getMutable(MAIN_CAR).inGame = true
+  Car.getMutable(MAIN_CAR).position = loadedLevel.mainCar.position
+  // DIRTY HACK TO ROTATE THE MAIN CAR
+  // TODO: rewrite level loading
+  Car.getMutable(MAIN_CAR).position.x += 1
+  Car.getMutable(MAIN_CAR).direction = CarDirection.right
+  Car.getMutable(MAIN_CAR).length = loadedLevel.mainCar.length
+
+  getAllCarsExceptMain().forEach((car, i) => {
+    if (Car.get(car).isMain) return
+    if (!loadedLevel.cars[i]) return
+    const carData = loadedLevel.cars[i]
+    Car.getMutable(car).inGame = true
+    Car.getMutable(car).position = carData.position
+    Car.getMutable(car).direction = carData.direction
+    Car.getMutable(car).length = carData.length
+  })
+}
+
+function removeCarFromGame(car: Entity) {
+  Car.getMutable(car).inGame = false
+  Car.getMutable(car).position = { x: -1, y: -1 }
+  Car.getMutable(car).direction = CarDirection.right
+}
+
+export function exitGame() {
+  movePlayerTo({
+    newRelativePosition: Vector3.create(8, 1, 14)
+  })
+  queue.setNextPlayer()
 }

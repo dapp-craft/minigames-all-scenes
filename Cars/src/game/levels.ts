@@ -16,6 +16,8 @@ const levels: Record<number, string> = {
       SSS0D0`
 }
 
+export const MAX_LEVEL = Object.keys(levels).length
+
 export function getLevel(level: number) {
   if (!levels[level]) throw new Error(`Level ${level} not found`)
   const levelData = levels[level]

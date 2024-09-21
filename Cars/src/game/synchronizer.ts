@@ -22,10 +22,12 @@ export function setUpSynchronizer() {
 function updateCar(car: Entity) {
   const carData = Car.get(car)
 
+  
+
+  // Position
   const startPosition = Transform.get(car).position
   const endPosition = cellRelativePosition(carData.position)
 
-  // Position
   if (!Vector3.equals(startPosition, endPosition)) {
     Tween.createOrReplace(car, {
       mode: Tween.Mode.Move({

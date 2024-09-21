@@ -1,8 +1,7 @@
+export const GAME_ID = '67ad1757-6796-4817-ac29-5bf1987d24f9'
+
+
 // Game
-
-import { TransformType } from "@dcl/sdk/ecs"
-import { Quaternion, Vector3 } from "@dcl/sdk/math"
-
 /**
  * Number of rows and columns of the board
  */
