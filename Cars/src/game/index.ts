@@ -24,7 +24,7 @@ import { BOARD_PHYSICAL_SIZE, BOARD_SIZE, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE
 import { Car } from './components/definitions'
 import { setUpSynchronizer } from './synchronizer'
 import { BOARD, createBoard } from './objects/board'
-import { createCar, createMainCar, getAllCars, getInGameCars, MAIN_CAR } from './objects/car'
+import { createCar, createMainCar, getAllCars, getAllCarsExceptMain, getInGameCars, MAIN_CAR } from './objects/car'
 import { calculateFinalDelta, createAvailabilityMap, getMovementDelta, markCarCellsAsAvailable } from './logic/board'
 import { getLevel } from './levels'
 
@@ -86,7 +86,12 @@ function startLevel(level: number) {
 
 }
 
-
+function finishLevel() {
+  inputBuffer.selectedCar = undefined
+  inputBuffer.startCell = undefined
+  inputBuffer.currentCell = undefined
+  startLevel(2)
+}
 
 function setUpRaycast() {
   raycastSystem.registerLocalDirectionRaycast(
@@ -178,4 +183,14 @@ function processMovement(start: Cell, end: Cell) {
 
   Car.getMutable(car).position = {x: carData.position.x + finalDelta.x, y: carData.position.y + finalDelta.y}
   inputBuffer.startCell = { x: start.x + finalDelta.x, y: start.y + finalDelta.y }
+
+  if (isSolved()) finishLevel()
+}
+
+function isSolved() {
+  const mainCar = Car.get(MAIN_CAR)
+  if (mainCar.position.x == 5){
+    return true    
+  }
+  return false
 }
