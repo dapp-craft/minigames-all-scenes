@@ -4,15 +4,16 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'MatchTwo/**'
-      - 'common/**'
+      - ci_tests2
+    # paths:
+    #   - 'MatchTwo/**'
+    #   - 'common/**'
     tags:
       - 'stage/circus-v*'
 
 jobs:
   testing:
-    if: github.ref_type != 'tag'
+    if: github.ref_type == 'tag'
     uses: ./.github/workflows/.deploy_worlds.yml
     with:
       directory: MatchTwo
@@ -21,7 +22,7 @@ jobs:
       DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
 
   staging:
-    if: github.ref_type == 'tag'
+    if: github.ref_type != 'tag'
     uses: ./.github/workflows/.deploy_genesis.yml
     with:
       directory: MatchTwo
@@ -29,3 +30,10 @@ jobs:
       coordinates: '["50,-88"]'
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
+
+  production:
+    needs: staging
+    runs-on: ubuntu-latest
+    environment: puzzle-deploy
+    steps:
+      - run: ls
