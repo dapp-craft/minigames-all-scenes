@@ -1,30 +1,32 @@
-name: steampunk
+name: frogs
+
 on:
   push:
     branches:
       - main
     paths:
-      - 'SpotTheDifference/**'
+      - 'Toads/**'
       - 'common/**'
     tags:
-      - 'stage/steampunk-v*'
+      - 'preview/frogs-v*'
+      - 'release/frogs-v*'
 
 jobs:
   testing:
     if: github.ref_type != 'tag'
     uses: ./.github/workflows/.deploy_worlds.yml
     with:
-      directory: SpotTheDifference
-      worlds: v01d.crossverse.eth
+      directory: Toads
+      worlds: maccoder.crossverse.eth
     secrets:
       DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
 
-  staging:
+  release:
     if: github.ref_type == 'tag'
     uses: ./.github/workflows/.deploy_genesis.yml
     with:
-      directory: SpotTheDifference
-      server: linker-server.decentraland.today
-      coordinates: '["-138,-94"]'
+      directory: Toads
+      coordinates: '["-109,-97"]'
+      mainnet: ${{ startsWith(github.ref_name, 'release') }}
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}

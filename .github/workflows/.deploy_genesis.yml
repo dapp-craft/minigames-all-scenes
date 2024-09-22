@@ -9,6 +9,9 @@ on:
       coordinates:
         required: true
         type: string
+      testnet:
+        type: boolean
+        default: true
       mainnet:
         type: boolean
         default: false
@@ -36,15 +39,16 @@ jobs:
         run: npm run build -- --production --skip-install
       - uses: actions/upload-artifact@v4
         with:
-          retention-days: 1
+          retention-days: 7
           include-hidden-files: true
           name: project
           path: |
             ./${{ inputs.directory }}
             !./${{ inputs.directory }}/node_modules
   staging:
-    runs-on: ubuntu-latest
+    if: inputs.testnet
     needs: build
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v4
       - name: install decentraland cli
@@ -60,16 +64,17 @@ jobs:
         run: dcl deploy -t ${{ env.testing-server }} --skip-build --skip-validations --skip-version-checks
 
   production:
-    needs: staging
+    if: inputs.mainnet
+    needs: build
     runs-on: ubuntu-latest
     environment: production
-    if: inputs.mainnet
     steps:
       - uses: actions/setup-node@v4
+      - name: install decentraland commands
+        run: npm install @dcl/sdk-commands
       - uses: actions/download-artifact@v4
         with:
           name: project
-      - run: npm install @dcl/sdk-commands
       - name: set genesis coordinates
         run: node -e '${{ vars.SET_DEPLOY_TARGET }}' genesis '${{ inputs.coordinates }}'
       - name: deploy to mainnet catalyst

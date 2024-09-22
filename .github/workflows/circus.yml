@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - main
-      - ci_tests2
-    # paths:
-    #   - 'MatchTwo/**'
-    #   - 'common/**'
+    paths:
+      - 'MatchTwo/**'
+      - 'common/**'
     tags:
       - 'preview/circus-v*'
       - 'release/circus-v*'
