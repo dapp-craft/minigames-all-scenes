@@ -8,7 +8,8 @@ on:
       - 'Cars/**'
       - 'common/**'
     tags:
-      - 'stage/cars-v*'
+      - 'preview/cars-v*'
+      - 'release/cars-v*'
 
 jobs:
   testing:
@@ -20,12 +21,12 @@ jobs:
     secrets:
       DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
 
-  staging:
+  release:
     if: github.ref_type == 'tag'
     uses: ./.github/workflows/.deploy_genesis.yml
     with:
       directory: Cars
-      server: linker-server.decentraland.today
       coordinates: '["-139,-28"]'
+      mainnet: ${{ startsWith(github.ref_name, 'release') }}
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}

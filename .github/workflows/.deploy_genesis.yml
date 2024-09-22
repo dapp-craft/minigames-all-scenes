@@ -9,12 +9,19 @@ on:
       coordinates:
         required: true
         type: string
-      server:
-        required: true
-        type: string
+      testnet:
+        type: boolean
+        default: true
+      mainnet:
+        type: boolean
+        default: false
     secrets:
       DEPLOY_PKEY:
         required: true
+
+env:
+  testing-server: linker-server.decentraland.today
+  production-server: linker-server.decentraland.org
 
 jobs:
   build:
@@ -32,15 +39,16 @@ jobs:
         run: npm run build -- --production --skip-install
       - uses: actions/upload-artifact@v4
         with:
-          retention-days: 1
+          retention-days: 7
           include-hidden-files: true
           name: project
           path: |
             ./${{ inputs.directory }}
             !./${{ inputs.directory }}/node_modules
-  deploy:
-    runs-on: ubuntu-latest
+  staging:
+    if: inputs.testnet
     needs: build
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v4
       - name: install decentraland cli
@@ -50,7 +58,26 @@ jobs:
           name: project
       - name: set genesis coordinates
         run: node -e '${{ vars.SET_DEPLOY_TARGET }}' genesis '${{ inputs.coordinates }}'
-      - name: deploy to genesis
+      - name: deploy to testing catalyst
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
-        run: dcl deploy -t ${{ inputs.server }} --skip-build --skip-validations --skip-version-checks
+        run: dcl deploy -t ${{ env.testing-server }} --skip-build --skip-validations --skip-version-checks
+
+  production:
+    if: inputs.mainnet
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/setup-node@v4
+      - name: install decentraland commands
+        run: npm install @dcl/sdk-commands
+      - uses: actions/download-artifact@v4
+        with:
+          name: project
+      - name: set genesis coordinates
+        run: node -e '${{ vars.SET_DEPLOY_TARGET }}' genesis '${{ inputs.coordinates }}'
+      - name: deploy to mainnet catalyst
+        env:
+          DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
+        run: npm run deploy -- -t ${{ env.production-server }} --skip-build --skip-validations --skip-version-checks
