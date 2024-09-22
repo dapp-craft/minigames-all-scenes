@@ -78,6 +78,6 @@ jobs:
       - name: set genesis coordinates
         run: node -e '${{ vars.SET_DEPLOY_TARGET }}' genesis '${{ inputs.coordinates }}'
       - name: deploy to mainnet catalyst
-        # env:
-        #   DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
+        env:
+          DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
         run: npm run deploy -- -t ${{ env.production-server }} --skip-build --skip-validations --skip-version-checks

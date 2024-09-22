@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - main
-      - ci_tests2
-    # paths:
-    #   - 'SlidingPuzzle/**'
-    #   - 'common/**'
+    paths:
+      - 'SlidingPuzzle/**'
+      - 'common/**'
     tags:
       - 'preview/puzzle-v*'
       - 'release/puzzle-v*'
