@@ -9,7 +9,7 @@ on:
       coordinates:
         required: true
         type: string
-      production:
+      mainnet:
         type: boolean
         default: false
     secrets:
@@ -17,7 +17,7 @@ on:
         required: true
 
 env:
-  staging-server: linker-server.decentraland.today
+  testing-server: linker-server.decentraland.today
   production-server: linker-server.decentraland.org
 
 jobs:
@@ -54,24 +54,25 @@ jobs:
           name: project
       - name: set genesis coordinates
         run: node -e '${{ vars.SET_DEPLOY_TARGET }}' genesis '${{ inputs.coordinates }}'
-      - name: deploy to staging genesis
+      - name: deploy to testing catalyst
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
-        run: dcl deploy -t ${{ env.staging-server }} --skip-build --skip-validations --skip-version-checks
+        run: dcl deploy -t ${{ env.testing-server }} --skip-build --skip-validations --skip-version-checks
 
   production:
     needs: staging
     runs-on: ubuntu-latest
     environment: production
-    if: inputs.production
+    if: inputs.mainnet
     steps:
       - uses: actions/setup-node@v4
       - uses: actions/download-artifact@v4
         with:
           name: project
+      - run: npm install sdk-commands
       - name: set genesis coordinates
         run: node -e '${{ vars.SET_DEPLOY_TARGET }}' genesis '${{ inputs.coordinates }}'
-      - name: deploy to production genesis
+      - name: deploy to mainnet catalyst
         # env:
         #   DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
         run: npm run deploy -- -t ${{ env.production-server }} --skip-build --skip-validations --skip-version-checks

@@ -28,6 +28,6 @@ jobs:
     with:
       directory: SlidingPuzzle
       coordinates: '["79,-30"]'
-      production: ${{ startsWith(github.ref_name, 'release') }}
+      mainnet: ${{ startsWith(github.ref_name, 'release') }}
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}

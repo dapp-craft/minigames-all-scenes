@@ -28,5 +28,6 @@ jobs:
     with:
       directory: MatchTwo
       coordinates: '["50,-88"]'
+      mainnet: ${{ startsWith(github.ref_name, 'release') }}
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
