@@ -9,12 +9,16 @@ on:
       coordinates:
         required: true
         type: string
-      server:
-        required: true
-        type: string
+      production:
+        type: boolean
+        default: false
     secrets:
       DEPLOY_PKEY:
         required: true
+
+env:
+  staging-server: linker-server.decentraland.today
+  production-server: linker-server.decentraland.org
 
 jobs:
   build:
@@ -38,7 +42,7 @@ jobs:
           path: |
             ./${{ inputs.directory }}
             !./${{ inputs.directory }}/node_modules
-  deploy:
+  staging:
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -50,7 +54,24 @@ jobs:
           name: project
       - name: set genesis coordinates
         run: node -e '${{ vars.SET_DEPLOY_TARGET }}' genesis '${{ inputs.coordinates }}'
-      - name: deploy to genesis
+      - name: deploy to staging genesis
         env:
           DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
-        run: dcl deploy -t ${{ inputs.server }} --skip-build --skip-validations --skip-version-checks
+        run: dcl deploy -t ${{ env.staging-server }} --skip-build --skip-validations --skip-version-checks
+
+  production:
+    needs: staging
+    runs-on: ubuntu-latest
+    environment: production
+    if: inputs.production
+    steps:
+      - uses: actions/setup-node@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: project
+      - name: set genesis coordinates
+        run: node -e '${{ vars.SET_DEPLOY_TARGET }}' genesis '${{ inputs.coordinates }}'
+      - name: deploy to production genesis
+        # env:
+        #   DCL_PRIVATE_KEY: ${{ secrets.DEPLOY_PKEY }}
+        run: npm run deploy -- -t ${{ env.production-server }} --skip-build --skip-validations --skip-version-checks

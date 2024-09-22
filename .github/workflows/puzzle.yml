@@ -9,11 +9,12 @@ on:
     #   - 'SlidingPuzzle/**'
     #   - 'common/**'
     tags:
-      - 'stage/puzzle-v*'
+      - 'preview/puzzle-v*'
+      - 'release/puzzle-v*'
 
 jobs:
   testing:
-    if: github.ref_type == 'tag'
+    if: github.ref_type != 'tag'
     uses: ./.github/workflows/.deploy_worlds.yml
     with:
       directory: SlidingPuzzle
@@ -21,19 +22,12 @@ jobs:
     secrets:
       DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
 
-  staging:
-    if: github.ref_type != 'tag'
+  release:
+    if: github.ref_type == 'tag'
     uses: ./.github/workflows/.deploy_genesis.yml
     with:
       directory: SlidingPuzzle
-      server: linker-server.decentraland.today
       coordinates: '["79,-30"]'
+      production: ${{ startsWith(github.ref_name, 'release') }}
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
-
-  production:
-    needs: staging
-    runs-on: ubuntu-latest
-    environment: puzzle-deploy
-    steps:
-      - run: ls
