@@ -29,3 +29,10 @@ jobs:
       coordinates: '["79,-30"]'
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
+
+  production:
+    needs: staging
+    runs-on: ubuntu-latest
+    environment: deploy-puzzle
+    steps:
+      - run: ls
