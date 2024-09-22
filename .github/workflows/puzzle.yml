@@ -5,9 +5,9 @@ on:
     branches:
       - main
       - ci_tests2
-    paths:
-      - 'SlidingPuzzle/**'
-      - 'common/**'
+    # paths:
+    #   - 'SlidingPuzzle/**'
+    #   - 'common/**'
     tags:
       - 'stage/puzzle-v*'
 
