@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ci_tests2
     paths:
       - 'SlidingPuzzle/**'
       - 'common/**'
