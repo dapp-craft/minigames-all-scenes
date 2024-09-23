@@ -13,6 +13,7 @@ import { Color3, Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { setupWinAnimations, startWinAnimation } from './game/gameEfffects'
 import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { ui } from './ui'
+import { Ui3D } from './game/ui3D'
 
 const root = engine.addEntity()
 Transform.create(root, {position: {x: 8, y: 0, z: 8}})
@@ -89,6 +90,7 @@ export async function main() {
     await init(root)
     setupWinAnimations()
     ReactEcsRenderer.setUiRenderer(ui)
+    const ui3d = new Ui3D()
 
     const locators = await readGltfLocators('locators/obj_locators_unique.gltf')
     const clock = engine.addEntity()
