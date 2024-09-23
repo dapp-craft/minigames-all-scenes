@@ -40,7 +40,7 @@ function updateCar(car: Entity) {
         start: Vector3.Zero(),
         end: Vector3.scale(Vector3.One(), CELL_SIZE_RELATIVE),
       }),
-      duration: 500,
+      duration: 1000,
       easingFunction: EasingFunction.EF_EASEOUTCUBIC
     })
   } else if (oldCarData.inGame == true && newCarData.inGame == false) {
@@ -50,7 +50,7 @@ function updateCar(car: Entity) {
         start: Vector3.scale(Vector3.One(), CELL_SIZE_RELATIVE),
         end: Vector3.Zero()
       }),
-      duration: 500,
+      duration: 1000,
       easingFunction: EasingFunction.EF_EASEOUTCUBIC
     })
   } else if (oldCarData.inGame == true && newCarData.inGame == true) {

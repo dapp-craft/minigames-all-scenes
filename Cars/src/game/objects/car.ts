@@ -44,7 +44,7 @@ export function createMainCar(id: number) {
   const car = engine.addEntity()
   Transform.create(car, {
     position: Vector3.Zero(),
-    scale: Vector3.scale(Vector3.One(), CELL_SIZE_RELATIVE),
+    scale: Vector3.Zero(),
     rotation: Quaternion.Identity(),
     parent: BOARD
   })
@@ -52,7 +52,7 @@ export function createMainCar(id: number) {
     position: { x: -1, y: -1 },
     direction: CarDirection.right,
     length: 2,
-    inGame: true,
+    inGame: false,
     isMain: true
   })
   syncEntity(car, [Car.componentId], id)

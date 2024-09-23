@@ -228,6 +228,7 @@ function processMovement(start: Cell, end: Cell) {
 function isSolved() {
   const mainCar = Car.get(MAIN_CAR)
   if (mainCar.position.x == 5) {
+    Car.getMutable(MAIN_CAR).position = { x: 9, y: 3 }
     return true
   }
   return false
@@ -244,6 +245,8 @@ function loadLevel(level: number) {
   Car.getMutable(MAIN_CAR).position.x += 1
   Car.getMutable(MAIN_CAR).direction = CarDirection.right
   Car.getMutable(MAIN_CAR).length = loadedLevel.mainCar.length
+
+  Car.getMutable(MAIN_CAR).inGame = true
 
   getAllCarsExceptMain().forEach((car, i) => {
     if (Car.get(car).isMain) return
