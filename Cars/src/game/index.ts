@@ -99,6 +99,8 @@ export function getReadyToStart() {
 export function startLevel(level: number) {
   console.log('Start level', level)
 
+  clearInputBuffer()
+
   getAllCars().forEach((car) => {
     removeCarFromGame(car)
   })
@@ -112,9 +114,7 @@ export function startLevel(level: number) {
 }
 
 function finishLevel() {
-  inputBuffer.selectedCar = undefined
-  inputBuffer.startCell = undefined
-  inputBuffer.currentCell = undefined
+  clearInputBuffer()
 
   gameState.levelFinishTime = Date.now()
 
@@ -197,9 +197,7 @@ function setUpInputSystem() {
       PointerLock.get(engine.CameraEntity).isPointerLocked
     ) {
       if (!inputAvailable) return
-      inputBuffer.selectedCar = undefined
-      inputBuffer.startCell = undefined
-      inputBuffer.currentCell = undefined
+      clearInputBuffer()
     }
   })
 }
@@ -265,8 +263,16 @@ function removeCarFromGame(car: Entity) {
 }
 
 export function exitGame() {
+  clearInputBuffer()
   movePlayerTo({
     newRelativePosition: Vector3.create(8, 1, 14)
   })
   queue.setNextPlayer()
+}
+
+
+function clearInputBuffer(){
+  inputBuffer.selectedCar = undefined
+  inputBuffer.startCell = undefined
+  inputBuffer.currentCell = undefined
 }
