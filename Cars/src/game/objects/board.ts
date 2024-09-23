@@ -16,7 +16,7 @@ import { Quaternion } from '@dcl/sdk/math'
 export let BOARD: Entity
 
 const BOARD_TRANSFORM: TransformType = {
-  position: Vector3.create(8, 0.01, 4.2141509056),
+  position: Vector3.create(8, 0.04820071533322334, 4.2141509056),
   scale: Vector3.create(BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE),
   rotation: Quaternion.fromEulerDegrees(90, 0, 0)
 }
@@ -24,12 +24,12 @@ const BOARD_TRANSFORM: TransformType = {
 export function createBoard() {
   const board = engine.addEntity()
   Transform.create(board, BOARD_TRANSFORM)
-  Material.setPbrMaterial(board, {
-    texture: Material.Texture.Common({
-      src: boardTexture
-    })
-  })
-  MeshRenderer.setPlane(board)
+  // Material.setPbrMaterial(board, {
+  //   texture: Material.Texture.Common({
+  //     src: boardTexture
+  //   })
+  // })
+  // MeshRenderer.setPlane(board)
   BOARD = board
 
   const boardCollider = engine.addEntity()

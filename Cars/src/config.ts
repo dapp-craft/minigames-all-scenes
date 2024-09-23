@@ -9,7 +9,7 @@ export const BOARD_SIZE = 6
 /**
  * Physical size of the board in meters
  */
-export const BOARD_PHYSICAL_SIZE = 6
+export const BOARD_PHYSICAL_SIZE = 5.1968765259
 export const CELL_SIZE_RELATIVE = 1 / BOARD_SIZE
 export const CELL_SIZE_PHYSICAL = BOARD_PHYSICAL_SIZE / BOARD_SIZE
 
