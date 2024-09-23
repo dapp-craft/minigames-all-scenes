@@ -1,5 +1,5 @@
 import { Animator, GltfContainer, MeshCollider, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
-import { draft, floor, frame, gameZone, grass, ground, wall } from '../resources/resources'
+import { draft, floor, frame, gameZone, grass, ground, terminal, wall } from '../resources/resources'
 import { toadsGameState } from '../state'
 
 const staticModels = [
@@ -10,6 +10,7 @@ const staticModels = [
     ground,
     wall,
     gameZone,
+    terminal,
 ]
 
 export const setupStaticModels = () => {

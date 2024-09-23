@@ -11,11 +11,13 @@ export const frame: PBGltfContainer = { src: modelsFolder + 'obj_frame.gltf' };
 export const grass: PBGltfContainer = { src: modelsFolder + 'obj_grass.gltf' };
 export const ground: PBGltfContainer = { src: modelsFolder + 'obj_ground.gltf' };
 export const wall: PBGltfContainer = { src: modelsFolder + 'obj_wall.gltf' };
-
+export const terminal: PBGltfContainer = { src: modelsFolder + 'obj_terminal.gltf' };
 
 
 export const frog01: PBGltfContainer = { src: modelsFolder + 'obj_frog01.gltf' };
 export const frog02: PBGltfContainer = { src: modelsFolder + 'obj_frog02.gltf' };
+export const hammer: PBGltfContainer = { src: modelsFolder + 'obj_hammer.gltf' };
+
 
 
 //Game Zone Collider

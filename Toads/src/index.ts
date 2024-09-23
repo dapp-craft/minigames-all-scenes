@@ -7,7 +7,7 @@ import { toadsGameConfig } from './config'
 import { sceneParentEntity, toadsGameState } from './state'
 import { GameLogic } from './game/gameLogic'
 import { setupStaticModels } from './staticModels/setupStaticModels'
-import { frog01 } from './resources/resources'
+import { frog01, hammer } from './resources/resources'
 
 
 const handlers = {
@@ -32,9 +32,9 @@ export async function main() {
 
     generateInitialEntity()
 
-
+    
     // gameLogic.startGame()
-
+    
     initGame()
 }
 
@@ -47,6 +47,8 @@ const generateInitialEntity = async () => {
     }
     // const board = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 1]
     const hammerEntity = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 2]
+    const missTarget = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 3]
+    GltfContainer.create(hammerEntity, hammer)
 
     // Transform.create(board, { ...tempLocators.get(`Board`), parent: sceneParentEntity })
     
@@ -55,6 +57,7 @@ const generateInitialEntity = async () => {
 
     // toadsGameState.listOfEntity.set('board', board)
     toadsGameState.listOfEntity.set('hammer', hammerEntity)
+    toadsGameState.listOfEntity.set('missTarget', missTarget)
 
     for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) {
         Transform.createOrReplace(toadsGameState.availableEntity[i], {position: data.get(`object_hole_${i + 1}`)?.position, parent: sceneParentEntity})

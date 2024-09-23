@@ -2,7 +2,7 @@ import * as utils from '@dcl-sdk/utils'
 import { EasingFunction, engine, Entity, GltfContainer, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem } from "@dcl/sdk/ecs"
 import { animationConfig, toadsGameConfig } from "../config"
 import { toadsGameState } from "../state"
-import { Vector3 } from "@dcl/sdk/math"
+import { Quaternion, Vector3 } from "@dcl/sdk/math"
 import { frog01, frog02 } from "../resources/resources"
 
 export class GameLogic {
@@ -55,7 +55,7 @@ export class GameLogic {
 
     private activateHummer() {
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
-        MeshRenderer.setCylinder(hammerEntity)
+        // MeshRenderer.setCylinder(hammerEntity)
         Transform.createOrReplace(hammerEntity)
         raycastSystem.registerLocalDirectionRaycast(
             {
@@ -71,7 +71,12 @@ export class GameLogic {
                 if (hit.hits.length == 0) { return }
                 const hitPos = hit.hits[0].position
                 if (hitPos == undefined) { return }
-                Transform.getMutable(hammerEntity).position = { ...hitPos, y: hitPos.y + 1 }
+                Transform.createOrReplace(hammerEntity, {
+                    position: { ...hitPos, y: hitPos.y + 2 },
+                    // rotation: Quaternion.fromLookAt(Transform.get(engine.PlayerEntity).position, Transform.get(hammerEntity).position)
+                })
+
+                // Transform.getMutable(hammerEntity).position = { ...hitPos, y: hitPos.y + 2 }
             }
         )
     }
@@ -84,29 +89,45 @@ export class GameLogic {
         raycastSystem.removeRaycasterEntity(engine.CameraEntity)
     }
 
-    private hitHammer(target: Entity) {
+    private hitHammer(target: Entity = toadsGameState.listOfEntity.get('missTarget')) {
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
         const initialHammerPosition = Transform.get(hammerEntity).position
+        
+        if (target == toadsGameState.listOfEntity.get('missTarget')) {
+            Transform.createOrReplace(target, {position: {...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y - 3}})
+        }
 
         raycastSystem.removeRaycasterEntity(engine.CameraEntity)
 
         Tween.createOrReplace(hammerEntity, {
-            mode: Tween.Mode.Move({
-                start: Transform.get(hammerEntity).position,
-                end: { ...Transform.get(hammerEntity).position, y: 1 }
+            mode: Tween.Mode.Rotate({
+                start: Transform.get(hammerEntity).rotation,
+                end: Quaternion.fromAngleAxis(90, Vector3.create(0, 0, 1))
             }),
-            duration: animationConfig.hitDelay,
-            easingFunction: EasingFunction.EF_EASEOUTEXPO,
+            duration: 200,
+            easingFunction: EasingFunction.EF_EASEBOUNCE,
+        })
+
+        TweenSequence.createOrReplace(hammerEntity, {
+            sequence: [
+                {
+                    mode: Tween.Mode.Move({
+                        start: Transform.get(hammerEntity).position,
+                        end: { ...Transform.get(hammerEntity).position, y: 1 }
+                    }),
+                    duration: animationConfig.hitDelay,
+                    easingFunction: EasingFunction.EF_EASEOUTEXPO,
+                }
+            ]
         })
 
         engine.addSystem(() => {
             const targetPosition = { ...Transform.get(target).position, y: Transform.get(target).position.y + 1 }
-            if (Transform.getMutable(hammerEntity).position.y <= targetPosition.y) {
+            if (Transform.get(hammerEntity).position.y <= targetPosition.y || Transform.get(hammerEntity).position.y <= 1.1) {
                 engine.removeSystem('hammerHit')
                 Tween.deleteFrom(hammerEntity)
-                utils.timers.setTimeout(() => {
-                    hammerBounce()
-                }, animationConfig.hitDelay / 4)
+                hammerBounce()
+                this.activateHummer()
             }
         }, 1000, 'hammerHit');
 
@@ -114,18 +135,13 @@ export class GameLogic {
             console.log("Bounce")
             Tween.createOrReplace(hammerEntity, {
                 mode: Tween.Mode.Move({
-                    start: { ...initialHammerPosition, y: 1 },
+                    start: { ...initialHammerPosition, y: Transform.get(hammerEntity).position.y },
                     end: initialHammerPosition
                 }),
                 duration: animationConfig.hammerBounceTime,
                 easingFunction: EasingFunction.EF_EASEOUTBACK,
             })
         }
-
-        utils.timers.setTimeout(() => {
-            TweenSequence.deleteFrom(hammerEntity)
-            this.activateHummer()
-        }, animationConfig.hammerBounceTime / 2)
     }
 
     private async playGame() {
@@ -194,7 +210,11 @@ export class GameLogic {
                 entity: toadsGameState.listOfEntity.get('wall'),
                 opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH' },
             },
-            () => this.miss++
+            () => {
+                console.log("Miss")
+                this.hitHammer()
+                this.miss++
+            }
         )
 
         for (let i = 1; i <= this.toadsAmount; i++) {
