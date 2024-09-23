@@ -1,5 +1,5 @@
 import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src";
-import { engine, TextShape, Transform, TransformType } from "@dcl/sdk/ecs";
+import { engine, Entity, TextShape, Transform, TransformType } from "@dcl/sdk/ecs";
 import { readGltfLocators } from "../../../common/locators";
 
 export class Ui3D {
@@ -7,7 +7,7 @@ export class Ui3D {
     private readonly counterLevel = engine.addEntity()
     private readonly counterStopwatch = engine.addEntity()
     private readonly ready
-    constructor() {
+    constructor(private levelButtonCallback: (arg: Number) => void) {
         this.ready = readGltfLocators(`locators/obj_locators_unique.gltf`).then(this.init.bind(this))
         this.setObjects()
         this.setLevel()
@@ -19,7 +19,7 @@ export class Ui3D {
             ui.uiAssets.shapes.SQUARE_YELLOW,
             ui.uiAssets.numbers[i],
             `START LEVEL ${i}`,
-            () => {}
+            () => this.levelButtonCallback(i)
         )
         const textSettings = {text: '', fontSize: 3}
         Transform.create(this.counterObjects, {...locators.get('counter_foundObjects'), parent: sceneParentEntity})
@@ -31,16 +31,19 @@ export class Ui3D {
     }
     public async setObjects(current?: number, total?: number) {
         await this.ready
-        TextShape.getMutable(this.counterObjects).text = `Found: ${current ?? '-'} / ${total ?? '-'}`
+        this.setTextOptimized(this.counterObjects, `Found: ${current ?? '-'} / ${total ?? '-'}`)
     }
     public async setLevel(level?: number) {
         await this.ready
-        TextShape.getMutable(this.counterLevel).text = `Level: ${level ?? 'none'}`
+        this.setTextOptimized(this.counterLevel, `Level: ${level ?? 'none'}`)
     }
     public async setTime(value?: number) {
         await this.ready
         const minutes = value ? String(Math.floor(value / 60)).padStart(2, '0') : undefined
         const seconds = value ? String(Math.floor(value % 60)).padStart(2, '0') : undefined
-        TextShape.getMutable(this.counterStopwatch).text = `Round: ${minutes ?? '--'}:${seconds ?? '--'}`
+        this.setTextOptimized(this.counterStopwatch, `Round: ${minutes ?? '--'}:${seconds ?? '--'}`)
+    }
+    private setTextOptimized(entity: Entity, value: string) {
+        if (TextShape.get(entity).text != value) TextShape.getMutable(entity).text = value
     }
 }

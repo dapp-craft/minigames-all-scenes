@@ -47,7 +47,6 @@ export class GameObject {
                     cooldown.value = cooldwnBase
                     cooldwnBase *= 2
                 }
-                console.log(cooldown.value, cooldwnBase)
             }
         )
     }
@@ -79,12 +78,10 @@ export class GameObject {
         if (!alt) {
             if (this.timer) utils.timers.clearTimeout(this.timer)
             Promise.race([this.marked, undefined]).then(m => GltfContainer.getMutable(this.entity).src = m ? this.altVarSrc : this.baseSrc)
-            console.log('to base')
         } else 
         // if (!this.differs || await Promise.race([this.marked, undefined])) 
         {
             Promise.race([this.marked, undefined]).then(m => GltfContainer.getMutable(this.entity).src = m ? this.baseSrc : this.altVarSrc)
-            console.log('to alt')
         }
         //  else {
         //     GltfContainer.getMutable(this.entity).src = this.altSrc
