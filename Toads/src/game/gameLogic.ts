@@ -55,7 +55,6 @@ export class GameLogic {
 
     private activateHummer() {
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
-        // MeshRenderer.setCylinder(hammerEntity)
         Transform.createOrReplace(hammerEntity)
         raycastSystem.registerLocalDirectionRaycast(
             {
@@ -73,7 +72,7 @@ export class GameLogic {
                 if (hitPos == undefined) { return }
                 Transform.createOrReplace(hammerEntity, {
                     position: { ...hitPos, y: hitPos.y + 2 },
-                    // rotation: Quaternion.fromLookAt(Transform.get(engine.PlayerEntity).position, Transform.get(hammerEntity).position)
+                    rotation: Quaternion.multiply(Quaternion.fromLookAt(Transform.get(hammerEntity).position, Transform.get(engine.PlayerEntity).position), Quaternion.create(-.5, .5, .6, 0.5))
                 })
 
                 // Transform.getMutable(hammerEntity).position = { ...hitPos, y: hitPos.y + 2 }
@@ -89,13 +88,11 @@ export class GameLogic {
         raycastSystem.removeRaycasterEntity(engine.CameraEntity)
     }
 
-    private hitHammer(target: Entity = toadsGameState.listOfEntity.get('missTarget')) {
+    private hitHammer(data: { target: Entity, pos: any } = { target: toadsGameState.listOfEntity.get('missTarget'), pos: Vector3.create(0, 0, 0) }) {
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
         const initialHammerPosition = Transform.get(hammerEntity).position
-        
-        if (target == toadsGameState.listOfEntity.get('missTarget')) {
-            Transform.createOrReplace(target, {position: {...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y - 3}})
-        }
+
+        if (data.target == toadsGameState.listOfEntity.get('missTarget')) Transform.createOrReplace(data.target, { position: { ...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y - 3 } })
 
         raycastSystem.removeRaycasterEntity(engine.CameraEntity)
 
@@ -122,11 +119,12 @@ export class GameLogic {
         })
 
         engine.addSystem(() => {
-            const targetPosition = { ...Transform.get(target).position, y: Transform.get(target).position.y + 1 }
+            const targetPosition = { ...Transform.get(data!.target).position, y: Transform.get(data!.target).position.y + 1 }
             if (Transform.get(hammerEntity).position.y <= targetPosition.y || Transform.get(hammerEntity).position.y <= 1.1) {
                 engine.removeSystem('hammerHit')
                 Tween.deleteFrom(hammerEntity)
                 hammerBounce()
+                this.hitEntity(data!.target, data!.pos)
                 this.activateHummer()
             }
         }, 1000, 'hammerHit');
@@ -142,6 +140,34 @@ export class GameLogic {
                 easingFunction: EasingFunction.EF_EASEOUTBACK,
             })
         }
+    }
+
+    private hitEntity(entity: Entity, pos: number) {
+        pointerEventsSystem.removeOnPointerDown(entity);
+        Tween.createOrReplace(entity, {
+            mode: Tween.Mode.Move({
+                start: { ...Transform.get(entity).position, y: Transform.get(entity).position.y - .3 },
+                end: { ...Transform.get(entity).position, y: pos - 1 }
+            }),
+            duration: animationConfig.frogSkipGoBackTime,
+            easingFunction: EasingFunction.EF_LINEAR,
+        },)
+        GltfContainer.createOrReplace(entity, { src: frog01.src })
+        TweenSequence.createOrReplace(entity, {
+            sequence: [
+                {
+                    mode: Tween.Mode.Move({
+                        start: { ...Transform.get(entity).position, y: pos - 1 },
+                        end: { ...Transform.get(entity).position, y: pos }
+                    }),
+                    duration: 500,
+                    easingFunction: EasingFunction.EF_LINEAR,
+                },
+            ]
+        })
+        this.toadsAmount--
+        console.log(this.toadsAmount)
+        if (this.toadsAmount == 0) this.stopGame()
     }
 
     private async playGame() {
@@ -164,42 +190,6 @@ export class GameLogic {
                 pointerEventsSystem.removeOnPointerDown(entity)
             }, animationConfig.frogSkipGoBackTime)
 
-            this.toadsAmount--
-            console.log(this.toadsAmount)
-            if (this.toadsAmount == 0) this.stopGame()
-        }
-
-        const hitEntity = (entity: Entity, pos: number) => {
-            pointerEventsSystem.removeOnPointerDown(entity)
-            Tween.createOrReplace(entity, {
-                mode: Tween.Mode.Move({
-                    start: Transform.get(entity).position,
-                    end: Transform.get(entity).position
-                }),
-                duration: animationConfig.hitDelay,
-                easingFunction: EasingFunction.EF_EASEBOUNCE,
-            })
-            GltfContainer.createOrReplace(entity, { src: frog01.src })
-            TweenSequence.createOrReplace(entity, {
-                sequence: [
-                    {
-                        mode: Tween.Mode.Move({
-                            start: { ...Transform.get(entity).position, y: Transform.get(entity).position.y - .3 },
-                            end: { ...Transform.get(entity).position, y: pos - 1 }
-                        }),
-                        duration: animationConfig.hitDelay,
-                        easingFunction: EasingFunction.EF_LINEAR,
-                    },
-                    {
-                        mode: Tween.Mode.Move({
-                            start: { ...Transform.get(entity).position, y: pos - 1 },
-                            end: { ...Transform.get(entity).position, y: pos }
-                        }),
-                        duration: 500,
-                        easingFunction: EasingFunction.EF_LINEAR,
-                    },
-                ]
-            })
             this.toadsAmount--
             console.log(this.toadsAmount)
             if (this.toadsAmount == 0) this.stopGame()
@@ -244,17 +234,13 @@ export class GameLogic {
                         () => {
                             console.log('CLICKED')
                             utils.timers.clearTimeout(this.toadsTimer.get(i).finish);
-                            this.hitHammer(entity)
-                            hitEntity(entity, y)
+                            this.hitHammer({ target: entity, pos: y })
                             isEnemy ? this.correctSmashCounter++ : this.mistakeSmashCounter++
                         }
                     )
-                    // this.toadQueueReady()
                     this.toadsTimer.get(i).finish = utils.timers.setTimeout(() => hideEntity(entity, y), animationConfig.frogStayTime)
                 }, this.initialTimeGap)
             })
-            // this.toadQueueIsDone = new Promise(r => this.toadQueueReady = r)
-            // await this.toadQueueIsDone;
         }
     }
 
@@ -265,7 +251,6 @@ export class GameLogic {
         this.toadsTimer.forEach((e, k) => {
             utils.timers.clearTimeout(e.start)
             this.resolveReady()
-            // e.finish && utils.timers.clearTimeout(e.finish)
         })
 
     }
