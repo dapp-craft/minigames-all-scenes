@@ -7,8 +7,8 @@ import { syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
 
-const SESSION_DURATION = 1000 * 60 * 5 // 5 minutes
-const INACTIVITY_TIMEOUT = 1000 * 15 * 1 // 15 seconds
+export const SESSION_DURATION = 1000 * 60 * 5 // 5 minutes
+export const INACTIVITY_TIMEOUT = 1000 * 15 * 1 // 15 seconds
 
 const SCOREBOARD_SCALE = 1.2
 
