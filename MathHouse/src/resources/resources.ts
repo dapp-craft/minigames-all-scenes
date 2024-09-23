@@ -12,6 +12,11 @@ export const kitty: PBGltfContainer = { src: modelsFolder + 'npc_kitty.gltf' };
 export const bus: PBGltfContainer = { src: modelsFolder + 'obj_bus.gltf' };
 export const rocket: PBGltfContainer = { src: modelsFolder + 'obj_rocket.gltf' };
 export const panel: PBGltfContainer = { src: modelsFolder + 'obj_panel.gltf' };
+export const terminal: PBGltfContainer = { src: modelsFolder + 'obj_terminal.gltf' };
+export const clouds: PBGltfContainer = { src: modelsFolder + 'obj_clouds.gltf' };
+export const frame: PBGltfContainer = { src: modelsFolder + 'obj_frame.gltf' };
+export const text: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
+
 
 //Results Screen
 export const cat01: PBGltfContainer = {src: modelsFolder + 'obj_cat01.gltf'}

@@ -1,5 +1,5 @@
 import { Animator, GltfContainer, MeshCollider, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
-import { floor, wall, ground, railings, gameZone, kitty, bus, rocket, panel } from '../resources/resources'
+import { floor, wall, ground, railings, gameZone, kitty, bus, rocket, panel, terminal, clouds, frame, text } from '../resources/resources'
 import { readGltfLocators } from '../../../common/locators'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { entityList } from '../state'
@@ -10,9 +10,11 @@ const staticModels = [
     ground,
     railings,
     gameZone,
-    // bus,
-    // rocket,
-    panel
+    panel,
+    terminal,
+    clouds,
+    frame,
+    text,
 ]
 
 export const setupStaticModels = () => {
