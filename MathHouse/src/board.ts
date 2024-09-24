@@ -38,9 +38,9 @@ export class board {
         }
         for (let i = 0; i < gameState.counterEntity.length - 1; i++) {
             const entity = gameState.counterEntity[i]
-            let entityTransform = this.data.get(`number0${i + 1}`)
+            let entityTransform = i == 0 ? this.data.get(`counter_enteredAnswer`) : this.data.get(`counter_correctAnswer`)
             engine.addSystem(() => Transform.createOrReplace(entity, {
-                position: Vector3.add(Vector3.scale(entityTransform.position, 2), Transform.get(gameState.rocketWindow!).position),
+                position: Vector3.add(Vector3.scale(entityTransform.position, 1.75), Transform.get(gameState.rocketWindow!).position),
                 scale: Vector3.create(0.5, 0.5, 0.5)
             }))
         }
@@ -121,7 +121,7 @@ export class board {
                 Tween.createOrReplace(entity, {
                     mode: Tween.Mode.Scale({
                         start: Vector3.create(.5 + i / 20, .5 + i / 20, .5 + i / 20),
-                        end: this.data.get(`number01`)?.scale,
+                        end: this.data.get(`counter_correctAnswer`)?.scale,
                     }),
                     duration: 100,
                     easingFunction: EasingFunction.EF_LINEAR,

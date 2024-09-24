@@ -87,7 +87,7 @@ const spawnInitialEntityPoll = async () => {
     text: '0',
     fontSize: 3
   })
-  Transform.create(gameState.levelCounter, { ...data.get('counter_level'), rotation: Quaternion.create(0, -.42, .175, 0), parent: sceneParentEntity })
+  Transform.create(gameState.levelCounter, { ...data.get('counter_level'), rotation: Quaternion.create(0, -.414, .175, 0), parent: sceneParentEntity })
   syncEntity(gameState.levelCounter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, TextShape.componentId], 4010)
 }
 

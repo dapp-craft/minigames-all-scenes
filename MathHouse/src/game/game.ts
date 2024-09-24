@@ -130,7 +130,7 @@ const initGameButtons = async () => {
     for (let i = 1; i <= 9; i++) {
         gameButtons.push(
             new ui.MenuButton(
-                { position: data.get(`button_answer_${i}`)?.position, parent: sceneParentEntity, rotation: Quaternion.create(0, -2, -1, 0) },
+                { position: data.get(`button_answer_${i}`)?.position, parent: sceneParentEntity, rotation: Quaternion.create(0, -2, -1, 0), scale: data.get(`button_answer_${i}`)?.scale },
                 ui.uiAssets.shapes.SQUARE_GREEN,
                 ui.uiAssets.numbers[i],
                 `${i}`,
