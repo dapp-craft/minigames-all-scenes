@@ -105,7 +105,7 @@ export class GameLogic {
 
         if (isMissed) {
             Transform.createOrReplace(data.target, {
-                position: { ...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y - 3 }
+                position: { ...Transform.get(hammerEntity).position}
             })
         }
 
@@ -135,7 +135,7 @@ export class GameLogic {
 
         engine.addSystem(() => {
             const targetPosition = { ...Transform.get(data!.target).position, y: Transform.get(data!.target).position.y + 1 }
-            if (Transform.get(hammerEntity).position.y <= targetPosition.y || Transform.get(hammerEntity).position.y <= 1.1) {
+            if (Transform.get(hammerEntity).position.y <= targetPosition.y || Transform.get(hammerEntity).position.y <= 1.5) {
                 engine.removeSystem('hammerHit')
                 Tween.deleteFrom(hammerEntity)
                 hammerBounce()
@@ -210,7 +210,7 @@ export class GameLogic {
             console.log(this.toadsAmount)
             if (this.toadsAmount == 0) this.stopGame()
         }
-
+        console.log(toadsGameState.listOfEntity.get('ground'))
         pointerEventsSystem.onPointerDown(
             {
                 entity: toadsGameState.listOfEntity.get('ground'),
@@ -264,6 +264,7 @@ export class GameLogic {
         console.log("Game is stopped")
         pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('board'))
         this.stopHammer()
+        pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('ground'))
         this.toadsTimer.forEach((e, k) => {
             utils.timers.clearTimeout(e.start)
             this.resolveReady()

@@ -19,6 +19,6 @@ export const setupStaticModels = () => {
         const enitity = engine.addEntity()
         Transform.create(enitity, { position: { x: 8, y: 0, z: 8 } })
         GltfContainer.create(enitity, {...model, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5})
-        if (model == ground) toadsGameState.listOfEntity.set('ground', enitity)
+        if (model == whack) toadsGameState.listOfEntity.set('ground', enitity)
     })
 }
