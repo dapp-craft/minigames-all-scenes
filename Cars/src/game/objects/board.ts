@@ -18,7 +18,7 @@ export let BOARD: Entity
 const BOARD_TRANSFORM: TransformType = {
   position: Vector3.create(8, 0.04820071533322334, 4.2141509056),
   scale: Vector3.create(BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE, BOARD_PHYSICAL_SIZE),
-  rotation: Quaternion.fromEulerDegrees(90, 0, 0)
+  rotation: Quaternion.fromEulerDegrees(90, 180, 0)
 }
 
 export function createBoard() {
