@@ -19,25 +19,53 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_panel"
+			"name":"obj_bench",
+			"scale":[
+				1,
+				1.160962700843811,
+				1
+			],
+			"translation":[
+				0,
+				0.11883614212274551,
+				4.310177803039551
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_panel_collider"
+			"name":"obj_bench_collider",
+			"scale":[
+				1,
+				1.160962700843811,
+				1
+			],
+			"translation":[
+				0,
+				0.11883614212274551,
+				4.310177803039551
+			]
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
+			"emissiveFactor":[
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
+			],
+			"emissiveTexture":{
+				"index":0
+			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
 				}
 			},
-			"name":"obj_panel",
+			"name":"Material.001",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":0
+					"index":1
 				},
 				"metallicFactor":0
 			}
@@ -45,7 +73,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.029",
+			"name":"Bounding Box Mesh.011",
 			"primitives":[
 				{
 					"attributes":{
@@ -59,7 +87,7 @@
 			]
 		},
 		{
-			"name":"Cube.024",
+			"name":"Bounding Box Mesh.013",
 			"primitives":[
 				{
 					"attributes":{
@@ -76,120 +104,124 @@
 		{
 			"sampler":0,
 			"source":0
+		},
+		{
+			"sampler":0,
+			"source":0
 		}
 	],
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_panel",
-			"uri":"textures/obj_panel.png"
+			"name":"obj_bench",
+			"uri":"textures/obj_bench.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":888,
+			"count":3264,
 			"max":[
-				1.342249870300293,
-				1.1397267580032349,
-				-2.1208040714263916
+				6.6924333572387695,
+				1.0194369554519653,
+				3.2252142429351807
 			],
 			"min":[
-				-1.342249870300293,
-				-1.480068590353767e-06,
-				-3.2096760272979736
+				-6.6924333572387695,
+				0.1990586519241333,
+				-3.2252142429351807
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":888,
+			"count":3264,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":888,
+			"count":3264,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":2502,
+			"count":11712,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":888,
+			"count":3264,
 			"max":[
-				1.342249870300293,
-				1.1397267580032349,
-				-2.1208040714263916
+				6.6924333572387695,
+				1.0194369554519653,
+				3.2252142429351807
 			],
 			"min":[
-				-1.342249870300293,
-				-1.480068590353767e-06,
-				-3.2096760272979736
+				-6.6924333572387695,
+				0.1990586519241333,
+				-3.2252142429351807
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":888,
+			"count":3264,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":888,
+			"count":3264,
 			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":10656,
+			"byteLength":39168,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10656,
-			"byteOffset":10656,
+			"byteLength":39168,
+			"byteOffset":39168,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":7104,
-			"byteOffset":21312,
+			"byteLength":26112,
+			"byteOffset":78336,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5004,
-			"byteOffset":28416,
+			"byteLength":23424,
+			"byteOffset":104448,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":10656,
-			"byteOffset":33420,
+			"byteLength":39168,
+			"byteOffset":127872,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10656,
-			"byteOffset":44076,
+			"byteLength":39168,
+			"byteOffset":167040,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":7104,
-			"byteOffset":54732,
+			"byteLength":26112,
+			"byteOffset":206208,
 			"target":34962
 		}
 	],
@@ -201,8 +233,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":61836,
-			"uri":"obj_panel.bin"
+			"byteLength":232320,
+			"uri":"obj_bench.bin"
 		}
 	]
 }
