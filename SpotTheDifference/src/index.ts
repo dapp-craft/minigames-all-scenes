@@ -23,11 +23,11 @@ async function playLevel(level: keyof typeof LEVELS) {
     console.log(`Starting level ${level}`)
     const abort = new Promise<never>((_, r) => interruptPlay = r)
     ui3d.setLevel(level)
+    ui3d.setObjects(0, LEVELS[level].goal)
     await Promise.race([new Promise<void>(r => countdown(r, 5)), abort])
     gameObjects = generateLevelObjects(LEVELS[level].difficulty, LEVELS[level].total)
     gameObjects.forEach(o => o.toggle(alt))
     const targets = new Set(gameObjects.filter(o => o.differs))
-    ui3d.setObjects(0, LEVELS[level].goal)
     try {
         for (let i = 0; i < LEVELS[level].goal; i++) {
             let t = await Promise.race([...Array.from(targets).map(t => t.isMarked), abort])

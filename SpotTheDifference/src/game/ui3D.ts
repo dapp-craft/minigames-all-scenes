@@ -1,5 +1,5 @@
 import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src";
-import { engine, Entity, TextShape, Transform, TransformType } from "@dcl/sdk/ecs";
+import { engine, Entity, Font, PBTextShape, TextAlignMode, TextShape, Transform, TransformType } from "@dcl/sdk/ecs";
 import { readGltfLocators } from "../../../common/locators";
 
 export class Ui3D {
@@ -21,7 +21,7 @@ export class Ui3D {
             `START LEVEL ${i}`,
             () => this.levelButtonCallback(i)
         )
-        const textSettings = {text: '', fontSize: 3}
+        const textSettings: PBTextShape = {text: '', fontSize: 3, textAlign: TextAlignMode.TAM_MIDDLE_LEFT}
         Transform.create(this.counterObjects, {...locators.get('counter_foundObjects'), parent: sceneParentEntity})
         TextShape.create(this.counterObjects, {...textSettings})
         Transform.create(this.counterLevel, {...locators.get('counter_level'), parent: sceneParentEntity})
@@ -35,7 +35,7 @@ export class Ui3D {
     }
     public async setLevel(level?: number) {
         await this.ready
-        this.setTextOptimized(this.counterLevel, `Level: ${level ?? 'none'}`)
+        this.setTextOptimized(this.counterLevel, `Level: ${level ?? '-'}`)
     }
     public async setTime(value?: number) {
         await this.ready
