@@ -10,7 +10,7 @@ export function initCountdownNumbers() {
   timer = new ui.Timer3D(
     {
       parent: sceneParentEntity,
-      position: Vector3.create(0, 3, -6),
+      position: Vector3.create(0, 2.5, -6),
       rotation: Quaternion.fromEulerDegrees(0, 0, 0)
     },
     1,
@@ -58,14 +58,12 @@ export function setupWinAnimations() {
   GltfContainer.create(winAnimA, {
     src: 'mini-game-assets/models/winAnim.glb'
   })
-
   Transform.create(winAnimA, {
     parent: sceneParentEntity,
-    position: Vector3.create(0, 3, -6),
+    position: Vector3.create(0, 0.75, -6),
     scale: Vector3.create(1, 1, 1),
-    rotation: Quaternion.fromEulerDegrees(0, 45, 0)
+    rotation: Quaternion.fromEulerDegrees(0, 135, 0)
   })
-
   Animator.create(winAnimA, {
     states: [
       {
@@ -79,14 +77,12 @@ export function setupWinAnimations() {
   GltfContainer.create(winAnimB, {
     src: 'mini-game-assets/models/winAnim.glb'
   })
-
   Transform.create(winAnimB, {
     parent: sceneParentEntity,
-    position: Vector3.create(0, 3, -6),
+    position: Vector3.create(0, 0.75, -6),
     scale: Vector3.create(1, 1, 1),
-    rotation: Quaternion.fromEulerDegrees(0, 0, 0)
+    rotation: Quaternion.fromEulerDegrees(0, 90, 0)
   })
-
   Animator.create(winAnimB, {
     states: [
       {
@@ -100,14 +96,12 @@ export function setupWinAnimations() {
   GltfContainer.create(winAnimC, {
     src: 'mini-game-assets/models/winAnim.glb'
   })
-
   Transform.create(winAnimC, {
     parent: sceneParentEntity,
-    position: Vector3.create(0, 3, -6),
+    position: Vector3.create(0, 0.75, -6),
     scale: Vector3.create(1, 1, 1),
-    rotation: Quaternion.fromEulerDegrees(0, -45, 0)
+    rotation: Quaternion.fromEulerDegrees(0, 45, 0)
   })
-
   Animator.create(winAnimC, {
     states: [
       {
@@ -121,15 +115,12 @@ export function setupWinAnimations() {
   GltfContainer.create(winAnimFollow, {
     src: 'mini-game-assets/models/winAnimFollow.glb'
   })
-
   Transform.create(winAnimFollow, {
     parent: sceneParentEntity,
-    position: Vector3.create(0, 3, -6),
-    scale: Vector3.create(0.3, 0.3, 0.3),
-    rotation: Quaternion.fromEulerDegrees(0, -90, 0)
+    position: Vector3.create(0, 2.5, -6),
+    scale: Vector3.create(0.3, 0.3, 0.3)
   })
   Billboard.create(winAnimFollow, {})
-
   Animator.create(winAnimFollow, {
     states: [
       {
@@ -143,7 +134,12 @@ export function setupWinAnimations() {
   GltfContainer.create(winAnimText, {
     src: 'mini-game-assets/models/winAnimText.glb'
   })
-
+  Transform.create(winAnimText, {
+    parent: sceneParentEntity,
+    position: Vector3.create(0, 2.5, -6),
+    scale: Vector3.create(0.8, 0.8, 0.8)
+  })
+  Billboard.create(winAnimText, {})
   Animator.create(winAnimText, {
     states: [
       {
@@ -153,14 +149,6 @@ export function setupWinAnimations() {
       }
     ]
   })
-
-  Transform.create(winAnimText, {
-    parent: sceneParentEntity,
-    position: Vector3.create(0, 3, -6),
-    scale: Vector3.create(0.8, 0.8, 0.8),
-    rotation: Quaternion.fromEulerDegrees(0, -90, 0)
-  })
-  Billboard.create(winAnimText, {})
 
   VisibilityComponent.create(winAnimA, { visible: false })
   VisibilityComponent.create(winAnimB, { visible: false })
@@ -200,5 +188,5 @@ export function startWinAnimation(cb: () => void) {
     //     // startNewLevel(nextLevel)
     //   }
     // }
-  }, 8000)
+  }, 3000)
 }
