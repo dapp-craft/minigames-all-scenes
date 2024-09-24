@@ -10,7 +10,7 @@ import { VARIANT } from './game/types'
 import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { Color3, Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { setupWinAnimations, startWinAnimation } from './game/gameEfffects'
+import { countdown, initCountdownNumbers, setupWinAnimations, startWinAnimation } from './game/gameEfffects'
 import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { ui } from './ui'
 import { Ui3D } from './game/ui3D'
@@ -23,6 +23,7 @@ async function playLevel(level: keyof typeof LEVELS) {
     console.log(`Starting level ${level}`)
     const abort = new Promise<never>((_, r) => interruptPlay = r)
     ui3d.setLevel(level)
+    await Promise.race([new Promise<void>(r => countdown(r, 5)), abort])
     gameObjects = generateLevelObjects(LEVELS[level].difficulty, LEVELS[level].total)
     gameObjects.forEach(o => o.toggle(alt))
     const targets = new Set(gameObjects.filter(o => o.differs))
@@ -106,6 +107,7 @@ export async function main() {
     }
 
     await init(sceneParentEntity)
+    initCountdownNumbers()
     setupWinAnimations()
     ReactEcsRenderer.setUiRenderer(ui)
 
