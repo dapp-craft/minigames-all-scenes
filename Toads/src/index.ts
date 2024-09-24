@@ -1,4 +1,4 @@
-import { engine, GltfContainer, Transform } from '@dcl/sdk/ecs'
+import { ColliderLayer, engine, GltfContainer, Transform } from '@dcl/sdk/ecs'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
@@ -31,7 +31,6 @@ export async function main() {
     await libraryReady
 
     generateInitialEntity()
-
     
     // gameLogic.startGame()
     
@@ -48,7 +47,8 @@ const generateInitialEntity = async () => {
     // const board = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 1]
     const hammerEntity = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 2]
     const missTarget = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 3]
-    GltfContainer.create(hammerEntity, hammer)
+
+    Transform.createOrReplace(hammerEntity)
 
     // Transform.create(board, { ...tempLocators.get(`Board`), parent: sceneParentEntity })
     
@@ -61,7 +61,7 @@ const generateInitialEntity = async () => {
 
     for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) {
         Transform.createOrReplace(toadsGameState.availableEntity[i], {position: data.get(`object_hole_${i + 1}`)?.position, parent: sceneParentEntity})
-        GltfContainer.createOrReplace(toadsGameState.availableEntity[i], { src: frog01.src })
+        GltfContainer.createOrReplace(toadsGameState.availableEntity[i], { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
     }
 
 }

@@ -1,9 +1,9 @@
 import * as utils from '@dcl-sdk/utils'
-import { EasingFunction, engine, Entity, GltfContainer, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem } from "@dcl/sdk/ecs"
+import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem } from "@dcl/sdk/ecs"
 import { animationConfig, toadsGameConfig } from "../config"
 import { toadsGameState } from "../state"
 import { Quaternion, Vector3 } from "@dcl/sdk/math"
-import { frog01, frog02 } from "../resources/resources"
+import { frog01, frog02, hammer } from "../resources/resources"
 
 export class GameLogic {
     private availableEntity = new Map()
@@ -55,7 +55,8 @@ export class GameLogic {
 
     private activateHummer() {
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
-        Transform.createOrReplace(hammerEntity)
+        // Tween.deleteFrom(hammerEntity)
+        GltfContainer.createOrReplace(hammerEntity, hammer)
         raycastSystem.registerLocalDirectionRaycast(
             {
                 entity: engine.CameraEntity,
@@ -63,13 +64,20 @@ export class GameLogic {
                     queryType: RaycastQueryType.RQT_HIT_FIRST,
                     direction: Vector3.Forward(),
                     continuous: true,
-                    maxDistance: 6
+                    collisionMask: ColliderLayer.CL_CUSTOM5,
+                    maxDistance: 6,
                 },
             },
             function (hit) {
-                if (hit.hits.length == 0) { return }
+                if (hit.hits.length == 0) {
+                    return GltfContainer.deleteFrom(hammerEntity)
+                    // return
+                }
                 const hitPos = hit.hits[0].position
-                if (hitPos == undefined) { return }
+                if (hitPos == undefined) {
+                    return
+                }
+                GltfContainer.getOrNull(hammerEntity) == null && GltfContainer.createOrReplace(hammerEntity, hammer)
                 Transform.createOrReplace(hammerEntity, {
                     position: { ...hitPos, y: hitPos.y + 2 },
                     rotation: Quaternion.multiply(Quaternion.fromLookAt(Transform.get(hammerEntity).position, Transform.get(engine.PlayerEntity).position), Quaternion.create(-.5, .5, .6, 0.5))
@@ -81,18 +89,25 @@ export class GameLogic {
     }
 
     private stopHammer() {
+        raycastSystem.removeRaycasterEntity(engine.CameraEntity)
         console.log("Hammer is stoped")
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
         MeshRenderer.deleteFrom(hammerEntity)
         MeshCollider.deleteFrom(hammerEntity)
-        raycastSystem.removeRaycasterEntity(engine.CameraEntity)
+        GltfContainer.deleteFrom(hammerEntity)
     }
 
     private hitHammer(data: { target: Entity, pos: any } = { target: toadsGameState.listOfEntity.get('missTarget'), pos: Vector3.create(0, 0, 0) }) {
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
         const initialHammerPosition = Transform.get(hammerEntity).position
 
-        if (data.target == toadsGameState.listOfEntity.get('missTarget')) Transform.createOrReplace(data.target, { position: { ...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y - 3 } })
+        let isMissed = data.target == toadsGameState.listOfEntity.get('missTarget') ? true : false
+
+        if (isMissed) {
+            Transform.createOrReplace(data.target, {
+                position: { ...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y - 3 }
+            })
+        }
 
         raycastSystem.removeRaycasterEntity(engine.CameraEntity)
 
@@ -124,7 +139,7 @@ export class GameLogic {
                 engine.removeSystem('hammerHit')
                 Tween.deleteFrom(hammerEntity)
                 hammerBounce()
-                this.hitEntity(data!.target, data!.pos)
+                !isMissed && this.hitEntity(data!.target, data!.pos)
                 this.activateHummer()
             }
         }, 1000, 'hammerHit');
@@ -149,10 +164,10 @@ export class GameLogic {
                 start: { ...Transform.get(entity).position, y: Transform.get(entity).position.y - .3 },
                 end: { ...Transform.get(entity).position, y: pos - 1 }
             }),
-            duration: animationConfig.frogSkipGoBackTime,
+            duration: animationConfig.forgHitGoBackTime,
             easingFunction: EasingFunction.EF_LINEAR,
         },)
-        GltfContainer.createOrReplace(entity, { src: frog01.src })
+        GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
         TweenSequence.createOrReplace(entity, {
             sequence: [
                 {
@@ -165,6 +180,7 @@ export class GameLogic {
                 },
             ]
         })
+
         this.toadsAmount--
         console.log(this.toadsAmount)
         if (this.toadsAmount == 0) this.stopGame()
@@ -175,7 +191,6 @@ export class GameLogic {
 
         const hideEntity = (entity: Entity, pos: number) => {
             console.log("Hide")
-            GltfContainer.createOrReplace(entity, { src: frog01.src })
 
             Tween.createOrReplace(entity, {
                 mode: Tween.Mode.Move({
@@ -188,6 +203,7 @@ export class GameLogic {
 
             utils.timers.setTimeout(() => {
                 pointerEventsSystem.removeOnPointerDown(entity)
+                GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
             }, animationConfig.frogSkipGoBackTime)
 
             this.toadsAmount--
@@ -197,7 +213,7 @@ export class GameLogic {
 
         pointerEventsSystem.onPointerDown(
             {
-                entity: toadsGameState.listOfEntity.get('wall'),
+                entity: toadsGameState.listOfEntity.get('ground'),
                 opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH' },
             },
             () => {
@@ -217,7 +233,7 @@ export class GameLogic {
             this.toadsTimer.set(i, {
                 start: utils.timers.setTimeout(async () => {
                     toadsAppeared++
-                    if (!isEnemy) GltfContainer.createOrReplace(entity, { src: frog02.src })
+                    if (!isEnemy) GltfContainer.createOrReplace(entity, { src: frog02.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
                     Tween.createOrReplace(entity, {
                         mode: Tween.Mode.Move({
                             start: Transform.get(entity).position,
@@ -229,7 +245,7 @@ export class GameLogic {
                     pointerEventsSystem.onPointerDown(
                         {
                             entity: entity,
-                            opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH', maxDistance: 6 },
+                            opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH', maxDistance: 6},
                         },
                         () => {
                             console.log('CLICKED')
@@ -245,8 +261,8 @@ export class GameLogic {
     }
 
     public stopGame() {
-        pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('board'))
         console.log("Game is stopped")
+        pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('board'))
         this.stopHammer()
         this.toadsTimer.forEach((e, k) => {
             utils.timers.clearTimeout(e.start)

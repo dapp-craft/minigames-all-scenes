@@ -11,6 +11,7 @@ export const frame: PBGltfContainer = { src: modelsFolder + 'obj_frame.gltf' };
 export const grass: PBGltfContainer = { src: modelsFolder + 'obj_grass.gltf' };
 export const ground: PBGltfContainer = { src: modelsFolder + 'obj_ground.gltf' };
 export const wall: PBGltfContainer = { src: modelsFolder + 'obj_wall.gltf' };
+export const whack: PBGltfContainer = { src: modelsFolder + 'obj_whack.gltf' };
 export const terminal: PBGltfContainer = { src: modelsFolder + 'obj_terminal.gltf' };
 
 
