@@ -49,5 +49,7 @@ export const soundConfig = {
   volume: 0.5
 }
 
+export const maxLevel = 50
+
 
 

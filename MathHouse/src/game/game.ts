@@ -1,5 +1,5 @@
 import { progress, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
-import { initialLevels, mainEntityId, soundConfig} from "../config"
+import { initialLevels, mainEntityId, maxLevel, soundConfig} from "../config"
 import { Quaternion, Vector3 } from "@dcl/sdk/math"
 import { Animator, Billboard, engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { syncEntity } from "@dcl/sdk/network"
@@ -146,7 +146,7 @@ const initGameButtons = async () => {
                         soundManager.playSound('correctAnswerSound', soundConfig.volume)
                         startWinAnimation()
                         utils.timers.setTimeout(async () => {
-                            if (progressState.level == levelArray.length - 1) return afterGame()
+                            if (progressState.level >= maxLevel) return afterGame()
                             await incrementUserProgress()
                             startGame()
                         }, 1500)
@@ -292,6 +292,7 @@ function setupWinAnimations() {
 }
 
 const afterGame = () => {
+    progressState.level = 1
     utils.timers.setTimeout(() => {
         movePlayerTo({
             newRelativePosition: Vector3.create(8, 1, 13),
