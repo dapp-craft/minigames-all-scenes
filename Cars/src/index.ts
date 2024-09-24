@@ -7,13 +7,14 @@ import { initMiniGame } from '../../common/library'
 import { exitGame, gameState, getReadyToStart, initGame, startLevel } from './game'
 import { GAME_ID } from './config'
 import { STATIC_MODELS } from './resources/resources'
+import { setSfxStatus, SFX_ENABLED } from './game/sfx'
 
 const handlers = {
     start: getReadyToStart,
     exit: exitGame,
     restart: () => {startLevel(gameState.level)},
     toggleMusic: () => {},
-    toggleSfx: () => {}
+    toggleSfx: () => {setSfxStatus(!SFX_ENABLED)}
 }
 
 const libraryReady = initMiniGame(GAME_ID, TIME_LEVEL, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)

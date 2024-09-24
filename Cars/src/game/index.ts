@@ -32,6 +32,7 @@ import { getPlayer } from '@dcl/sdk/players'
 import { countdown, initCountdownNumbers, setupWinAnimations, startWinAnimation } from './gameEffects'
 import { queue } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
+import { playMoveCarSound } from './sfx'
 
 let lookingAt: Cell | undefined = undefined
 
@@ -216,6 +217,7 @@ function processMovement(start: Cell, end: Cell) {
 
   const finalDelta = calculateFinalDelta(car, movementD, availabilityMap, start)
 
+  if (finalDelta.x != 0 || finalDelta.y != 0) playMoveCarSound()
   Car.getMutable(car).position = { x: carData.position.x + finalDelta.x, y: carData.position.y + finalDelta.y }
   inputBuffer.startCell = { x: start.x + finalDelta.x, y: start.y + finalDelta.y }
 

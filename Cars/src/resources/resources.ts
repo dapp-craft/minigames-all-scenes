@@ -17,3 +17,6 @@ export const carModels = {
     2: {src: modelsFolder + 'obj_car02.gltf'},
     3: {src: modelsFolder + 'obj_car01.gltf'},
 }
+
+
+export const moveCarSound = 'sounds/move_car.mp3'
