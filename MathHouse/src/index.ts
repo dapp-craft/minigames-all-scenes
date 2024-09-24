@@ -130,6 +130,7 @@ export const generateArray = (data: generatedData) => {
     }
   }
 
+  randomLvl.wave = new Map()
   for (let i = 1; i <= array.length; i++) {
     randomLvl.wave.set(i, { itemQueue: Math.abs(array[i - 1]), goOut: array[i - 1] > 0 ? false : true })
   }
