@@ -60,7 +60,7 @@ const generateInitialEntity = async () => {
     toadsGameState.listOfEntity.set('missTarget', missTarget)
 
     for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) {
-        Transform.createOrReplace(toadsGameState.availableEntity[i], {position: data.get(`object_hole_${i + 1}`)?.position, parent: sceneParentEntity})
+        Transform.createOrReplace(toadsGameState.availableEntity[i], {position: {...data.get(`object_hole_${i + 1}`)!.position, y: data.get(`object_hole_${i + 1}`)!.position.y - .3}, parent: sceneParentEntity})
         GltfContainer.createOrReplace(toadsGameState.availableEntity[i], { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
     }
 
