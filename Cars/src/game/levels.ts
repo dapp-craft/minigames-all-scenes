@@ -2,18 +2,40 @@ import { BOARD_SIZE } from '../config'
 import { CarDirection, CarType } from './type'
 
 const levels: Record<number, string> = {
-  1: `0AAABC
-      000DBC
-      **0DBC
-      00GFEE
-      00GF00
-      HH00II`,
-  2: `00HHG0
+  1: `00HHG0
       0JJFG0
       **CF00
       B0CEE0
       B0C0D0
-      SSS0D0`
+      SSS0D0`,
+
+  2: `00AABB
+      000CCC
+      **00ED
+      III0ED
+      00HGED
+      00HGFF`,
+
+  3: `ABBB0D
+      A00C0D
+      **0C0D
+      00GCEE
+      00G0F0
+      0HH0F0`,
+
+  4: `AAB0JI
+      00B0JI
+      **B00I
+      DCCFGG
+      D00FHH
+      0EEE00`,
+  
+  5: `00AA0B
+      CCD00B
+      **D00B
+      00DG00
+      FEEG00
+      F0HHH0`
 }
 
 export const MAX_LEVEL = Object.keys(levels).length
