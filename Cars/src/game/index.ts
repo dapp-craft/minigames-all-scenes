@@ -33,11 +33,13 @@ import { countdown, initCountdownNumbers, setupWinAnimations, startWinAnimation 
 import { queue } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { playMoveCarSound } from './sfx'
+import { levelButtons, setupGameUI } from './UiObjects'
 
 let lookingAt: Cell | undefined = undefined
 
 let inputAvailable = false
 
+let lastStart = 0
 export const gameState: {
   playerAddress: string
   playerName: string
@@ -75,6 +77,8 @@ export async function initGame() {
 
   setUpSynchronizer()
 
+  setupGameUI()
+
   createMainCar(SYNC_ENTITY_ID)
 
   for (let i = 0; i < (BOARD_SIZE * BOARD_SIZE) / 2 - 1; i++) {
@@ -92,6 +96,10 @@ export function getReadyToStart() {
   gameState.playerName = getPlayer()?.name ?? 'Underfined'
   gameState.playerAddress = getPlayer()?.userId ?? 'Underfined'
 
+  for (let i = 0; i < levetToStart; i++) {
+    levelButtons[i].enable()
+  }
+
   utils.timers.setTimeout(() => {
     startLevel(levetToStart)
   }, 2000)
@@ -99,6 +107,7 @@ export function getReadyToStart() {
 
 export function startLevel(level: number) {
   console.log('Start level', level)
+  const start = ++lastStart
 
   clearInputBuffer()
 
@@ -107,6 +116,7 @@ export function startLevel(level: number) {
   })
 
   countdown(() => {
+    if (start != lastStart) return
     gameState.levelStartTime = Date.now()
     gameState.level = level
     inputAvailable = true
@@ -124,6 +134,7 @@ function finishLevel() {
     exitGame()
   } else {
     const levelToStart = gameState.level == MAX_LEVEL ? 1 : gameState.level + 1
+    levelButtons[levelToStart].enable()
     startLevel(levelToStart)
   }
 }
@@ -275,8 +286,7 @@ export function exitGame() {
   queue.setNextPlayer()
 }
 
-
-function clearInputBuffer(){
+function clearInputBuffer() {
   inputBuffer.selectedCar = undefined
   inputBuffer.startCell = undefined
   inputBuffer.currentCell = undefined
