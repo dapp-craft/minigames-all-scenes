@@ -1,5 +1,6 @@
 import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/mini-games/src'
-import { getQueue } from '@dcl-sdk/mini-games/src/queue'
+import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
+import { getPlayer } from "@dcl/sdk/players"
 import { rotateVectorAroundCenter } from '@dcl-sdk/mini-games/src/utilities'
 import { engine, Transform, TransformType } from '@dcl/sdk/ecs'
 import { Vector3 } from '@dcl/sdk/math'
@@ -42,17 +43,16 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
     })
     const positionData = validatePositionData(await data) // TODO: account for rotation with rotateVectorAroundCenter
     let isActive = false
-    queue.listeners.onActivePlayerChange = player => {
+    function onActivePlayerChange(player: PlayerType | null) {
         const center = Transform.get(sceneParentEntity).position
-        const sceneRotation = Transform.get(sceneParentEntity).rotation
         
-        if (queue.isActive()) {
+        if (!isActive && player?.address === getPlayer()?.userId) {
             isActive = true
             movePlayerTo({
                 newRelativePosition: Vector3.add(positionData.get(NODE_NAME.AREA_PLAYSPAWN)!.position, center)
             })
             callbacks.start()
-        } else if (isActive) {
+        } else if (isActive && player?.address !== getPlayer()?.userId) {
             isActive = false
             callbacks.exit()
         }
@@ -62,6 +62,15 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
         positionData.get(NODE_NAME.AREA_BOTTOMRIGHT)!.position,
         positionData.get(NODE_NAME.AREA_EXITSPAWN)!.position
     ))
+    let activePlayer: PlayerType | null | undefined
+    engine.addSystem(() => {
+        const player = queue.getQueue().find(p => p.player.active)?.player ?? null
+        if (player?.address !== activePlayer?.address) {
+            activePlayer = player
+            console.log("ACTIVE PLAYER:", activePlayer)
+            onActivePlayerChange(activePlayer)
+        }
+    })
     
     
     new ui.ScoreBoard(
