@@ -8,6 +8,7 @@ let cooldownDefault = 2
 let cooldwnBase = cooldownDefault
 
 engine.addSystem(dt => cooldown.value = Math.max(0, cooldown.value - dt))
+import { parentEntity, syncEntity } from "@dcl/sdk/network"
 export class GameObject {
     private entity: Entity
     private baseSrc: string
@@ -21,9 +22,12 @@ export class GameObject {
     constructor(private model: string, base: VARIANT, altVar: VARIANT, transform: TransformType) {
         this.differs = altVar !== VARIANT.ALT
         this.entity = engine.addEntity()
-        Transform.create(this.entity, transform)
+        syncEntity(this.entity, [Transform.componentId, GltfContainer.componentId])
+        Transform.create(this.entity, {position: Vector3.add(transform.position, Transform.get(transform.parent!).position), parent: undefined})
+        // parentEntity(this.entity, transform.parent!)
         
         this.baseSrc = `models/${model}_${base}.gltf`
+        if (this.differs) this.baseSrc = `models/${model}_alt.gltf`
         this.altSrc = `models/${model}_alt.gltf`
         this.altVarSrc = `models/${model}_${altVar}.gltf`
         // console.log(this.origSrc, this.altSrc, base, altVar)

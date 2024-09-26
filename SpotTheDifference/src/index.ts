@@ -14,6 +14,7 @@ import { countdown, initCountdownNumbers, setupWinAnimations, startWinAnimation 
 import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { ui } from './ui'
 import { Ui3D } from './game/ui3D'
+import '../../common/cleaner'
 
 let alt = false
 let currentLevel = 1 as keyof typeof LEVELS
@@ -24,7 +25,7 @@ async function playLevel(level: keyof typeof LEVELS) {
     const abort = new Promise<never>((_, r) => interruptPlay = r)
     ui3d.setLevel(level)
     ui3d.setObjects(0, LEVELS[level].goal)
-    await Promise.race([new Promise<void>(r => countdown(r, 5)), abort])
+    // await Promise.race([new Promise<void>(r => countdown(r, 5)), abort])
     gameObjects = generateLevelObjects(LEVELS[level].difficulty, LEVELS[level].total)
     gameObjects.forEach(o => o.toggle(alt))
     const targets = new Set(gameObjects.filter(o => o.differs))
