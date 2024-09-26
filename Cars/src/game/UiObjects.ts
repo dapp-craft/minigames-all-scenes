@@ -1,19 +1,19 @@
 import { ui, queue } from '@dcl-sdk/mini-games/src'
-import { Vector3, Quaternion } from '@dcl/sdk/math'
+import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
 import { MAX_LEVEL } from './levels'
-import { startLevel } from './index'
+import { gameState, startLevel } from './index'
 import * as utils from '@dcl-sdk/utils'
 import { levelButtonPositions, setLevelButtonPositions } from './locators/levelButtonPositions'
+import { setLevelUiPositions, UiLocators } from './locators/UILocators'
+import { MeshRenderer, TextShape, Transform, engine } from '@dcl/sdk/ecs'
 const width = 2
 const height = 3
 const scale = 1
 
 export const levelButtons: ui.MenuButton[] = []
-const levelButtonCooldown = 1000
-let lastLevelButtonPress = 0
-export async function setupGameUI() {
 
-  await setLevelButtonPositions()
+export async function setupGameUI() {
+  await Promise.all([setLevelButtonPositions(), setLevelUiPositions()])
 
   for (let index = 0; index < MAX_LEVEL; index++) {
     const level = index + 1
@@ -30,4 +30,48 @@ export async function setupGameUI() {
     levelButtons.push(button)
   }
 
+  setupMoveCouner()
+  seteupTimer()
+}
+
+function setupMoveCouner() {
+  const moveCounter = engine.addEntity()
+  Transform.create(moveCounter, UiLocators['counter_moves'])
+
+  engine.addSystem(() => {
+    TextShape.createOrReplace(moveCounter, {
+      text: `${gameState.moves}`,
+      fontSize: 3,
+      textColor: Color4.Black()
+    })
+  })
+}
+
+function seteupTimer() {
+  const timer = engine.addEntity()
+  Transform.create(timer, UiLocators['counter_timer'])
+
+  engine.addSystem(() => {
+    if (gameState.levelStartTime == 0) {
+      TextShape.createOrReplace(timer, {
+        text: `--:--`,
+        fontSize: 3,
+        textColor: Color4.Black()
+      })
+      return
+    }
+
+    const gameElapsedTime = (Date.now() - gameState.levelStartTime) / 1000
+    const minutes = Math.max(Math.floor(gameElapsedTime / 60), 0)
+    const seconds = Math.max(Math.round(gameElapsedTime) - minutes * 60, 0)
+
+    TextShape.createOrReplace(timer, {
+      text: `${minutes.toLocaleString('en-US', {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+      })}:${seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}`,
+      fontSize: 3,
+      textColor: Color4.Black()
+    })
+  })
 }

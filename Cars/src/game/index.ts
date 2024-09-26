@@ -122,6 +122,7 @@ export function startLevel(level: number) {
   countdown(() => {
     if (start != lastStart) return
     gameState.levelStartTime = Date.now()
+    gameState.levelFinishTime = 0
     gameState.level = level
     gameState.moves = 0
     inputAvailable = true
@@ -297,6 +298,10 @@ export function exitGame() {
   movePlayerTo({
     newRelativePosition: Vector3.create(8, 1, 14)
   })
+  gameState.level = 1
+  gameState.levelFinishTime = 0
+  gameState.levelStartTime = 0
+  gameState.moves = 0
   queue.setNextPlayer()
 }
 
