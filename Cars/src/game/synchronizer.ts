@@ -26,8 +26,9 @@ function updateCar(car: Entity) {
   const oldCarData = CarsLatest[car] as CarType
 
   // Rotation
-  Transform.getMutable(car).rotation = rotationToQuaterion(newCarData.direction)
-
+  if (!isQuaternionEqual(Transform.get(car).rotation, rotationToQuaterion(oldCarData.direction))) {
+    Transform.getMutable(car).rotation = rotationToQuaterion(newCarData.direction)
+  }
 
   const startPosition = cellRelativePosition(oldCarData.position)
   const endPosition = cellRelativePosition(newCarData.position)
@@ -38,7 +39,7 @@ function updateCar(car: Entity) {
     Tween.createOrReplace(car, {
       mode: Tween.Mode.Scale({
         start: Vector3.Zero(),
-        end: Vector3.scale(Vector3.One(), CELL_SIZE_RELATIVE),
+        end: Vector3.scale(Vector3.One(), CELL_SIZE_RELATIVE)
       }),
       duration: 1000,
       easingFunction: EasingFunction.EF_EASEOUTCUBIC
@@ -70,7 +71,10 @@ function updateCar(car: Entity) {
   //Model
   if (newCarData.isMain && GltfContainer.getOrNull(car)?.src != mainCarModel.src) {
     GltfContainer.createOrReplace(car, mainCarModel)
-  } else if (GltfContainer.getOrNull(car)?.src !== carModels[newCarData.length as keyof typeof carModels].src && !newCarData.isMain) {
+  } else if (
+    GltfContainer.getOrNull(car)?.src !== carModels[newCarData.length as keyof typeof carModels].src &&
+    !newCarData.isMain
+  ) {
     GltfContainer.createOrReplace(car, carModels[newCarData.length as keyof typeof carModels])
   }
 }
@@ -90,4 +94,13 @@ function rotationToQuaterion(rotation: CarDirection): Quaternion {
     case CarDirection.right:
       return Quaternion.fromEulerDegrees(0, 90, -90)
   }
+}
+
+function isQuaternionEqual(q1: Quaternion, q2: Quaternion) {
+  const dw = Math.abs(q1.w - q2.w)
+  const dx = Math.abs(q1.x - q2.x)
+  const dy = Math.abs(q1.y - q2.y)
+  const dz = Math.abs(q1.z - q2.z)
+
+  return Math.max(dw, dx, dy, dz) < 0.001
 }
