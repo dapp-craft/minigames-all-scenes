@@ -2,13 +2,14 @@ import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/m
 import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
 import { getPlayer } from "@dcl/sdk/players"
 import { rotateVectorAroundCenter } from '@dcl-sdk/mini-games/src/utilities'
-import { engine, Transform, TransformType } from '@dcl/sdk/ecs'
+import { engine, Transform, TransformType, TextShape } from '@dcl/sdk/ecs'
 import { Vector3 } from '@dcl/sdk/math'
 import { syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
+import { parseTime } from './utils/time'
 
-export const SESSION_DURATION = 1000 * 60 * 5 // 5 minutes
+export const SESSION_TIMEOUT = 1000 * 60 * 5 // 5 minutes
 export const INACTIVITY_TIMEOUT = 1000 * 15 * 1 // 15 seconds
 
 const SCOREBOARD_SCALE = 1.2
@@ -18,8 +19,9 @@ enum NODE_NAME {
     AREA_BOTTOMRIGHT = 'area_bottomRight',
     AREA_EXITSPAWN = 'area_exitSpawn',
     AREA_PLAYSPAWN = 'area_playSpawn',
-    SCOREBOARD = 'display_scoreboard',
-    QUEUE = 'display_queue',
+    DISPLAY_SCOREBOARD = 'display_scoreboard',
+    DISPLAY_QUEUE = 'display_queue',
+    LABEL_NICKNAME = 'label_nickname',
     BUTTON_PLAY = 'button_play',
     BUTTON_RESTART = 'button_restart',
     BUTTON_EXIT = 'button_exit',
@@ -38,10 +40,11 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
     initLibrary(engine, syncEntity, players, {
         environment: 'dev',
         gameId: id,
-        gameTimeoutMs: SESSION_DURATION,
+        gameTimeoutMs: SESSION_TIMEOUT,
         inactiveTimeoutMs: INACTIVITY_TIMEOUT,
     })
     const positionData = validatePositionData(await data) // TODO: account for rotation with rotateVectorAroundCenter
+    let sessionTimeLeft: number | undefined
     let isActive = false
     function onActivePlayerChange(player: PlayerType | null) {
         const center = Transform.get(sceneParentEntity).position
@@ -51,9 +54,13 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
             movePlayerTo({
                 newRelativePosition: Vector3.add(positionData.get(NODE_NAME.AREA_PLAYSPAWN)!.position, center)
             })
+            let elapsed = 0
+            engine.addSystem(dt => sessionTimeLeft = Math.max(0, SESSION_TIMEOUT / 1000 - (elapsed += dt)), undefined, 'countdown')
             callbacks.start()
         } else if (isActive && player?.address !== getPlayer()?.userId) {
             isActive = false
+            engine.removeSystem('countdown')
+            sessionTimeLeft = undefined
             callbacks.exit()
         }
     }
@@ -70,19 +77,32 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
             console.log("ACTIVE PLAYER:", activePlayer)
             onActivePlayerChange(activePlayer)
         }
+        updateLabels()
     })
     
-    
+
+    function updateLabels() {
+        const {minutes, seconds} = parseTime(sessionTimeLeft)
+        const value = `
+            Now playing: ${activePlayer ? getPlayer({userId: activePlayer?.address})!.name : '---'}
+            Next turn: ${sessionTimeLeft !== undefined ? minutes + ':' + seconds : 'now'}
+        `
+        if (TextShape.get(labelNickname).text != value) TextShape.getMutable(labelNickname).text = value
+    }
+    const labelNickname = engine.addEntity()
+    Transform.create(labelNickname, {...positionData.get(NODE_NAME.LABEL_NICKNAME), parent: sceneParentEntity})
+    TextShape.create(labelNickname, {text: '', fontSize: 3})
+
     new ui.ScoreBoard(
-        {...positionData.get(NODE_NAME.SCOREBOARD)!, scale: Vector3.One(), parent: sceneParentEntity},
-        positionData.get(NODE_NAME.SCOREBOARD)!.scale.x,
-        positionData.get(NODE_NAME.SCOREBOARD)!.scale.y,
+        {...positionData.get(NODE_NAME.DISPLAY_SCOREBOARD)!, scale: Vector3.One(), parent: sceneParentEntity},
+        positionData.get(NODE_NAME.DISPLAY_SCOREBOARD)!.scale.x,
+        positionData.get(NODE_NAME.DISPLAY_SCOREBOARD)!.scale.y,
         SCOREBOARD_SCALE,
         scoreboardPreset
     )
     
     queue.initQueueDisplay(
-        {...positionData.get(NODE_NAME.QUEUE)!, parent: sceneParentEntity}
+        {...positionData.get(NODE_NAME.DISPLAY_QUEUE)!, parent: sceneParentEntity}
     )
     
     new ui.MenuButton(

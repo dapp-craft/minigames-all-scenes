@@ -1,6 +1,6 @@
 import { Entity, engine, Transform, TextShape, TextAlignMode } from "@dcl/sdk/ecs"
 import { Quaternion, Color4 } from "@dcl/sdk/math"
-import { SESSION_DURATION } from "../../../common/library"
+import { SESSION_TIMEOUT } from "../../../common/library"
 import { sceneParentEntity, GameData } from "../state"
 import { gameDataEntity, sessionStartedAt } from "./game"
 import { name, steps, timer } from "../config"
@@ -52,7 +52,7 @@ function updateTexts() {
   if (sessionStartedAt === 0) return
 
   // const gameElapsedTime = ((GameData.get(gameDataEntity).levelFinishedAt || Date.now()) - GameData.get(gameDataEntity).levelStartedAt) / 1000
-  const gameElapsedTime = (SESSION_DURATION - (Date.now() - sessionStartedAt)) / 1000
+  const gameElapsedTime = (SESSION_TIMEOUT - (Date.now() - sessionStartedAt)) / 1000
   const minutes = Math.max(Math.floor(gameElapsedTime / 60), 0)
   const seconds = Math.max(Math.round(gameElapsedTime) - minutes * 60, 0)
 

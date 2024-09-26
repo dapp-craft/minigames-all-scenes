@@ -1,7 +1,7 @@
 import { EasingFunction, engine, EngineInfo, Entity, executeTask, GltfContainer, GltfContainerLoadingState, InputAction, inputSystem, LoadingState, Material, MeshCollider, MeshRenderer, PointerEvents, pointerEventsSystem, PointerEventType, Transform, Tween, TweenLoop, TweenSequence, VisibilityComponent } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../common/locators'
 import * as utils from '@dcl-sdk/utils'
-import { initMiniGame, SESSION_DURATION } from '../../common/library'
+import { initMiniGame, SESSION_TIMEOUT } from '../../common/library'
 import { TIME_LEVEL } from '@dcl-sdk/mini-games/src/ui'
 import { LEVELS } from './game/levels'
 import { GameObject } from './game/object'
@@ -50,7 +50,7 @@ const handlers = {
     start: async () => {
         console.log("Game START")
         let elapsed = 0
-        engine.addSystem(dt => void ui3d.setTime(Math.max(0, SESSION_DURATION / 1000 - (elapsed += dt))), undefined, 'stopwatch')
+        engine.addSystem(dt => void ui3d.setTime(Math.max(0, SESSION_TIMEOUT / 1000 - (elapsed += dt))), undefined, 'stopwatch')
         let next: Number | null
         do next = await playLevel(currentLevel)
             .then(() => currentLevel + 1 in LEVELS ? currentLevel++ : null)
