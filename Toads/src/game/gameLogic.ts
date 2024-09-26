@@ -15,9 +15,9 @@ export class GameLogic {
     private correctSmashCounter = 0
     private miss = 0
     private initialTimeGap = 900
-    private additionTimeGap = 1000
     private resolveReady!: () => void
     private isHammerInAction = false
+    private gameEnd = false
 
     private gameIsDone: Promise<void>
 
@@ -54,6 +54,7 @@ export class GameLogic {
         this.correctSmashCounter = 0
         this.miss = 0
         this.initialTimeGap = 900
+        this.gameEnd = false
     }
 
     private activateHummer() {
@@ -186,7 +187,7 @@ export class GameLogic {
                 {
                     mode: Tween.Mode.Move({
                         start: { ...Transform.get(entity).position, y: pos - 1 },
-                        end: { ...Transform.get(entity).position, y: pos }
+                        end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight }
                     }),
                     duration: 500,
                     easingFunction: EasingFunction.EF_LINEAR,
@@ -204,7 +205,7 @@ export class GameLogic {
             Tween.createOrReplace(entity, {
                 mode: Tween.Mode.Move({
                     start: Transform.get(entity).position,
-                    end: { ...Transform.get(entity).position, y: pos }
+                    end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight }
                 }),
                 duration: animationConfig.frogSkipGoBackTime,
                 easingFunction: EasingFunction.EF_EASEOUTBACK,
@@ -216,7 +217,7 @@ export class GameLogic {
             }, animationConfig.frogSkipGoBackTime)
             obj.available = true
         }
-        console.log(toadsGameState.listOfEntity.get('ground'))
+        console.log(toadsGameState.listOfEntity.get('ground'));
         pointerEventsSystem.onPointerDown(
             {
                 entity: toadsGameState.listOfEntity.get('ground'),
@@ -231,6 +232,7 @@ export class GameLogic {
 
         for (let i = 1; i <= 100; i++) {
             this.initialTimeGap = this.initialTimeGap + 1500
+            if (this.gameEnd) console.log("Yo")
             this.toadsTimer.set(i, {
                 start: utils.timers.setTimeout(async () => {
                     console.log("Here")
@@ -276,6 +278,7 @@ export class GameLogic {
         console.log("Game is stopped")
         pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('board'))
         this.stopHammer()
+        this.gameEnd = true
         pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('ground'))
         this.availableEntity.forEach(obj => {
             Transform.getMutable(obj.entity).position.y = toadsGameState.toadInitialHeight

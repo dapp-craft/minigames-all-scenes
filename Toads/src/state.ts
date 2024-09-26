@@ -18,7 +18,10 @@ export const GameData = engine.defineComponent('game-data', {
   playerAddress: Schemas.String,
   playerName: Schemas.String,
   moves: Schemas.Number,
-  levelStartedAt: Schemas.Int64,
-  levelFinishedAt: Schemas.Int64,
   level: Schemas.Int,
 })
+
+export const progressState = {
+  level: 1,
+  moves: 0,
+}
