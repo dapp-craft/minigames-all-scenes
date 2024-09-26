@@ -36,7 +36,13 @@ export interface MiniGameCallbacks {
     toggleSfx: () => void
 }
 
-export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, data: Promise<Map<String, TransformType>>, callbacks: MiniGameCallbacks) {
+export async function initMiniGame(
+    id: string,
+    scoreboardPreset: ui.ColumnData,
+    data: Promise<Map<String, TransformType>>,
+    callbacks: MiniGameCallbacks,
+    disableQueueGuard: boolean = false
+) {
     initLibrary(engine, syncEntity, players, {
         environment: 'dev',
         gameId: id,
@@ -64,7 +70,7 @@ export async function initMiniGame(id: string, scoreboardPreset: ui.ColumnData, 
             callbacks.exit()
         }
     }
-    engine.addSystem(gameAreaChecker(
+    if (!disableQueueGuard) engine.addSystem(gameAreaChecker(
         positionData.get(NODE_NAME.AREA_TOPLEFT)!.position,
         positionData.get(NODE_NAME.AREA_BOTTOMRIGHT)!.position,
         positionData.get(NODE_NAME.AREA_EXITSPAWN)!.position
