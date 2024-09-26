@@ -44,6 +44,29 @@
 				},
 				"metallicFactor":0
 			}
+		},
+		{
+			"doubleSided":true,
+			"emissiveFactor":[
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
+			],
+			"emissiveTexture":{
+				"index":2
+			},
+			"extensions":{
+				"KHR_materials_specular":{
+					"specularFactor":0
+				}
+			},
+			"name":"obj_frame",
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":3
+				},
+				"metallicFactor":0
+			}
 		}
 	],
 	"meshes":[
@@ -58,6 +81,15 @@
 					},
 					"indices":3,
 					"material":0
+				},
+				{
+					"attributes":{
+						"POSITION":4,
+						"NORMAL":5,
+						"TEXCOORD_0":6
+					},
+					"indices":7,
+					"material":1
 				}
 			]
 		}
@@ -70,6 +102,14 @@
 		{
 			"sampler":0,
 			"source":0
+		},
+		{
+			"sampler":0,
+			"source":1
+		},
+		{
+			"sampler":0,
+			"source":1
 		}
 	],
 	"images":[
@@ -77,6 +117,11 @@
 			"mimeType":"image/png",
 			"name":"img_background",
 			"uri":"textures/img_background.png"
+		},
+		{
+			"mimeType":"image/png",
+			"name":"obj_frame",
+			"uri":"textures/obj_frame.png"
 		}
 	],
 	"accessors":[
@@ -113,6 +158,40 @@
 			"componentType":5123,
 			"count":6,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":32,
+			"max":[
+				0.42177802324295044,
+				0.6636205911636353,
+				-0.00028724968433380127
+			],
+			"min":[
+				-0.42177814245224,
+				-0.6636207103729248,
+				-0.055249180644750595
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":32,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":32,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":7,
+			"componentType":5123,
+			"count":60,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -139,6 +218,30 @@
 			"byteLength":12,
 			"byteOffset":128,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":384,
+			"byteOffset":140,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":384,
+			"byteOffset":524,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":256,
+			"byteOffset":908,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":120,
+			"byteOffset":1164,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -149,7 +252,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":140,
+			"byteLength":1284,
 			"uri":"obj_background.bin"
 		}
 	]
