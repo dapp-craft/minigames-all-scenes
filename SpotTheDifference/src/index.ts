@@ -4,7 +4,7 @@ import * as utils from '@dcl-sdk/utils'
 import { initMiniGame } from '../../common/library'
 import { TIME_LEVEL } from '@dcl-sdk/mini-games/src/ui'
 import { LEVELS } from './game/levels'
-import { GameObject } from './game/object'
+import { GameObject, resetCooldown } from './game/object'
 import { generateLevelObjects, init } from './game'
 import { VARIANT } from './game/types'
 import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
@@ -57,6 +57,7 @@ async function playLevel(level: keyof typeof LEVELS) {
 const handlers = {
     start: async () => {
         console.log("Game START")
+        resetCooldown()
         let next: Number | null
         do next = await playLevel(currentLevel)
             .then(() => currentLevel + 1 in LEVELS ? currentLevel++ : null)
@@ -67,6 +68,7 @@ const handlers = {
     exit: () => {
         console.log("Game EXIT")
         interruptPlay()
+        resetCooldown()
     },
     restart: () => {
         interruptPlay(currentLevel)

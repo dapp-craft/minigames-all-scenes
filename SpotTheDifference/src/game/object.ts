@@ -4,8 +4,12 @@ import { Vector3 } from "@dcl/sdk/math"
 import * as utils from '@dcl-sdk/utils'
 import { cooldown } from "../ui"
 
-let cooldownDefault = 2
+const cooldownDefault = 2
 let cooldwnBase = cooldownDefault
+export function resetCooldown() {
+    cooldwnBase = cooldownDefault
+    cooldown.value = 0
+}
 
 engine.addSystem(dt => cooldown.value = Math.max(0, cooldown.value - dt))
 import { parentEntity, syncEntity } from "@dcl/sdk/network"
@@ -49,7 +53,7 @@ export class GameObject {
                     cooldwnBase = cooldownDefault
                 } else {
                     cooldown.value = cooldwnBase
-                    cooldwnBase *= 2
+                    cooldwnBase = cooldwnBase < 50 ? cooldwnBase * 2 : cooldwnBase
                 }
             }
         )
