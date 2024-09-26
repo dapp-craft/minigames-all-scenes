@@ -1,6 +1,7 @@
 import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src";
 import { engine, Entity, Font, PBTextShape, TextAlignMode, TextShape, Transform, TransformType } from "@dcl/sdk/ecs";
 import { readGltfLocators } from "../../../common/locators";
+import { parseTime } from "../../../common/utils/time";
 
 export class Ui3D {
     private readonly counterObjects = engine.addEntity()
@@ -39,9 +40,8 @@ export class Ui3D {
     }
     public async setTime(value?: number) {
         await this.ready
-        const minutes = value ? String(Math.floor(value / 60)).padStart(2, '0') : undefined
-        const seconds = value ? String(Math.floor(value % 60)).padStart(2, '0') : undefined
-        this.setTextOptimized(this.counterStopwatch, `Round: ${minutes ?? '--'}:${seconds ?? '--'}`)
+        const {minutes, seconds, millis} = parseTime(value)
+        this.setTextOptimized(this.counterStopwatch, `Time: ${minutes ?? '--'}:${seconds ?? '--'}.${millis ?? '---'}`)
     }
     private setTextOptimized(entity: Entity, value: string) {
         if (TextShape.get(entity).text != value) TextShape.getMutable(entity).text = value

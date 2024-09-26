@@ -1,7 +1,7 @@
 import { EasingFunction, engine, EngineInfo, Entity, executeTask, GltfContainer, GltfContainerLoadingState, InputAction, inputSystem, LoadingState, Material, MeshCollider, MeshRenderer, PointerEvents, pointerEventsSystem, PointerEventType, Transform, Tween, TweenLoop, TweenSequence, VisibilityComponent } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../common/locators'
 import * as utils from '@dcl-sdk/utils'
-import { initMiniGame, SESSION_TIMEOUT } from '../../common/library'
+import { initMiniGame } from '../../common/library'
 import { TIME_LEVEL } from '@dcl-sdk/mini-games/src/ui'
 import { LEVELS } from './game/levels'
 import { GameObject } from './game/object'
@@ -25,22 +25,30 @@ async function playLevel(level: keyof typeof LEVELS) {
     const abort = new Promise<never>((_, r) => interruptPlay = r)
     ui3d.setLevel(level)
     ui3d.setObjects(0, LEVELS[level].goal)
-    // await Promise.race([new Promise<void>(r => countdown(r, 5)), abort])
-    gameObjects = generateLevelObjects(LEVELS[level].difficulty, LEVELS[level].total)
-    gameObjects.forEach(o => o.toggle(alt))
-    const targets = new Set(gameObjects.filter(o => o.differs))
+    ui3d.setTime(0)
     try {
+        // await Promise.race([new Promise<void>(r => countdown(r, 5)), abort])
+        gameObjects = generateLevelObjects(LEVELS[level].difficulty, LEVELS[level].total)
+        gameObjects.forEach(o => o.toggle(alt))
+        const targets = new Set(gameObjects.filter(o => o.differs))
+        let elapsed = 0
+        engine.addSystem(dt => void ui3d.setTime(elapsed += dt), undefined, 'stopwatch')
         for (let i = 0; i < LEVELS[level].goal; i++) {
             let t = await Promise.race([...Array.from(targets).map(t => t.isMarked), abort])
             targets.delete(t)
             console.log("Found", t) 
             ui3d.setObjects(i+1, LEVELS[level].goal)
-        } 
+        }
+        engine.removeSystem('stopwatch')
         console.log(`Win level ${level}`)
         let pos = await positions.then(data => Vector3.add(data.get('area_playSpawn')!.position, Transform.get(sceneParentEntity).position))
         movePlayerTo({newRelativePosition: pos, cameraTarget: Vector3.add(pos, Vector3.scale(Vector3.Backward(), 5))})
         await Promise.race([new Promise<void>(r => startWinAnimation(r)), abort])
     } finally {
+        engine.removeSystem('stopwatch')
+        ui3d.setObjects()
+        ui3d.setLevel()
+        ui3d.setTime()
         gameObjects.forEach(o => o.destroy())
         gameObjects = []
     }
@@ -49,8 +57,6 @@ async function playLevel(level: keyof typeof LEVELS) {
 const handlers = {
     start: async () => {
         console.log("Game START")
-        let elapsed = 0
-        engine.addSystem(dt => void ui3d.setTime(Math.max(0, SESSION_TIMEOUT / 1000 - (elapsed += dt))), undefined, 'stopwatch')
         let next: Number | null
         do next = await playLevel(currentLevel)
             .then(() => currentLevel + 1 in LEVELS ? currentLevel++ : null)
@@ -61,10 +67,6 @@ const handlers = {
     exit: () => {
         console.log("Game EXIT")
         interruptPlay()
-        ui3d.setObjects()
-        ui3d.setLevel()
-        ui3d.setTime()
-        engine.removeSystem('stopwatch')
     },
     restart: () => {
         interruptPlay(currentLevel)
@@ -107,10 +109,10 @@ export async function main() {
         }
     }
 
-    await init(sceneParentEntity)
     initCountdownNumbers()
     setupWinAnimations()
     ReactEcsRenderer.setUiRenderer(ui)
+    await init(sceneParentEntity)
 
     const locators = await readGltfLocators('locators/obj_locators_unique.gltf')
     const clock = engine.addEntity()
