@@ -40,18 +40,22 @@ let lookingAt: Cell | undefined = undefined
 let inputAvailable = false
 
 let lastStart = 0
+let moveMade = false
+
 export const gameState: {
   playerAddress: string
   playerName: string
   levelStartTime: number
   levelFinishTime: number
   level: number
+  moves: number
 } = {
   playerAddress: '',
   playerName: '',
   levelStartTime: 0,
   levelFinishTime: 0,
-  level: 0
+  level: 0,
+  moves: 0
 }
 
 const inputBuffer: {
@@ -119,6 +123,7 @@ export function startLevel(level: number) {
     if (start != lastStart) return
     gameState.levelStartTime = Date.now()
     gameState.level = level
+    gameState.moves = 0
     inputAvailable = true
     loadLevel(level)
   }, 3)
@@ -154,11 +159,13 @@ function setUpRaycast() {
       // Update lookingAt
       if (hit.hits.length === 0) {
         inputBuffer.currentCell = undefined
+        lookingAt = undefined
         return
       }
       const hitPosition = hit.hits[0].position
       if (hitPosition == undefined) {
         inputBuffer.currentCell = undefined
+        lookingAt = undefined
         return
       }
       const relativePosition = globalCoordsToLocal(hitPosition as Vector3)
@@ -209,6 +216,7 @@ function setUpInputSystem() {
       PointerLock.get(engine.CameraEntity).isPointerLocked
     ) {
       if (!inputAvailable) return
+      moveMade = false
       clearInputBuffer()
     }
   })
@@ -228,7 +236,13 @@ function processMovement(start: Cell, end: Cell) {
 
   const finalDelta = calculateFinalDelta(car, movementD, availabilityMap, start)
 
-  if (finalDelta.x != 0 || finalDelta.y != 0) playMoveCarSound()
+  if (finalDelta.x != 0 || finalDelta.y != 0) {
+    playMoveCarSound()
+    if (!moveMade) {
+      gameState.moves += 1
+      moveMade = true
+    }
+  }
   Car.getMutable(car).position = { x: carData.position.x + finalDelta.x, y: carData.position.y + finalDelta.y }
   inputBuffer.startCell = { x: start.x + finalDelta.x, y: start.y + finalDelta.y }
 
