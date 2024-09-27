@@ -34,6 +34,6 @@ function updateTexts() {
   TextShape.createOrReplace(movesEntity, {
     text: `${gameState.moves}`,
     fontSize: 3,
-    textColor: Color4.Black()
+    textColor: Color4.White()
   })
 }
