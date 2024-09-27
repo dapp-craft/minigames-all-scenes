@@ -3,6 +3,10 @@
 		"generator":"Khronos glTF Blender I/O v4.2.57",
 		"version":"2.0"
 	},
+	"extensionsUsed":[
+		"KHR_materials_specular",
+		"KHR_materials_ior"
+	],
 	"scene":0,
 	"scenes":[
 		{
@@ -16,20 +20,40 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_floor"
+			"name":"obj_wall"
 		},
 		{
 			"mesh":1,
-			"name":"obj_floor_collider"
+			"name":"obj_wall_collider"
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"obj_floor",
+			"emissiveFactor":[
+				0.5,
+				0.5,
+				0.5
+			],
+			"emissiveTexture":{
+				"index":0
+			},
+			"extensions":{
+				"KHR_materials_specular":{
+					"specularColorFactor":[
+						0.0,
+						0.0,
+						0.0
+					]
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
+				}
+			},
+			"name":"obj_wall",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":0
+					"index":1
 				},
 				"metallicFactor":0
 			}
@@ -37,7 +61,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.005",
+			"name":"Torus.005",
 			"primitives":[
 				{
 					"attributes":{
@@ -51,7 +75,7 @@
 			]
 		},
 		{
-			"name":"Mesh.017",
+			"name":"Torus.008",
 			"primitives":[
 				{
 					"attributes":{
@@ -68,120 +92,129 @@
 		{
 			"sampler":0,
 			"source":0
+		},
+		{
+			"sampler":0,
+			"source":1
 		}
 	],
 	"images":[
 		{
-			"mimeType":"image/jpeg",
-			"name":"obj_floor",
-			"uri":"textures/obj_floor.jpg"
+			"mimeType":"image/png",
+			"name":"obj_wall_emission",
+			"uri":"textures/obj_wall_emission.png"
+		},
+		{
+			"mimeType":"image/png",
+			"name":"obj_wall",
+			"uri":"textures/obj_wall.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":47,
+			"count":10117,
 			"max":[
-				7.877691745758057,
-				0.04611922428011894,
-				6.5022735595703125
+				7.7893853187561035,
+				4.458832740783691,
+				5.633542060852051
 			],
 			"min":[
-				-7.883676528930664,
-				0.04611846059560776,
-				0.3117105960845947
+				-7.7893805503845215,
+				0.03565202280879021,
+				-7.8484978675842285
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":47,
+			"count":10117,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":47,
+			"count":10117,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":108,
+			"count":31770,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":47,
+			"count":10117,
 			"max":[
-				7.877691745758057,
-				0.04611922428011894,
-				6.5022735595703125
+				7.7893853187561035,
+				4.458832740783691,
+				5.633542060852051
 			],
 			"min":[
-				-7.883676528930664,
-				0.04611846059560776,
-				0.3117105960845947
+				-7.7893805503845215,
+				0.03565202280879021,
+				-7.8484978675842285
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":47,
+			"count":10117,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":47,
+			"count":10117,
 			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":564,
+			"byteLength":121404,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":564,
-			"byteOffset":564,
+			"byteLength":121404,
+			"byteOffset":121404,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":376,
-			"byteOffset":1128,
+			"byteLength":80936,
+			"byteOffset":242808,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":216,
-			"byteOffset":1504,
+			"byteLength":63540,
+			"byteOffset":323744,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":564,
-			"byteOffset":1720,
+			"byteLength":121404,
+			"byteOffset":387284,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":564,
-			"byteOffset":2284,
+			"byteLength":121404,
+			"byteOffset":508688,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":376,
-			"byteOffset":2848,
+			"byteLength":80936,
+			"byteOffset":630092,
 			"target":34962
 		}
 	],
@@ -193,8 +226,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":3224,
-			"uri":"obj_floor.bin"
+			"byteLength":711028,
+			"uri":"obj_wall.bin"
 		}
 	]
 }

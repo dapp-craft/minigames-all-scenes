@@ -3,6 +3,9 @@
 		"generator":"Khronos glTF Blender I/O v4.2.57",
 		"version":"2.0"
 	},
+	"extensionsUsed":[
+		"KHR_materials_specular"
+	],
 	"scene":0,
 	"scenes":[
 		{
@@ -16,17 +19,22 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_floor"
+			"name":"obj_cars"
 		},
 		{
 			"mesh":1,
-			"name":"obj_floor_collider"
+			"name":"obj_cars_collider"
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"obj_floor",
+			"extensions":{
+				"KHR_materials_specular":{
+					"specularFactor":0
+				}
+			},
+			"name":"obj_car03",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":0
@@ -37,7 +45,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.005",
+			"name":"Cube.038",
 			"primitives":[
 				{
 					"attributes":{
@@ -51,7 +59,7 @@
 			]
 		},
 		{
-			"name":"Mesh.017",
+			"name":"Cube.039",
 			"primitives":[
 				{
 					"attributes":{
@@ -59,7 +67,8 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3
+					"indices":3,
+					"material":0
 				}
 			]
 		}
@@ -72,116 +81,116 @@
 	],
 	"images":[
 		{
-			"mimeType":"image/jpeg",
-			"name":"obj_floor",
-			"uri":"textures/obj_floor.jpg"
+			"mimeType":"image/png",
+			"name":"obj_car03",
+			"uri":"textures/obj_car03.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":47,
+			"count":7696,
 			"max":[
-				7.877691745758057,
-				0.04611922428011894,
-				6.5022735595703125
+				7.093493461608887,
+				1.0780469179153442,
+				6.268970489501953
 			],
 			"min":[
-				-7.883676528930664,
-				0.04611846059560776,
-				0.3117105960845947
+				-7.099475860595703,
+				0.04611843824386597,
+				0.5450155735015869
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":47,
+			"count":7696,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":47,
+			"count":7696,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":108,
+			"count":25176,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":47,
+			"count":7696,
 			"max":[
-				7.877691745758057,
-				0.04611922428011894,
-				6.5022735595703125
+				7.093493461608887,
+				1.0780469179153442,
+				6.268970489501953
 			],
 			"min":[
-				-7.883676528930664,
-				0.04611846059560776,
-				0.3117105960845947
+				-7.099475860595703,
+				0.04611843824386597,
+				0.5450155735015869
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":47,
+			"count":7696,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":47,
+			"count":7696,
 			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":564,
+			"byteLength":92352,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":564,
-			"byteOffset":564,
+			"byteLength":92352,
+			"byteOffset":92352,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":376,
-			"byteOffset":1128,
+			"byteLength":61568,
+			"byteOffset":184704,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":216,
-			"byteOffset":1504,
+			"byteLength":50352,
+			"byteOffset":246272,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":564,
-			"byteOffset":1720,
+			"byteLength":92352,
+			"byteOffset":296624,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":564,
-			"byteOffset":2284,
+			"byteLength":92352,
+			"byteOffset":388976,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":376,
-			"byteOffset":2848,
+			"byteLength":61568,
+			"byteOffset":481328,
 			"target":34962
 		}
 	],
@@ -193,8 +202,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":3224,
-			"uri":"obj_floor.bin"
+			"byteLength":542896,
+			"uri":"obj_cars.bin"
 		}
 	]
 }

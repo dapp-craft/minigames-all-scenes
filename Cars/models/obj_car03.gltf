@@ -44,7 +44,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"Material",
+			"name":"obj_car03",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":0
