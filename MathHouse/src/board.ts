@@ -3,8 +3,9 @@ import { Vector3 } from "@dcl/sdk/math";
 import { gameState, rocketCoords } from "./state";
 import { EasingFunction, engine, GltfContainer, Transform, Tween } from "@dcl/sdk/ecs";
 import { background, cat01, cat02 } from "./resources/resources";
-import { syncEntity } from "@dcl/sdk/network";
+import { parentEntity, syncEntity } from "@dcl/sdk/network";
 import { readGltfLocators } from "../../common/locators";
+import { sceneParentEntity } from './globals';
 
 export class board {
 
@@ -14,18 +15,17 @@ export class board {
     private resolveReady!: () => void
     private dataIsDone: Promise<void>
 
-
     constructor() {
         this.dataIsDone = new Promise((res) => { this.resolveReady = res })
         this.init()
-
     }
 
     private async init() {
         this.data = await readGltfLocators(`locators/obj_background.gltf`)
         this.resolveReady()
         gameState.rocketWindow = engine.addEntity()
-        Transform.createOrReplace(gameState.rocketWindow, { position: rocketCoords, scale: this.data.get('background')?.scale })
+        Transform.createOrReplace(gameState.rocketWindow, { position: {...Vector3.add(this.data.get('background')?.position, Transform.get(sceneParentEntity).position), y: this.data.get('background')?.position.y - 5}, scale: this.data.get('background')?.scale })
+        console.log(Transform.get(sceneParentEntity).position)
         GltfContainer.createOrReplace(gameState.rocketWindow, { src: background.src })
         syncEntity(gameState.rocketWindow, [Transform.componentId, GltfContainer.componentId, Tween.componentId], 5000)
         for (let i = 0; i < gameState.entityInRoket.length - 1; i++) {
