@@ -71,7 +71,7 @@
 			]
 		},
 		{
-			"name":"Mesh.178",
+			"name":"Mesh.019",
 			"primitives":[
 				{
 					"attributes":{
@@ -79,7 +79,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":7
+					"indices":3
 				}
 			]
 		}
@@ -139,7 +139,7 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":359,
+			"count":207,
 			"max":[
 				0.5811094045639038,
 				1.259837031364441,
@@ -155,20 +155,14 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":359,
+			"count":207,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":359,
+			"count":207,
 			"type":"VEC2"
-		},
-		{
-			"bufferView":7,
-			"componentType":5123,
-			"count":1116,
-			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -198,27 +192,21 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":4308,
+			"byteLength":2484,
 			"byteOffset":8076,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4308,
-			"byteOffset":12384,
+			"byteLength":2484,
+			"byteOffset":10560,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2872,
-			"byteOffset":16692,
+			"byteLength":1656,
+			"byteOffset":13044,
 			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":2232,
-			"byteOffset":19564,
-			"target":34963
 		}
 	],
 	"samplers":[
@@ -229,7 +217,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":21796,
+			"byteLength":14700,
 			"uri":"obj_terminal.bin"
 		}
 	]
