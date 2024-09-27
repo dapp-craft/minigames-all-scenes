@@ -1,61 +1,123 @@
 import * as utils from '@dcl-sdk/utils'
 import { getPlayer } from '@dcl/sdk/players'
 import { gameLogic } from '..'
-import { GameData } from '../state'
-import { Entity } from '@dcl/sdk/ecs'
+import { GameData, progressState, sceneParentEntity } from '../state'
+import { engine, Entity } from '@dcl/sdk/ecs'
 import { initStatusBoard } from './initStatusBoard'
-import { fetchPlayerProgress } from './syncData'
-import { progress } from '@dcl-sdk/mini-games/src'
+import { fetchPlayerProgress, updatePlayerProgress } from './syncData'
+import { progress, ui } from '@dcl-sdk/mini-games/src'
+import { Vector3, Quaternion } from '@dcl/sdk/math'
+import { readGltfLocators } from '../../../common/locators'
 
 export let gameDataEntity: Entity
 export let sessionStartedAt: number
 
-let maxProgress: progress.IProgress
+let timer: ui.Timer3D
+let score: ui.Counter3D
+let miss: ui.Counter3D
+let counter: ui.Counter3D
 
 export const initGame = async () => {
-    console.log('INIT GAME')
+  console.log('INIT GAME')
 
-    await initMaxProgress();
+  await fetchPlayerProgress();
 
-    await fetchPlayerProgress();
-    
-    initStatusBoard()
+  initStatusBoard()
 
+  await initCountdownNumbers()
+
+  // await initCounter()
 }
 
 export function getReadyToStart() {
-    console.log('Get Ready to start!')
-    utils.timers.setTimeout(() => startGame(), 2000)
+  console.log('Get Ready to start!')
+  utils.timers.setTimeout(() => startGame(), 2000)
 }
 
 export function exitCallback() {
-    gameLogic.stopGame()
-    GameData.createOrReplace(gameDataEntity, {
-        playerAddress: '',
-        playerName: '',
-        moves: 0,
-    })
+  gameLogic.stopGame()
+  GameData.createOrReplace(gameDataEntity, {
+    playerAddress: '',
+    playerName: '',
+    moves: 0,
+  })
 }
 
 async function startGame() {
-    const localPlayer = getPlayer()
-    sessionStartedAt = Date.now()
+  const localPlayer = getPlayer()
+  sessionStartedAt = Date.now();
 
-    // soundManager.playSound('enterSounds', soundConfig.volume)
+  countdown(() => {
+    gameLogic.stopGame()
+  }, 30)
 
-    const res = await gameLogic.startGame()
-    console.log(res)
 
-    GameData.createOrReplace(gameDataEntity, {
-        level: 1,
-        moves: res.correct - res.miss,
-        playerAddress: localPlayer?.userId,
-        playerName: localPlayer?.name
-    })
+  const res = await gameLogic.startGame();
+  console.log(res)
+
+  progressState.moves = res.correct - res.miss
+  console.log(progressState)
+  await updatePlayerProgress(progressState);
+
+  GameData.createOrReplace(gameDataEntity, {
+    playerAddress: localPlayer?.userId,
+    playerName: localPlayer?.name,
+    moves: res.correct - res.miss
+  })
 }
 
-async function initMaxProgress() {
-    console.log('Fetching progress', Object.keys(progress))
-    let req = await progress.getProgress('level', progress.SortDirection.DESC, 1)
-    if (req?.length) maxProgress = req[0]
+async function initCountdownNumbers() {
+  const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+  timer = new ui.Timer3D(
+    {
+      parent: sceneParentEntity,
+      position: data.get('counter_timer')?.position,
+      rotation: Quaternion.fromEulerDegrees(0, 0, 0),
+      scale: Vector3.create(.5, .5, .5)
+    },
+    1,
+    1,
+    false,
+    10
+  )
+  console.log(timer)
+  timer.hide()
+}
+
+const initCounter = async () => {
+  const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+  score = new ui.Counter3D({ ...data.get('counter_score')!, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.fromEulerDegrees(0, 0, 0), parent: sceneParentEntity }, 1, 1, false, 11)
+  score.setNumber(1)
+  score.show()
+  miss = new ui.Counter3D({ ...data.get('counter_misses')!, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.fromEulerDegrees(0, 0, 0), parent: sceneParentEntity }, 1, 1, false, 11)
+  miss.setNumber(2)
+  miss.show()
+  counter = new ui.Counter3D({ ...data.get('counter_hits')!, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.fromEulerDegrees(0, 0, 0), parent: sceneParentEntity }, 1, 1, false, 11)
+  counter.setNumber(3)
+  counter.show()
+}
+
+export async function countdown(cb: () => void, number: number) {
+  let currentValue = number
+  let time = 1
+
+  engine.addSystem(
+    (dt: number) => {
+      time += dt
+
+      if (time >= 1) {
+        time = 0
+        if (currentValue > 0) {
+          timer.show()
+          timer.setTimeAnimated(currentValue--)
+        } else {
+          timer.hide()
+          engine.removeSystem('countdown-system')
+          cb && cb()
+        }
+      }
+    },
+    undefined,
+    'countdown-system'
+  )
 }

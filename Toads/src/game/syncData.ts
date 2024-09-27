@@ -15,7 +15,8 @@ export async function fetchPlayerProgress() {
 export async function updatePlayerProgress(data: typeof progressState) {
   console.log('Updating progress', playerProgress)
   progress.upsertProgress({
+    time: 1,
     level: progressState.level,
-    moves: progressState.moves
+    score: progressState.moves
   })
 }
