@@ -2,8 +2,8 @@ import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/m
 import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
 import { getPlayer } from "@dcl/sdk/players"
 import { rotateVectorAroundCenter } from '@dcl-sdk/mini-games/src/utilities'
-import { engine, Transform, TransformType, TextShape } from '@dcl/sdk/ecs'
-import { Vector3 } from '@dcl/sdk/math'
+import { engine, Transform, TransformType, TextShape, PBTextShape } from '@dcl/sdk/ecs'
+import { Color4, Vector3 } from '@dcl/sdk/math'
 import { syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
@@ -41,6 +41,7 @@ export async function initMiniGame(
     scoreboardPreset: ui.ColumnData,
     data: Promise<Map<String, TransformType>>,
     callbacks: MiniGameCallbacks,
+    textSettings: Omit<PBTextShape, 'text'> = {fontSize: 3, textColor: Color4.White()},
     disableQueueGuard: boolean = false
 ) {
     initLibrary(engine, syncEntity, players, {
@@ -97,7 +98,7 @@ export async function initMiniGame(
     }
     const labelNickname = engine.addEntity()
     Transform.create(labelNickname, {...positionData.get(NODE_NAME.LABEL_NICKNAME), parent: sceneParentEntity})
-    TextShape.create(labelNickname, {text: '', fontSize: 3})
+    TextShape.create(labelNickname, {...textSettings, text: ''})
 
     new ui.ScoreBoard(
         {...positionData.get(NODE_NAME.DISPLAY_SCOREBOARD)!, scale: Vector3.One(), parent: sceneParentEntity},
