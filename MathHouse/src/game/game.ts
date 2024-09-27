@@ -37,7 +37,7 @@ export const exitCallback = () => {
     soundManager.playSound('exitSounds', soundConfig.volume)
     entityManager?.stopGame()
     progressState.level = 1
-    TextShape.getMutable(gameState.levelCounter).text = `${progressState.level - 1}`
+    TextShape.getMutable(gameState.levelCounter).text = `Level: ${progressState.level - 1}`
     GameData.createOrReplace(gameDataEntity, {
         playerAddress: '',
         playerName: '',
@@ -318,7 +318,7 @@ function startWinAnimation() {
 
 const incrementUserProgress = async () => {
     progressState.level++
-    TextShape.getMutable(gameState.levelCounter).text = `${progressState.level - 1}`
+    TextShape.getMutable(gameState.levelCounter).text = `Level: ${progressState.level - 1}`
     await updatePlayerProgress(progressState)
 }
 

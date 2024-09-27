@@ -84,7 +84,7 @@ const spawnInitialEntityPoll = async () => {
   const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
 
   TextShape.create(gameState.levelCounter, {
-    text: '0',
+    text: 'Level: 0',
     fontSize: 3
   })
   Transform.create(gameState.levelCounter, { ...data.get('counter_level'), rotation: Quaternion.create(0, -.414, .175, 0), parent: sceneParentEntity })
