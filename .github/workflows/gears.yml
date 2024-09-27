@@ -6,6 +6,7 @@ on:
     paths:
       - 'SpotTheDifference/**'
       - 'common/**'
+      - 'package.json'
     tags:
       - 'preview/gears-v*'
       - 'release/gears-v*'

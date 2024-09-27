@@ -7,6 +7,7 @@ on:
     paths:
       - 'MatchTwo/**'
       - 'common/**'
+      - 'package.json'
     tags:
       - 'preview/circus-v*'
       - 'release/circus-v*'

@@ -7,6 +7,7 @@ on:
     paths:
       - 'MathHouse/**'
       - 'common/**'
+      - 'package.json'
     tags:
       - 'preview/kittens-v*'
       - 'release/kittens-v*'
