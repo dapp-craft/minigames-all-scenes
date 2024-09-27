@@ -140,7 +140,7 @@ function finishLevel() {
     exitGame()
   } else {
     const levelToStart = gameState.level == MAX_LEVEL ? 1 : gameState.level + 1
-    levelButtons[levelToStart].enable()
+    levelButtons[levelToStart - 1].enable()
     startLevel(levelToStart)
   }
 }
