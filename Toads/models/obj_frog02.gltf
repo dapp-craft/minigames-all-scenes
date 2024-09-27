@@ -53,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.012",
+			"name":"Mesh.011",
 			"primitives":[
 				{
 					"attributes":{
@@ -67,7 +67,7 @@
 			]
 		},
 		{
-			"name":"Mesh.013",
+			"name":"Mesh.016",
 			"primitives":[
 				{
 					"attributes":{
@@ -101,107 +101,107 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":844,
+			"count":206,
 			"max":[
-				0.46496284008026123,
-				0.4568823277950287,
-				0.4776778817176819
+				0.4206773638725281,
+				-2.9802322387695312e-08,
+				0.430457204580307
 			],
 			"min":[
-				-0.4649626910686493,
-				-0.45424970984458923,
-				-0.38467562198638916
+				-0.4206772744655609,
+				-0.6575601100921631,
+				-0.42087775468826294
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":844,
+			"count":206,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":844,
+			"count":206,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":3858,
+			"count":936,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":844,
+			"count":206,
 			"max":[
-				0.46496284008026123,
-				0.4568823277950287,
-				0.4776778817176819
+				0.4206773638725281,
+				-2.9802322387695312e-08,
+				0.430457204580307
 			],
 			"min":[
-				-0.4649626910686493,
-				-0.45424970984458923,
-				-0.38467562198638916
+				-0.4206772744655609,
+				-0.6575601100921631,
+				-0.42087775468826294
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":844,
+			"count":206,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":844,
+			"count":206,
 			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":10128,
+			"byteLength":2472,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10128,
-			"byteOffset":10128,
+			"byteLength":2472,
+			"byteOffset":2472,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6752,
-			"byteOffset":20256,
+			"byteLength":1648,
+			"byteOffset":4944,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":7716,
-			"byteOffset":27008,
+			"byteLength":1872,
+			"byteOffset":6592,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":10128,
-			"byteOffset":34724,
+			"byteLength":2472,
+			"byteOffset":8464,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10128,
-			"byteOffset":44852,
+			"byteLength":2472,
+			"byteOffset":10936,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6752,
-			"byteOffset":54980,
+			"byteLength":1648,
+			"byteOffset":13408,
 			"target":34962
 		}
 	],
@@ -213,7 +213,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":61732,
+			"byteLength":15056,
 			"uri":"obj_frog02.bin"
 		}
 	]
