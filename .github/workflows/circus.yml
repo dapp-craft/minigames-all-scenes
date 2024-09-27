@@ -17,7 +17,7 @@ jobs:
     uses: ./.github/workflows/.deploy_worlds.yml
     with:
       directory: MatchTwo
-      worlds: snikes.crossverse.eth
+      worlds: test.snikes.eth
     secrets:
       DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
 
