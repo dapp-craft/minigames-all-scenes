@@ -217,7 +217,7 @@ export function getReadyToStart() {
 export async function startLevel(level: keyof typeof TILES_LEVEL) {
   console.log('Start level', level)
 
-  countdown( async () => {
+  countdown(async () => {
     await Promise.all(tiles.map((tile) => resetTile(tile)))
 
     console.log('TILES LEVEL', TILES_LEVEL)
@@ -293,7 +293,7 @@ function checkIfMatch() {
 
 function disableTile(tile: TileType) {
   pointerEventsSystem.removeOnPointerDown(tile.doorEntity)
-  Transform.getMutable(tile.doorEntity).scale = Vector3.create(0.1, 0.1, 0.1)
+  Transform.getMutable(tile.doorEntity).scale = Vector3.create(0, 0, 0)
   Tile.getMutable(tile.mainEntity).inGame = false
 }
 

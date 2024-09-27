@@ -38,7 +38,7 @@ export const toysModels: PBGltfContainer[] = [
 ]
 
 export const tileDoorShape: PBGltfContainer = { src: modelsFolder + 'obj_door.gltf' }
-export const defaulToyModel: PBGltfContainer = { src: modelsFolder + 'obj_toy01.gltf' }
+export const defaulToyModel: PBGltfContainer = { src: modelsFolder + '' }
 
 export const openTileSound1 = 'sounds/open_1.mp3'
 export const openTileSound2 = 'sounds/open_2.mp3'
