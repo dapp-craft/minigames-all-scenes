@@ -23,7 +23,7 @@
 	],
 	"materials":[
 		{
-			"alphaMode":"MASK",
+			"alphaMode":"BLEND",
 			"doubleSided":true,
 			"extensions":{
 				"KHR_materials_specular":{
@@ -206,15 +206,15 @@
 		{
 			"bufferView":8,
 			"componentType":5126,
-			"count":745,
+			"count":716,
 			"max":[
 				6.920620918273926,
-				3.2028276920318604,
-				4.121727466583252
+				3.1372315883636475,
+				4.070674419403076
 			],
 			"min":[
 				-6.920616149902344,
-				2.897310733795166,
+				2.900529384613037,
 				-6.936429977416992
 			],
 			"type":"VEC3"
@@ -222,13 +222,13 @@
 		{
 			"bufferView":9,
 			"componentType":5126,
-			"count":745,
+			"count":716,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":10,
 			"componentType":5126,
-			"count":745,
+			"count":716,
 			"type":"VEC2"
 		},
 		{
@@ -289,26 +289,26 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":8940,
+			"byteLength":8592,
 			"byteOffset":700,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8940,
-			"byteOffset":9640,
+			"byteLength":8592,
+			"byteOffset":9292,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5960,
-			"byteOffset":18580,
+			"byteLength":5728,
+			"byteOffset":17884,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":3246,
-			"byteOffset":24540,
+			"byteOffset":23612,
 			"target":34963
 		}
 	],
@@ -320,7 +320,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":27788,
+			"byteLength":26860,
 			"uri":"obj_text.bin"
 		}
 	]

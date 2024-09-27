@@ -61,7 +61,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Torus.005",
+			"name":"Torus.006",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,7 +75,7 @@
 			]
 		},
 		{
-			"name":"Torus.008",
+			"name":"Torus.009",
 			"primitives":[
 				{
 					"attributes":{
@@ -114,10 +114,10 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":10117,
+			"count":6339,
 			"max":[
 				7.7893853187561035,
-				4.458832740783691,
+				4.797542095184326,
 				5.633542060852051
 			],
 			"min":[
@@ -130,28 +130,28 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":10117,
+			"count":6339,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":10117,
+			"count":6339,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":31770,
+			"count":17586,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":10117,
+			"count":6339,
 			"max":[
 				7.7893853187561035,
-				4.458832740783691,
+				4.797542095184326,
 				5.633542060852051
 			],
 			"min":[
@@ -164,57 +164,57 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":10117,
+			"count":6339,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":10117,
+			"count":6339,
 			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":121404,
+			"byteLength":76068,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":121404,
-			"byteOffset":121404,
+			"byteLength":76068,
+			"byteOffset":76068,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":80936,
-			"byteOffset":242808,
+			"byteLength":50712,
+			"byteOffset":152136,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":63540,
-			"byteOffset":323744,
+			"byteLength":35172,
+			"byteOffset":202848,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":121404,
-			"byteOffset":387284,
+			"byteLength":76068,
+			"byteOffset":238020,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":121404,
-			"byteOffset":508688,
+			"byteLength":76068,
+			"byteOffset":314088,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":80936,
-			"byteOffset":630092,
+			"byteLength":50712,
+			"byteOffset":390156,
 			"target":34962
 		}
 	],
@@ -226,7 +226,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":711028,
+			"byteLength":440868,
 			"uri":"obj_wall.bin"
 		}
 	]
