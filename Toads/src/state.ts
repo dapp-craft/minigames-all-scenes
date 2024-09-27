@@ -4,7 +4,7 @@ import { Vector3, Quaternion } from "@dcl/sdk/math"
 export const toadsGameState = {
   availableEntity: new Array,
   listOfEntity: new Map(),
-  toadInitialHeight: 0
+  toadInitialHeight: 0,
 }
 
 export const sceneParentEntity = engine.addEntity()

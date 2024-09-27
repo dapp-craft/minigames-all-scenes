@@ -65,7 +65,8 @@ export class GameLogic {
                     collisionMask: ColliderLayer.CL_CUSTOM5,
                 },
             },
-            function (hit) {
+            (hit) => {
+                if (this.isHammerInAction) return
                 if (hit.hits.length == 0) {
                     return GltfContainer.deleteFrom(hammerEntity)
                     // return
@@ -116,13 +117,13 @@ export class GameLogic {
             duration: 200,
             easingFunction: EasingFunction.EF_EASEBOUNCE,
         })
-
+console.log(utils.getWorldPosition(target))
         TweenSequence.createOrReplace(hammerEntity, {
             sequence: [
                 {
                     mode: Tween.Mode.Move({
-                        start: Transform.get(hammerEntity).position,
-                        end: { ...Transform.get(hammerEntity).position, y: 1 }
+                        start: isMissed ? Transform.get(hammerEntity).position : {...utils.getWorldPosition(target), y: Transform.get(hammerEntity).position.y, },
+                        end: isMissed ? { ...Transform.get(hammerEntity).position, y: 1 } : { ...utils.getWorldPosition(target), y: 1 }
                     }),
                     duration: animationConfig.hitDelay,
                     easingFunction: EasingFunction.EF_EASEOUTEXPO,
@@ -156,6 +157,7 @@ export class GameLogic {
                     engine.removeSystem("bounceSystem")
                     this.isHammerInAction = false
                     this.activateHummer()
+                    return
                 }
             }, 1, "bounceSystem")
         }
@@ -249,7 +251,7 @@ export class GameLogic {
                     Tween.createOrReplace(entity, {
                         mode: Tween.Mode.Move({
                             start: Transform.get(entity).position,
-                            end: { ...Transform.get(entity).position, y: y + toadsGameConfig.toadsDistance },
+                            end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight + toadsGameConfig.toadsDistance },
                         }),
                         duration: 100,
                         easingFunction: EasingFunction.EF_EASEOUTBACK,

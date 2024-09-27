@@ -58,9 +58,6 @@ const generateInitialEntity = async () => {
     const miss = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 5]
     const counter = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 6]
 
-    console.log("hhghghghhgh");
-    console.log(hits, miss, counter)
-
     TextShape.create(hits, { text: '0', fontSize: 3 })
     TextShape.create(miss, { text: '0', fontSize: 3 })
     TextShape.create(counter, { text: '0', fontSize: 3 })
