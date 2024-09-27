@@ -8,28 +8,37 @@ import { exitGame, gameState, getReadyToStart, initGame, startLevel } from './ga
 import { GAME_ID } from './config'
 import { STATIC_MODELS } from './resources/resources'
 import { setSfxStatus, SFX_ENABLED } from './game/sfx'
+import { Color4 } from '@dcl/sdk/math'
 
 const handlers = {
-    start: getReadyToStart,
-    exit: exitGame,
-    restart: () => {startLevel(gameState.level)},
-    toggleMusic: () => {},
-    toggleSfx: () => {setSfxStatus(!SFX_ENABLED)}
+  start: getReadyToStart,
+  exit: exitGame,
+  restart: () => {
+    startLevel(gameState.level)
+  },
+  toggleMusic: () => {},
+  toggleSfx: () => {
+    setSfxStatus(!SFX_ENABLED)
+  }
 }
 
-const libraryReady = initMiniGame(GAME_ID, TIME_LEVEL, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
-
+const libraryReady = initMiniGame(
+  GAME_ID,
+  TIME_LEVEL,
+  readGltfLocators(`locators/obj_locators_default.gltf`),
+  handlers,
+  { textColor: Color4.Black(), fontSize: 3 }
+)
 
 executeTask(async () => {
-    for (const model of STATIC_MODELS) {
-        const entity = engine.addEntity()
-        GltfContainer.create(entity, model)
-        Transform.create(entity, {parent: sceneParentEntity})
-    }
+  for (const model of STATIC_MODELS) {
+    const entity = engine.addEntity()
+    GltfContainer.create(entity, model)
+    Transform.create(entity, { parent: sceneParentEntity })
+  }
 })
 
-
 export async function main() {
-    // await libraryReady
-    initGame()
+  // await libraryReady
+  initGame()
 }
