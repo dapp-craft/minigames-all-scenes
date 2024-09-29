@@ -78,7 +78,6 @@ export class GameLogic {
                 GltfContainer.getOrNull(hammerEntity) == null && GltfContainer.createOrReplace(hammerEntity, hammer)
                 Transform.createOrReplace(hammerEntity, {
                     position: { ...hitPos, y: 3 },
-                    rotation: Quaternion.multiply(Quaternion.fromLookAt(Transform.get(hammerEntity).position, Transform.get(engine.PlayerEntity).position), Quaternion.create(-.5, .5, .6, 0.5))
                 })
             }
         )
@@ -93,50 +92,51 @@ export class GameLogic {
         GltfContainer.deleteFrom(hammerEntity)
     }
 
-    private hitHammer(data: { obj: EntityObject, pos: any } = { obj: { entity: toadsGameState.listOfEntity.get('missTarget'), available: true }, pos: Vector3.create(0, 0, 0) }) {
+    private hitHammer() {
         this.isHammerInAction = true;
-        const target = data.obj.entity
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
-        const initialHammerPosition = Transform.get(hammerEntity).position
+        raycastSystem.removeRaycasterEntity(engine.CameraEntity)
+        let isMissed = false;
 
-        let isMissed = target == toadsGameState.listOfEntity.get('missTarget') ? true : false
+        let target: EntityObject = { entity: toadsGameState.listOfEntity.get('missTarget'), available: true }
+        let hammerZeroYVector = { ...Transform.get(hammerEntity).position, y: 0 }
+        for (const obj of this.availableEntity.values()) {
+            const entityPosition = { ...utils.getWorldPosition(obj.entity), y: 0 };
+            const distance = Vector3.distance(hammerZeroYVector, entityPosition);
 
-        if (isMissed) {
-            Transform.createOrReplace(target, {
-                position: toadsGameState.listOfEntity.get('missTarget')
-            })
+            if (distance <= toadsGameConfig.hammerRadius) {
+                console.log("Hit", distance);
+                target = obj;
+                isMissed = false;
+                break;
+            } else {
+                console.log("Miss");
+                isMissed = true;
+            }
         }
 
-        raycastSystem.removeRaycasterEntity(engine.CameraEntity)
+        if (isMissed) {
+            this.miss++
+            TextShape.getMutable(toadsGameState.listOfEntity.get('miss')).text = `${this.miss}`
+        } else {
+            this.correctSmashCounter++
+            TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `${this.correctSmashCounter}`
+        }
 
         Tween.createOrReplace(hammerEntity, {
-            mode: Tween.Mode.Rotate({
-                start: Transform.get(hammerEntity).rotation,
-                end: Quaternion.fromAngleAxis(90, Vector3.create(0, 0, 1))
+            mode: Tween.Mode.Move({
+                start: Transform.get(hammerEntity).position,
+                end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight}
             }),
-            duration: 200,
-            easingFunction: EasingFunction.EF_EASEBOUNCE,
-        })
-console.log(utils.getWorldPosition(target))
-        TweenSequence.createOrReplace(hammerEntity, {
-            sequence: [
-                {
-                    mode: Tween.Mode.Move({
-                        start: isMissed ? Transform.get(hammerEntity).position : {...utils.getWorldPosition(target), y: Transform.get(hammerEntity).position.y, },
-                        end: isMissed ? { ...Transform.get(hammerEntity).position, y: 1 } : { ...utils.getWorldPosition(target), y: 1 }
-                    }),
-                    duration: animationConfig.hitDelay,
-                    easingFunction: EasingFunction.EF_EASEOUTEXPO,
-                }
-            ]
+            duration: animationConfig.hitDelay,
+            easingFunction: EasingFunction.EF_EASEOUTEXPO,
         })
 
         engine.addSystem(() => {
-            const targetPosition = { ...Transform.get(target).position, y: Transform.get(target).position.y + 1 }
-            if (Transform.get(hammerEntity).position.y <= targetPosition.y || Transform.get(hammerEntity).position.y <= 1.5) {
+            if (Transform.get(hammerEntity).position.y <= Transform.get(target.entity).position.y || Transform.get(hammerEntity).position.y <= 1) {
                 engine.removeSystem('hammerHit')
                 Tween.deleteFrom(hammerEntity)
-                !isMissed && this.hitEntity(data.obj, data!.pos)
+                !isMissed && this.hitEntity(target)
                 hammerBounce()
             }
         }, 1000, 'hammerHit');
@@ -145,8 +145,8 @@ console.log(utils.getWorldPosition(target))
             console.log("Bounce")
             Tween.createOrReplace(hammerEntity, {
                 mode: Tween.Mode.Move({
-                    start: { ...initialHammerPosition, y: Transform.get(hammerEntity).position.y },
-                    end: initialHammerPosition
+                    start: { ...Transform.get(hammerEntity).position, y: Transform.get(hammerEntity).position.y },
+                    end: Transform.get(hammerEntity).position,
                 }),
                 duration: animationConfig.hammerBounceTime,
                 easingFunction: EasingFunction.EF_EASEOUTBACK,
@@ -163,15 +163,15 @@ console.log(utils.getWorldPosition(target))
         }
     }
 
-    private hitEntity(obj: EntityObject, pos: number) {
-        const entity = obj.entity
+    private hitEntity(target: EntityObject) {
+        const entity = target.entity
         pointerEventsSystem.removeOnPointerDown(entity);
         GltfContainer.createOrReplace(entity, { src: frog02.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
 
         Tween.createOrReplace(entity, {
             mode: Tween.Mode.Move({
-                start: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight },
-                end: { ...Transform.get(entity).position, y: pos - 1 }
+                start: Transform.get(entity).position,
+                end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight }
             }),
             duration: animationConfig.forgHitGoBackTime,
             easingFunction: EasingFunction.EF_LINEAR,
@@ -181,26 +181,12 @@ console.log(utils.getWorldPosition(target))
             pointerEventsSystem.removeOnPointerDown(entity)
             GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
         }, animationConfig.forgHitGoBackTime)
-
-        TweenSequence.createOrReplace(entity, {
-            sequence: [
-                {
-                    mode: Tween.Mode.Move({
-                        start: { ...Transform.get(entity).position, y: pos - 1 },
-                        end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight }
-                    }),
-                    duration: 500,
-                    easingFunction: EasingFunction.EF_LINEAR,
-                },
-            ]
-        })
-        obj.available = true
+        target.available = true
     }
 
     private async playGame() {
         let toadsAppeared = 0
         const hideEntity = (obj: EntityObject, pos: number) => {
-            console.log("Hide")
             const entity = obj.entity
             Tween.createOrReplace(entity, {
                 mode: Tween.Mode.Move({
@@ -224,14 +210,12 @@ console.log(utils.getWorldPosition(target))
                 opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH' },
             },
             () => {
-                console.log("Miss")
                 if (this.isHammerInAction) {
                     console.log('Miss BUT HAMMER IN ACTION')
                     return
                 }
                 this.hitHammer()
-                this.miss++
-                TextShape.getMutable(toadsGameState.listOfEntity.get('miss')).text = `${this.miss}`
+
             }
         )
 
@@ -266,11 +250,7 @@ console.log(utils.getWorldPosition(target))
                                 console.log('CLICKED BUT HAMMER IN ACTION')
                                 return
                             }
-                            console.log('CLICKED')
-                            utils.timers.clearTimeout(this.toadsTimer.get(i).finish);
-                            this.hitHammer({ obj: obj, pos: y })
-                            this.correctSmashCounter++
-                            TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `${this.correctSmashCounter}`
+                            this.hitHammer()
                         }
                     )
                     this.toadsTimer.get(i).finish = utils.timers.setTimeout(() => hideEntity(obj, y), animationConfig.frogStayTime)

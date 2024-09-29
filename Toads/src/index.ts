@@ -86,7 +86,7 @@ const generateInitialEntity = async () => {
     
     toadsGameState.listOfEntity.forEach((e, k) => console.log(k, e))
 
-    toadsGameState.toadInitialHeight = data.get(`object_hole_1`)!.position.y - .3
+    toadsGameState.toadInitialHeight = data.get(`object_hole_1`)!.position.y
     Transform.create(missTarget, { position: { ...data.get(`object_hole_1`)!.position, y: toadsGameState.toadInitialHeight } })
 
     for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) {
