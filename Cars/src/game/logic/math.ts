@@ -1,7 +1,7 @@
 import { Transform } from '@dcl/sdk/ecs'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { BOARD_SIZE, CELL_SIZE_RELATIVE } from '../../config'
-import { Cell } from '../type'
+import { CarDirection, Cell } from '../type'
 import { BOARD } from '../objects/board'
 
 export function globalCoordsToLocal(position: Vector3) {
@@ -67,4 +67,17 @@ export function getDirectionVector(direction: number) {
       return Vector3.Left()
   }
   return Vector3.Zero()
+}
+
+export function directionToQuaterion(rotation: CarDirection): Quaternion {
+  switch (rotation) {
+    case CarDirection.up:
+      return Quaternion.fromEulerDegrees(-90, 0, 0)
+    case CarDirection.down:
+      return Quaternion.fromEulerDegrees(90, 180, 0)
+    case CarDirection.left:
+      return Quaternion.fromEulerDegrees(180, 90, -90)
+    case CarDirection.right:
+      return Quaternion.fromEulerDegrees(0, 90, -90)
+  }
 }

@@ -1,7 +1,7 @@
 import { EasingFunction, Entity, GltfContainer, Transform, Tween, engine } from '@dcl/sdk/ecs'
 import { CarDirection, CarType, Cell } from './type'
 import { Car } from './components/definitions'
-import { cellRelativePosition } from './logic/math'
+import { cellRelativePosition, directionToQuaterion } from './logic/math'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { carModels, mainCarModel } from '../resources/resources'
 import * as utils from '@dcl-sdk/utils'
@@ -26,8 +26,8 @@ function updateCar(car: Entity) {
   const oldCarData = CarsLatest[car] as CarType
 
   // Rotation
-  if (!isQuaternionEqual(Transform.get(car).rotation, rotationToQuaterion(oldCarData.direction))) {
-    Transform.getMutable(car).rotation = rotationToQuaterion(newCarData.direction)
+  if (!isQuaternionEqual(Transform.get(car).rotation, directionToQuaterion(oldCarData.direction))) {
+    Transform.getMutable(car).rotation = directionToQuaterion(newCarData.direction)
   }
 
   const startPosition = cellRelativePosition(oldCarData.position)
@@ -81,19 +81,6 @@ function updateCar(car: Entity) {
 
 function hash(data: any) {
   return JSON.stringify(data)
-}
-
-function rotationToQuaterion(rotation: CarDirection): Quaternion {
-  switch (rotation) {
-    case CarDirection.up:
-      return Quaternion.fromEulerDegrees(-90, 0, 0)
-    case CarDirection.down:
-      return Quaternion.fromEulerDegrees(90, 180, 0)
-    case CarDirection.left:
-      return Quaternion.fromEulerDegrees(180, 90, -90)
-    case CarDirection.right:
-      return Quaternion.fromEulerDegrees(0, 90, -90)
-  }
 }
 
 function isQuaternionEqual(q1: Quaternion, q2: Quaternion) {

@@ -34,8 +34,9 @@ import { queue } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { playMoveCarSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
+import { initArrow } from './arrow'
 
-let lookingAt: Cell | undefined = undefined
+export let lookingAt: Cell | undefined = undefined
 
 let inputAvailable = false
 
@@ -58,7 +59,7 @@ export const gameState: {
   moves: 0
 }
 
-const inputBuffer: {
+export const inputBuffer: {
   selectedCar: Entity | undefined
   startCell: Cell | undefined
   currentCell: Cell | undefined
@@ -82,6 +83,8 @@ export async function initGame() {
   setUpSynchronizer()
 
   setupGameUI()
+
+  initArrow()
 
   createMainCar(SYNC_ENTITY_ID)
 
@@ -180,7 +183,7 @@ function setUpRaycast() {
   )
 }
 
-function getCarAt(cell: Cell) {
+export function getCarAt(cell: Cell) {
   return getInGameCars().find((car) => {
     const carComponent = Car.get(car)
     const direction = getDirectionVector(carComponent.direction)
