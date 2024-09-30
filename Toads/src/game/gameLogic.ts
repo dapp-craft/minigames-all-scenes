@@ -120,18 +120,17 @@ export class GameLogic {
                     target = obj;
                     isMissed = false;
                     break;
-                } else {
-                    console.log("Miss");
-                    isMissed = true;
                 }
             }
-            if (Transform.get(hammerEntity).position.y <= Transform.get(target.entity).position.y || Transform.get(hammerEntity).position.y <= toadsGameState.toadInitialHeight + .1) {
-                if (isMissed) this.changeCounter(-1)
-                else {
-                    this.changeCounter(1)
-                    this.hitEntity(target)
-                    target.available = false
-                }
+            if (Transform.get(hammerEntity).position.y <= Transform.get(target.entity).position.y) {
+                this.changeCounter(1)
+                this.hitEntity(target)
+                target.available = false
+                Tween.deleteFrom(hammerEntity)
+                engine.removeSystem('hammerHit')
+                hammerBounce()
+            } else if (Transform.get(hammerEntity).position.y <= toadsGameState.toadInitialHeight + .1) {
+                this.changeCounter(-1)
                 Tween.deleteFrom(hammerEntity)
                 engine.removeSystem('hammerHit')
                 hammerBounce()

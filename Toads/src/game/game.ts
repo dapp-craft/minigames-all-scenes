@@ -49,18 +49,18 @@ async function startGame() {
   }, 30)
 
 
+  GameData.createOrReplace(gameDataEntity, {
+    playerAddress: localPlayer?.userId,
+    playerName: localPlayer?.name,
+    // moves: res.correct - res.miss
+  })
+
   const res = await gameLogic.startGame();
   console.log(res)
 
   progressState.moves = res.correct - res.miss
   console.log(progressState)
   await updatePlayerProgress(progressState);
-
-  GameData.createOrReplace(gameDataEntity, {
-    playerAddress: localPlayer?.userId,
-    playerName: localPlayer?.name,
-    // moves: res.correct - res.miss
-  })
 }
 
 async function initCountdownNumbers() {
