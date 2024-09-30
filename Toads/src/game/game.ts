@@ -13,9 +13,6 @@ export let gameDataEntity: Entity
 export let sessionStartedAt: number
 
 let timer: ui.Timer3D
-let score: ui.Counter3D
-let miss: ui.Counter3D
-let counter: ui.Counter3D
 
 export const initGame = async () => {
   console.log('INIT GAME')
@@ -62,7 +59,7 @@ async function startGame() {
   GameData.createOrReplace(gameDataEntity, {
     playerAddress: localPlayer?.userId,
     playerName: localPlayer?.name,
-    moves: res.correct - res.miss
+    // moves: res.correct - res.miss
   })
 }
 
@@ -82,19 +79,6 @@ async function initCountdownNumbers() {
   )
   console.log(timer)
   timer.hide()
-}
-
-const initCounter = async () => {
-  const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
-  score = new ui.Counter3D({ ...data.get('counter_score')!, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.fromEulerDegrees(0, 0, 0), parent: sceneParentEntity }, 1, 1, false, 11)
-  score.setNumber(1)
-  score.show()
-  miss = new ui.Counter3D({ ...data.get('counter_misses')!, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.fromEulerDegrees(0, 0, 0), parent: sceneParentEntity }, 1, 1, false, 11)
-  miss.setNumber(2)
-  miss.show()
-  counter = new ui.Counter3D({ ...data.get('counter_hits')!, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.fromEulerDegrees(0, 0, 0), parent: sceneParentEntity }, 1, 1, false, 11)
-  counter.setNumber(3)
-  counter.show()
 }
 
 export async function countdown(cb: () => void, number: number) {

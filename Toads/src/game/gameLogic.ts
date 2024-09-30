@@ -33,7 +33,6 @@ export class GameLogic {
         this.gameIsDone = new Promise(r => this.resolveReady = r)
         await this.gameIsDone;
         console.log("Finish")
-        TextShape.getMutable(toadsGameState.listOfEntity.get('counter')).text = `${this.correctSmashCounter - this.miss}`
         return { correct: this.correctSmashCounter, miss: this.miss }
     }
 
@@ -102,44 +101,40 @@ export class GameLogic {
 
         raycastSystem.removeRaycasterEntity(engine.CameraEntity)
 
-        for (const obj of this.availableEntity.values()) {
-            const entityPosition = { ...utils.getWorldPosition(obj.entity), y: 0 };
-            const distance = Vector3.distance(hammerZeroYVector, entityPosition);
-            if (distance <= toadsGameConfig.hammerRadius) {
-                console.log("Hit", distance);
-                target = obj;
-                isMissed = false;
-                break;
-            } else {
-                console.log("Miss");
-                isMissed = true;
-            }
-        }
-
-        if (isMissed) {
-            this.miss++
-            TextShape.getMutable(toadsGameState.listOfEntity.get('miss')).text = `${this.miss}`
-        } else {
-            this.correctSmashCounter++
-            TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `${this.correctSmashCounter}`
-            target.available = false
-        }
 
         Tween.createOrReplace(hammerEntity, {
             mode: Tween.Mode.Move({
                 start: Transform.get(hammerEntity).position,
                 end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight }
             }),
-            duration: animationConfig.hitDelay,
+            duration: animationConfig.hitTIme,
             easingFunction: EasingFunction.EF_EASEOUTEXPO,
         })
 
         engine.addSystem(() => {
-            if (Transform.get(hammerEntity).position.y <= Transform.get(target.entity).position.y || Transform.get(hammerEntity).position.y <= 1) {
+            for (const obj of this.availableEntity.values()) {
+                const entityPosition = { ...utils.getWorldPosition(obj.entity), y: 0 };
+                const distance = Vector3.distance(hammerZeroYVector, entityPosition);
+                if (distance <= toadsGameConfig.hammerRadius) {
+                    console.log("Hit", distance);
+                    target = obj;
+                    isMissed = false;
+                    break;
+                } else {
+                    console.log("Miss");
+                    isMissed = true;
+                }
+            }
+            if (Transform.get(hammerEntity).position.y <= Transform.get(target.entity).position.y || Transform.get(hammerEntity).position.y <= toadsGameState.toadInitialHeight + .1) {
+                if (isMissed) this.changeCounter(-1)
+                else {
+                    this.changeCounter(1)
+                    this.hitEntity(target)
+                    target.available = false
+                }
                 Tween.deleteFrom(hammerEntity)
                 engine.removeSystem('hammerHit')
                 hammerBounce()
-                !isMissed && this.hitEntity(target)
             }
         }, 1000, 'hammerHit');
 
@@ -176,7 +171,7 @@ export class GameLogic {
                 start: Transform.get(entity).position,
                 end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight }
             }),
-            duration: animationConfig.forgHitGoBackTime,
+            duration: animationConfig.frogAfterHitHideTime,
             easingFunction: EasingFunction.EF_LINEAR,
         },)
 
@@ -184,7 +179,7 @@ export class GameLogic {
             pointerEventsSystem.removeOnPointerDown(entity)
             GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
             target.available = true
-        }, animationConfig.forgHitGoBackTime)
+        }, animationConfig.frogAfterHitHideTime)
     }
 
     private async playGame() {
@@ -195,7 +190,7 @@ export class GameLogic {
                     start: Transform.get(entity).position,
                     end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight }
                 }),
-                duration: animationConfig.frogSkipGoBackTime,
+                duration: animationConfig.frogEscapeTime,
                 easingFunction: EasingFunction.EF_EASEOUTBACK,
             })
 
@@ -203,7 +198,7 @@ export class GameLogic {
                 pointerEventsSystem.removeOnPointerDown(entity)
                 GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
                 obj.available = true
-            }, animationConfig.frogSkipGoBackTime)
+            }, animationConfig.frogEscapeTime)
         }
         console.log(toadsGameState.listOfEntity.get('ground'));
         pointerEventsSystem.onPointerDown(
@@ -256,6 +251,17 @@ export class GameLogic {
                 }, this.initialTimeGap)
             })
         }
+    }
+
+    private changeCounter(number: number) {
+        if (number >= 0) {
+            this.correctSmashCounter++
+            TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `${this.correctSmashCounter}`
+        } else {
+            this.miss++
+            TextShape.getMutable(toadsGameState.listOfEntity.get('miss')).text = `${this.miss}`
+        }
+        TextShape.getMutable(toadsGameState.listOfEntity.get('counter')).text = `${(this.correctSmashCounter - this.miss) * toadsGameConfig.priceMultiplier}`
     }
 
     public stopGame() {
