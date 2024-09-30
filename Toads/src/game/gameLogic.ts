@@ -95,7 +95,6 @@ export class GameLogic {
         this.isHammerInAction = true;
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
         const initialHammerPosition = Transform.get(hammerEntity).position
-        let isMissed = false;
         let target: EntityObject = { entity: toadsGameState.listOfEntity.get('missTarget'), available: true }
         let hammerZeroYVector = { ...Transform.get(hammerEntity).position, y: 0 }
 
@@ -118,7 +117,6 @@ export class GameLogic {
                 if (distance <= toadsGameConfig.hammerRadius) {
                     console.log("Hit", distance);
                     target = obj;
-                    isMissed = false;
                     break;
                 }
             }
