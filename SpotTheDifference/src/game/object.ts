@@ -31,7 +31,7 @@ export class GameObject {
         // parentEntity(this.entity, transform.parent!)
         
         this.baseSrc = `models/${model}_${base}.gltf`
-        if (this.differs) this.baseSrc = `models/${model}_alt.gltf`
+        // if (this.differs) this.baseSrc = `models/${model}_alt.gltf`
         this.altSrc = `models/${model}_alt.gltf`
         this.altVarSrc = `models/${model}_${altVar}.gltf`
         // console.log(this.origSrc, this.altSrc, base, altVar)

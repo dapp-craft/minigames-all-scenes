@@ -27,7 +27,7 @@ async function playLevel(level: keyof typeof LEVELS) {
     ui3d.setObjects(0, LEVELS[level].goal)
     ui3d.setTime(0)
     try {
-        // await Promise.race([new Promise<void>(r => countdown(r, 5)), abort])
+        await Promise.race([new Promise<void>(r => countdown(r, 5)), abort])
         gameObjects = generateLevelObjects(LEVELS[level].difficulty, LEVELS[level].total)
         gameObjects.forEach(o => o.toggle(alt))
         const targets = new Set(gameObjects.filter(o => o.differs))
