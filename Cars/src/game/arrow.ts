@@ -89,7 +89,7 @@ function isVectorEqual(a: Vector3, b: Vector3) {
   const xd = Math.abs(a.x - b.x)
   const yd = Math.abs(a.y - b.y)
   const zd = Math.abs(a.z - b.z)
-  return Math.max(xd, yd, zd) < 0.1
+  return Math.max(xd, yd, zd) < 0.01
 }
 
 function calculateArrowPosition(car: Entity) {
