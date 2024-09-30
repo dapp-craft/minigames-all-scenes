@@ -5,6 +5,7 @@ export const toadsGameState = {
   availableEntity: new Array,
   listOfEntity: new Map(),
   toadInitialHeight: 0,
+  toadFinishHeight: 0
 }
 
 export const sceneParentEntity = engine.addEntity()

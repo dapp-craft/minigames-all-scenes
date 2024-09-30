@@ -86,11 +86,12 @@ const generateInitialEntity = async () => {
     
     toadsGameState.listOfEntity.forEach((e, k) => console.log(k, e))
 
-    toadsGameState.toadInitialHeight = data.get(`object_hole_1`)!.position.y
-    Transform.create(missTarget, { position: { ...data.get(`object_hole_1`)!.position, y: toadsGameState.toadInitialHeight } })
+    toadsGameState.toadInitialHeight = data.get(`obj_frog_hidden_1`)!.position.y
+    toadsGameState.toadFinishHeight = data.get(`obj_frog_shown_1`)!.position.y
+    Transform.create(missTarget, { position: { ...data.get(`obj_frog_hidden_1`)!.position, y: toadsGameState.toadInitialHeight } })
 
     for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) {
-        Transform.createOrReplace(toadsGameState.availableEntity[i], { position: { ...data.get(`object_hole_${i + 1}`)!.position, y: toadsGameState.toadInitialHeight }, parent: sceneParentEntity })
+        Transform.createOrReplace(toadsGameState.availableEntity[i], { position: { ...data.get(`obj_frog_hidden_${i + 1}`)!.position, y: toadsGameState.toadInitialHeight }, parent: sceneParentEntity })
         GltfContainer.createOrReplace(toadsGameState.availableEntity[i], { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
         syncEntity(toadsGameState.availableEntity[i], [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + i)
     }

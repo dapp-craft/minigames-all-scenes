@@ -2,7 +2,7 @@ import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs"
 import { animationConfig, toadsGameConfig } from "../config"
 import { toadsGameState } from "../state"
-import { Quaternion, Vector3 } from "@dcl/sdk/math"
+import { Vector3 } from "@dcl/sdk/math"
 import { frog01, frog02, hammer } from "../resources/resources"
 
 interface EntityObject {
@@ -68,7 +68,6 @@ export class GameLogic {
                 if (this.isHammerInAction) return
                 if (hit.hits.length == 0) {
                     return GltfContainer.deleteFrom(hammerEntity)
-                    // return
                 }
                 const hitPos = hit.hits[0].position
                 if (hitPos == undefined) {
@@ -123,6 +122,7 @@ export class GameLogic {
             if (Transform.get(hammerEntity).position.y <= Transform.get(target.entity).position.y) {
                 this.changeCounter(1)
                 this.hitEntity(target)
+                this.toadsTimer.forEach((e, k) => { if (e.entity == target.entity) utils.timers.clearTimeout(e.finish) })
                 target.available = false
                 Tween.deleteFrom(hammerEntity)
                 engine.removeSystem('hammerHit')
@@ -160,7 +160,6 @@ export class GameLogic {
 
     private hitEntity(target: EntityObject) {
         const entity = target.entity
-        pointerEventsSystem.removeOnPointerDown(entity);
         GltfContainer.createOrReplace(entity, { src: frog02.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
 
         Tween.createOrReplace(entity, {
@@ -173,7 +172,6 @@ export class GameLogic {
         },)
 
         utils.timers.setTimeout(() => {
-            pointerEventsSystem.removeOnPointerDown(entity)
             GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
             target.available = true
         }, animationConfig.frogAfterHitHideTime)
@@ -192,7 +190,6 @@ export class GameLogic {
             })
 
             utils.timers.setTimeout(() => {
-                pointerEventsSystem.removeOnPointerDown(entity)
                 GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
                 obj.available = true
             }, animationConfig.frogEscapeTime)
@@ -215,7 +212,7 @@ export class GameLogic {
         for (let i = 1; i <= 100; i++) {
             this.initialTimeGap = this.initialTimeGap + 1500
             this.toadsTimer.set(i, {
-                start: utils.timers.setTimeout(async () => {
+                start: utils.timers.setTimeout(() => {
                     let random = Math.floor(Math.random() * toadsGameConfig.ToadsAmount) + 1
                     const obj = this.availableEntity.get(random)
                     if (!obj.available) return
@@ -226,7 +223,7 @@ export class GameLogic {
                     Tween.createOrReplace(entity, {
                         mode: Tween.Mode.Move({
                             start: Transform.get(entity).position,
-                            end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight + toadsGameConfig.toadsDistance },
+                            end: { ...Transform.get(entity).position, y: toadsGameState.toadFinishHeight },
                         }),
                         duration: 100,
                         easingFunction: EasingFunction.EF_EASEOUTBACK,
@@ -245,6 +242,7 @@ export class GameLogic {
                         }
                     )
                     this.toadsTimer.get(i).finish = utils.timers.setTimeout(() => hideEntity(obj, y), animationConfig.frogStayTime)
+                    this.toadsTimer.get(i).entity = entity
                 }, this.initialTimeGap)
             })
         }
