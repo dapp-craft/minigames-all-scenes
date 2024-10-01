@@ -1,8 +1,8 @@
 // We define the empty imports so the auto-complete feature works as expected.
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { AudioSource, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
+import { Animator, AudioSource, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState } from './state'
-import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, rocketCoords, soundConfig, startCoords } from './config'
+import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, mainEntityId, rocketCoords, soundConfig, startCoords } from './config'
 
 import { syncEntity } from '@dcl/sdk/network'
 import { setupStaticModels, setupStaticModelsFromGltf } from './staticModels/setupStaticModels'
@@ -16,6 +16,12 @@ import { readGltfLocators } from '../../common/locators'
 import { sceneParentEntity } from './globals'
 import { initMiniGame } from '../../common/library'
 import { mainThereme } from './SoundManager'
+
+const BOARD_TRANSFORM = {
+  position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
+  scale: { x: 1, y: 1, z: 1 },
+  rotation: Quaternion.fromAngleAxis(180, Vector3.create(0, 1, 0))
+};
 
 const preset = {
   placementStart: 0.06,
@@ -45,9 +51,9 @@ initMiniGame(GAME_ID, preset, readGltfLocators(`locators/obj_locators_default.gl
 export let rocketBoard: any
 
 export async function main() {
-  setupStaticModels()
-
   spawnInitialEntityPoll()
+
+  setupStaticModels()
 
   await setupStaticModelsFromGltf()
 
@@ -66,7 +72,7 @@ const spawnInitialEntityPoll = async () => {
     Transform.createOrReplace(entity, {
       position: Vector3.create(...rocketCoords),
     })
-    VisibilityComponent.createOrReplace(entity, {visible: false})
+    VisibilityComponent.createOrReplace(entity, { visible: false })
     gameState.availableEntity.push(entity)
     syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catEntityId + i)
   };
@@ -81,6 +87,19 @@ const spawnInitialEntityPoll = async () => {
     syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], catInRocketEntityId + entityAmount + 10 + i)
   }
 
+  for (let i = 0; i <= 3; i++) {
+    const entity = engine.addEntity()
+    gameState.syncModels.push(entity);
+    syncEntity(entity, [Animator.componentId], catInRocketEntityId + entityAmount + counterEntity + 50 + i)
+  }
+
+  gameState.rocketWindow = engine.addEntity()
+  syncEntity(gameState.rocketWindow, [Transform.componentId, GltfContainer.componentId, Tween.componentId], 5000)
+
+  const boardEntity = engine.addEntity()
+  Transform.create(boardEntity, BOARD_TRANSFORM)
+  syncEntity(boardEntity, [Transform.componentId], mainEntityId + 1)
+
   const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
 
   TextShape.create(gameState.levelCounter, {
@@ -88,7 +107,7 @@ const spawnInitialEntityPoll = async () => {
     fontSize: 3
   })
   Transform.create(gameState.levelCounter, { ...data.get('counter_level'), rotation: Quaternion.create(0, -.414, .175, 0), parent: sceneParentEntity })
-  syncEntity(gameState.levelCounter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, TextShape.componentId], 4010)
+  syncEntity(gameState.levelCounter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, TextShape.componentId], catInRocketEntityId + entityAmount + counterEntity + 100)
 }
 
 export const generateArray = (data: generatedData) => {

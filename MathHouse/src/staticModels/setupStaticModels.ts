@@ -2,7 +2,7 @@ import { Animator, GltfContainer, MeshCollider, MeshRenderer, Transform, engine 
 import { floor, wall, ground, railings, gameZone, kitty, bus, rocket, panel, terminal, clouds, frame, text, bench } from '../resources/resources'
 import { readGltfLocators } from '../../../common/locators'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { entityList } from '../state'
+import { entityList, gameState } from '../state'
 
 const staticModels = [
     floor,
@@ -30,14 +30,14 @@ export const setupStaticModelsFromGltf = async () => {
     const rocketData = await readGltfLocators(`locators/obj_rocket.gltf`)
     const busData = await readGltfLocators(`locators/obj_bus.gltf`)
 
-    const rocketEntity = engine.addEntity()
-    const leftBusEntity = engine.addEntity()
-    const rightBusEntity = engine.addEntity()
+    const rocketEntity = gameState.syncModels[0]
+    const leftBusEntity = gameState.syncModels[1]
+    const rightBusEntity = gameState.syncModels[2]
 
-    Transform.create(rocketEntity, rocketData.get('obj_rocket.001'))
+    Transform.createOrReplace(rocketEntity, rocketData.get('obj_rocket.001'))
     Transform.getMutable(rocketEntity).parent = sceneParentEntity
-    GltfContainer.create(rocketEntity, rocket)
-    Animator.create(rocketEntity, {
+    GltfContainer.createOrReplace(rocketEntity, rocket)
+    Animator.createOrReplace(rocketEntity, {
         states: [
             {
                 clip: 'idle1',
@@ -59,10 +59,10 @@ export const setupStaticModelsFromGltf = async () => {
     Animator.playSingleAnimation(rocketEntity, 'stand')
     entityList.set('rocket', rocketEntity)
 
-    Transform.create(leftBusEntity, busData.get('obj_bus.001'))
+    Transform.createOrReplace(leftBusEntity, busData.get('obj_bus.001'))
     Transform.getMutable(leftBusEntity).parent = sceneParentEntity
-    GltfContainer.create(leftBusEntity, bus)
-    Animator.create(leftBusEntity, {
+    GltfContainer.createOrReplace(leftBusEntity, bus)
+    Animator.createOrReplace(leftBusEntity, {
         states: [
             {
                 clip: 'idle1',
@@ -79,10 +79,10 @@ export const setupStaticModelsFromGltf = async () => {
     Animator.playSingleAnimation(leftBusEntity, 'stand')
     entityList.set('leftBusEntity', leftBusEntity)
 
-    Transform.create(rightBusEntity, busData.get('obj_bus.002'))
+    Transform.createOrReplace(rightBusEntity, busData.get('obj_bus.002'))
     Transform.getMutable(rightBusEntity).parent = sceneParentEntity
-    GltfContainer.create(rightBusEntity, bus)
-    Animator.create(rightBusEntity, {
+    GltfContainer.createOrReplace(rightBusEntity, bus)
+    Animator.createOrReplace(rightBusEntity, {
         states: [
             {
                 clip: 'idle1',

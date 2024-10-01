@@ -14,12 +14,6 @@ import { levelArray, randomLvl } from "../levels"
 import { soundManager } from "../globals"
 import { fetchPlayerProgress, updatePlayerProgress } from "./syncData"
 
-const BOARD_TRANSFORM = {
-    position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
-    scale: { x: 1, y: 1, z: 1 },
-    rotation: Quaternion.fromAngleAxis(180, Vector3.create(0, 1, 0))
-}
-
 export let gameDataEntity: Entity
 export let boardEntity: Entity
 export let sessionStartedAt: number
@@ -58,11 +52,7 @@ export const initGame = async () => {
 
     await fetchPlayerProgress()
 
-    initBoard()
-
     initGameButtons()
-
-    initCountdownNumbers()
 
     setupWinAnimations()
 }
@@ -96,37 +86,14 @@ async function startGame() {
     })
 }
 
-function initBoard() {
-    boardEntity = engine.addEntity()
-    Transform.create(boardEntity, BOARD_TRANSFORM)
-    syncEntity(boardEntity, [Transform.componentId], mainEntityId + 1)
-}
-
 async function initMaxProgress() {
     console.log('Fetching progress', Object.keys(progress))
     let req = await progress.getProgress('level', progress.SortDirection.DESC, 1)
     if (req?.length) maxProgress = req[0]
 }
 
-function initCountdownNumbers() {
-    timer = new ui.Timer3D(
-        {
-            parent: sceneParentEntity,
-            position: Vector3.create(5, 3, -6),
-            rotation: Quaternion.fromEulerDegrees(0, 0, 0)
-        },
-        1,
-        1,
-        false,
-        10
-    )
-    console.log(timer)
-    timer.hide()
-}
-
 const initGameButtons = async () => {
     const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
-
     for (let i = 1; i <= 9; i++) {
         gameButtons.push(
             new ui.MenuButton(

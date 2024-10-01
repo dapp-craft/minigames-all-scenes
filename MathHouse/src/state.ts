@@ -7,7 +7,8 @@ type GameState = {
     counterEntity: Array<Entity>
     levelCounter: Entity
     rocketWindow: Entity | undefined
-    generatedCartrige: any
+    generatedCartrige: any,
+    syncModels: Array<Entity>
 }
 
 export let gameState: GameState = {
@@ -16,7 +17,8 @@ export let gameState: GameState = {
     counterEntity: [],
     levelCounter: engine.addEntity(),
     rocketWindow: undefined,
-    generatedCartrige: new Map()
+    generatedCartrige: new Map(),
+    syncModels: []
 }
 
 export const GameData = engine.defineComponent('game-data', {
