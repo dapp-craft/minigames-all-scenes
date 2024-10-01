@@ -23,3 +23,9 @@ export const hammer: PBGltfContainer = { src: modelsFolder + 'obj_hammer.gltf' }
 
 //Game Zone Collider
 export const gameZone: PBGltfContainer = { src: modelsFolder + 'obj_gamezone.gltf' };
+
+// Game sounds
+export const enterSound = 'sounds/Start_of_the_round.mp3';
+export const exitSound = 'sounds/End_of_round.mp3';
+export const missSound = 'sounds/Miss.mp3';
+export const hitSound = 'sounds/Hit_the_target.mp3';

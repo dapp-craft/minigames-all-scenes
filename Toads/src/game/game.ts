@@ -6,9 +6,9 @@ import { updatePlayerProgress } from './syncData'
 import { ui } from '@dcl-sdk/mini-games/src'
 import { Vector3, Quaternion } from '@dcl/sdk/math'
 import { readGltfLocators } from '../../../common/locators'
-import { toadsGameConfig } from '../config'
+import { soundConfig, toadsGameConfig } from '../config'
+import { soundManager } from '../globals'
 
-// export let gameDataEntity: Entity
 export let sessionStartedAt: number
 
 let timer: ui.Timer3D
@@ -16,10 +16,6 @@ let playButton: ui.MenuButton
 
 export const initGame = async () => {
   console.log('INIT GAME')
-
-  // await fetchPlayerProgress();
-
-  // initStatusBoard()
 
   await initCountdownNumbers()
 
@@ -29,32 +25,24 @@ export const initGame = async () => {
 
 export function getReadyToStart() {
   console.log('Get Ready to start!')
+  soundManager.playSound('enterSounds', soundConfig.volume)
   utils.timers.setTimeout(() => playButton.disable(), playButton.releaseTime + 200)
   utils.timers.setTimeout(() => startGame(), 2000)
 }
 
 export function exitCallback() {
+  soundManager.playSound('exitSounds', soundConfig.volume)
   gameLogic.stopGame()
-  // GameData.createOrReplace(gameDataEntity, {
-  //   playerAddress: '',
-  //   playerName: '',
-  //   moves: 0,
-  // })
+  engine.removeSystem('countdown-system')
+  timer.hide()
 }
 
 async function startGame() {
-  // const localPlayer = getPlayer()
   sessionStartedAt = Date.now();
 
   countdown(() => {
     gameLogic.stopGame()
   }, toadsGameConfig.gameTime / 1000)
-
-  // GameData.createOrReplace(gameDataEntity, {
-  //   playerAddress: localPlayer?.userId,
-  //   playerName: localPlayer?.name,
-  //   // moves: res.correct - res.miss
-  // })
 
   const res = await gameLogic.startGame();
   console.log(res)
@@ -84,9 +72,9 @@ async function initCountdownNumbers() {
   timer.hide()
 }
 
-export async function countdown(cb: () => void, number: number) {
+export async function countdown(cb: () => void, number: number, stop?: boolean) {
   let currentValue = number
-  let time = 1
+  let time = stop ? 0 : 1
 
   engine.addSystem(
     (dt: number) => {

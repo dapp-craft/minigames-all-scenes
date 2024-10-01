@@ -20,6 +20,10 @@ export const animationConfig = {
     frogEscapeTime: 2000,
 }
 
+export const soundConfig = {
+    volume: 0.5
+}
+
 export const TOADS_SYNC_ID = 3000
 
 export const timer = {

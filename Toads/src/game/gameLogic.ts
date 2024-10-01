@@ -1,9 +1,10 @@
 import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs"
-import { animationConfig, toadsGameConfig } from "../config"
+import { animationConfig, soundConfig, toadsGameConfig } from "../config"
 import { toadsGameState } from "../state"
 import { Vector3 } from "@dcl/sdk/math"
 import { frog01, frog02, hammer } from "../resources/resources"
+import { soundManager } from '../globals'
 
 interface EntityObject {
     entity: Entity,
@@ -115,12 +116,14 @@ export class GameLogic {
                 const distance = Vector3.distance(hammerZeroYVector, entityPosition);
                 if (Transform.get(hammerEntity).position.y <= toadsGameState.toadInitialHeight + .1) {
                     engine.removeSystem('hammerHit')
+                    soundManager.playSound('missSound', soundConfig.volume)
                     this.changeCounter(-1)
                     Tween.deleteFrom(hammerEntity)
                     hammerBounce()
                     break;
                 } else if (Transform.get(hammerEntity).position.y <= Transform.get(obj.entity).position.y && distance <= toadsGameConfig.hammerRadius) {
                     engine.removeSystem('hammerHit')
+                    soundManager.playSound('hitSound', soundConfig.volume)
                     this.changeCounter(1)
                     this.hitEntity(obj)
                     this.toadsTimer.forEach((e, k) => { if (e.entity == obj.entity) utils.timers.clearTimeout(e.finish) })
@@ -128,7 +131,7 @@ export class GameLogic {
                     Tween.deleteFrom(hammerEntity)
                     hammerBounce()
                     break;
-                } 
+                }
             }
         }, 1000, 'hammerHit');
 

@@ -1,14 +1,15 @@
-import { ColliderLayer, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
+import { AudioSource, ColliderLayer, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { exitCallback, getReadyToStart, initGame } from './game/game'
-import { GAME_ID, TOADS_SYNC_ID, toadsGameConfig } from './config'
+import { GAME_ID, soundConfig, TOADS_SYNC_ID, toadsGameConfig } from './config'
 import { sceneParentEntity, toadsGameState } from './state'
 import { GameLogic } from './game/gameLogic'
 import { setupStaticModels } from './staticModels/setupStaticModels'
 import { frog01 } from './resources/resources'
 import { syncEntity } from '@dcl/sdk/network'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
+import { mainThereme } from './game/soundManager'
 
 const preset = {
     placementStart: 0.06,
@@ -25,8 +26,8 @@ const handlers = {
         gameLogic.stopGame();
         getReadyToStart()
     },
-    toggleMusic: () => { },
-    toggleSfx: () => { }
+    toggleMusic: () => playBackgroundMusic(),
+    toggleSfx: () => toggleVolume()
 }
 
 const libraryReady = initMiniGame(GAME_ID, preset, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
@@ -77,13 +78,13 @@ const generateInitialEntity = async () => {
     // VisibilityComponent.create(hits, { visible: false })
     // VisibilityComponent.create(miss, { visible: false })
     // VisibilityComponent.create(counter, { visible: false })
-    
+
     toadsGameState.listOfEntity.set('hammer', hammerEntity)
     toadsGameState.listOfEntity.set('missTarget', missTarget);
     toadsGameState.listOfEntity.set('hits', hits);
     toadsGameState.listOfEntity.set('miss', miss);
     toadsGameState.listOfEntity.set('counter', counter);
-    
+
     toadsGameState.listOfEntity.forEach((e, k) => console.log(k, e))
 
     toadsGameState.toadInitialHeight = data.get(`obj_frog_hidden_1`)!.position.y
@@ -95,4 +96,14 @@ const generateInitialEntity = async () => {
         GltfContainer.createOrReplace(toadsGameState.availableEntity[i], { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
         syncEntity(toadsGameState.availableEntity[i], [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + i)
     }
+}
+
+const playBackgroundMusic = () => {
+    if (AudioSource.getMutable(mainThereme).volume != 0) AudioSource.getMutable(mainThereme).volume = 0
+    else AudioSource.getMutable(mainThereme).volume = 0.07
+}
+
+const toggleVolume = () => {
+    if (soundConfig.volume != 0) soundConfig.volume = 0
+    else soundConfig.volume = 0.5
 }
