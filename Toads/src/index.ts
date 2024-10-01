@@ -22,10 +22,7 @@ const preset = {
 const handlers = {
     start: () => { getReadyToStart() },
     exit: () => { exitCallback() },
-    restart: () => {
-        gameLogic.stopGame();
-        getReadyToStart()
-    },
+    restart: () => getReadyToStart(),
     toggleMusic: () => playBackgroundMusic(),
     toggleSfx: () => toggleVolume()
 }

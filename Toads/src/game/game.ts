@@ -13,6 +13,8 @@ export let sessionStartedAt: number
 
 let timer: ui.Timer3D
 let playButton: ui.MenuButton
+let startTimeOut: utils.TimerId
+let buttonDisableTimeOut: utils.TimerId
 
 export const initGame = async () => {
   console.log('INIT GAME')
@@ -20,14 +22,17 @@ export const initGame = async () => {
   await initCountdownNumbers()
 
   await spawnButton()
-
 }
 
 export function getReadyToStart() {
+  playButton.disable()
   console.log('Get Ready to start!')
   soundManager.playSound('enterSounds', soundConfig.volume)
-  utils.timers.setTimeout(() => playButton.disable(), playButton.releaseTime + 200)
-  utils.timers.setTimeout(() => startGame(), 2000)
+  utils.timers.clearTimeout(startTimeOut)
+  utils.timers.clearTimeout(buttonDisableTimeOut)
+  exitCallback()
+  buttonDisableTimeOut = utils.timers.setTimeout(() => playButton.disable(), playButton.releaseTime + 200)
+  startTimeOut = utils.timers.setTimeout(() => startGame(), 2000)
 }
 
 export function exitCallback() {
