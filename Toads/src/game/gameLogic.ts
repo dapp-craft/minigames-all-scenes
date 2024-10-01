@@ -113,25 +113,22 @@ export class GameLogic {
             for (const obj of this.availableEntity.values()) {
                 const entityPosition = { ...utils.getWorldPosition(obj.entity), y: 0 };
                 const distance = Vector3.distance(hammerZeroYVector, entityPosition);
-                if (distance <= toadsGameConfig.hammerRadius) {
-                    console.log("Hit", distance);
-                    target = obj;
+                if (Transform.get(hammerEntity).position.y <= toadsGameState.toadInitialHeight + .1) {
+                    engine.removeSystem('hammerHit')
+                    this.changeCounter(-1)
+                    Tween.deleteFrom(hammerEntity)
+                    hammerBounce()
                     break;
-                }
-            }
-            if (Transform.get(hammerEntity).position.y <= Transform.get(target.entity).position.y) {
-                this.changeCounter(1)
-                this.hitEntity(target)
-                this.toadsTimer.forEach((e, k) => { if (e.entity == target.entity) utils.timers.clearTimeout(e.finish) })
-                target.available = false
-                Tween.deleteFrom(hammerEntity)
-                engine.removeSystem('hammerHit')
-                hammerBounce()
-            } else if (Transform.get(hammerEntity).position.y <= toadsGameState.toadInitialHeight + .1) {
-                this.changeCounter(-1)
-                Tween.deleteFrom(hammerEntity)
-                engine.removeSystem('hammerHit')
-                hammerBounce()
+                } else if (Transform.get(hammerEntity).position.y <= Transform.get(obj.entity).position.y && distance <= toadsGameConfig.hammerRadius) {
+                    engine.removeSystem('hammerHit')
+                    this.changeCounter(1)
+                    this.hitEntity(obj)
+                    this.toadsTimer.forEach((e, k) => { if (e.entity == obj.entity) utils.timers.clearTimeout(e.finish) })
+                    obj.available = false
+                    Tween.deleteFrom(hammerEntity)
+                    hammerBounce()
+                    break;
+                } 
             }
         }, 1000, 'hammerHit');
 
