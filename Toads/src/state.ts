@@ -15,12 +15,12 @@ Transform.create(sceneParentEntity, {
   scale: Vector3.One()
 })
 
-export const GameData = engine.defineComponent('game-data', {
-  playerAddress: Schemas.String,
-  playerName: Schemas.String,
-  moves: Schemas.Number,
-  level: Schemas.Int,
-})
+// export const GameData = engine.defineComponent('game-data', {
+//   playerAddress: Schemas.String,
+//   playerName: Schemas.String,
+//   moves: Schemas.Number,
+//   level: Schemas.Int,
+// })
 
 export const progressState = {
   level: 1,

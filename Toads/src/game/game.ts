@@ -1,62 +1,65 @@
 import * as utils from '@dcl-sdk/utils'
-import { getPlayer } from '@dcl/sdk/players'
 import { gameLogic } from '..'
-import { GameData, progressState, sceneParentEntity } from '../state'
-import { engine, Entity } from '@dcl/sdk/ecs'
-import { initStatusBoard } from './initStatusBoard'
-import { fetchPlayerProgress, updatePlayerProgress } from './syncData'
-import { progress, ui } from '@dcl-sdk/mini-games/src'
+import { progressState, sceneParentEntity } from '../state'
+import { engine } from '@dcl/sdk/ecs'
+import { updatePlayerProgress } from './syncData'
+import { ui } from '@dcl-sdk/mini-games/src'
 import { Vector3, Quaternion } from '@dcl/sdk/math'
 import { readGltfLocators } from '../../../common/locators'
+import { toadsGameConfig } from '../config'
 
-export let gameDataEntity: Entity
+// export let gameDataEntity: Entity
 export let sessionStartedAt: number
 
 let timer: ui.Timer3D
+let playButton: ui.MenuButton
 
 export const initGame = async () => {
   console.log('INIT GAME')
 
-  await fetchPlayerProgress();
+  // await fetchPlayerProgress();
 
-  initStatusBoard()
+  // initStatusBoard()
 
   await initCountdownNumbers()
 
-  // await initCounter()
+  await spawnButton()
+
 }
 
 export function getReadyToStart() {
   console.log('Get Ready to start!')
+  utils.timers.setTimeout(() => playButton.disable(), playButton.releaseTime + 200)
   utils.timers.setTimeout(() => startGame(), 2000)
 }
 
 export function exitCallback() {
   gameLogic.stopGame()
-  GameData.createOrReplace(gameDataEntity, {
-    playerAddress: '',
-    playerName: '',
-    moves: 0,
-  })
+  // GameData.createOrReplace(gameDataEntity, {
+  //   playerAddress: '',
+  //   playerName: '',
+  //   moves: 0,
+  // })
 }
 
 async function startGame() {
-  const localPlayer = getPlayer()
+  // const localPlayer = getPlayer()
   sessionStartedAt = Date.now();
 
   countdown(() => {
     gameLogic.stopGame()
-  }, 30)
+  }, toadsGameConfig.gameTime / 1000)
 
-
-  GameData.createOrReplace(gameDataEntity, {
-    playerAddress: localPlayer?.userId,
-    playerName: localPlayer?.name,
-    // moves: res.correct - res.miss
-  })
+  // GameData.createOrReplace(gameDataEntity, {
+  //   playerAddress: localPlayer?.userId,
+  //   playerName: localPlayer?.name,
+  //   // moves: res.correct - res.miss
+  // })
 
   const res = await gameLogic.startGame();
   console.log(res)
+
+  playButton.enable()
 
   progressState.moves = res.correct - res.miss
   console.log(progressState)
@@ -103,5 +106,20 @@ export async function countdown(cb: () => void, number: number) {
     },
     undefined,
     'countdown-system'
+  )
+}
+
+const spawnButton = async () => {
+  const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+  playButton = new ui.MenuButton(
+    {...data.get("button_start")!, parent: sceneParentEntity},
+    ui.uiAssets.shapes.SQUARE_GREEN,
+    ui.uiAssets.icons.play,
+    ``,
+    () => {
+      getReadyToStart()
+    },
+    true,
+    500
   )
 }

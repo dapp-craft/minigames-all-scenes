@@ -6,8 +6,8 @@ import { GAME_ID, TOADS_SYNC_ID, toadsGameConfig } from './config'
 import { sceneParentEntity, toadsGameState } from './state'
 import { GameLogic } from './game/gameLogic'
 import { setupStaticModels } from './staticModels/setupStaticModels'
-import { frog01, hammer } from './resources/resources'
-import { parentEntity, syncEntity } from '@dcl/sdk/network'
+import { frog01 } from './resources/resources'
+import { syncEntity } from '@dcl/sdk/network'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 
 const preset = {
@@ -58,9 +58,9 @@ const generateInitialEntity = async () => {
     const miss = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 5]
     const counter = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 6]
 
-    TextShape.create(hits, { text: '0', fontSize: 3 })
-    TextShape.create(miss, { text: '0', fontSize: 3 })
-    TextShape.create(counter, { text: '0', fontSize: 3 })
+    TextShape.create(hits, { text: 'Hits \n0', fontSize: 2 })
+    TextShape.create(miss, { text: 'Misses \n0', fontSize: 2 })
+    TextShape.create(counter, { text: 'Score \n0', fontSize: 2 })
 
     syncEntity(hammerEntity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 1)
     syncEntity(missTarget, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 2)

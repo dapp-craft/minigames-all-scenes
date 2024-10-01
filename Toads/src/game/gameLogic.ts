@@ -46,9 +46,9 @@ export class GameLogic {
         this.initialTimeGap = 900
         this.gameEnd = false
         this.isHammerInAction = false
-        TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `${0}`
-        TextShape.getMutable(toadsGameState.listOfEntity.get('miss')).text = `${0}`
-        TextShape.getMutable(toadsGameState.listOfEntity.get('counter')).text = `${0}`
+        TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `Hits \n${0}`
+        TextShape.getMutable(toadsGameState.listOfEntity.get('miss')).text = `Misses \n${0}`
+        TextShape.getMutable(toadsGameState.listOfEntity.get('counter')).text = `Score \n${0}`
     }
 
     private activateHummer() {
@@ -248,12 +248,12 @@ export class GameLogic {
     private changeCounter(number: number) {
         if (number >= 0) {
             this.correctSmashCounter++
-            TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `${this.correctSmashCounter}`
+            TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `Hits \n${this.correctSmashCounter}`
         } else {
             this.miss++
-            TextShape.getMutable(toadsGameState.listOfEntity.get('miss')).text = `${this.miss}`
+            TextShape.getMutable(toadsGameState.listOfEntity.get('miss')).text = `Misses \n${this.miss}`
         }
-        TextShape.getMutable(toadsGameState.listOfEntity.get('counter')).text = `${(this.correctSmashCounter - this.miss) * toadsGameConfig.priceMultiplier}`
+        TextShape.getMutable(toadsGameState.listOfEntity.get('counter')).text = `Score \n${(this.correctSmashCounter - this.miss) * toadsGameConfig.priceMultiplier}`
     }
 
     public stopGame() {
