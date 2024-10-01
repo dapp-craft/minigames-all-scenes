@@ -8,11 +8,12 @@ export const toadsGameConfig = {
     toadsDistance: .5,
     gameTime: 30000,
     hammerRadius: .7,
+    hammerAltitude: 2,
     priceMultiplier: 10
 }
 
 export const animationConfig = {
-    hitTIme: 1500,
+    hitTIme: 400,
     hammerBounceTime: 500,
     frogStayTime: 5000,
     frogAfterHitHideTime: 100,

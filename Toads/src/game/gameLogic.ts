@@ -75,7 +75,7 @@ export class GameLogic {
                 }
                 GltfContainer.getOrNull(hammerEntity) == null && GltfContainer.createOrReplace(hammerEntity, hammer)
                 Transform.createOrReplace(hammerEntity, {
-                    position: { ...hitPos, y: 3 },
+                    position: { ...hitPos, y: toadsGameConfig.hammerAltitude },
                 })
             }
         )
@@ -106,7 +106,7 @@ export class GameLogic {
                 end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight }
             }),
             duration: animationConfig.hitTIme,
-            easingFunction: EasingFunction.EF_EASEOUTEXPO,
+            easingFunction: EasingFunction.EF_EASEINQUAD,
         })
 
         engine.addSystem(() => {
