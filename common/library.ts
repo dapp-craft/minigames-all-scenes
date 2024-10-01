@@ -2,7 +2,7 @@ import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/m
 import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
 import { getPlayer } from "@dcl/sdk/players"
 import { rotateVectorAroundCenter } from '@dcl-sdk/mini-games/src/utilities'
-import { engine, Transform, TransformType, TextShape, PBTextShape } from '@dcl/sdk/ecs'
+import { engine, Transform, TransformType, TextShape, PBTextShape, Entity } from '@dcl/sdk/ecs'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
@@ -22,6 +22,7 @@ enum NODE_NAME {
     DISPLAY_SCOREBOARD = 'display_scoreboard',
     DISPLAY_QUEUE = 'display_queue',
     LABEL_NICKNAME = 'label_nickname',
+    COUNTER_TIMER = 'counter_timer',
     BUTTON_PLAY = 'button_play',
     BUTTON_RESTART = 'button_restart',
     BUTTON_EXIT = 'button_exit',
@@ -90,15 +91,21 @@ export async function initMiniGame(
 
     function updateLabels() {
         const {minutes, seconds} = parseTime(sessionTimeLeft)
-        const value = `
-            Now playing: ${activePlayer ? getPlayer({userId: activePlayer?.address})!.name : '---'}
-            Next turn: ${sessionTimeLeft !== undefined ? minutes + ':' + seconds : 'now'}
-        `
+        let value = `Now playing: ${activePlayer ? getPlayer({userId: activePlayer?.address})!.name : '---'}`
         if (TextShape.get(labelNickname).text != value) TextShape.getMutable(labelNickname).text = value
+        value = `Next turn: ${sessionTimeLeft !== undefined ? minutes + ':' + seconds : 'now'}`
+        if (counterTimer && TextShape.get(counterTimer).text != value) TextShape.getMutable(counterTimer).text = value
     }
     const labelNickname = engine.addEntity()
     Transform.create(labelNickname, {...positionData.get(NODE_NAME.LABEL_NICKNAME), parent: sceneParentEntity})
     TextShape.create(labelNickname, {...textSettings, text: ''})
+    let counterTimer: Entity | undefined
+    if (positionData.has(NODE_NAME.COUNTER_TIMER)) {
+        counterTimer = engine.addEntity()
+        Transform.create(counterTimer, {...positionData.get(NODE_NAME.COUNTER_TIMER), parent: sceneParentEntity})
+        TextShape.create(counterTimer, {...textSettings, text: ''})
+    
+    }
 
     new ui.ScoreBoard(
         {...positionData.get(NODE_NAME.DISPLAY_SCOREBOARD)!, scale: Vector3.One(), parent: sceneParentEntity},
@@ -155,7 +162,7 @@ export async function initMiniGame(
 
 function validatePositionData(positionData: Map<String, TransformType>) {
     for (const nodeName of Object.values(NODE_NAME)) {
-        if (!positionData.has(nodeName)) {
+        if (!positionData.has(nodeName) && nodeName != NODE_NAME.COUNTER_TIMER) {
             throw new Error(`Node '${nodeName}' not found`);
         }
     }
