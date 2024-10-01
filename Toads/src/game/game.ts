@@ -30,13 +30,13 @@ export function getReadyToStart() {
   soundManager.playSound('enterSounds', soundConfig.volume)
   utils.timers.clearTimeout(startTimeOut)
   utils.timers.clearTimeout(buttonDisableTimeOut)
-  exitCallback()
+  exitCallback(false)
   buttonDisableTimeOut = utils.timers.setTimeout(() => playButton.disable(), playButton.releaseTime + 200)
   startTimeOut = utils.timers.setTimeout(() => startGame(), 2000)
 }
 
-export function exitCallback() {
-  soundManager.playSound('exitSounds', soundConfig.volume)
+export function exitCallback(sound: boolean = true) {
+  sound == true && soundManager.playSound('exitSounds', soundConfig.volume)
   gameLogic.stopGame()
   engine.removeSystem('countdown-system')
   timer.hide()
