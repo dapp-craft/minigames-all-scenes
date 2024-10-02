@@ -29,7 +29,7 @@ export class GameLogic {
     public async startGame() {
         this.resetData()
         await this.initializeEntity()
-        this.activateHummer()
+        this.activateHammer()
         this.playGame()
         this.gameIsDone = new Promise(r => this.resolveReady = r)
         await this.gameIsDone;
@@ -52,8 +52,8 @@ export class GameLogic {
         TextShape.getMutable(toadsGameState.listOfEntity.get('counter')).text = `Score \n${0}`
     }
 
-    private activateHummer() {
-        console.log("activateHummer")
+    private activateHammer() {
+        console.log("activateHammer")
         const hammerEntity = toadsGameState.listOfEntity.get('hammerParent')
         const hammerСhild = toadsGameState.listOfEntity.get('hammer')
         raycastSystem.registerLocalDirectionRaycast(
@@ -70,7 +70,7 @@ export class GameLogic {
                 if (hit.hits.length == 0) return VisibilityComponent.getMutable(hammerСhild).visible = false
                 const hitPos = hit.hits[0].position
                 if (hitPos == undefined) return
-                VisibilityComponent.getOrNull(hammerСhild)?.visible !== true && VisibilityComponent.createOrReplace(hammerСhild, {visible: true})
+                VisibilityComponent.getOrNull(hammerСhild)?.visible !== true && VisibilityComponent.createOrReplace(hammerСhild, { visible: true })
                 Transform.createOrReplace(hammerEntity, { position: { ...hitPos, y: toadsGameConfig.hammerAltitude } })
             }
         )
@@ -82,7 +82,7 @@ export class GameLogic {
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
         MeshRenderer.deleteFrom(hammerEntity)
         MeshCollider.deleteFrom(hammerEntity)
-        VisibilityComponent.getOrNull(hammerEntity)?.visible == true && VisibilityComponent.createOrReplace(hammerEntity, {visible: false})
+        VisibilityComponent.getOrNull(hammerEntity)?.visible == true && VisibilityComponent.createOrReplace(hammerEntity, { visible: false })
     }
 
     private hitHammer() {
@@ -90,6 +90,7 @@ export class GameLogic {
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
         const hammerParent = toadsGameState.listOfEntity.get('hammerParent')
         let hammerZeroYVector = { ...Transform.get(hammerParent).position, y: 0 }
+        let currentPosY: number = Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y
 
         raycastSystem.removeRaycasterEntity(engine.CameraEntity)
 
@@ -104,13 +105,15 @@ export class GameLogic {
 
         const hammerFinish = () => {
             engine.removeSystem('hammerHit')
-            this.activateHummer()
+            this.activateHammer()
             Tween.deleteFrom(hammerEntity)
             this.isHammerInAction = false
             hammerBounce()
         }
 
         engine.addSystem(() => {
+            const distanceTOLastPoint = -(Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y - currentPosY)
+            currentPosY = Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y
             for (const obj of this.availableEntity.values()) {
                 const entityPosition = { ...utils.getWorldPosition(obj.entity), y: 0 };
                 const distance = Vector3.distance(hammerZeroYVector, entityPosition);
@@ -119,7 +122,10 @@ export class GameLogic {
                     this.changeCounter(-1)
                     hammerFinish()
                     break;
-                } else if (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= Transform.get(obj.entity).position.y && distance <= toadsGameConfig.hammerRadius) {
+                } else if (
+                    (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= Transform.get(obj.entity).position.y
+                        || currentPosY - distanceTOLastPoint * toadsGameConfig.hammerHitDistMult <= Transform.get(obj.entity).position.y)
+                    && distance <= toadsGameConfig.hammerRadius) {
                     soundManager.playSound('hitSound', soundConfig.volume)
                     this.changeCounter(1)
                     this.hitEntity(obj)

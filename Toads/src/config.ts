@@ -9,7 +9,8 @@ export const toadsGameConfig = {
     gameTime: 30000,
     hammerRadius: .7,
     hammerAltitude: 2,
-    priceMultiplier: 10
+    priceMultiplier: 10,
+    hammerHitDistMult: 2
 }
 
 export const animationConfig = {
