@@ -6,7 +6,7 @@ import { GAME_ID, soundConfig, TOADS_SYNC_ID, toadsGameConfig } from './config'
 import { sceneParentEntity, toadsGameState } from './state'
 import { GameLogic } from './game/gameLogic'
 import { setupStaticModels } from './staticModels/setupStaticModels'
-import { frog01 } from './resources/resources'
+import { frog01, hammer } from './resources/resources'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { mainThereme } from './game/soundManager'
@@ -78,6 +78,7 @@ const generateInitialEntity = async () => {
     Transform.create(miss, { position: { ...data.get('counter_misses')!.position, z: data.get('counter_misses')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
     Transform.create(counter, { position: { ...data.get('counter_score')!.position, z: data.get('counter_score')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
 
+    GltfContainer.createOrReplace(hammerEntity, hammer)
     // VisibilityComponent.create(hits, { visible: false })
     // VisibilityComponent.create(miss, { visible: false })
     // VisibilityComponent.create(counter, { visible: false })

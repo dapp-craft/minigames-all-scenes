@@ -55,8 +55,7 @@ export class GameLogic {
     private activateHummer() {
         console.log("activateHummer")
         const hammerEntity = toadsGameState.listOfEntity.get('hammerParent')
-        const hammer1 = toadsGameState.listOfEntity.get('hammer')
-        GltfContainer.createOrReplace(hammer1, hammer)
+        const hammerСhild = toadsGameState.listOfEntity.get('hammer')
         raycastSystem.registerLocalDirectionRaycast(
             {
                 entity: engine.CameraEntity,
@@ -68,10 +67,10 @@ export class GameLogic {
                 },
             },
             (hit) => {
-                if (hit.hits.length == 0) return GltfContainer.deleteFrom(hammerEntity)
+                if (hit.hits.length == 0) return VisibilityComponent.getMutable(hammerСhild).visible = false
                 const hitPos = hit.hits[0].position
                 if (hitPos == undefined) return
-                GltfContainer.getOrNull(hammerEntity) == null && GltfContainer.createOrReplace(hammer1, hammer)
+                VisibilityComponent.getOrNull(hammerСhild)?.visible !== true && VisibilityComponent.createOrReplace(hammerСhild, {visible: true})
                 Transform.createOrReplace(hammerEntity, { position: { ...hitPos, y: toadsGameConfig.hammerAltitude } })
             }
         )
@@ -83,7 +82,7 @@ export class GameLogic {
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
         MeshRenderer.deleteFrom(hammerEntity)
         MeshCollider.deleteFrom(hammerEntity)
-        GltfContainer.deleteFrom(hammerEntity)
+        VisibilityComponent.getOrNull(hammerEntity)?.visible == true && VisibilityComponent.createOrReplace(hammerEntity, {visible: false})
     }
 
     private hitHammer() {
