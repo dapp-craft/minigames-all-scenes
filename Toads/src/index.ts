@@ -7,10 +7,10 @@ import { sceneParentEntity, toadsGameState } from './state'
 import { GameLogic } from './game/gameLogic'
 import { setupStaticModels } from './staticModels/setupStaticModels'
 import { frog01 } from './resources/resources'
-import { syncEntity } from '@dcl/sdk/network'
+import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { mainThereme } from './game/soundManager'
-
+(globalThis as any).DEBUG_NETWORK_MESSAGES = false
 const preset = {
     placementStart: 0.06,
     nameStart: 0.08,
@@ -50,6 +50,8 @@ const generateInitialEntity = async () => {
         const entity = engine.addEntity()
         toadsGameState.availableEntity.push(entity)
     }
+
+    const hammerParent = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 1]
     const hammerEntity = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 2]
     const missTarget = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 3]
     const hits = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 4]
@@ -60,13 +62,17 @@ const generateInitialEntity = async () => {
     TextShape.create(miss, { text: 'Misses \n0', fontSize: 2 })
     TextShape.create(counter, { text: 'Score \n0', fontSize: 2 })
 
+    syncEntity(hammerParent, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 6)
     syncEntity(hammerEntity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 1)
     syncEntity(missTarget, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 2)
     syncEntity(hits, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 3)
     syncEntity(miss, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 4)
     syncEntity(counter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 5)
 
-    Transform.createOrReplace(hammerEntity)
+    Transform.createOrReplace(hammerParent)
+    Transform.createOrReplace(hammerEntity, {parent: hammerParent})
+
+    parentEntity(hammerEntity, hammerParent)
 
     Transform.create(hits, { position: { ...data.get('counter_hits')!.position, z: data.get('counter_hits')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
     Transform.create(miss, { position: { ...data.get('counter_misses')!.position, z: data.get('counter_misses')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
@@ -76,6 +82,7 @@ const generateInitialEntity = async () => {
     // VisibilityComponent.create(miss, { visible: false })
     // VisibilityComponent.create(counter, { visible: false })
 
+    toadsGameState.listOfEntity.set('hammerParent', hammerParent)
     toadsGameState.listOfEntity.set('hammer', hammerEntity)
     toadsGameState.listOfEntity.set('missTarget', missTarget);
     toadsGameState.listOfEntity.set('hits', hits);

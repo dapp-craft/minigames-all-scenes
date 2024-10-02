@@ -53,8 +53,10 @@ export class GameLogic {
     }
 
     private activateHummer() {
-        const hammerEntity = toadsGameState.listOfEntity.get('hammer')
-        GltfContainer.createOrReplace(hammerEntity, hammer)
+        console.log("activateHummer")
+        const hammerEntity = toadsGameState.listOfEntity.get('hammerParent')
+        const hammer1 = toadsGameState.listOfEntity.get('hammer')
+        GltfContainer.createOrReplace(hammer1, hammer)
         raycastSystem.registerLocalDirectionRaycast(
             {
                 entity: engine.CameraEntity,
@@ -66,18 +68,11 @@ export class GameLogic {
                 },
             },
             (hit) => {
-                if (this.isHammerInAction) return
-                if (hit.hits.length == 0) {
-                    return GltfContainer.deleteFrom(hammerEntity)
-                }
+                if (hit.hits.length == 0) return GltfContainer.deleteFrom(hammerEntity)
                 const hitPos = hit.hits[0].position
-                if (hitPos == undefined) {
-                    return
-                }
-                GltfContainer.getOrNull(hammerEntity) == null && GltfContainer.createOrReplace(hammerEntity, hammer)
-                Transform.createOrReplace(hammerEntity, {
-                    position: { ...hitPos, y: toadsGameConfig.hammerAltitude },
-                })
+                if (hitPos == undefined) return
+                GltfContainer.getOrNull(hammerEntity) == null && GltfContainer.createOrReplace(hammer1, hammer)
+                Transform.createOrReplace(hammerEntity, { position: { ...hitPos, y: toadsGameConfig.hammerAltitude } })
             }
         )
     }
@@ -94,42 +89,44 @@ export class GameLogic {
     private hitHammer() {
         this.isHammerInAction = true;
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
-        const initialHammerPosition = Transform.get(hammerEntity).position
-        let target: EntityObject = { entity: toadsGameState.listOfEntity.get('missTarget'), available: true }
-        let hammerZeroYVector = { ...Transform.get(hammerEntity).position, y: 0 }
+        const hammerParent = toadsGameState.listOfEntity.get('hammerParent')
+        let hammerZeroYVector = { ...Transform.get(hammerParent).position, y: 0 }
 
         raycastSystem.removeRaycasterEntity(engine.CameraEntity)
-
 
         Tween.createOrReplace(hammerEntity, {
             mode: Tween.Mode.Move({
                 start: Transform.get(hammerEntity).position,
-                end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight }
+                end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight - Transform.get(hammerParent).position.y }
             }),
             duration: animationConfig.hitTIme,
             easingFunction: EasingFunction.EF_EASEINQUAD,
         })
 
+        const hammerFinish = () => {
+            engine.removeSystem('hammerHit')
+            this.activateHummer()
+            Tween.deleteFrom(hammerEntity)
+            this.isHammerInAction = false
+            hammerBounce()
+        }
+
         engine.addSystem(() => {
             for (const obj of this.availableEntity.values()) {
                 const entityPosition = { ...utils.getWorldPosition(obj.entity), y: 0 };
                 const distance = Vector3.distance(hammerZeroYVector, entityPosition);
-                if (Transform.get(hammerEntity).position.y <= toadsGameState.toadInitialHeight + .1) {
-                    engine.removeSystem('hammerHit')
+                if (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= toadsGameState.toadInitialHeight + .1) {
                     soundManager.playSound('missSound', soundConfig.volume)
                     this.changeCounter(-1)
-                    Tween.deleteFrom(hammerEntity)
-                    hammerBounce()
+                    hammerFinish()
                     break;
-                } else if (Transform.get(hammerEntity).position.y <= Transform.get(obj.entity).position.y && distance <= toadsGameConfig.hammerRadius) {
-                    engine.removeSystem('hammerHit')
+                } else if (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= Transform.get(obj.entity).position.y && distance <= toadsGameConfig.hammerRadius) {
                     soundManager.playSound('hitSound', soundConfig.volume)
                     this.changeCounter(1)
                     this.hitEntity(obj)
                     this.toadsTimer.forEach((e, k) => { if (e.entity == obj.entity) utils.timers.clearTimeout(e.finish) })
                     obj.available = false
-                    Tween.deleteFrom(hammerEntity)
-                    hammerBounce()
+                    hammerFinish()
                     break;
                 }
             }
@@ -139,22 +136,12 @@ export class GameLogic {
             console.log("Bounce")
             Tween.createOrReplace(hammerEntity, {
                 mode: Tween.Mode.Move({
-                    start: Transform.get(hammerEntity).position,
-                    end: { ...Transform.get(hammerEntity).position, y: initialHammerPosition.y },
+                    start: { ...Transform.get(hammerEntity).position, },
+                    end: Vector3.Zero(),
                 }),
                 duration: animationConfig.hammerBounceTime,
                 easingFunction: EasingFunction.EF_EASEOUTBACK,
             })
-            engine.addSystem(() => {
-                const tweenCompleted = tweenSystem.tweenCompleted(hammerEntity)
-                if (tweenCompleted) {
-                    if (this.gameEnd) return
-                    engine.removeSystem("bounceSystem")
-                    this.isHammerInAction = false
-                    this.activateHummer()
-                    return
-                }
-            }, 1, "bounceSystem")
         }
     }
 
