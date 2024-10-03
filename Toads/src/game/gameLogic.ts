@@ -1,10 +1,13 @@
 import * as utils from '@dcl-sdk/utils'
-import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs"
+import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, Material, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs"
 import { animationConfig, soundConfig, toadsGameConfig } from "../config"
 import { toadsGameState } from "../state"
-import { Vector3 } from "@dcl/sdk/math"
+import { Vector3, Color4 } from "@dcl/sdk/math"
 import { frog01, frog02, hammer } from "../resources/resources"
 import { soundManager } from '../globals'
+import { TweenState as TweenStateGetter } from '@dcl/ecs/dist/components/generated/index.gen'
+
+const TweenState = TweenStateGetter(engine)
 
 interface EntityObject {
     entity: Entity,
@@ -55,7 +58,7 @@ export class GameLogic {
     private activateHammer() {
         console.log("activateHammer")
         const hammerEntity = toadsGameState.listOfEntity.get('hammerParent')
-        const hammerСhild = toadsGameState.listOfEntity.get('hammer')
+
         raycastSystem.registerLocalDirectionRaycast(
             {
                 entity: engine.CameraEntity,
@@ -67,11 +70,49 @@ export class GameLogic {
                 },
             },
             (hit) => {
-                if (hit.hits.length == 0) return VisibilityComponent.getMutable(hammerСhild).visible = false
+                if (hit.hits.length == 0) return
                 const hitPos = hit.hits[0].position
                 if (hitPos == undefined) return
-                VisibilityComponent.getOrNull(hammerСhild)?.visible !== true && VisibilityComponent.createOrReplace(hammerСhild, { visible: true })
-                Transform.createOrReplace(hammerEntity, { position: { ...hitPos, y: toadsGameConfig.hammerAltitude } })
+                let start = Transform.get(hammerEntity).position
+                const end = {...hitPos, y: toadsGameConfig.hammerAltitude}
+                if (Vector3.distance(start, end) > animationConfig.hammerSpeed / 30) {
+                    const tween = Tween.getOrNull(hammerEntity)?.mode
+                    const currentState = TweenState.getOrNull(hammerEntity)?.state
+                    if (currentState == TweenStateStatus.TS_ACTIVE && tween?.$case == 'move') {
+                        const currentPosition = Math.max(Tween.get(hammerEntity).currentTime!, TweenState.get(hammerEntity).currentTime)
+                        let calculatedStart = Vector3.add(
+                            tween.move.start!,
+                            Vector3.scale(
+                                Vector3.subtract(tween.move.end!, tween.move.start!),
+                                currentPosition + 50 * animationConfig.hammerSpeed / 1000 / Vector3.distance(tween.move.end!, tween.move.start!)
+                            )
+                        )
+                        if (Vector3.distance(tween.move.end!, end) < 0.01) return
+                        
+                        // ERRATA: moving path start away because Tween currentTime is not updated
+                        if (currentPosition < 0.99) {
+                            const extendedPath = Vector3.scale(Vector3.subtract(end, calculatedStart), 1 / (1 - currentPosition))
+                            calculatedStart = Vector3.subtract(end, extendedPath)
+                        }
+                        start = calculatedStart
+                        Tween.createOrReplace(hammerEntity, {
+                            mode: Tween.Mode.Move({start, end})!,
+                            duration: 1000 * Vector3.distance(start, end) / animationConfig.hammerSpeed,
+                            easingFunction: EasingFunction.EF_LINEAR,
+                            currentTime: currentPosition
+                        })
+                    } else if (!Tween.has(hammerEntity)) {
+                        Tween.createOrReplace(hammerEntity, {
+                            mode: Tween.Mode.Move({start, end}),
+                            duration: 1000 * Vector3.distance(start, end) / animationConfig.hammerSpeed,
+                            easingFunction: EasingFunction.EF_LINEAR,
+                            currentTime: 0
+                        })
+                    } else if (currentState == TweenStateStatus.TS_COMPLETED) Tween.deleteFrom(hammerEntity)
+                } else {
+                    Tween.deleteFrom(hammerEntity)
+                    Transform.createOrReplace(hammerEntity, { position: end })
+                }
             }
         )
     }
@@ -89,7 +130,6 @@ export class GameLogic {
         this.isHammerInAction = true;
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
         const hammerParent = toadsGameState.listOfEntity.get('hammerParent')
-        let hammerZeroYVector = { ...Transform.get(hammerParent).position, y: 0 }
         let currentPosY: number = Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y
 
         raycastSystem.removeRaycasterEntity(engine.CameraEntity)
@@ -114,6 +154,7 @@ export class GameLogic {
         engine.addSystem(() => {
             const distanceTOLastPoint = -(Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y - currentPosY)
             currentPosY = Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y
+            let hammerZeroYVector = { ...Transform.get(hammerParent).position, y: 0 }
             for (const obj of this.availableEntity.values()) {
                 const entityPosition = { ...utils.getWorldPosition(obj.entity), y: 0 };
                 const distance = Vector3.distance(hammerZeroYVector, entityPosition);

@@ -17,6 +17,7 @@ export const toadsGameConfig = {
 export const animationConfig = {
     hitTIme: 400,
     hammerBounceTime: 500,
+    hammerSpeed: 10,
     frogStayTime: 5000,
     frogAfterHitHideTime: 100,
     frogEscapeTime: 2000,
