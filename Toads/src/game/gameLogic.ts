@@ -34,7 +34,7 @@ export class GameLogic {
         this.gameIsDone = new Promise(r => this.resolveReady = r)
         await this.gameIsDone;
         console.log("Finish")
-        return { correct: this.correctSmashCounter, miss: this.miss }
+        return (this.correctSmashCounter - this.miss) * toadsGameConfig.priceMultiplier
     }
 
     private async initializeEntity() {
@@ -202,7 +202,7 @@ export class GameLogic {
         )
 
         for (let i = 1; i <= 100; i++) {
-            this.initialTimeGap = this.initialTimeGap + 1500
+            this.initialTimeGap = this.initialTimeGap + toadsGameConfig.frogTimeGap
             this.toadsTimer.set(i, {
                 start: utils.timers.setTimeout(() => {
                     let random = Math.floor(Math.random() * toadsGameConfig.ToadsAmount) + 1

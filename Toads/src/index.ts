@@ -16,7 +16,7 @@ const preset = {
     nameStart: 0.08,
     scoreStart: 0.90,
     nameHeader: 'PLAYER',
-    scoreHeader: 'MOVES',
+    scoreHeader: 'SCORE',
 }
 
 const handlers = {
@@ -37,8 +37,6 @@ export async function main() {
     await libraryReady
 
     await generateInitialEntity()
-
-    // gameLogic.startGame()
 
     initGame()
 }
@@ -79,9 +77,6 @@ const generateInitialEntity = async () => {
     Transform.create(counter, { position: { ...data.get('counter_score')!.position, z: data.get('counter_score')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
 
     GltfContainer.createOrReplace(hammerEntity, hammer)
-    // VisibilityComponent.create(hits, { visible: false })
-    // VisibilityComponent.create(miss, { visible: false })
-    // VisibilityComponent.create(counter, { visible: false })
 
     toadsGameState.listOfEntity.set('hammerParent', hammerParent)
     toadsGameState.listOfEntity.set('hammer', hammerEntity)
@@ -89,8 +84,6 @@ const generateInitialEntity = async () => {
     toadsGameState.listOfEntity.set('hits', hits);
     toadsGameState.listOfEntity.set('miss', miss);
     toadsGameState.listOfEntity.set('counter', counter);
-
-    toadsGameState.listOfEntity.forEach((e, k) => console.log(k, e))
 
     toadsGameState.toadInitialHeight = data.get(`obj_frog_hidden_1`)!.position.y
     toadsGameState.toadFinishHeight = data.get(`obj_frog_shown_1`)!.position.y

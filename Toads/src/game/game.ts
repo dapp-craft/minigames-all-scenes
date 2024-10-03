@@ -2,7 +2,7 @@ import * as utils from '@dcl-sdk/utils'
 import { gameLogic } from '..'
 import { progressState, sceneParentEntity } from '../state'
 import { engine } from '@dcl/sdk/ecs'
-import { updatePlayerProgress } from './syncData'
+import { fetchPlayerProgress, updatePlayerProgress } from './syncData'
 import { ui } from '@dcl-sdk/mini-games/src'
 import { Vector3, Quaternion } from '@dcl/sdk/math'
 import { readGltfLocators } from '../../../common/locators'
@@ -18,6 +18,8 @@ let buttonDisableTimeOut: utils.TimerId
 
 export const initGame = async () => {
   console.log('INIT GAME')
+
+  // await fetchPlayerProgress()
 
   await initCountdownNumbers()
 
@@ -54,7 +56,7 @@ async function startGame() {
 
   playButton.enable()
 
-  progressState.moves = res.correct - res.miss
+  progressState.moves = res
   console.log(progressState)
   await updatePlayerProgress(progressState);
 }
