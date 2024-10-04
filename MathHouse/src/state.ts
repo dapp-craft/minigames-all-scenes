@@ -6,7 +6,7 @@ type GameState = {
     entityInRoket: Array<Entity>
     counterEntity: Array<Entity>
     levelCounter: Entity
-    rocketWindow: Entity | undefined
+    rocketWindow: Entity
     generatedCartrige: any,
     syncModels: Array<Entity>
 }
@@ -16,7 +16,7 @@ export let gameState: GameState = {
     entityInRoket: [],
     counterEntity: [],
     levelCounter: engine.addEntity(),
-    rocketWindow: undefined,
+    rocketWindow: engine.addEntity(),
     generatedCartrige: new Map(),
     syncModels: []
 }

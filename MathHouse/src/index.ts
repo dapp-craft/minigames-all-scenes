@@ -2,9 +2,8 @@
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { Animator, AudioSource, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState } from './state'
-import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, mainEntityId, rocketCoords, soundConfig, startCoords } from './config'
-
-import { syncEntity } from '@dcl/sdk/network'
+import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, mainEntityId, rocketCoords, soundConfig } from './config'
+import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { setupStaticModels, setupStaticModelsFromGltf } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
 import { exitCallback, getReadyToStart, initGame, restartCallback } from './game/game'
@@ -16,12 +15,7 @@ import { readGltfLocators } from '../../common/locators'
 import { sceneParentEntity } from './globals'
 import { initMiniGame } from '../../common/library'
 import { mainThereme } from './SoundManager'
-
-const BOARD_TRANSFORM = {
-  position: { x: 8, y: 2.6636881828308105, z: 1.0992899895 },
-  scale: { x: 1, y: 1, z: 1 },
-  rotation: Quaternion.fromAngleAxis(180, Vector3.create(0, 1, 0))
-};
+(globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const preset = {
   placementStart: 0.06,
@@ -29,7 +23,6 @@ const preset = {
   timeStart: 0.7,
   levelStart: 0.96,
   nameHeader: 'PLAYER',
-  // timeHeader: 'TIME',
   levelHeader: 'LEVEL'
 }
 
@@ -76,15 +69,20 @@ const spawnInitialEntityPoll = async () => {
     gameState.availableEntity.push(entity)
     syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catEntityId + i)
   };
+
+  syncEntity(gameState.rocketWindow, [Transform.componentId], 5200)
+
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
     gameState.entityInRoket.push(entity)
-    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], catInRocketEntityId + i)
+    syncEntity(entity, [Tween.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catInRocketEntityId + i)
+    parentEntity(entity, gameState.rocketWindow)
   }
   for (let i = 0; i <= counterEntity; i++) {
     const entity = engine.addEntity()
     gameState.counterEntity.push(entity)
-    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], catInRocketEntityId + entityAmount + 10 + i)
+    syncEntity(entity, [Tween.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catInRocketEntityId + entityAmount + 10 + i)
+    parentEntity(entity, gameState.rocketWindow)
   }
 
   for (let i = 0; i <= 3; i++) {
@@ -93,13 +91,6 @@ const spawnInitialEntityPoll = async () => {
     syncEntity(entity, [Animator.componentId], catInRocketEntityId + entityAmount + counterEntity + 50 + i)
   }
 
-  gameState.rocketWindow = engine.addEntity()
-  syncEntity(gameState.rocketWindow, [Transform.componentId, GltfContainer.componentId, Tween.componentId], 5000)
-
-  const boardEntity = engine.addEntity()
-  Transform.create(boardEntity, BOARD_TRANSFORM)
-  syncEntity(boardEntity, [Transform.componentId], mainEntityId + 1)
-
   const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
 
   TextShape.create(gameState.levelCounter, {
@@ -107,7 +98,7 @@ const spawnInitialEntityPoll = async () => {
     fontSize: 3
   })
   Transform.create(gameState.levelCounter, { ...data.get('counter_level'), rotation: Quaternion.create(0, -.414, .175, 0), parent: sceneParentEntity })
-  syncEntity(gameState.levelCounter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, TextShape.componentId], catInRocketEntityId + entityAmount + counterEntity + 100)
+  syncEntity(gameState.levelCounter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catInRocketEntityId + entityAmount + counterEntity + 100)
 }
 
 export const generateArray = (data: generatedData) => {

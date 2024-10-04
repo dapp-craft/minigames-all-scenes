@@ -17,6 +17,12 @@ export const entityConfig = {
     maxRowLength: 1.5,
 }
 
+export const timerConfig = {
+  catIconAnimationTime: 300,
+  initialCatTimeGap: 400,
+  additionCatTimeGap: 100,
+}
+
 export const rocketCoords = [8, 1, 3.5]
 export const startCoords = [14, .5, 3]
 export const finishCoords = [2, .5, 3]

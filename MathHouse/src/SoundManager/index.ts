@@ -5,6 +5,7 @@ import {
     Transform  } from '@dcl/sdk/ecs'
   import * as utils from '@dcl-sdk/utils'
 import { correctAnswerSound, enterSound, exitSound, wrongAnswerSound } from '../resources/resources'
+import { Vector3 } from '@dcl/sdk/math'
   
   export let SOUNDS: { [key: string]: string } = {
     "enterSounds": enterSound, 
@@ -17,7 +18,7 @@ import { correctAnswerSound, enterSound, exitSound, wrongAnswerSound } from '../
   export const THEME_VOLUME = 0.7
   
   export const mainThereme = engine.addEntity()
-  Transform.create(mainThereme, {parent: engine.PlayerEntity})
+  Transform.create(mainThereme, {position: Vector3.create(0, 3, 0), parent: engine.PlayerEntity})
   AudioSource.create(mainThereme, {audioClipUrl: `sounds/game/OST1.mp3`, loop: true, playing: true, volume: 0.07})
   
   export class SoundManager {

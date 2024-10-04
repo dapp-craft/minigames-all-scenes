@@ -3,9 +3,9 @@ import { Vector3 } from "@dcl/sdk/math";
 import { gameState, rocketCoords } from "./state";
 import { EasingFunction, engine, GltfContainer, Transform, Tween } from "@dcl/sdk/ecs";
 import { background, cat01, cat02 } from "./resources/resources";
-import { parentEntity, syncEntity } from "@dcl/sdk/network";
 import { readGltfLocators } from "../../common/locators";
 import { sceneParentEntity } from './globals';
+import { timerConfig } from './config';
 
 export class board {
 
@@ -29,31 +29,20 @@ export class board {
         for (let i = 0; i < gameState.entityInRoket.length - 1; i++) {
             const entity = gameState.entityInRoket[i]
             let entityTransform = this.data.get(`cat0${i + 1}`)
-            engine.addSystem(() => Transform.createOrReplace(entity, {
-                position: Vector3.add(Vector3.scale(entityTransform.position, 1.7), Transform.get(gameState.rocketWindow!).position),
-                scale: Vector3.create(0.2, 0.2, 0.2)
-            }))
+            Transform.createOrReplace(entity, entityTransform)
         }
         for (let i = 0; i < gameState.counterEntity.length - 1; i++) {
             const entity = gameState.counterEntity[i]
             let entityTransform = i == 0 ? this.data.get(`counter_enteredAnswer`) : this.data.get(`counter_correctAnswer`)
-            engine.addSystem(() => Transform.createOrReplace(entity, {
-                position: Vector3.add(Vector3.scale(entityTransform.position, 1.75), Transform.get(gameState.rocketWindow!).position),
-                scale: Vector3.create(0.5, 0.5, 0.5)
-            }))
+            Transform.createOrReplace(entity, entityTransform)
         }
     }
 
     private async initBoardElements() {
-        let delay = 400
+        let delay = timerConfig.initialCatTimeGap
         for (let i = 0; i < gameState.entityInRoket.length - 1; i++) {
             const entity = gameState.entityInRoket[i]
             GltfContainer.createOrReplace(entity, { src: cat01.src })
-            let entityTransform = this.data.get(`cat0${i + 1}`)
-            engine.addSystem(() => Transform.createOrReplace(entity, {
-                position: Vector3.add(Vector3.scale(entityTransform.position, 1.7), Transform.get(gameState.rocketWindow!).position),
-                scale: Vector3.create(0.2, 0.2, 0.2)
-            }))
         }
         for (let i = 0; i < this.numberOfBoardElements; i++) {
             const entity = gameState.entityInRoket[i]
@@ -62,15 +51,15 @@ export class board {
                 GltfContainer.createOrReplace(entity, { src: cat02.src })
                 Tween.createOrReplace(entity, {
                     mode: Tween.Mode.Scale({
-                        start: Vector3.create(.3, .3, .3),
+                        start: Vector3.create(.2, .2, .2),
                         end: this.data.get(`cat01`)?.scale,
                     }),
-                    duration: 300,
+                    duration: timerConfig.catIconAnimationTime,
                     easingFunction: EasingFunction.EF_LINEAR,
                     playing: true
                 })
             }, delay)
-            delay = delay + 100
+            delay = delay + timerConfig.additionCatTimeGap
         }
     }
 
@@ -111,7 +100,6 @@ export class board {
         await this.dataIsDone;
         let delay = 400
         const entity = gameState.counterEntity[leftCounter ? 0 : 1]
-        // Transform.createOrReplace(entity, this.data.get(leftCounter ? `number01` : `number02`))
         for (let i = 0; i <= showNumber; i++) {
             Tween.deleteFrom(entity)
             utils.timers.setTimeout(() => {

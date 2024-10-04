@@ -1,5 +1,5 @@
-import { progress, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
-import { initialLevels, mainEntityId, maxLevel, soundConfig} from "../config"
+import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
+import { initialLevels, maxLevel, soundConfig, timerConfig } from "../config"
 import { Quaternion, Vector3 } from "@dcl/sdk/math"
 import { Animator, Billboard, engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { syncEntity } from "@dcl/sdk/network"
@@ -10,20 +10,18 @@ import { movePlayerTo } from "~system/RestrictedActions"
 import { gameEntityManager } from "../entityManager"
 import { generateArray, rocketBoard } from ".."
 import { readGltfLocators } from "../../../common/locators"
-import { levelArray, randomLvl } from "../levels"
+import { randomLvl } from "../levels"
 import { soundManager } from "../globals"
 import { fetchPlayerProgress, updatePlayerProgress } from "./syncData"
 
 export let gameDataEntity: Entity
-export let boardEntity: Entity
 export let sessionStartedAt: number
 export let gameButtons: ui.MenuButton[] = []
 
-let maxProgress: progress.IProgress
-let timer: ui.Timer3D
 let playerAnswer = 0
 let entityCounter = -1
 let entityManager: gameEntityManager
+let timer: ui.Timer3D
 
 const WIN_DURATION = 2000
 
@@ -48,19 +46,19 @@ export const restartCallback = () => {
 }
 
 export const initGame = async () => {
-    await initMaxProgress()
-
     await fetchPlayerProgress()
 
     initGameButtons()
 
     setupWinAnimations()
+
+    await initCountdownNumbers()
 }
 
 export function getReadyToStart() {
     console.log('Get Ready to start!')
     gameButtons.forEach((button, i) => button.disable())
-    utils.timers.setTimeout(() => startGame(), 2000)
+    countdown(() => startGame(), 3)
 }
 
 async function startGame() {
@@ -73,9 +71,9 @@ async function startGame() {
     generateLevel()
 
     entityCounter = -1
-    rocketBoard.showBoard(randomLvl.initialEntityAmount)
     rocketBoard.setLeftCounter(0)
     rocketBoard.setRightCounter(randomLvl.initialEntityAmount)
+    rocketBoard.showBoard(randomLvl.initialEntityAmount)
 
     entityManager = new gameEntityManager(randomLvl);
     entityCounter = await entityManager.startGame()
@@ -86,19 +84,13 @@ async function startGame() {
     })
 }
 
-async function initMaxProgress() {
-    console.log('Fetching progress', Object.keys(progress))
-    let req = await progress.getProgress('level', progress.SortDirection.DESC, 1)
-    if (req?.length) maxProgress = req[0]
-}
-
 const initGameButtons = async () => {
     const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
     for (let i = 1; i <= 9; i++) {
         gameButtons.push(
             new ui.MenuButton(
                 { position: data.get(`button_answer_${i}`)?.position, parent: sceneParentEntity, rotation: data.get(`button_answer_${i}`)?.rotation, scale: data.get(`button_answer_${i}`)?.scale },
-                ui.uiAssets.shapes.SQUARE_GREEN,
+                ui.uiAssets.shapes.SQUARE_PURPLE,
                 ui.uiAssets.numbers[i],
                 `${i}`,
                 () => {
@@ -108,25 +100,28 @@ const initGameButtons = async () => {
                     rocketBoard.setLeftCounter(playerAnswer)
                     rocketBoard.setRightCounter(entityCounter)
                     rocketBoard.showBoard(playerAnswer)
+                    const time = playerAnswer * timerConfig.additionCatTimeGap + timerConfig.catIconAnimationTime + timerConfig.initialCatTimeGap
                     utils.timers.setTimeout(() => {
-                        gameButtons[i-1].disable()
-                    }, gameButtons[i-1].releaseTime + 200)
+                        gameButtons[i - 1].disable()
+                    }, gameButtons[i - 1].releaseTime + 200)
                     if (entityCounter == playerAnswer) {
                         console.log("WIN")
                         soundManager.playSound('correctAnswerSound', soundConfig.volume)
-                        startWinAnimation()
+                        utils.timers.setTimeout(async () => {
+                            startWinAnimation()
+                        }, time)
                         utils.timers.setTimeout(async () => {
                             if (progressState.level >= maxLevel) return afterGame()
                             await incrementUserProgress()
                             startGame()
-                        }, 1500)
+                        }, time + WIN_DURATION)
                     }
                     else {
                         console.log("LOSE")
                         soundManager.playSound('wrongAnswerSound', soundConfig.volume)
                         utils.timers.setTimeout(() => restartCallback(), 1500)
                     }
-                }, 
+                },
                 true,
                 500
             )
@@ -262,12 +257,11 @@ function setupWinAnimations() {
 }
 
 const afterGame = () => {
-    progressState.level = 1
     utils.timers.setTimeout(() => {
         movePlayerTo({
             newRelativePosition: Vector3.create(8, 1, 13),
-            cameraTarget: Vector3.subtract(Transform.get(boardEntity).position, Vector3.Up())
         })
+        progressState.level = 1
     }, WIN_DURATION)
 }
 
@@ -298,4 +292,48 @@ const generateLevel = () => {
     console.log("levelDifficulty: ", levelDifficulty)
     if (levelDifficulty % 2 == 0) { generateArray({ length: levelDifficulty / 2 }) }
     else { generateArray({ length: (levelDifficulty - 1) / 2 }) }
+}
+
+async function initCountdownNumbers() {
+    const data = await readGltfLocators(`locators/obj_background.gltf`)
+    console.log(data.get('background')?.position)
+    timer = new ui.Timer3D(
+        {
+            parent: sceneParentEntity,
+            position: { ...data.get('background')!.position, y: 3 },
+            rotation: Quaternion.fromEulerDegrees(0, 0, 0),
+            scale: Vector3.create(.5, .5, .5)
+        },
+        1,
+        1,
+        false,
+        10
+    )
+    console.log(timer)
+    timer.hide()
+}
+
+async function countdown(cb: () => void, number: number, stop?: boolean) {
+    let currentValue = number
+    let time = stop ? 0 : 1
+
+    engine.addSystem(
+        (dt: number) => {
+            time += dt
+
+            if (time >= 1) {
+                time = 0
+                if (currentValue > 0) {
+                    timer.show()
+                    timer.setTimeAnimated(currentValue--)
+                } else {
+                    timer.hide()
+                    engine.removeSystem('countdown-system')
+                    cb && cb()
+                }
+            }
+        },
+        undefined,
+        'countdown-system'
+    )
 }
