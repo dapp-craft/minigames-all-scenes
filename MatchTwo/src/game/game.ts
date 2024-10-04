@@ -308,7 +308,7 @@ function finishLevel() {
     exitGame()
   } else {
     const levelToStart = gameState.level == Object.keys(TILES_LEVEL).length ? 1 : gameState.level + 1
-    levelButtons[gameState.level].enable()
+    if (levelButtons[gameState.level]) levelButtons[gameState.level].enable()
     startLevel(levelToStart as keyof typeof TILES_LEVEL)
   }
 }
