@@ -51,7 +51,7 @@ let tilesShape: { [key: number]: Entity } = {}
 export let tileImages: { [key: number]: Entity } = {}
 let gameButtons: ui.MenuButton[] = []
 let maxProgress: progress.IProgress
-export let sessionStartedAt: number
+export let sessionStartedAt: number | undefined = undefined
 let solidImage: SolidImage
 // GameUI
 let timer: ui.Timer3D
@@ -106,7 +106,9 @@ export async function initGame() {
     const localPlayer = getPlayer()
     if (player?.address === localPlayer?.userId) {
       getReadyToStart()
+      sessionStartedAt = Date.now()
     } else {
+      sessionStartedAt = Date.now()
       GameData.createOrReplace(gameDataEntity, {
         playerAddress: '',
         playerName: '',
@@ -128,7 +130,6 @@ function getReadyToStart() {
 
 async function startGame() {
   const localPlayer = getPlayer()
-  sessionStartedAt = Date.now()
 
   GameData.createOrReplace(gameDataEntity, {
     playerAddress: localPlayer?.userId,

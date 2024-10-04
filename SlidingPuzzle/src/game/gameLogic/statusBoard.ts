@@ -52,16 +52,20 @@ function updateTexts() {
   if (!gameData) return
   if (sessionStartedAt === 0) return
 
-  // const gameElapsedTime = ((GameData.get(gameDataEntity).levelFinishedAt || Date.now()) - GameData.get(gameDataEntity).levelStartedAt) / 1000
-  const gameElapsedTime = (SESSION_DURATION - (Date.now() - sessionStartedAt)) / 1000
-  const minutes = Math.max(Math.floor(gameElapsedTime / 60), 0)
-  const seconds = Math.max(Math.round(gameElapsedTime) - minutes * 60, 0)
+  let minutes = 0
+  let seconds = 0
+  if (sessionStartedAt != undefined) {
+    const gameElapsedTime = (SESSION_DURATION - (Date.now() - sessionStartedAt)) / 1000
+    console.log('gameElapsedTime ' + gameElapsedTime)
+    minutes = Math.max(Math.floor(gameElapsedTime / 60), 0)
+    seconds = Math.max(Math.round(gameElapsedTime) - minutes * 60, 0)
+  }
 
   TextShape.createOrReplace(playerNameEntity, {
     text: `${gameData.playerName}`,
     fontSize: 3,
     textAlign: TextAlignMode.TAM_MIDDLE_CENTER,
-    textColor: Color4.White(),
+    textColor: Color4.White()
   })
 
   if (GameData.get(gameDataEntity).level > 0) {
