@@ -118,7 +118,6 @@ export async function initGame() {
   }
 }
 
-
 function getReadyToStart() {
   console.log('Get Ready to start!')
 
@@ -180,22 +179,20 @@ function startNewLevel(level: number) {
   gameState.matrix.forEach((row) => console.log(row.join(' ')))
 
   gameState.matrix[gameState.size - 1][gameState.size - 1] = -1
-  
+
   gameState.matrix = shuffleMatrix(gameState.matrix, 100)
   console.log('Matrix shuffled')
   gameState.matrix.forEach((row) => console.log(row.join(' ')))
 
   syncGameData()
   setImage(level)
- 
+
   solidImage.show(getImage(level))
 
   countdown(async () => {
-  
     gameState.levelStartedAt = Date.now()
     gameState.levelFinishedAt = 0
     syncGameData()
-
 
     setTilesPointerEvents()
     solidImage.hide()
@@ -226,7 +223,7 @@ function initTiles() {
     Transform.create(tile, {
       // Hack to avoid z-flickering
       position: Vector3.create(0, 0, i * 0.001),
-      scale: Vector3.create(1, 1, 1),
+      scale: Vector3.create(1, 1, 1)
       // parent: boardEntity
     })
     Tile.create(tile, { number: i })
@@ -244,7 +241,7 @@ function initTiles() {
     // Image
     const image = engine.addEntity()
     Transform.create(image, {
-      position: { x: 0, y: 0, z: -0.015 },
+      position: { x: 0, y: 0, z: -0.015 }
       // parent: tile
     })
     MeshRenderer.setPlane(image, getImageUV(3, i))
@@ -309,7 +306,7 @@ function setTiles() {
   }
 }
 
-function updateTile(tileNumber: any, animDuration=500) {
+function updateTile(tileNumber: any, animDuration = 500) {
   validateTileNumber(tileNumber)
 
   const tile = tiles[tileNumber]
@@ -516,7 +513,6 @@ function getLevelSize(level: number): number {
 }
 
 function initGameButtons() {
-
   for (let i = 0; i < MAX_LEVEL; i++) {
     gameButtons.push(
       new ui.MenuButton(
@@ -536,55 +532,71 @@ function initGameButtons() {
     )
   }
 
-  gameButtons.push(new ui.MenuButton({
-    parent: sceneParentEntity,
-    position: restartButton.position,
-    scale: Vector3.create(1.5, 1.5, 1.5),
-    rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-  },
-    ui.uiAssets.shapes.SQUARE_RED,
-    ui.uiAssets.icons.restart,
-    "RESTART LEVEL",
-    () => {
-      startNewLevel(gameState.lvl)
-    }
-  ))
+  gameButtons.push(
+    new ui.MenuButton(
+      {
+        parent: sceneParentEntity,
+        position: restartButton.position,
+        scale: Vector3.create(1.5, 1.5, 1.5),
+        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+      },
+      ui.uiAssets.shapes.SQUARE_RED,
+      ui.uiAssets.icons.restart,
+      'RESTART LEVEL',
+      () => {
+        startNewLevel(gameState.lvl)
+      }
+    )
+  )
 
-  gameButtons.push(new ui.MenuButton({
-    parent: sceneParentEntity,
-    position: sfxButton.position,
-    scale: Vector3.create(1.5, 1.5, 1.5),
-    rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-  },
-    ui.uiAssets.shapes.SQUARE_RED,
-    ui.uiAssets.icons.sound,
-    'Sound FX',
-    () => {sfxEnable = !sfxEnable}
-  ))
+  gameButtons.push(
+    new ui.MenuButton(
+      {
+        parent: sceneParentEntity,
+        position: sfxButton.position,
+        scale: Vector3.create(1.5, 1.5, 1.5),
+        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+      },
+      ui.uiAssets.shapes.SQUARE_RED,
+      ui.uiAssets.icons.sound,
+      'Sound FX',
+      () => {
+        sfxEnable = !sfxEnable
+      }
+    )
+  )
 
-  gameButtons.push(new ui.MenuButton({
-    parent: sceneParentEntity,
-    position: exitButton.position,
-    scale: Vector3.create(1.5, 1.5, 1.5),
-    rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-  },
-    ui.uiAssets.shapes.RECT_RED,
-    ui.uiAssets.icons.exitText,
-    'Exit from game area',
-    () => {exitGame()}
-  ))
+  gameButtons.push(
+    new ui.MenuButton(
+      {
+        parent: sceneParentEntity,
+        position: exitButton.position,
+        scale: Vector3.create(1.5, 1.5, 1.5),
+        rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+      },
+      ui.uiAssets.shapes.RECT_RED,
+      ui.uiAssets.icons.exitText,
+      'Exit from game area',
+      () => {
+        exitGame()
+      }
+    )
+  )
 
-  new ui.MenuButton({
-    parent: sceneParentEntity,
-    position: musicButton.position,
-    scale: Vector3.create(1.5, 1.5, 1.5),
-    rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
-},
+  new ui.MenuButton(
+    {
+      parent: sceneParentEntity,
+      position: musicButton.position,
+      scale: Vector3.create(1.5, 1.5, 1.5),
+      rotation: Quaternion.fromEulerDegrees(-90, 90, 90)
+    },
     ui.uiAssets.shapes.SQUARE_RED,
     ui.uiAssets.icons.music,
     'Play/Stop Music',
-    () => {soundManager.themePlaying(!soundManager.getThemeStatus())}
-)
+    () => {
+      soundManager.themePlaying(!soundManager.getThemeStatus())
+    }
+  )
 }
 
 async function initMaxProgress() {
@@ -594,12 +606,12 @@ async function initMaxProgress() {
 }
 
 function setTilesPointerEvents() {
-  console.log("SETTING POINTER EVENTS")
+  console.log('SETTING POINTER EVENTS')
   for (let i = 1; i < MAX_BOARD_SIZE * MAX_BOARD_SIZE; i++) {
     pointerEventsSystem.onPointerDown(
       {
         entity: tilesShape[i],
-        opts: { button: InputAction.IA_POINTER, hoverText: i.toString() }
+        opts: { button: InputAction.IA_POINTER, hoverText: i.toString(), showFeedback: false }
       },
       () => {
         onTileClick(i)
@@ -609,7 +621,7 @@ function setTilesPointerEvents() {
 }
 
 function removeTilesPointerEvents() {
-  console.log("REMOVING POINTER EVENTS")
+  console.log('REMOVING POINTER EVENTS')
   for (let i = 1; i < MAX_BOARD_SIZE * MAX_BOARD_SIZE; i++) {
     pointerEventsSystem.removeOnPointerDown(tilesShape[i])
   }
@@ -662,7 +674,6 @@ async function countdown(cb: () => void, number: number) {
   )
 }
 
-
 function setupWinAnimations() {
   let winAnimA = engine.addEntity()
   let winAnimB = engine.addEntity()
@@ -671,8 +682,7 @@ function setupWinAnimations() {
   let winAnimText = engine.addEntity()
 
   GltfContainer.create(winAnimA, {
-    src: "mini-game-assets/models/winAnim.glb",
-
+    src: 'mini-game-assets/models/winAnim.glb'
   })
 
   Transform.create(winAnimA, {
@@ -693,8 +703,7 @@ function setupWinAnimations() {
   })
 
   GltfContainer.create(winAnimB, {
-    src: "mini-game-assets/models/winAnim.glb"
-
+    src: 'mini-game-assets/models/winAnim.glb'
   })
 
   Transform.create(winAnimB, {
@@ -715,7 +724,7 @@ function setupWinAnimations() {
   })
 
   GltfContainer.create(winAnimC, {
-    src: "mini-game-assets/models/winAnim.glb"
+    src: 'mini-game-assets/models/winAnim.glb'
   })
 
   Transform.create(winAnimC, {
@@ -736,7 +745,7 @@ function setupWinAnimations() {
   })
 
   GltfContainer.create(winAnimFollow, {
-    src: "mini-game-assets/models/winAnimFollow.glb"
+    src: 'mini-game-assets/models/winAnimFollow.glb'
   })
 
   Transform.create(winAnimFollow, {
@@ -758,7 +767,7 @@ function setupWinAnimations() {
   })
 
   GltfContainer.create(winAnimText, {
-    src: "mini-game-assets/models/winAnimText.glb"
+    src: 'mini-game-assets/models/winAnimText.glb'
   })
 
   Animator.create(winAnimText, {
@@ -792,7 +801,6 @@ function setupWinAnimations() {
   syncEntity(winAnimText, [VisibilityComponent.componentId, Animator.componentId])
 }
 
-
 function startWinAnimation() {
   const animations = engine.getEntitiesWith(Animator, VisibilityComponent)
   for (const [entity] of animations) {
@@ -801,12 +809,11 @@ function startWinAnimation() {
   }
 
   utils.timers.setTimeout(() => {
-
     const animations = engine.getEntitiesWith(Animator, VisibilityComponent)
     for (const [entity] of animations) {
       VisibilityComponent.getMutable(entity).visible = false
     }
-    console.log("GameData current level: ", gameState.lvl)
+    console.log('GameData current level: ', gameState.lvl)
     if (gameState.lvl <= MAX_LEVEL) {
       // console.log("playersQueue: ", queue.getQueue())
       //add challenge check
@@ -835,6 +842,6 @@ function syncGameData() {
   gameData.moves = gameState.moves
   gameData.levelStartedAt = gameState.levelStartedAt
   gameData.levelFinishedAt = gameState.levelFinishedAt ? gameState.levelFinishedAt : 0
-  gameData.playerName = getPlayer()?.name ? getPlayer()?.name as string : ''
+  gameData.playerName = getPlayer()?.name ? (getPlayer()?.name as string) : ''
   gameData.level = gameState.lvl
 }
