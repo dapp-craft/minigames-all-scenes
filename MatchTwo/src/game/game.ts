@@ -219,6 +219,7 @@ export async function startLevel(level: keyof typeof TILES_LEVEL) {
 
   countdown(async () => {
     await Promise.all(tiles.map((tile) => resetTile(tile)))
+    flippedTileQueue = []
 
     console.log('TILES LEVEL', TILES_LEVEL)
 
