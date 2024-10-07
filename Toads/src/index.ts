@@ -10,14 +10,9 @@ import { frog01, hammer } from './resources/resources'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { mainThereme } from './game/soundManager'
+import { SCORE } from '@dcl-sdk/mini-games/src/ui'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
-const preset = {
-    placementStart: 0.06,
-    nameStart: 0.08,
-    scoreStart: 0.90,
-    nameHeader: 'PLAYER',
-    scoreHeader: 'SCORE',
-}
+
 
 const handlers = {
     start: () => { getReadyToStart() },
@@ -27,7 +22,7 @@ const handlers = {
     toggleSfx: () => toggleVolume()
 }
 
-const libraryReady = initMiniGame(GAME_ID, preset, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
+const libraryReady = initMiniGame(GAME_ID, [SCORE], readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
 
 export const gameLogic = new GameLogic()
 

@@ -15,16 +15,9 @@ import { readGltfLocators } from '../../common/locators'
 import { sceneParentEntity } from './globals'
 import { initMiniGame } from '../../common/library'
 import { mainThereme } from './SoundManager'
+import { LEVEL } from '@dcl-sdk/mini-games/src/ui'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
-const preset = {
-  placementStart: 0.06,
-  nameStart: 0.08,
-  timeStart: 0.7,
-  levelStart: 0.96,
-  nameHeader: 'PLAYER',
-  levelHeader: 'LEVEL'
-}
 
 const handlers = {
   start: () => getReadyToStart(),
@@ -39,7 +32,7 @@ const toggleVolume = () => {
   else soundConfig.volume = 0.5
 }
 
-initMiniGame(GAME_ID, preset, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
+initMiniGame(GAME_ID, [LEVEL], readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
 
 export let rocketBoard: any
 

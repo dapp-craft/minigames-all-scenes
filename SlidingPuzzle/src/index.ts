@@ -9,6 +9,7 @@ import players, { getPlayer } from '@dcl/sdk/players'
 import { GAME_ID, SESSION_DURATION } from './config'
 import { listeners } from '@dcl-sdk/mini-games/src/queue'
 import { setupUI } from './ui'
+import { TIME_LEVEL } from '@dcl-sdk/mini-games/src/ui'
 
 initLibrary(engine, syncEntity, players, {
   environment: 'dev',
@@ -54,15 +55,7 @@ export function main() {
     width,
     height,
     scale,
-    {
-      placementStart: 0.06,
-      nameStart: 0.08,
-      timeStart: 0.7,
-      levelStart: 0.96,
-      nameHeader: 'PLAYER',
-      timeHeader: 'TIME',
-      levelHeader: 'LEVEL'
-    }
+    TIME_LEVEL
   )
 
   queue.initQueueDisplay({

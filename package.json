@@ -23,7 +23,7 @@
     "Toads"
   ],
   "dependencies": {
-    "@dcl-sdk/mini-games": "1.0.0-20240925194246.commit-729deb3",
+    "@dcl-sdk/mini-games": "1.0.0-20241004165406.commit-a103d3a",
     "@dcl/js-runtime": "7.6.0",
     "@dcl/sdk": "7.6.0"
   }

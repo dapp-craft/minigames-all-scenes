@@ -12,6 +12,7 @@ import { SFX_ENABLED, setSfxStatus } from './game/sound'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { toggleBackgroundMusic } from './SoundManager'
+import { TIME_LEVEL } from '@dcl-sdk/mini-games/src/ui'
 
 const handlers = {
   start: () => getReadyToStart(),
@@ -23,15 +24,7 @@ const handlers = {
 
 initMiniGame(
   GAME_ID,
-  {
-    placementStart: 0.06,
-    nameStart: 0.08,
-    timeStart: 0.7,
-    levelStart: 0.96,
-    nameHeader: 'PLAYER',
-    timeHeader: 'TIME',
-    levelHeader: 'LEVEL'
-  },
+  TIME_LEVEL,
   readGltfLocators(`locators/obj_locators_default.gltf`),
   handlers
 )

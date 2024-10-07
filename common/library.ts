@@ -39,7 +39,7 @@ export interface MiniGameCallbacks {
 
 export async function initMiniGame(
     id: string,
-    scoreboardPreset: ui.ColumnData,
+    scoreboardPreset: ui.Column[],
     data: Promise<Map<String, TransformType>>,
     callbacks: MiniGameCallbacks,
     textSettings: Omit<PBTextShape, 'text'> = {fontSize: 3, textColor: Color4.White()},
@@ -112,7 +112,8 @@ export async function initMiniGame(
         positionData.get(NODE_NAME.DISPLAY_SCOREBOARD)!.scale.x,
         positionData.get(NODE_NAME.DISPLAY_SCOREBOARD)!.scale.y,
         SCOREBOARD_SCALE,
-        scoreboardPreset
+        scoreboardPreset,
+        {sortBy: scoreboardPreset[0]?.type, showButtons: true}
     )
     
     queue.initQueueDisplay(
