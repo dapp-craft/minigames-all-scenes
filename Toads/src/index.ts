@@ -13,7 +13,6 @@ import { mainThereme } from './game/soundManager'
 import { SCORE } from '@dcl-sdk/mini-games/src/ui'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
-
 const handlers = {
     start: () => { getReadyToStart() },
     exit: () => { exitCallback() },

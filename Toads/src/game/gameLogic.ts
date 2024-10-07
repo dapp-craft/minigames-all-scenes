@@ -41,7 +41,7 @@ export class GameLogic {
     }
 
     private async initializeEntity() {
-        for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) this.availableEntity.set(i + 1, { entity: toadsGameState.availableEntity[i], available: true })
+        for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) this.availableEntity.set(i + 1, { entity: toadsGameState.availableEntity[i], available: true, hitable: false })
     }
 
     private resetData() {
@@ -74,7 +74,7 @@ export class GameLogic {
                 const hitPos = hit.hits[0].position
                 if (hitPos == undefined) return
                 let start = Transform.get(hammerEntity).position
-                const end = {...hitPos, y: toadsGameConfig.hammerAltitude}
+                const end = { ...hitPos, y: toadsGameConfig.hammerAltitude }
                 if (Vector3.distance(start, end) > animationConfig.hammerSpeed / 30) {
                     const tween = Tween.getOrNull(hammerEntity)?.mode
                     const currentState = TweenState.getOrNull(hammerEntity)?.state
@@ -88,7 +88,7 @@ export class GameLogic {
                             )
                         )
                         if (Vector3.distance(tween.move.end!, end) < 0.01) return
-                        
+
                         // ERRATA: moving path start away because Tween currentTime is not updated
                         if (currentPosition < 0.99) {
                             const extendedPath = Vector3.scale(Vector3.subtract(end, calculatedStart), 1 / (1 - currentPosition))
@@ -96,14 +96,14 @@ export class GameLogic {
                         }
                         start = calculatedStart
                         Tween.createOrReplace(hammerEntity, {
-                            mode: Tween.Mode.Move({start, end})!,
+                            mode: Tween.Mode.Move({ start, end })!,
                             duration: 1000 * Vector3.distance(start, end) / animationConfig.hammerSpeed,
                             easingFunction: EasingFunction.EF_LINEAR,
                             currentTime: currentPosition
                         })
                     } else if (!Tween.has(hammerEntity)) {
                         Tween.createOrReplace(hammerEntity, {
-                            mode: Tween.Mode.Move({start, end}),
+                            mode: Tween.Mode.Move({ start, end }),
                             duration: 1000 * Vector3.distance(start, end) / animationConfig.hammerSpeed,
                             easingFunction: EasingFunction.EF_LINEAR,
                             currentTime: 0
@@ -155,23 +155,32 @@ export class GameLogic {
             const distanceTOLastPoint = -(Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y - currentPosY)
             currentPosY = Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y
             let hammerZeroYVector = { ...Transform.get(hammerParent).position, y: 0 }
+            if (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= toadsGameState.toadInitialHeight + .1) {
+                soundManager.playSound('missSound', soundConfig.volume)
+                this.changeCounter(-1)
+                hammerFinish()
+            }
             for (const obj of this.availableEntity.values()) {
                 const entityPosition = { ...utils.getWorldPosition(obj.entity), y: 0 };
                 const distance = Vector3.distance(hammerZeroYVector, entityPosition);
-                if (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= toadsGameState.toadInitialHeight + .1) {
-                    soundManager.playSound('missSound', soundConfig.volume)
-                    this.changeCounter(-1)
-                    hammerFinish()
-                    break;
-                } else if (
+                if (
                     (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= Transform.get(obj.entity).position.y
                         || currentPosY - distanceTOLastPoint * toadsGameConfig.hammerHitDistMult <= Transform.get(obj.entity).position.y)
                     && distance <= toadsGameConfig.hammerRadius) {
+                        console.log(obj)
+                    if (!obj.hitable) {
+                        console.log("HERHEHEHEHEHEHEHEH")
+                        soundManager.playSound('missSound', soundConfig.volume)
+                        this.changeCounter(-1)
+                        hammerFinish()
+                        break
+                    }
                     soundManager.playSound('hitSound', soundConfig.volume)
                     this.changeCounter(1)
                     this.hitEntity(obj)
                     this.toadsTimer.forEach((e, k) => { if (e.entity == obj.entity) utils.timers.clearTimeout(e.finish) })
                     obj.available = false
+                    obj.hitable = false
                     hammerFinish()
                     break;
                 }
@@ -249,7 +258,8 @@ export class GameLogic {
                     let random = Math.floor(Math.random() * toadsGameConfig.ToadsAmount) + 1
                     const obj = this.availableEntity.get(random)
                     if (!obj.available) return
-                    obj.available = false
+                    obj.available = true
+                    obj.hitable = true
                     const entity = obj.entity
                     let y = Transform.get(entity).position.y;
                     Tween.deleteFrom(entity)
