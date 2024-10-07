@@ -167,9 +167,7 @@ export class GameLogic {
                     (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= Transform.get(obj.entity).position.y
                         || currentPosY - distanceTOLastPoint * toadsGameConfig.hammerHitDistMult <= Transform.get(obj.entity).position.y)
                     && distance <= toadsGameConfig.hammerRadius) {
-                        console.log(obj)
                     if (!obj.hitable) {
-                        console.log("HERHEHEHEHEHEHEHEH")
                         soundManager.playSound('missSound', soundConfig.volume)
                         this.changeCounter(-1)
                         hammerFinish()
