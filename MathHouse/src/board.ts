@@ -23,7 +23,7 @@ export class board {
     private async init() {
         this.data = await readGltfLocators(`locators/obj_background.gltf`)
         this.resolveReady()
-        Transform.createOrReplace(gameState.rocketWindow!, { position: {...Vector3.add(this.data.get('background')?.position, Transform.get(sceneParentEntity).position), y: this.data.get('background')?.position.y - 5}, scale: this.data.get('background')?.scale })
+        Transform.createOrReplace(gameState.rocketWindow!, { position: { ...Vector3.add(this.data.get('background')?.position, Transform.get(sceneParentEntity).position), y: this.data.get('background')?.position.y - 5 }, scale: this.data.get('background')?.scale })
         console.log(Transform.get(sceneParentEntity).position)
         GltfContainer.createOrReplace(gameState.rocketWindow!, { src: background.src })
         for (let i = 0; i < gameState.entityInRoket.length - 1; i++) {
@@ -66,10 +66,10 @@ export class board {
     public async showBoard(numberOfBoardElements: number) {
         await this.dataIsDone;
         this.numberOfBoardElements = numberOfBoardElements
-        Tween.createOrReplace(gameState.rocketWindow!, {
+        Tween.createOrReplace(gameState.rocketWindow, {
             mode: Tween.Mode.Move({
                 start: Transform.get(gameState.rocketWindow!).position,
-                end: Vector3.create(Transform.get(gameState.rocketWindow!).position.x, rocketCoords.y + 5, Transform.get(gameState.rocketWindow!).position.z),
+                end: { ...Transform.get(gameState.rocketWindow!).position, y: rocketCoords.y + 5 },
             }),
             duration: 500,
             easingFunction: EasingFunction.EF_LINEAR,
@@ -81,7 +81,7 @@ export class board {
         Tween.createOrReplace(gameState.rocketWindow!, {
             mode: Tween.Mode.Move({
                 start: Transform.get(gameState.rocketWindow!).position,
-                end: Vector3.create(Transform.get(gameState.rocketWindow!).position.x, rocketCoords.y - 5, Transform.get(gameState.rocketWindow!).position.z),
+                end: { ...Transform.get(gameState.rocketWindow!).position, y: rocketCoords.y - 5 },
             }),
             duration: 500,
             easingFunction: EasingFunction.EF_LINEAR,

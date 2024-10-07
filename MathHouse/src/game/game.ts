@@ -27,7 +27,8 @@ const WIN_DURATION = 2000
 
 export const exitCallback = () => {
     soundManager.playSound('exitSounds', soundConfig.volume)
-    entityManager?.stopGame()
+    entityManager.stopGame()
+    rocketBoard.hideBoard()
     progressState.level = 1
     TextShape.getMutable(gameState.levelCounter).text = `Level: ${progressState.level - 1}`
     GameData.createOrReplace(gameDataEntity, {

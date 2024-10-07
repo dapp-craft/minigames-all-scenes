@@ -129,6 +129,5 @@ export class gameEntityManager {
             VisibilityComponent.createOrReplace(entity, { visible: false })
         })
         gameState.availableEntity.forEach((e, k) => Tween.deleteFrom(e))
-        rocketBoard.hideBoard()
     }
 }
