@@ -4,7 +4,8 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_specular"
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"scene":0,
 	"scenes":[
@@ -30,9 +31,9 @@
 		{
 			"doubleSided":true,
 			"emissiveFactor":[
-				0.05000000074505806,
-				0.05000000074505806,
-				0.05000000074505806
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -40,9 +41,12 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
 				}
 			},
-			"name":"obj_global_steampunk02",
+			"name":"obj_gear04_alt",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -53,7 +57,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.203",
+			"name":"Mesh.074",
 			"primitives":[
 				{
 					"attributes":{
@@ -67,7 +71,7 @@
 			]
 		},
 		{
-			"name":"Cylinder.204",
+			"name":"Mesh.075",
 			"primitives":[
 				{
 					"attributes":{
@@ -92,38 +96,38 @@
 	],
 	"images":[
 		{
-			"mimeType":"image/png",
-			"name":"obj_global_steampunk02",
-			"uri":"textures/obj_global_steampunk02.png"
+			"mimeType":"image/jpeg",
+			"name":"obj_gear04_alt",
+			"uri":"textures/obj_gear04_alt.jpg"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1028,
+			"count":660,
 			"max":[
 				0.17008920013904572,
-				0.06981050223112106,
-				0.17242760956287384
+				0.06981053203344345,
+				0.17242759466171265
 			],
 			"min":[
 				-0.1700892448425293,
-				-0.00012494222028180957,
-				-0.17242760956287384
+				-0.00012497509305831045,
+				-0.17242766916751862
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1028,
+			"count":660,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1028,
+			"count":660,
 			"type":"VEC2"
 		},
 		{
@@ -137,13 +141,13 @@
 			"componentType":5126,
 			"count":36,
 			"max":[
-				0.17117714881896973,
-				0.07644032686948776,
+				0.17117713391780853,
+				0.07644037157297134,
 				0.19765834510326385
 			],
 			"min":[
-				-0.17117714881896973,
-				0,
+				-0.17117713391780853,
+				-4.710929601969838e-08,
 				-0.19765834510326385
 			],
 			"type":"VEC3"
@@ -170,50 +174,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":12336,
+			"byteLength":7920,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12336,
-			"byteOffset":12336,
+			"byteLength":7920,
+			"byteOffset":7920,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8224,
-			"byteOffset":24672,
+			"byteLength":5280,
+			"byteOffset":15840,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":3096,
-			"byteOffset":32896,
+			"byteOffset":21120,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":432,
-			"byteOffset":35992,
+			"byteOffset":24216,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":432,
-			"byteOffset":36424,
+			"byteOffset":24648,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":36856,
+			"byteOffset":25080,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":120,
-			"byteOffset":37144,
+			"byteOffset":25368,
 			"target":34963
 		}
 	],
@@ -225,7 +229,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":37264,
+			"byteLength":25488,
 			"uri":"obj_gear04_alt.bin"
 		}
 	]

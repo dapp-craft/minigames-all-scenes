@@ -4,7 +4,8 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_specular"
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"scene":0,
 	"scenes":[
@@ -30,9 +31,9 @@
 		{
 			"doubleSided":true,
 			"emissiveFactor":[
-				0.05000000074505806,
-				0.05000000074505806,
-				0.05000000074505806
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -40,9 +41,12 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
 				}
 			},
-			"name":"obj_global_steampunk01",
+			"name":"obj_stone03_base",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -53,7 +57,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Sphere.008",
+			"name":"Mesh.008",
 			"primitives":[
 				{
 					"attributes":{
@@ -67,7 +71,7 @@
 			]
 		},
 		{
-			"name":"Cube.081",
+			"name":"Mesh.009",
 			"primitives":[
 				{
 					"attributes":{
@@ -92,44 +96,44 @@
 	],
 	"images":[
 		{
-			"mimeType":"image/png",
-			"name":"obj_global_steampunk",
-			"uri":"textures/obj_global_steampunk.png"
+			"mimeType":"image/jpeg",
+			"name":"obj_stone03_base",
+			"uri":"textures/obj_stone03_base.jpg"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":564,
+			"count":377,
 			"max":[
-				0.5181667804718018,
-				1.0503435134887695,
-				0.48127061128616333
+				0.5191647410392761,
+				1.052291989326477,
+				0.4859771728515625
 			],
 			"min":[
-				-0.5201629996299744,
-				-0.00233141309581697,
-				-0.4906836450099945
+				-0.5191648602485657,
+				-0.0003829562047030777,
+				-0.48597708344459534
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":564,
+			"count":377,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":564,
+			"count":377,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":720,
+			"count":705,
 			"type":"SCALAR"
 		},
 		{
@@ -138,13 +142,13 @@
 			"count":24,
 			"max":[
 				0.47284963726997375,
-				1.0254560708999634,
+				1.025456190109253,
 				0.47284963726997375
 			],
 			"min":[
 				-0.47284963726997375,
-				0,
-				-0.47284963726997375
+				-1.1258914867084968e-07,
+				-0.47284987568855286
 			],
 			"type":"VEC3"
 		},
@@ -170,50 +174,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":6768,
+			"byteLength":4524,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6768,
-			"byteOffset":6768,
+			"byteLength":4524,
+			"byteOffset":4524,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4512,
-			"byteOffset":13536,
+			"byteLength":3016,
+			"byteOffset":9048,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1440,
-			"byteOffset":18048,
+			"byteLength":1410,
+			"byteOffset":12064,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":19488,
+			"byteOffset":13476,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":19776,
+			"byteOffset":13764,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":192,
-			"byteOffset":20064,
+			"byteOffset":14052,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":72,
-			"byteOffset":20256,
+			"byteOffset":14244,
 			"target":34963
 		}
 	],
@@ -225,7 +229,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":20328,
+			"byteLength":14316,
 			"uri":"obj_stone03_base.bin"
 		}
 	]

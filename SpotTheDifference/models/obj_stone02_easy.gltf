@@ -4,7 +4,8 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_specular"
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"scene":0,
 	"scenes":[
@@ -19,20 +20,20 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_stone02_easy"
+			"name":"obj_stone02_easy_collider"
 		},
 		{
 			"mesh":1,
-			"name":"obj_stone02_easy_collider"
+			"name":"obj_stone02_easy"
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
 			"emissiveFactor":[
-				0.05000000074505806,
-				0.05000000074505806,
-				0.05000000074505806
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -40,9 +41,12 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
 				}
 			},
-			"name":"obj_global_steampunk02",
+			"name":"obj_stone02_alt",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -53,7 +57,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.123",
+			"name":"Cube.124",
 			"primitives":[
 				{
 					"attributes":{
@@ -61,13 +65,12 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"indices":3,
-					"material":0
+					"indices":3
 				}
 			]
 		},
 		{
-			"name":"Cube.124",
+			"name":"Mesh.006",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,7 +78,8 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":7
+					"indices":7,
+					"material":0
 				}
 			]
 		}
@@ -92,48 +96,14 @@
 	],
 	"images":[
 		{
-			"mimeType":"image/png",
-			"name":"obj_global_steampunk02",
-			"uri":"textures/obj_global_steampunk02.png"
+			"mimeType":"image/jpeg",
+			"name":"obj_stone02_alt",
+			"uri":"textures/obj_stone02_alt.jpg"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
-			"componentType":5126,
-			"count":380,
-			"max":[
-				0.17447611689567566,
-				0.5644374489784241,
-				0.3203708529472351
-			],
-			"min":[
-				-0.5625653266906738,
-				-0.005402648821473122,
-				-0.2775842845439911
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":1,
-			"componentType":5126,
-			"count":380,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":2,
-			"componentType":5126,
-			"count":380,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":3,
-			"componentType":5123,
-			"count":534,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":4,
 			"componentType":5126,
 			"count":38,
 			"max":[
@@ -149,71 +119,105 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
+			"bufferView":1,
 			"componentType":5126,
 			"count":38,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
+			"bufferView":2,
 			"componentType":5126,
 			"count":38,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":7,
+			"bufferView":3,
 			"componentType":5123,
 			"count":60,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":284,
+			"max":[
+				0.16861769556999207,
+				0.5698401927947998,
+				0.3552858531475067
+			],
+			"min":[
+				-0.5684237480163574,
+				0,
+				-0.24266928434371948
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":284,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":284,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":7,
+			"componentType":5123,
+			"count":534,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":4560,
+			"byteLength":456,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4560,
-			"byteOffset":4560,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3040,
-			"byteOffset":9120,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1068,
-			"byteOffset":12160,
-			"target":34963
-		},
-		{
-			"buffer":0,
 			"byteLength":456,
-			"byteOffset":13228,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":456,
-			"byteOffset":13684,
+			"byteOffset":456,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":304,
-			"byteOffset":14140,
+			"byteOffset":912,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":120,
-			"byteOffset":14444,
+			"byteOffset":1216,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":3408,
+			"byteOffset":1336,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3408,
+			"byteOffset":4744,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":2272,
+			"byteOffset":8152,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1068,
+			"byteOffset":10424,
 			"target":34963
 		}
 	],
@@ -225,7 +229,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":14564,
+			"byteLength":11492,
 			"uri":"obj_stone02_easy.bin"
 		}
 	]

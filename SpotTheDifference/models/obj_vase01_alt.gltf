@@ -4,7 +4,8 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_specular"
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"scene":0,
 	"scenes":[
@@ -19,20 +20,20 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_vase01_alt_collider"
+			"name":"obj_vase01_alt"
 		},
 		{
 			"mesh":1,
-			"name":"obj_vase01_alt"
+			"name":"obj_vase01_alt_collider"
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
 			"emissiveFactor":[
-				0.05000000074505806,
-				0.05000000074505806,
-				0.05000000074505806
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -40,9 +41,12 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
 				}
 			},
-			"name":"obj_global_steampunk02",
+			"name":"obj_vase01_alt",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -53,7 +57,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.212",
+			"name":"Mesh.020",
 			"primitives":[
 				{
 					"attributes":{
@@ -61,12 +65,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"indices":3
+					"indices":3,
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Cone.001",
+			"name":"Mesh.021",
 			"primitives":[
 				{
 					"attributes":{
@@ -74,8 +79,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":7,
-					"material":0
+					"indices":7
 				}
 			]
 		}
@@ -92,128 +96,128 @@
 	],
 	"images":[
 		{
-			"mimeType":"image/png",
-			"name":"obj_global_steampunk02",
-			"uri":"textures/obj_global_steampunk02.png"
+			"mimeType":"image/jpeg",
+			"name":"obj_vase01_alt",
+			"uri":"textures/obj_vase01_alt.jpg"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":100,
+			"count":665,
 			"max":[
-				0.19041043519973755,
-				0.5279754400253296,
-				0.20020939409732819
+				0.18679870665073395,
+				0.5309811234474182,
+				0.19729477167129517
 			],
 			"min":[
-				-0.19041043519973755,
-				0,
-				-0.2002093642950058
+				-0.18679870665073395,
+				-2.9802322387695312e-08,
+				-0.19729484617710114
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":100,
+			"count":665,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":100,
+			"count":665,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":168,
+			"count":1092,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":982,
+			"count":100,
 			"max":[
-				0.1880502998828888,
-				0.5289070010185242,
-				0.1980471909046173
+				0.19041043519973755,
+				0.5279754400253296,
+				0.20020931959152222
 			],
 			"min":[
-				-0.18732807040214539,
-				-0.0020741319749504328,
-				-0.19654244184494019
+				-0.19041043519973755,
+				-4.2965872637523717e-08,
+				-0.20020943880081177
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":982,
+			"count":100,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":982,
+			"count":100,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":7,
 			"componentType":5123,
-			"count":1260,
+			"count":168,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1200,
+			"byteLength":7980,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
+			"byteLength":7980,
+			"byteOffset":7980,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5320,
+			"byteOffset":15960,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":2184,
+			"byteOffset":21280,
+			"target":34963
+		},
+		{
+			"buffer":0,
 			"byteLength":1200,
-			"byteOffset":1200,
+			"byteOffset":23464,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1200,
+			"byteOffset":24664,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":800,
-			"byteOffset":2400,
+			"byteOffset":25864,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":336,
-			"byteOffset":3200,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":11784,
-			"byteOffset":3536,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":11784,
-			"byteOffset":15320,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":7856,
-			"byteOffset":27104,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":2520,
-			"byteOffset":34960,
+			"byteOffset":26664,
 			"target":34963
 		}
 	],
@@ -225,7 +229,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":37480,
+			"byteLength":27000,
 			"uri":"obj_vase01_alt.bin"
 		}
 	]

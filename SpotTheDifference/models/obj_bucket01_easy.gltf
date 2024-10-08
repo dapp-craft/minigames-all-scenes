@@ -4,7 +4,8 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_specular"
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"scene":0,
 	"scenes":[
@@ -19,20 +20,26 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_bucket01_easy"
+			"name":"obj_bucket01_easy_collider"
 		},
 		{
 			"mesh":1,
-			"name":"obj_bucket01_easy_collider"
+			"name":"obj_bucket01_easy",
+			"rotation":[
+				0,
+				0.38807594776153564,
+				0,
+				0.9216275215148926
+			]
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
 			"emissiveFactor":[
-				0.05000000074505806,
-				0.05000000074505806,
-				0.05000000074505806
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -40,9 +47,12 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
 				}
 			},
-			"name":"obj_global_steampunk02",
+			"name":"obj_bucket01_alt",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -53,7 +63,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.273",
+			"name":"Cylinder.274",
 			"primitives":[
 				{
 					"attributes":{
@@ -61,13 +71,12 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"indices":3,
-					"material":0
+					"indices":3
 				}
 			]
 		},
 		{
-			"name":"Cylinder.274",
+			"name":"Mesh.022",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,7 +84,8 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":7
+					"indices":7,
+					"material":0
 				}
 			]
 		}
@@ -92,48 +102,14 @@
 	],
 	"images":[
 		{
-			"mimeType":"image/png",
-			"name":"obj_global_steampunk02",
-			"uri":"textures/obj_global_steampunk02.png"
+			"mimeType":"image/jpeg",
+			"name":"obj_bucket01_alt",
+			"uri":"textures/obj_bucket01_alt.jpg"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
-			"componentType":5126,
-			"count":420,
-			"max":[
-				0.23692375421524048,
-				0.5813745856285095,
-				0.24078795313835144
-			],
-			"min":[
-				-0.22870704531669617,
-				-0.0024945884943008423,
-				-0.23416931927204132
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":1,
-			"componentType":5126,
-			"count":420,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":2,
-			"componentType":5126,
-			"count":420,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":3,
-			"componentType":5123,
-			"count":588,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":4,
 			"componentType":5126,
 			"count":62,
 			"max":[
@@ -149,71 +125,105 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
+			"bufferView":1,
 			"componentType":5126,
 			"count":62,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
+			"bufferView":2,
 			"componentType":5126,
 			"count":62,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":7,
+			"bufferView":3,
 			"componentType":5123,
 			"count":96,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":390,
+			"max":[
+				0.22945503890514374,
+				0.5837430953979492,
+				0.24384360015392303
+			],
+			"min":[
+				-0.2328222393989563,
+				-0.0024945673067122698,
+				-0.23656727373600006
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":390,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":390,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":7,
+			"componentType":5123,
+			"count":588,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":5040,
+			"byteLength":744,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5040,
-			"byteOffset":5040,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3360,
-			"byteOffset":10080,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1176,
-			"byteOffset":13440,
-			"target":34963
-		},
-		{
-			"buffer":0,
 			"byteLength":744,
-			"byteOffset":14616,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":744,
-			"byteOffset":15360,
+			"byteOffset":744,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":496,
-			"byteOffset":16104,
+			"byteOffset":1488,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":192,
-			"byteOffset":16600,
+			"byteOffset":1984,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":4680,
+			"byteOffset":2176,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4680,
+			"byteOffset":6856,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3120,
+			"byteOffset":11536,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1176,
+			"byteOffset":14656,
 			"target":34963
 		}
 	],
@@ -225,7 +235,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":16792,
+			"byteLength":15832,
 			"uri":"obj_bucket01_easy.bin"
 		}
 	]

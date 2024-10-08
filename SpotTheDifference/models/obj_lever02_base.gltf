@@ -4,7 +4,8 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_specular"
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"scene":0,
 	"scenes":[
@@ -30,9 +31,9 @@
 		{
 			"doubleSided":true,
 			"emissiveFactor":[
-				0.05000000074505806,
-				0.05000000074505806,
-				0.05000000074505806
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -40,9 +41,12 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
 				}
 			},
-			"name":"obj_global_steampunk01",
+			"name":"obj_lever02_base",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -53,7 +57,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.071",
+			"name":"Mesh.028",
 			"primitives":[
 				{
 					"attributes":{
@@ -67,7 +71,7 @@
 			]
 		},
 		{
-			"name":"Cube.072",
+			"name":"Mesh.029",
 			"primitives":[
 				{
 					"attributes":{
@@ -92,38 +96,38 @@
 	],
 	"images":[
 		{
-			"mimeType":"image/png",
-			"name":"obj_global_steampunk",
-			"uri":"textures/obj_global_steampunk.png"
+			"mimeType":"image/jpeg",
+			"name":"obj_lever02_base",
+			"uri":"textures/obj_lever02_base.jpg"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":636,
+			"count":490,
 			"max":[
-				0.13757595419883728,
+				0.13757598400115967,
 				0.4890504479408264,
 				0.21881745755672455
 			],
 			"min":[
-				-0.13757595419883728,
-				-0.0010241871932521462,
-				-0.21881747245788574
+				-0.13757598400115967,
+				-0.0010242394637316465,
+				-0.21881750226020813
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":636,
+			"count":490,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":636,
+			"count":490,
 			"type":"VEC2"
 		},
 		{
@@ -139,12 +143,12 @@
 			"max":[
 				0.13743677735328674,
 				0.48552095890045166,
-				0.22004669904708862
+				0.22004668414592743
 			],
 			"min":[
 				-0.13743677735328674,
-				0,
-				-0.22004669904708862
+				-5.2524860905123205e-08,
+				-0.22004668414592743
 			],
 			"type":"VEC3"
 		},
@@ -170,50 +174,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":7632,
+			"byteLength":5880,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":7632,
-			"byteOffset":7632,
+			"byteLength":5880,
+			"byteOffset":5880,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5088,
-			"byteOffset":15264,
+			"byteLength":3920,
+			"byteOffset":11760,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1788,
-			"byteOffset":20352,
+			"byteOffset":15680,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":22140,
+			"byteOffset":17468,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":22428,
+			"byteOffset":17756,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":192,
-			"byteOffset":22716,
+			"byteOffset":18044,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":72,
-			"byteOffset":22908,
+			"byteOffset":18236,
 			"target":34963
 		}
 	],
@@ -225,7 +229,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":22980,
+			"byteLength":18308,
 			"uri":"obj_lever02_base.bin"
 		}
 	]
