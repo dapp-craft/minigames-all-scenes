@@ -294,7 +294,7 @@ function checkIfMatch() {
 
 function disableTile(tile: TileType) {
   pointerEventsSystem.removeOnPointerDown(tile.doorEntity)
-  Transform.getMutable(tile.doorEntity).scale = Vector3.create(0, 0, 0)
+  Transform.getMutable(tile.mainEntity).scale = Vector3.create(0, 0, 0)
   Tile.getMutable(tile.mainEntity).inGame = false
 }
 
