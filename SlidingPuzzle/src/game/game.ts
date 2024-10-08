@@ -147,8 +147,6 @@ async function startGame() {
   // Update buttons
   gameButtons.forEach((button, i) => {
     if (i <= MAX_LEVEL - 1) {
-      //set level buttons according to currentLevel
-      //TODO: check max level played on progress
       if (i < maxProgress?.level + 1 || i == 0) {
         button.enable()
       } else {
@@ -175,7 +173,6 @@ function startNewLevel(level: number) {
     Array.from({ length: gameState.size }, (_, colIndex) => rowIndex * gameState.size + colIndex + 1)
   )
 
-  // TODO create a separate function that will generate a shuffled matrix
   console.log('Matrix init')
   gameState.matrix.forEach((row) => console.log(row.join(' ')))
 
@@ -191,6 +188,8 @@ function startNewLevel(level: number) {
   solidImage.show(getImage(level))
 
   countdown(async () => {
+    hideAllTiles()
+
     gameState.levelStartedAt = Date.now()
     gameState.levelFinishedAt = 0
     syncGameData()
