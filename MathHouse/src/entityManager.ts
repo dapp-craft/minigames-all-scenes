@@ -55,7 +55,7 @@ export class gameEntityManager {
                 gameState.availableEntity.forEach((e, k) => Tween.deleteFrom(e))
                 for (let j = 0; j < waveData.itemQueue; j++) {
                     this.spawnEntity("test", waveData.goOut);
-                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? (Math.random() * (this.spawnEntityDelay.time / 120)) + 150 : this.spawnEntityDelay.time);
+                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? 200 : this.spawnEntityDelay.time);
                     await this.entityMoved;
                     this.entityMoved = new Promise(r => this.entityReady = r);
                 }
