@@ -39,8 +39,8 @@ export const SETTINGS = {
     obj_gear05:    {size: SIZE.SMALL, variants: [VARIANT.EASY]},
     obj_gear06:    {size: SIZE.SMALL, variants: [VARIANT.HARD]},
     obj_gear07:    {size: SIZE.SMALL, variants: [VARIANT.HARD]},
-    obj_gear08:    {size: SIZE.SMALL, variants: [VARIANT.HARD]},
-    obj_gear09:    {size: SIZE.SMALL, variants: [VARIANT.MEDIUM]},
+    obj_gear08:    {size: SIZE.SMALL, variants: [VARIANT.MEDIUM]},
+    obj_gear09:    {size: SIZE.SMALL, variants: [VARIANT.HARD]},
     obj_gun01:     {size: SIZE.SMALL, variants: [VARIANT.MEDIUM]},
 } as const
 
