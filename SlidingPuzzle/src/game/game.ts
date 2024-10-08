@@ -323,7 +323,7 @@ function updateTile(tileNumber: any, animDuration = 500) {
       start: Transform.get(tile).position,
       end: position
     }),
-    duration: animDuration,
+    duration: animDuration + (Math.random() - 0.5) * 100,
     easingFunction: EasingFunction.EF_EASECUBIC
   })
 }
