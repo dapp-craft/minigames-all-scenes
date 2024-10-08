@@ -10,7 +10,7 @@
 	"scene":0,
 	"scenes":[
 		{
-			"name":"obj_stone01_hard",
+			"name":"Scene",
 			"nodes":[
 				0,
 				1
