@@ -40,7 +40,7 @@ function setupMoveCouner() {
 
   engine.addSystem(() => {
     TextShape.createOrReplace(moveCounter, {
-      text: `${gameState.moves}`,
+      text: `Moves: ${gameState.moves}`,
       fontSize: 3,
       textColor: Color4.Black()
     })
@@ -54,7 +54,7 @@ function seteupTimer() {
   engine.addSystem(() => {
     if (gameState.levelStartTime == 0) {
       TextShape.createOrReplace(timer, {
-        text: `--:--`,
+        text: `Time: --:--`,
         fontSize: 3,
         textColor: Color4.Black()
       })
@@ -66,7 +66,7 @@ function seteupTimer() {
     const seconds = Math.max(Math.round(gameElapsedTime) - minutes * 60, 0)
 
     TextShape.createOrReplace(timer, {
-      text: `${minutes.toLocaleString('en-US', {
+      text: `Time: ${minutes.toLocaleString('en-US', {
         minimumIntegerDigits: 2,
         useGrouping: false
       })}:${seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}`,
