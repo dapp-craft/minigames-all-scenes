@@ -75,15 +75,14 @@
 			]
 		},
 		{
-			"name":"Torus.009",
+			"name":"Bounding Box Mesh",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":4,
-						"NORMAL":5,
-						"TEXCOORD_0":6
+						"NORMAL":5
 					},
-					"indices":3
+					"indices":6
 				}
 			]
 		}
@@ -148,30 +147,30 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":6339,
+			"count":72,
 			"max":[
-				7.7893853187561035,
-				4.797542095184326,
+				7.831806659698486,
+				4.5353193283081055,
 				5.633542060852051
 			],
 			"min":[
-				-7.7893805503845215,
-				0.03565202280879021,
-				-7.8484978675842285
+				-7.8318071365356445,
+				0,
+				-7.870057106018066
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":6339,
+			"count":72,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
-			"componentType":5126,
-			"count":6339,
-			"type":"VEC2"
+			"componentType":5123,
+			"count":108,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -201,21 +200,21 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":76068,
+			"byteLength":864,
 			"byteOffset":238020,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":76068,
-			"byteOffset":314088,
+			"byteLength":864,
+			"byteOffset":238884,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":50712,
-			"byteOffset":390156,
-			"target":34962
+			"byteLength":216,
+			"byteOffset":239748,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -226,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":440868,
+			"byteLength":239964,
 			"uri":"obj_wall.bin"
 		}
 	]
