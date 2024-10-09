@@ -26,5 +26,13 @@
     "@dcl-sdk/mini-games": "1.0.0-20241004165406.commit-a103d3a",
     "@dcl/js-runtime": "7.6.0",
     "@dcl/sdk": "7.6.0"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 120,
+    "trailingComma": "none",
+    "arrowParens": "avoid",
+    "tabWidth": 4
   }
 }
