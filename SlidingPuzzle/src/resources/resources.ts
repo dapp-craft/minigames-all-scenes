@@ -5,17 +5,17 @@ const imagesFolder = 'images/'
 
 // Static models
 export const STATIC_MODELS: PBGltfContainer[] = [
-  { src: modelsFolder + 'obj_floor.gltf' },
-  { src: modelsFolder + 'obj_sign.gltf' },
-  { src: modelsFolder + 'obj_stairs.gltf' },
-  { src: modelsFolder + 'obj_pillars.gltf' },
-  { src: modelsFolder + 'obj_title.gltf' },
-  { src: modelsFolder + 'obj_frame.gltf' },
-  { src: modelsFolder + 'obj_text.gltf' },
-  { src: modelsFolder + 'obj_plants.gltf' },
-  { src: modelsFolder + 'obj_bench.gltf' },
-  { src: modelsFolder + 'obj_terminal.gltf' },
-  { src: modelsFolder + 'obj_gamezone.gltf' }
+  // { src: modelsFolder + 'obj_floor.gltf' },
+  // { src: modelsFolder + 'obj_sign.gltf' },
+  // { src: modelsFolder + 'obj_stairs.gltf' },
+  // { src: modelsFolder + 'obj_pillars.gltf' },
+  // { src: modelsFolder + 'obj_title.gltf' },
+  // { src: modelsFolder + 'obj_frame.gltf' },
+  // { src: modelsFolder + 'obj_text.gltf' },
+  // { src: modelsFolder + 'obj_plants.gltf' },
+  // { src: modelsFolder + 'obj_bench.gltf' },
+  // { src: modelsFolder + 'obj_terminal.gltf' }
+  // { src: modelsFolder + 'obj_gamezone.gltf' }
 ]
 
 // Game shapes

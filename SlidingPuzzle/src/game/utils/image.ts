@@ -13,19 +13,29 @@ export function getImage(lvl: number) {
  * @returns - UV array for the tiles
  */
 export function getImageUV(boardSize: number, tileNumber: number): number[] {
+  console.log('getImageUV', boardSize, tileNumber)
   const { row, column } = tileRowColumn(boardSize, tileNumber)
   const uvOffset = 1 / boardSize
   const UV = [
     // North side (Front)
-    uvOffset * (column), uvOffset * (boardSize - row - 1), 
-    uvOffset * (column), uvOffset * (boardSize - row),
-    uvOffset * (column + 1), uvOffset * (boardSize - row), 
-    uvOffset * (column + 1), uvOffset * (boardSize - row- 1), 
+    uvOffset * column,
+    uvOffset * (boardSize - row - 1),
+    uvOffset * column,
+    uvOffset * (boardSize - row),
+    uvOffset * (column + 1),
+    uvOffset * (boardSize - row),
+    uvOffset * (column + 1),
+    uvOffset * (boardSize - row - 1),
     // South side (Back)
-    uvOffset * (column + 1), uvOffset * (boardSize - row- 1), 
-    uvOffset * (column + 1), uvOffset * (boardSize - row), 
-    uvOffset * (column), uvOffset * (boardSize - row),
-    uvOffset * (column), uvOffset * (boardSize - row - 1), 
+    uvOffset * (column + 1),
+    uvOffset * (boardSize - row - 1),
+    uvOffset * (column + 1),
+    uvOffset * (boardSize - row),
+    uvOffset * column,
+    uvOffset * (boardSize - row),
+    uvOffset * column,
+    uvOffset * (boardSize - row - 1)
   ]
+  console.log(UV)
   return UV
 }

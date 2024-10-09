@@ -1,6 +1,6 @@
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { GltfContainer, MeshRenderer, Transform, TransformType, engine, executeTask } from '@dcl/sdk/ecs'
-import { initGame } from './game/game'
+import { initGame } from './game'
 import players, { getPlayer } from '@dcl/sdk/players'
 import { GAME_ID, SESSION_DURATION } from './config'
 import { TIME_LEVEL } from '@dcl-sdk/mini-games/src/ui'
@@ -22,7 +22,8 @@ const libraryReady = initMiniGame(
   TIME_LEVEL,
   readGltfLocators(`locators/obj_locators_default.gltf`),
   handlers,
-  { textColor: Color4.Black(), fontSize: 3 }
+  { textColor: Color4.Black(), fontSize: 3 },
+  true
 )
 
 executeTask(async () => {
@@ -33,4 +34,6 @@ executeTask(async () => {
   }
 })
 
-export function main() {}
+export function main() {
+  initGame()
+}

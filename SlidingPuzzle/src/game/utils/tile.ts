@@ -1,6 +1,7 @@
 import { Entity, Material, MaterialTransparencyMode, MeshRenderer, TextureFilterMode } from '@dcl/sdk/ecs'
 import { Color4 } from '@dcl/sdk/math'
 import { Tile } from '../components'
+import { getImageUV } from './image'
 
 /**
  * Update the tile image and UV coordinates
@@ -12,7 +13,7 @@ export function updateTileImage(entity: Entity) {
   const index = Tile.get(entity).index
 
   // @ts-ignore
-  MeshRenderer.getMutable(image).mesh.plane.uvs = getImageUV(size, index)
+  MeshRenderer.getMutable(entity).mesh.plane.uvs = getImageUV(size, index)
   Material.createOrReplace(entity, {
     material: {
       $case: 'pbr',
