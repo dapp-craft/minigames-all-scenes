@@ -18,12 +18,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_bus_collider",
-			"scale":[
-				1,
-				1,
-				1.682332158088684
-			]
+			"name":"obj_bus_collider"
 		},
 		{
 			"name":"doors",

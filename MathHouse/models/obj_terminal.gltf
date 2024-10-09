@@ -19,11 +19,21 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_terminal"
+			"name":"obj_terminal",
+			"translation":[
+				0,
+				0,
+				0.819061815738678
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_terminal_collider"
+			"name":"obj_terminal_collider",
+			"translation":[
+				0,
+				0,
+				0.819061815738678
+			]
 		}
 	],
 	"materials":[
@@ -67,7 +77,7 @@
 			]
 		},
 		{
-			"name":"Cube.012",
+			"name":"Cube.018",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,8 +85,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3,
-					"material":0
+					"indices":3
 				}
 			]
 		}

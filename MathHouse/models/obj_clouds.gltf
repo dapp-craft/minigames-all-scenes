@@ -67,7 +67,7 @@
 			]
 		},
 		{
-			"name":"Plane.080",
+			"name":"Plane.049",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,7 +75,8 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3
+					"indices":3,
+					"material":0
 				}
 			]
 		}
@@ -101,7 +102,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1620,
+			"count":1503,
 			"max":[
 				7.529086112976074,
 				5.063962459564209,
@@ -117,25 +118,25 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1620,
+			"count":1503,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1620,
+			"count":1503,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":4278,
+			"count":3981,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":1620,
+			"count":1503,
 			"max":[
 				7.529086112976074,
 				5.063962459564209,
@@ -151,57 +152,57 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":1620,
+			"count":1503,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":1620,
+			"count":1503,
 			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":19440,
+			"byteLength":18036,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":19440,
-			"byteOffset":19440,
+			"byteLength":18036,
+			"byteOffset":18036,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12960,
-			"byteOffset":38880,
+			"byteLength":12024,
+			"byteOffset":36072,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8556,
-			"byteOffset":51840,
+			"byteLength":7962,
+			"byteOffset":48096,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":19440,
-			"byteOffset":60396,
+			"byteLength":18036,
+			"byteOffset":56060,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":19440,
-			"byteOffset":79836,
+			"byteLength":18036,
+			"byteOffset":74096,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12960,
-			"byteOffset":99276,
+			"byteLength":12024,
+			"byteOffset":92132,
 			"target":34962
 		}
 	],
@@ -213,7 +214,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":112236,
+			"byteLength":104156,
 			"uri":"obj_clouds.bin"
 		}
 	]

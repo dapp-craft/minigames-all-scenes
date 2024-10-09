@@ -26,9 +26,9 @@
 				1
 			],
 			"translation":[
-				0,
-				0.11883614212274551,
-				4.310177803039551
+				-4.818319320678711,
+				0.4000000059604645,
+				2.3978657722473145
 			]
 		},
 		{
@@ -40,9 +40,9 @@
 				1
 			],
 			"translation":[
-				0,
-				0.11883614212274551,
-				4.310177803039551
+				-4.818319320678711,
+				0.4000000059604645,
+				2.3978657722473145
 			]
 		}
 	],
@@ -87,7 +87,7 @@
 			]
 		},
 		{
-			"name":"Bounding Box Mesh.013",
+			"name":"Bounding Box Mesh.002",
 			"primitives":[
 				{
 					"attributes":{
@@ -121,107 +121,107 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":3264,
+			"count":1884,
 			"max":[
-				6.6924333572387695,
-				1.0194369554519653,
-				3.2252142429351807
+				10.64480972290039,
+				0.8203781843185425,
+				0.5350338816642761
 			],
 			"min":[
-				-6.6924333572387695,
-				0.1990586519241333,
-				-3.2252142429351807
+				-1.008171558380127,
+				-1.1920928955078125e-07,
+				-0.4653228521347046
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":3264,
+			"count":1884,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":3264,
+			"count":1884,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":11712,
+			"count":3072,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":3264,
+			"count":1884,
 			"max":[
-				6.6924333572387695,
-				1.0194369554519653,
-				3.2252142429351807
+				10.64480972290039,
+				0.8203781843185425,
+				0.5350338816642761
 			],
 			"min":[
-				-6.6924333572387695,
-				0.1990586519241333,
-				-3.2252142429351807
+				-1.008171558380127,
+				-1.1920928955078125e-07,
+				-0.4653228521347046
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":3264,
+			"count":1884,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":3264,
+			"count":1884,
 			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":39168,
+			"byteLength":22608,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":39168,
-			"byteOffset":39168,
+			"byteLength":22608,
+			"byteOffset":22608,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":26112,
-			"byteOffset":78336,
+			"byteLength":15072,
+			"byteOffset":45216,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":23424,
-			"byteOffset":104448,
+			"byteLength":6144,
+			"byteOffset":60288,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":39168,
-			"byteOffset":127872,
+			"byteLength":22608,
+			"byteOffset":66432,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":39168,
-			"byteOffset":167040,
+			"byteLength":22608,
+			"byteOffset":89040,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":26112,
-			"byteOffset":206208,
+			"byteLength":15072,
+			"byteOffset":111648,
 			"target":34962
 		}
 	],
@@ -233,7 +233,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":232320,
+			"byteLength":126720,
 			"uri":"obj_bench.bin"
 		}
 	]

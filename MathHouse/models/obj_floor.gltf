@@ -34,7 +34,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_floor.001",
+			"name":"obj_floor",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":0
@@ -59,7 +59,7 @@
 			]
 		},
 		{
-			"name":"Plane.030",
+			"name":"Plane.004",
 			"primitives":[
 				{
 					"attributes":{
