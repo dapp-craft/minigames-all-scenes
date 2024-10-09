@@ -10,7 +10,7 @@ import { VARIANT } from './game/types'
 import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { Color3, Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { countdown, initCountdownNumbers, setupWinAnimations, startWinAnimation } from './game/gameEfffects'
+import { setupEffects, runWinAnimation, cancelWinAnimation, runCountdown, cancelCountdown } from '../../common/effects'
 import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { ui } from './ui'
 import { Ui3D } from './game/ui3D'
@@ -27,7 +27,7 @@ async function playLevel(level: keyof typeof LEVELS) {
     ui3d.setObjects(0, LEVELS[level].goal)
     ui3d.setTime(0)
     try {
-        await Promise.race([new Promise<void>(r => countdown(r, 5)), abort])
+        await Promise.race([runCountdown(), abort])
         gameObjects = generateLevelObjects(LEVELS[level].difficulty, LEVELS[level].total)
         gameObjects.forEach(o => o.toggle(alt))
         const targets = new Set(gameObjects.filter(o => o.differs))
@@ -43,14 +43,17 @@ async function playLevel(level: keyof typeof LEVELS) {
         console.log(`Win level ${level}`)
         let pos = await positions.then(data => Vector3.add(data.get('area_playSpawn')!.position, Transform.get(sceneParentEntity).position))
         movePlayerTo({newRelativePosition: pos, cameraTarget: Vector3.add(pos, Vector3.scale(Vector3.Backward(), 5))})
-        await Promise.race([new Promise<void>(r => startWinAnimation(r)), abort])
+        await Promise.race([runWinAnimation(), abort])
     } finally {
+        cancelCountdown()
+        cancelWinAnimation()
         engine.removeSystem('stopwatch')
         ui3d.setObjects()
         ui3d.setLevel()
         ui3d.setTime()
         gameObjects.forEach(o => o.destroy())
         gameObjects = []
+        console.log(`Exit level ${level}`)
     }
 }
 
@@ -111,8 +114,7 @@ export async function main() {
         }
     }
 
-    initCountdownNumbers()
-    setupWinAnimations()
+    setupEffects(Vector3.create(0, 2.5, -6))
     ReactEcsRenderer.setUiRenderer(ui)
     await init(sceneParentEntity)
 
