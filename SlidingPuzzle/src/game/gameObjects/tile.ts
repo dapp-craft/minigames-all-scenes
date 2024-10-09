@@ -3,7 +3,7 @@ import { Vector3, Quaternion } from '@dcl/sdk/math'
 import { BOARD } from './board'
 import { Tile } from '../components'
 
-function createTile(index: number) {
+export function createTile(index: number) {
   const mainEntity = engine.addEntity()
   Transform.create(mainEntity, {
     position: Vector3.create(0, 0, 0),
@@ -17,4 +17,22 @@ function createTile(index: number) {
     image: '',
     boardSize: 0
   })
+}
+
+export function getInGameTiles(): Entity[] {
+  const ret = []
+  for (let [tile] of engine.getEntitiesWith(Tile)) {
+    if (Tile.get(tile).inGame) {
+      ret.push(tile)
+    }
+  }
+  return ret
+}
+
+export function getAllTiles(): Entity[] {
+  const ret = []
+  for (let [tile] of engine.getEntitiesWith(Tile)) {
+    ret.push(tile)
+  }
+  return ret
 }
