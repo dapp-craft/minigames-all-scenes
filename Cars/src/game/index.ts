@@ -29,7 +29,7 @@ import { calculateFinalDelta, createAvailabilityMap, getMovementDelta, markCarCe
 import { getLevel, MAX_LEVEL } from './levels'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { getPlayer } from '@dcl/sdk/players'
-import { countdown, initCountdownNumbers, setupWinAnimations, startWinAnimation } from './gameEffects'
+import { runCountdown, runWinAnimation, setupEffects } from '../../../common/effects'
 import { queue } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { playMoveCarSound } from './sfx'
@@ -70,9 +70,7 @@ export const inputBuffer: {
 }
 
 export async function initGame() {
-  initCountdownNumbers()
-
-  setupWinAnimations()
+  setupEffects(Vector3.create(0, 2.5, -6))
 
   createBoard()
 
@@ -112,7 +110,7 @@ export function getReadyToStart() {
   }, 2000)
 }
 
-export function startLevel(level: number) {
+export async function startLevel(level: number) {
   console.log('Start level', level)
   const start = ++lastStart
 
@@ -121,16 +119,14 @@ export function startLevel(level: number) {
   getAllCars().forEach((car) => {
     removeCarFromGame(car)
   })
-
-  countdown(() => {
-    if (start != lastStart) return
-    gameState.levelStartTime = Date.now()
-    gameState.levelFinishTime = 0
-    gameState.level = level
-    gameState.moves = 0
-    inputAvailable = true
-    loadLevel(level)
-  }, 3)
+  await runCountdown()
+  if (start != lastStart) return
+  gameState.levelStartTime = Date.now()
+  gameState.levelFinishTime = 0
+  gameState.level = level
+  gameState.moves = 0
+  inputAvailable = true
+  loadLevel(level)
 }
 
 function finishLevel() {
@@ -252,7 +248,7 @@ function processMovement(start: Cell, end: Cell) {
 
   if (isSolved()) {
     inputAvailable = false
-    startWinAnimation(finishLevel)
+    runWinAnimation().then(finishLevel)
   }
 }
 
