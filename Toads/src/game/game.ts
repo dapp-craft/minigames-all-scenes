@@ -41,6 +41,7 @@ export function exitCallback(sound: boolean = true) {
   utils.timers.setTimeout(() => { 
     sound == true && soundManager.playSound('exitSounds', soundConfig.volume)
     gameLogic.stopGame()
+    gameLogic.resetData()
     engine.removeSystem('countdown-system')
     timer.hide()
   }, 100)

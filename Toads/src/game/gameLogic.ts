@@ -1,5 +1,5 @@
 import * as utils from '@dcl-sdk/utils'
-import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, Material, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs"
+import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, Material, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem, VisibilityComponent, CameraModeArea } from "@dcl/sdk/ecs"
 import { animationConfig, soundConfig, toadsGameConfig } from "../config"
 import { toadsGameState } from "../state"
 import { Vector3, Color4 } from "@dcl/sdk/math"
@@ -36,6 +36,7 @@ export class GameLogic {
         this.playGame()
         this.gameIsDone = new Promise(r => this.resolveReady = r)
         await this.gameIsDone;
+        this.stopGame()
         console.log("Finish")
         return (this.correctSmashCounter - this.miss) * toadsGameConfig.priceMultiplier
     }
@@ -44,7 +45,7 @@ export class GameLogic {
         for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) this.availableEntity.set(i + 1, { entity: toadsGameState.availableEntity[i], available: true, hitable: false })
     }
 
-    private resetData() {
+    public resetData() {
         this.correctSmashCounter = 0
         this.miss = 0
         this.initialTimeGap = 900
@@ -58,7 +59,8 @@ export class GameLogic {
     private activateHammer() {
         console.log("activateHammer")
         const hammerEntity = toadsGameState.listOfEntity.get('hammerParent')
-
+        const hammer = toadsGameState.listOfEntity.get('hammer')
+        if(!this.gameEnd) VisibilityComponent.getMutable(hammer).visible = true
         raycastSystem.registerLocalDirectionRaycast(
             {
                 entity: engine.CameraEntity,
@@ -70,6 +72,7 @@ export class GameLogic {
                 },
             },
             (hit) => {
+                if (this.gameEnd) return
                 if (hit.hits.length == 0) return
                 const hitPos = hit.hits[0].position
                 if (hitPos == undefined) return
@@ -123,7 +126,7 @@ export class GameLogic {
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
         MeshRenderer.deleteFrom(hammerEntity)
         MeshCollider.deleteFrom(hammerEntity)
-        VisibilityComponent.getOrNull(hammerEntity)?.visible == true && VisibilityComponent.createOrReplace(hammerEntity, { visible: false })
+        VisibilityComponent.getMutable(hammerEntity).visible = false
     }
 
     private hitHammer() {
@@ -303,12 +306,10 @@ export class GameLogic {
     public stopGame() {
         console.log("Game is stopped")
         pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('board'))
+        pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('ground'))
         this.stopHammer()
         this.gameEnd = true
-        pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('ground'))
-        this.availableEntity.forEach(obj => {
-            Transform.getMutable(obj.entity).position.y = toadsGameState.toadInitialHeight
-        })
+        this.availableEntity.forEach(obj => Transform.getMutable(obj.entity).position.y = toadsGameState.toadInitialHeight)
         this.toadsTimer.forEach((e, k) => {
             utils.timers.clearTimeout(e.start)
             this.resolveReady()
