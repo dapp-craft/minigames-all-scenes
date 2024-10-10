@@ -9,8 +9,10 @@ import players from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { parseTime } from './utils/time'
 
-export const SESSION_TIMEOUT = 1000 * 60 * 5 // 5 minutes
-export const INACTIVITY_TIMEOUT = 1000 * 15 * 1 // 15 seconds
+export const DEFAULT_TIMEOUTS = {
+    session: 10 * 60,
+    inactivity: 15
+}
 
 const SCOREBOARD_SCALE = 1.2
 
@@ -43,13 +45,16 @@ export async function initMiniGame(
     data: Promise<Map<String, TransformType>>,
     callbacks: MiniGameCallbacks,
     textSettings: Omit<PBTextShape, 'text'> = {fontSize: 3, textColor: Color4.White()},
+    timeouts: Partial<typeof DEFAULT_TIMEOUTS> = DEFAULT_TIMEOUTS,
     disableQueueGuard: boolean = false
 ) {
+    timeouts = {...DEFAULT_TIMEOUTS, ...timeouts}
+    
     initLibrary(engine, syncEntity, players, {
         environment: 'dev',
         gameId: id,
-        gameTimeoutMs: SESSION_TIMEOUT,
-        inactiveTimeoutMs: INACTIVITY_TIMEOUT,
+        gameTimeoutMs: timeouts.session! * 1000,
+        inactiveTimeoutMs: timeouts.inactivity! * 1000,
     })
     const positionData = validatePositionData(await data) // TODO: account for rotation with rotateVectorAroundCenter
     let sessionTimeLeft: number | undefined
@@ -63,7 +68,7 @@ export async function initMiniGame(
                 newRelativePosition: Vector3.add(positionData.get(NODE_NAME.AREA_PLAYSPAWN)!.position, center)
             })
             let elapsed = 0
-            engine.addSystem(dt => sessionTimeLeft = Math.max(0, SESSION_TIMEOUT / 1000 - (elapsed += dt)), undefined, 'countdown')
+            engine.addSystem(dt => sessionTimeLeft = Math.max(0, timeouts.session! / 1000 - (elapsed += dt)), undefined, 'countdown')
             callbacks.start()
         } else if (isActive && player?.address !== getPlayer()?.userId) {
             isActive = false
