@@ -96,7 +96,7 @@ export async function initMiniGame(
 
     function updateLabels() {
         const {minutes, seconds} = parseTime(sessionTimeLeft)
-        let value = `Now playing: ${activePlayer ? getPlayer({userId: activePlayer?.address})!.name : '---'}`
+        let value = `${activePlayer ? getPlayer({userId: activePlayer?.address})!.name : '---'}`
         if (TextShape.get(labelNickname).text != value) TextShape.getMutable(labelNickname).text = value
         value = `Next turn: ${sessionTimeLeft !== undefined ? minutes + ':' + seconds : 'now'}`
         if (counterTimer && TextShape.get(counterTimer).text != value) TextShape.getMutable(counterTimer).text = value
