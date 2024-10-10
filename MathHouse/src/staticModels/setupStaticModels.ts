@@ -23,7 +23,7 @@ export const setupStaticModels = () => {
         const enitity = engine.addEntity()
         Transform.create(enitity, { position: { x: 8, y: 0, z: 8 } })
         GltfContainer.create(enitity, model)
-        if (model == panel) GltfContainer.getMutable(enitity).invisibleMeshesCollisionMask = ColliderLayer.CL_NONE
+        if (model == panel) GltfContainer.getMutable(enitity).invisibleMeshesCollisionMask = ColliderLayer.CL_PHYSICS
     })
 }
 

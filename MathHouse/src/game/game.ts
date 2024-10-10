@@ -13,7 +13,7 @@ import { readGltfLocators } from "../../../common/locators"
 import { randomLvl } from "../levels"
 import { soundManager } from "../globals"
 import { fetchPlayerProgress, updatePlayerProgress } from "./syncData"
-import { runCountdown, runGameoverAnimation, runWinAnimation } from "../../../common/effects"
+import { cancelCountdown, runCountdown, runGameoverAnimation, runWinAnimation } from "../../../common/effects"
 
 export let gameDataEntity: Entity
 export let sessionStartedAt: number
@@ -104,21 +104,17 @@ const initGameButtons = async () => {
                     if (entityCounter == playerAnswer) {
                         console.log("WIN")
                         soundManager.playSound('correctAnswerSound', soundConfig.volume)
-                        utils.timers.setTimeout(() => {
-                            runWinAnimation(WIN_DURATION).then(async () => {
-                                if (progressState.level >= maxLevel) return afterGame()
-                                await incrementUserProgress()
-                                startGame()
-                            })
+                        utils.timers.setTimeout(async () => {
+                            await incrementUserProgress()
+                            if (progressState.level >= maxLevel) runGameoverAnimation(WIN_DURATION).then(() => afterGame())
+                            else runWinAnimation(WIN_DURATION).then(async () => startGame())
                         }, time)
                     }
                     else {
                         console.log("LOSE")
                         soundManager.playSound('wrongAnswerSound', soundConfig.volume)
                         utils.timers.setTimeout(() => {
-                            runGameoverAnimation(WIN_DURATION).then(async () => {
-                                restartCallback()
-                            })
+                            restartCallback()
                         }, time + 500)
                     }
                 },
