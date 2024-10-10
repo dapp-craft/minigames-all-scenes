@@ -59,6 +59,8 @@ let lastStart = 0
  */
 let moveMade = false
 
+let inGame = false
+
 export const gameState: {
   playerAddress: string
   playerName: string
@@ -127,6 +129,7 @@ export function getReadyToStart() {
 export async function startLevel(level: number) {
   console.log('Start level', level)
   const start = ++lastStart
+  const inGame = true
 
   levelButtons.forEach((button, i) => {
     button.buttonShapeEnabled = level === i + 1 ? ui.uiAssets.shapes.SQUARE_YELLOW : ui.uiAssets.shapes.SQUARE_GREEN
@@ -160,6 +163,7 @@ function finishLevel() {
   } else {
     const levelToStart = gameState.level == MAX_LEVEL ? 1 : gameState.level + 1
     levelButtons[levelToStart - 1].enable()
+    if (!inGame) return
     startLevel(levelToStart)
   }
 }
@@ -316,6 +320,7 @@ export function exitGame() {
   clearInputBuffer()
   cancelCountdown()
   cancelWinAnimation()
+  inGame = false
   lastStart = 0
   inputAvailable = false
   console.log('Exit game')
