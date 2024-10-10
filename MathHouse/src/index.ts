@@ -33,7 +33,7 @@ const toggleVolume = () => {
   else soundConfig.volume = 0.5
 }
 
-initMiniGame(GAME_ID, [LEVEL], readGltfLocators(`locators/obj_locators_default.gltf`), handlers, {fontSize: 3, textColor: Color4.White()}, gameTime)
+initMiniGame(GAME_ID, [LEVEL], readGltfLocators(`locators/obj_locators_default.gltf`), handlers, undefined, gameTime)
 
 export let rocketBoard: any
 
