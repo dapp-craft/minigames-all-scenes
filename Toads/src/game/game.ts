@@ -1,7 +1,7 @@
 import * as utils from '@dcl-sdk/utils'
 import { gameLogic } from '..'
 import { progressState, sceneParentEntity } from '../state'
-import { engine } from '@dcl/sdk/ecs'
+import { CameraModeArea, CameraType, engine } from '@dcl/sdk/ecs'
 import { fetchPlayerProgress, updatePlayerProgress } from './syncData'
 import { ui } from '@dcl-sdk/mini-games/src'
 import { Vector3, Quaternion } from '@dcl/sdk/math'
@@ -31,14 +31,18 @@ export function getReadyToStart() {
   soundManager.playSound('enterSounds', soundConfig.volume)
   utils.timers.clearTimeout(startTimeOut)
   utils.timers.clearTimeout(buttonDisableTimeOut)
-  exitCallback(false)
+  // exitCallback(false)
   buttonDisableTimeOut = utils.timers.setTimeout(() => playButton.disable(), playButton.releaseTime + 200)
+  CameraModeArea.createOrReplace(engine.PlayerEntity, {
+    area: Vector3.create(1, 1, 1),
+    mode: CameraType.CT_FIRST_PERSON,
+  })
   runCountdown().then(() => startGame())
 }
 
 export function exitCallback(sound: boolean = true) {
   cancelCountdown()
-  utils.timers.setTimeout(() => { 
+  utils.timers.setTimeout(() => {
     sound == true && soundManager.playSound('exitSounds', soundConfig.volume)
     gameLogic.stopGame()
     gameLogic.resetData()
@@ -111,7 +115,7 @@ export async function countdown(cb: () => void, number: number, stop?: boolean) 
 const spawnButton = async () => {
   const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
   playButton = new ui.MenuButton(
-    {...data.get("button_start")!, parent: sceneParentEntity},
+    { ...data.get("button_start")!, parent: sceneParentEntity },
     ui.uiAssets.shapes.SQUARE_GREEN,
     ui.uiAssets.icons.play,
     ``,

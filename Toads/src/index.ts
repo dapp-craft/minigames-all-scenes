@@ -1,4 +1,4 @@
-import { AudioSource, CameraModeArea, CameraType, ColliderLayer, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
+import { AudioSource, CameraModeArea, CameraType, ColliderLayer, engine, GltfContainer, Material, MeshRenderer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { exitCallback, getReadyToStart, initGame } from './game/game'
@@ -64,8 +64,6 @@ const generateInitialEntity = async () => {
     syncEntity(hits, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 3)
     syncEntity(miss, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 4)
     syncEntity(counter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 5)
-    syncEntity(cameraTrigger, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 7)
-
 
     Transform.createOrReplace(hammerParent)
     Transform.createOrReplace(hammerEntity, { parent: hammerParent })
@@ -76,7 +74,6 @@ const generateInitialEntity = async () => {
     Transform.create(hits, { position: { ...data.get('counter_hits')!.position, z: data.get('counter_hits')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
     Transform.create(miss, { position: { ...data.get('counter_misses')!.position, z: data.get('counter_misses')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
     Transform.create(counter, { position: { ...data.get('counter_score')!.position, z: data.get('counter_score')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
-    Transform.create(cameraTrigger, { position: Vector3.create(0, 2.5, -3), parent: sceneParentEntity })
 
     GltfContainer.createOrReplace(hammerEntity, hammer)
 
@@ -97,11 +94,6 @@ const generateInitialEntity = async () => {
         GltfContainer.createOrReplace(toadsGameState.availableEntity[i], { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
         syncEntity(toadsGameState.availableEntity[i], [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + i)
     }
-
-    CameraModeArea.create(toadsGameState.listOfEntity.get('cameraTrigger'), {
-        area: Vector3.create(13, 5, 8),
-        mode: CameraType.CT_FIRST_PERSON,
-    })
 }
 
 const playBackgroundMusic = () => {

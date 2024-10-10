@@ -1,5 +1,5 @@
 import * as utils from '@dcl-sdk/utils'
-import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, Material, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem, VisibilityComponent, CameraModeArea } from "@dcl/sdk/ecs"
+import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, Material, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem, VisibilityComponent, CameraModeArea, CameraType } from "@dcl/sdk/ecs"
 import { animationConfig, soundConfig, toadsGameConfig } from "../config"
 import { toadsGameState } from "../state"
 import { Vector3, Color4 } from "@dcl/sdk/math"
@@ -305,6 +305,7 @@ export class GameLogic {
 
     public stopGame() {
         console.log("Game is stopped")
+        CameraModeArea.deleteFrom(engine.PlayerEntity)
         pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('board'))
         pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('ground'))
         this.stopHammer()
