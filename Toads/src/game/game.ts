@@ -8,6 +8,7 @@ import { Vector3, Quaternion } from '@dcl/sdk/math'
 import { readGltfLocators } from '../../../common/locators'
 import { soundConfig, toadsGameConfig } from '../config'
 import { soundManager } from '../globals'
+import { cancelCountdown, runCountdown } from '../../../common/effects'
 
 export let sessionStartedAt: number
 
@@ -18,8 +19,6 @@ let buttonDisableTimeOut: utils.TimerId
 
 export const initGame = async () => {
   console.log('INIT GAME')
-
-  // await fetchPlayerProgress()
 
   await initCountdownNumbers()
 
@@ -34,14 +33,18 @@ export function getReadyToStart() {
   utils.timers.clearTimeout(buttonDisableTimeOut)
   exitCallback(false)
   buttonDisableTimeOut = utils.timers.setTimeout(() => playButton.disable(), playButton.releaseTime + 200)
-  startTimeOut = utils.timers.setTimeout(() => startGame(), 2000)
+  runCountdown().then(() => startGame())
 }
 
 export function exitCallback(sound: boolean = true) {
-  sound == true && soundManager.playSound('exitSounds', soundConfig.volume)
-  gameLogic.stopGame()
-  engine.removeSystem('countdown-system')
-  timer.hide()
+  cancelCountdown()
+  utils.timers.setTimeout(() => { 
+    sound == true && soundManager.playSound('exitSounds', soundConfig.volume)
+    gameLogic.stopGame()
+    engine.removeSystem('countdown-system')
+    timer.hide()
+  }, 100)
+
 }
 
 async function startGame() {
@@ -73,7 +76,7 @@ async function initCountdownNumbers() {
     1,
     1,
     false,
-    10
+    110
   )
   console.log(timer)
   timer.hide()

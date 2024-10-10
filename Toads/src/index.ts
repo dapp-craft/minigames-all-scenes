@@ -11,6 +11,7 @@ import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { mainThereme } from './game/soundManager'
 import { SCORE } from '@dcl-sdk/mini-games/src/ui'
+import { setupEffects } from '../../common/effects'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
@@ -26,6 +27,8 @@ const libraryReady = initMiniGame(GAME_ID, [SCORE], readGltfLocators(`locators/o
 export const gameLogic = new GameLogic()
 
 export async function main() {
+    setupEffects(Vector3.create(0, 2.5, -3));
+
     setupStaticModels()
 
     await libraryReady
