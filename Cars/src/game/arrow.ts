@@ -1,4 +1,14 @@
-import { EasingFunction, engine, Entity, GltfContainer, Transform, Tween, TweenSequence, TweenLoop } from '@dcl/sdk/ecs'
+import {
+  EasingFunction,
+  engine,
+  Entity,
+  GltfContainer,
+  Transform,
+  Tween,
+  TweenSequence,
+  TweenLoop,
+  VisibilityComponent
+} from '@dcl/sdk/ecs'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { BOARD } from './objects/board'
 import { arrowModel } from '../resources/resources'
@@ -31,6 +41,7 @@ export function initArrow() {
   })
 
   GltfContainer.create(arrowAnimEntity, arrowModel)
+  VisibilityComponent.create(arrowAnimEntity, { visible: true })
 
   Tween.create(arrowAnimEntity, {
     mode: Tween.Mode.Move({
@@ -45,14 +56,17 @@ export function initArrow() {
 
   engine.addSystem(() => {
     if (inputBuffer.selectedCar && inputAvailable) {
+      if (VisibilityComponent.get(arrowAnimEntity).visible === false) {
+        VisibilityComponent.getMutable(arrowAnimEntity).visible = true
+      }
       const arrowPosition = calculateArrowPosition(inputBuffer.selectedCar as Entity)
       const selectedCarOffset = Vector3.create(0, 0, -0.8 / BOARD_PHYSICAL_SIZE)
       updateArrowPosition(Vector3.add(arrowPosition, selectedCarOffset))
       return
     }
     if (lookingAt) {
-      if (Transform.get(arrowPosEntity).scale.y < 1) {
-        Transform.getMutable(arrowPosEntity).scale = arrowScale
+      if (VisibilityComponent.get(arrowAnimEntity).visible === false) {
+        VisibilityComponent.getMutable(arrowAnimEntity).visible = true
       }
 
       if (getCarAt(lookingAt) && inputAvailable) {
@@ -63,8 +77,8 @@ export function initArrow() {
         updateArrowPosition(cellRelativePosition(lookingAt))
       }
     } else {
-      if (Transform.get(arrowPosEntity).scale.y > 0) {
-        Transform.getMutable(arrowPosEntity).scale = Vector3.Zero()
+      if (VisibilityComponent.get(arrowAnimEntity).visible === true) {
+        VisibilityComponent.getMutable(arrowAnimEntity).visible = false
       }
     }
   })
