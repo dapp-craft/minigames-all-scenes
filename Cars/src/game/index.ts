@@ -36,7 +36,7 @@ import {
   cancelCountdown,
   cancelWinAnimation
 } from '../../../common/effects'
-import { queue } from '@dcl-sdk/mini-games/src'
+import { queue, ui } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { playMoveCarSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
@@ -130,6 +130,11 @@ export function getReadyToStart() {
 export async function startLevel(level: number) {
   console.log('Start level', level)
   const start = ++lastStart
+
+  levelButtons.forEach((button, i) => {
+    button.buttonShapeEnabled = level === i + 1 ? ui.uiAssets.shapes.SQUARE_YELLOW : ui.uiAssets.shapes.SQUARE_GREEN
+    if (button.enabled) button.enable()
+  })
 
   clearInputBuffer()
 
