@@ -5,7 +5,7 @@ import { gameState, startLevel } from './index'
 import * as utils from '@dcl-sdk/utils'
 import { levelButtonPositions, setLevelButtonPositions } from './locators/levelButtonPositions'
 import { setLevelUiPositions, UiLocators } from './locators/UILocators'
-import { MeshRenderer, TextShape, Transform, engine } from '@dcl/sdk/ecs'
+import { MeshRenderer, TextShape, Transform, engine, TextAlignMode } from '@dcl/sdk/ecs'
 const width = 2
 const height = 3
 const scale = 1
@@ -41,6 +41,7 @@ function setupMoveCouner() {
   engine.addSystem(() => {
     TextShape.createOrReplace(moveCounter, {
       text: `Moves: ${gameState.moves}`,
+      textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
       fontSize: 3,
       textColor: Color4.Black()
     })
@@ -55,6 +56,7 @@ function seteupTimer() {
     if (gameState.levelStartTime == 0) {
       TextShape.createOrReplace(timer, {
         text: `Time: --:--`,
+        textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
         fontSize: 3,
         textColor: Color4.Black()
       })
@@ -70,6 +72,7 @@ function seteupTimer() {
         minimumIntegerDigits: 2,
         useGrouping: false
       })}:${seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}`,
+      textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
       fontSize: 3,
       textColor: Color4.Black()
     })
