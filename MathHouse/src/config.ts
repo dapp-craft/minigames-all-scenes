@@ -1,4 +1,5 @@
 import { Vector3 } from "@dcl/sdk/math"
+import { DEFAULT_TIMEOUTS } from "../../common/library"
 
 export const GAME_ID = "040ff183-c10a-4fba-8800-881cf9bda930"
 
@@ -57,5 +58,6 @@ export const soundConfig = {
 
 export const maxLevel = 50
 
+DEFAULT_TIMEOUTS.inactivity = 45
 
 

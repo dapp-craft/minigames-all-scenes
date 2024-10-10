@@ -1,8 +1,7 @@
 import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
 import { initialLevels, maxLevel, soundConfig, timerConfig } from "../config"
-import { Quaternion, Vector3 } from "@dcl/sdk/math"
-import { Animator, Billboard, engine, Entity, GltfContainer, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
-import { syncEntity } from "@dcl/sdk/network"
+import { Vector3 } from "@dcl/sdk/math"
+import { Entity, TextShape } from "@dcl/sdk/ecs"
 import { getPlayer } from "@dcl/sdk/players"
 import * as utils from '@dcl-sdk/utils'
 import { GameData, gameState, progressState } from "../state"
@@ -27,17 +26,21 @@ const WIN_DURATION = 2000
 
 export const exitCallback = () => {
     soundManager.playSound('exitSounds', soundConfig.volume)
-    entityManager.stopGame()
-    rocketBoard.hideBoard()
-    progressState.level = 1
-    TextShape.getMutable(gameState.levelCounter).text = `Level: ${progressState.level - 1}`
-    GameData.createOrReplace(gameDataEntity, {
-        playerAddress: '',
-        playerName: '',
-        moves: 0,
-        levelStartedAt: 0,
-        levelFinishedAt: 0
-    })
+    cancelCountdown()
+    // TODO delete setTimeout
+    utils.timers.setTimeout(() => {
+        entityManager.stopGame()
+        rocketBoard.hideBoard()
+        progressState.level = 1
+        TextShape.getMutable(gameState.levelCounter).text = `Level: ${progressState.level - 1}`
+        GameData.createOrReplace(gameDataEntity, {
+            playerAddress: '',
+            playerName: '',
+            moves: 0,
+            levelStartedAt: 0,
+            levelFinishedAt: 0
+        })
+    }, 100)
 }
 
 export const restartCallback = () => {
@@ -47,6 +50,7 @@ export const restartCallback = () => {
 }
 
 export const initGame = async () => {
+
     await fetchPlayerProgress()
 
     await initGameButtons()
