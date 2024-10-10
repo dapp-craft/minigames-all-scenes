@@ -29,7 +29,13 @@ import { calculateFinalDelta, createAvailabilityMap, getMovementDelta, markCarCe
 import { getLevel, MAX_LEVEL } from './levels'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { getPlayer } from '@dcl/sdk/players'
-import { runCountdown, runWinAnimation, setupEffects } from '../../../common/effects'
+import {
+  runCountdown,
+  runWinAnimation,
+  setupEffects,
+  cancelCountdown,
+  cancelWinAnimation
+} from '../../../common/effects'
 import { queue } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { playMoveCarSound } from './sfx'
@@ -294,6 +300,9 @@ function removeCarFromGame(car: Entity) {
 
 export function exitGame() {
   clearInputBuffer()
+  cancelCountdown()
+  cancelWinAnimation()
+
   movePlayerTo({
     newRelativePosition: Vector3.create(8, 1, 14)
   })
