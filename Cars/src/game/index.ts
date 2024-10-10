@@ -37,7 +37,6 @@ import {
   cancelWinAnimation
 } from '../../../common/effects'
 import { queue, ui } from '@dcl-sdk/mini-games/src'
-import { movePlayerTo } from '~system/RestrictedActions'
 import { playMoveCarSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
 import { initArrow } from './arrow'
@@ -321,9 +320,6 @@ export function exitGame() {
   inputAvailable = false
   console.log('Exit game')
 
-  movePlayerTo({
-    newRelativePosition: Vector3.create(8, 1, 14)
-  })
   gameState.level = 1
   gameState.levelFinishTime = 0
   gameState.levelStartTime = 0
