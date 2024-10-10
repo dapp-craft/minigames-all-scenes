@@ -1,4 +1,4 @@
-import { Animator, GltfContainer, MeshCollider, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
+import { Animator, ColliderLayer, GltfContainer, MeshCollider, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
 import { floor, wall, ground, railings, gameZone, kitty, bus, rocket, panel, terminal, clouds, frame, text, bench } from '../resources/resources'
 import { readGltfLocators } from '../../../common/locators'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
@@ -23,6 +23,7 @@ export const setupStaticModels = () => {
         const enitity = engine.addEntity()
         Transform.create(enitity, { position: { x: 8, y: 0, z: 8 } })
         GltfContainer.create(enitity, model)
+        if (model == panel) GltfContainer.getMutable(enitity).invisibleMeshesCollisionMask = ColliderLayer.CL_NONE
     })
 }
 

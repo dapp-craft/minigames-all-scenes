@@ -16,6 +16,7 @@ import { sceneParentEntity } from './globals'
 import { initMiniGame } from '../../common/library'
 import { mainThereme } from './SoundManager'
 import { LEVEL } from '@dcl-sdk/mini-games/src/ui'
+import { setupEffects } from '../../common/effects'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 
@@ -37,6 +38,8 @@ initMiniGame(GAME_ID, [LEVEL], readGltfLocators(`locators/obj_locators_default.g
 export let rocketBoard: any
 
 export async function main() {
+  setupEffects(Vector3.create(0, 2.5, -3));
+
   spawnInitialEntityPoll()
 
   setupStaticModels()
