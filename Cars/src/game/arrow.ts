@@ -3,7 +3,7 @@ import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { BOARD } from './objects/board'
 import { arrowModel } from '../resources/resources'
 import { BOARD_PHYSICAL_SIZE, BOARD_SIZE, CELL_SIZE_PHYSICAL } from '../config'
-import { getCarAt, inputBuffer, lookingAt } from '.'
+import { getCarAt, inputAvailable, inputBuffer, lookingAt } from '.'
 import { cellRelativePosition, directionToQuaterion } from './logic/math'
 import { Car } from './components/definitions'
 
@@ -44,7 +44,7 @@ export function initArrow() {
   TweenSequence.create(arrowAnimEntity, { sequence: [], loop: TweenLoop.TL_YOYO })
 
   engine.addSystem(() => {
-    if (inputBuffer.selectedCar) {
+    if (inputBuffer.selectedCar && inputAvailable) {
       const arrowPosition = calculateArrowPosition(inputBuffer.selectedCar as Entity)
       const selectedCarOffset = Vector3.create(0, 0, -0.8 / BOARD_PHYSICAL_SIZE)
       updateArrowPosition(Vector3.add(arrowPosition, selectedCarOffset))
@@ -55,7 +55,7 @@ export function initArrow() {
         Transform.getMutable(arrowPosEntity).scale = arrowScale
       }
 
-      if (getCarAt(lookingAt)) {
+      if (getCarAt(lookingAt) && inputAvailable) {
         const arrowPosition = calculateArrowPosition(getCarAt(lookingAt) as Entity)
         const unselectedCarOffset = Vector3.create(0, 0, -1 / BOARD_PHYSICAL_SIZE)
         updateArrowPosition(Vector3.add(arrowPosition, unselectedCarOffset))

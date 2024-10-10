@@ -44,9 +44,20 @@ import { initArrow } from './arrow'
 
 export let lookingAt: Cell | undefined = undefined
 
-let inputAvailable = false
+/**
+ * Flag indicates if input is processed
+ */
+export let inputAvailable = false
 
+/**
+ * Stores the last start
+ * Is used to process multiple start requests in a row
+ */
 let lastStart = 0
+
+/**
+ * Flag indicates if a car has been moved in the current input cycle
+ */
 let moveMade = false
 
 export const gameState: {
@@ -302,6 +313,9 @@ export function exitGame() {
   clearInputBuffer()
   cancelCountdown()
   cancelWinAnimation()
+  lastStart = 0
+  inputAvailable = false
+  console.log('Exit game')
 
   movePlayerTo({
     newRelativePosition: Vector3.create(8, 1, 14)
