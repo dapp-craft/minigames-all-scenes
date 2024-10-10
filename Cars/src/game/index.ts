@@ -122,9 +122,7 @@ export function getReadyToStart() {
     levelButtons[i].enable()
   }
 
-  utils.timers.setTimeout(() => {
-    startLevel(levetToStart)
-  }, 2000)
+  startLevel(levetToStart)
 }
 
 export async function startLevel(level: number) {
@@ -143,6 +141,7 @@ export async function startLevel(level: number) {
   })
   await runCountdown()
   if (start != lastStart) return
+  console.log('Start:', start, lastStart)
   gameState.levelStartTime = Date.now()
   gameState.levelFinishTime = 0
   gameState.level = level
