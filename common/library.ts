@@ -68,7 +68,7 @@ export async function initMiniGame(
                 newRelativePosition: Vector3.add(positionData.get(NODE_NAME.AREA_PLAYSPAWN)!.position, center)
             })
             let elapsed = 0
-            engine.addSystem(dt => sessionTimeLeft = Math.max(0, timeouts.session! / 1000 - (elapsed += dt)), undefined, 'countdown')
+            engine.addSystem(dt => sessionTimeLeft = Math.max(0, timeouts.session! - (elapsed += dt)), undefined, 'countdown')
             callbacks.start()
         } else if (isActive && player?.address !== getPlayer()?.userId) {
             isActive = false
