@@ -27,7 +27,7 @@ jobs:
     uses: ./.github/workflows/.deploy_genesis.yml
     with:
       directory: Cars
-      coordinates: '["-139,-28"]'
+      coordinates: '["149,30"]'
       mainnet: ${{ startsWith(github.ref_name, 'release') }}
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
