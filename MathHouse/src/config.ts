@@ -58,6 +58,9 @@ export const soundConfig = {
 
 export const maxLevel = 50
 
-DEFAULT_TIMEOUTS.inactivity = 45
+export const gameTime = {
+  session: 10 * 60,
+  inactivity: 45
+}
 
 

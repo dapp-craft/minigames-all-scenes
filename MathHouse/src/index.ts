@@ -1,8 +1,8 @@
 // We define the empty imports so the auto-complete feature works as expected.
-import { Quaternion, Vector3 } from '@dcl/sdk/math'
+import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { Animator, AudioSource, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState } from './state'
-import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, mainEntityId, rocketCoords, soundConfig } from './config'
+import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, gameTime, mainEntityId, rocketCoords, soundConfig } from './config'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { setupStaticModels, setupStaticModelsFromGltf } from './staticModels/setupStaticModels'
 import { setupUI } from './ui'
@@ -33,7 +33,7 @@ const toggleVolume = () => {
   else soundConfig.volume = 0.5
 }
 
-initMiniGame(GAME_ID, [LEVEL], readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
+initMiniGame(GAME_ID, [LEVEL], readGltfLocators(`locators/obj_locators_default.gltf`), handlers, {fontSize: 3, textColor: Color4.White()}, gameTime)
 
 export let rocketBoard: any
 
