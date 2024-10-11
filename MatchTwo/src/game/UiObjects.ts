@@ -85,7 +85,7 @@ function setupFoundPairs() {
   engine.addSystem(() => {
     if (gameState.levelStartTime == 0) {
       TextShape.createOrReplace(foundPairs, {
-        text: `Pairs: --:--`,
+        text: `Pairs: --/--`,
         textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
         fontSize: 3,
         textColor: Color4.White()
