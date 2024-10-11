@@ -16,6 +16,7 @@ export const terminal: PBGltfContainer = { src: modelsFolder + 'obj_terminal.glt
 export const clouds: PBGltfContainer = { src: modelsFolder + 'obj_clouds.gltf' };
 export const frame: PBGltfContainer = { src: modelsFolder + 'obj_frame.gltf' };
 export const text: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
+export const rules: PBGltfContainer = { src: modelsFolder + 'obj_rules.gltf' };
 export const bench : PBGltfContainer = { src: modelsFolder + 'obj_bench.gltf' };
 
 
