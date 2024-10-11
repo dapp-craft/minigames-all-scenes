@@ -1,7 +1,17 @@
-import { Entity, MeshCollider, MeshRenderer, Transform, TransformType, engine } from '@dcl/sdk/ecs'
+import {
+  Entity,
+  InputAction,
+  MeshCollider,
+  MeshRenderer,
+  Transform,
+  TransformType,
+  engine,
+  pointerEventsSystem
+} from '@dcl/sdk/ecs'
 import { Vector3, Quaternion } from '@dcl/sdk/math'
 import { BOARD } from './board'
 import { Tile } from '../components'
+import { onTileClick } from '..'
 
 export function createTile(index: number) {
   const mainEntity = engine.addEntity()
@@ -19,6 +29,17 @@ export function createTile(index: number) {
     image: '',
     boardSize: 3
   })
+
+  pointerEventsSystem.onPointerDown(
+    mainEntity,
+    () => {
+      onTileClick(mainEntity)
+    },
+    {
+      hoverText: 'Click to move',
+      button: InputAction.IA_POINTER
+    }
+  )
 }
 
 export function getInGameTiles(): Entity[] {
@@ -37,4 +58,14 @@ export function getAllTiles(): Entity[] {
     ret.push(tile)
   }
   return ret
+}
+
+export function getTileAtPosition(position: { x: number; y: number }): Entity {
+  const tile = getInGameTiles().find((tile) => {
+    if (Tile.get(tile).position.x === position.x && Tile.get(tile).position.y === position.y) {
+      return tile
+    }
+  })
+  if (tile) return tile
+  throw new Error('Tile not found')
 }
