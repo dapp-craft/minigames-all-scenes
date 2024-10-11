@@ -13,7 +13,9 @@ export const staticModels: PBGltfContainer[] = [
   { src: modelsFolder + 'obj_terminal.gltf' },
   { src: modelsFolder + 'obj_wall.gltf' },
   { src: modelsFolder + 'obj_tower.gltf' },
-  { src: modelsFolder + 'obj_gamezone.gltf' }
+  { src: modelsFolder + 'obj_gamezone.gltf' },
+  { src: modelsFolder + 'obj_rules.gltf' },
+  { src: modelsFolder + 'obj_logo.gltf' }
 ]
 
 export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' }
