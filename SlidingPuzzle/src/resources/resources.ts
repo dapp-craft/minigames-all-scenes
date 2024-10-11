@@ -22,7 +22,7 @@ export const STATIC_MODELS: PBGltfContainer[] = [
 export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' }
 
 // Game level images
-export const levelImages = {
+export const levelImages: Record<number, string> = {
   1: imagesFolder + 'gameImages/1.jpg',
   2: imagesFolder + 'gameImages/2.jpg',
   3: imagesFolder + 'gameImages/3.jpg',

@@ -27,10 +27,12 @@ import * as utils from '@dcl-sdk/utils'
 import { levelImages } from '../resources/resources'
 import { generateLevel, getLevelSize } from './utils/levelGenerator'
 import { boardMatrix } from './utils/boardMatrix'
+import { setupGameUI } from './UiObjects'
 
 export const stateVariables = {
   inGame: false,
-  moves: 0
+  moves: 0,
+  levelStartTime: 0
 }
 
 const TileMoveDirection = {
@@ -41,6 +43,8 @@ const TileMoveDirection = {
 }
 
 export function initGame() {
+  setupGameUI()
+
   initBoard()
 
   initTiles()
@@ -56,7 +60,7 @@ function initTiles() {
   }
 }
 
-function startLevel(level: keyof typeof levelImages) {
+export function startLevel(level: keyof typeof levelImages) {
   const size = getLevelSize(level)
   const matrix = generateLevel(size)
   reSetTiles(level, matrix)
