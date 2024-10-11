@@ -129,7 +129,7 @@ export function getReadyToStart() {
 export async function startLevel(level: number) {
   console.log('Start level', level)
   const start = ++lastStart
-  const inGame = true
+  inGame = true
 
   levelButtons.forEach((button, i) => {
     button.buttonShapeEnabled = level === i + 1 ? ui.uiAssets.shapes.SQUARE_YELLOW : ui.uiAssets.shapes.SQUARE_GREEN
