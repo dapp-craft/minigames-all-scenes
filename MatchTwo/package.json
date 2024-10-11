@@ -1,7 +1,7 @@
 {
-  "name": "match-two",
+  "name": "minigame-circus",
   "version": "1.0.0",
-  "description": "Minigame 'Match Two'",
+  "description": "Minigame 'Memory Circus'",
   "scripts": {
     "start": "sdk-commands start",
     "deploy": "sdk-commands deploy",

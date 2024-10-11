@@ -2,8 +2,8 @@
   "ecs7": true,
   "runtimeVersion": "7",
   "display": {
-    "title": "MatchTwo",
-    "description": "Minigame 'MatchTwo'",
+    "title": "Memory Circus",
+    "description": "Minigame 'Memory Circus'",
     "navmapThumbnail": "images/scene-thumbnail.png",
     "favicon": "favicon_asset"
   },
