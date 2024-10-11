@@ -10,6 +10,7 @@ import {
   Transform,
   TransformType,
   Tween,
+  VisibilityComponent,
   engine,
   pointerEventsSystem
 } from '@dcl/sdk/ecs'
@@ -106,6 +107,7 @@ function createTile(tileNumber: number) {
   const tileDoorEntity = engine.addEntity()
   Transform.create(tileDoorEntity, tilesPositions.doors[tileNumber])
   GltfContainer.create(tileDoorEntity, tileDoorShape)
+  VisibilityComponent.create(tileDoorEntity, { visible: true })
 
   const tile = {
     mainEntity: mainTileEntity,
@@ -115,7 +117,11 @@ function createTile(tileNumber: number) {
 
   syncEntity(mainTileEntity, [Tile.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 0)
   syncEntity(tileToy, [GltfContainer.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 1)
-  syncEntity(tileDoorEntity, [Transform.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 2)
+  syncEntity(
+    tileDoorEntity,
+    [Transform.componentId, VisibilityComponent.componentId],
+    SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 2
+  )
 
   tiles.push(tile)
 }
@@ -294,7 +300,7 @@ function checkIfMatch() {
 
 function disableTile(tile: TileType) {
   pointerEventsSystem.removeOnPointerDown(tile.doorEntity)
-  Transform.getMutable(tile.doorEntity).scale = Vector3.create(0, 0, 0)
+  VisibilityComponent.getMutable(tile.doorEntity).visible = false
   Tile.getMutable(tile.mainEntity).inGame = false
 }
 
@@ -345,7 +351,7 @@ async function resetTile(tile: TileType) {
     duration: FLIP_DURATION,
     easingFunction: EasingFunction.EF_EASECUBIC
   })
-  Transform.getMutable(tile.doorEntity).scale = Vector3.create(1, 1, 1)
+  VisibilityComponent.getMutable(tile.doorEntity).visible = true
 }
 
 function getToys(level: keyof typeof TILES_LEVEL) {
