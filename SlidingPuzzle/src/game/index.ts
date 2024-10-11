@@ -12,6 +12,7 @@ import { queue } from '@dcl-sdk/mini-games/src'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { getPlayer } from '@dcl/sdk/players'
 import * as utils from '@dcl-sdk/utils'
+import { playSLideSound } from './sound'
 
 export const stateVariables = {
   inGame: false,
@@ -154,6 +155,7 @@ function moveMultipleTiles(tile: Entity, direction: keyof typeof TileMoveDirecti
   })
 
   stateVariables.moves++
+  playSLideSound()
   if (isSolved()) finishLevel()
 }
 

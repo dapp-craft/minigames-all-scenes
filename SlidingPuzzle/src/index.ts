@@ -8,6 +8,8 @@ import { initMiniGame } from '../../common/library'
 import { readGltfLocators } from '../../common/locators'
 import { STATIC_MODELS } from './resources/resources'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
+import { setSfxStatus, SFX_ENABLED } from './game/sound'
+import { soundManager } from './game/sound'
 
 const handlers = {
   start: getReadyToStart,
@@ -15,8 +17,12 @@ const handlers = {
   restart: () => {
     startLevel(stateVariables.level)
   },
-  toggleMusic: () => {},
-  toggleSfx: () => {}
+  toggleMusic: () => {
+    soundManager.setThemeStatus(!soundManager.themePlaying)
+  },
+  toggleSfx: () => {
+    setSfxStatus(!SFX_ENABLED)
+  }
 }
 
 const libraryReady = initMiniGame(

@@ -1,33 +1,22 @@
-import {
-  AudioSource,
-  AudioStream,
-  engine,
-  Entity,
-  MeshCollider,
-  MeshRenderer,
-  Transform,
-  MediaState
-} from '@dcl/sdk/ecs'
+import { AudioSource, engine, Entity, Transform } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { Vector3 } from '@dcl/sdk/math'
-import { mainTheme, slideSound } from '../resources/resources'
+import { slideSound, mainTheme } from '../../resources/resources'
 
 export let SOUNDS: { [key: string]: string } = {
-  "slide": slideSound
+  slide: slideSound
 }
 
-export let THEME = mainTheme
 export const THEME_VOLUME = 0.7
-
-// export const mainThereme = engine.addEntity()
-// Transform.create(mainThereme, {parent: engine.PlayerEntity})
-// AudioSource.create(mainThereme, {audioClipUrl: `sounds/futuristic-abstract-chill.mp3`, loop: true, playing: true, volume: 0.07})
 
 export class SoundManager {
   private soundsStorage: Entity[] = []
   private themeVolume = THEME_VOLUME
   private themeEntity: Entity
   private themeStatus: boolean = true
+  public get themePlaying() {
+    return this.themeStatus
+  }
   constructor() {
     console.log('SoundManager constructor')
     console.log('SOUNDS', SOUNDS)
@@ -43,7 +32,7 @@ export class SoundManager {
 
     this.themeEntity = engine.addEntity()
     AudioSource.create(this.themeEntity, {
-      audioClipUrl: THEME,
+      audioClipUrl: mainTheme,
       loop: true,
       playing: this.themeStatus,
       volume: this.themeVolume
@@ -59,7 +48,7 @@ export class SoundManager {
       audioClipUrl: `${SOUNDS[soundName as keyof typeof SOUNDS]}`,
       loop: false,
       playing: false,
-      pitch: Math.random() * 0.2 + 0.8
+      pitch: Math.random() * 0.4 + 0.8
     })
     let audioSource = AudioSource.getMutable(soundEntity)
     audioSource.volume = volume
@@ -70,7 +59,7 @@ export class SoundManager {
     }, 2000)
   }
 
-  public themePlaying(status: boolean) {
+  public setThemeStatus(status: boolean) {
     this.themeStatus = status
     let audioSource = AudioSource.getMutable(this.themeEntity)
     audioSource.playing = this.themeStatus
@@ -79,6 +68,4 @@ export class SoundManager {
   public getThemeStatus() {
     return this.themeStatus
   }
-
-
 }
