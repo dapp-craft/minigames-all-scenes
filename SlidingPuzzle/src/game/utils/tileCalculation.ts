@@ -18,7 +18,7 @@ export function tileRowColumn(boardSize: number, tileNumber: number): { row: num
  * @param column - column of the tile in the board
  * @returns - return the position of the tile in the board
  */
-export function getTilePosition(boardSize: number, row: number, column: number): Vector3 {
+export function getTilePosition(boardSize: number, column: number, row: number): Vector3 {
   const centerOffset = boardSize % 2 === 0 ? 0.5 : 0
   const x = ((column - Math.floor(boardSize / 2) + centerOffset) * 3) / boardSize
   const y = ((Math.floor(boardSize / 2) - row - centerOffset) * 3) / boardSize
