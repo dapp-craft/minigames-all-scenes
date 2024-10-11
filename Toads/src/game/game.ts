@@ -60,6 +60,7 @@ async function startGame() {
 
   countdown(() => {
     gameLogic.stopGame()
+    soundManager.playSound('exitSounds', soundConfig.volume)
   }, toadsGameConfig.gameTime / 1000)
 
   const res = await gameLogic.startGame();
