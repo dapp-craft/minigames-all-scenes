@@ -12,6 +12,7 @@ import { Vector3, Quaternion } from '@dcl/sdk/math'
 import { BOARD } from './board'
 import { Tile } from '../components'
 import { onTileClick } from '..'
+import { syncEntity } from '@dcl/sdk/network'
 
 export function createTile(index: number) {
   const mainEntity = engine.addEntity()
@@ -29,6 +30,8 @@ export function createTile(index: number) {
     image: '',
     boardSize: 3
   })
+
+  syncEntity(mainEntity, [Tile.componentId], 5000 + index)
 
   pointerEventsSystem.onPointerDown(
     mainEntity,
