@@ -1,7 +1,7 @@
 {
-  "name": "math-house",
+  "name": "minigame-kittens",
   "version": "1.0.0",
-  "description": "Minigame 'MathHouse'",
+  "description": "Minigame 'Math Kittens'",
   "scripts": {
     "start": "sdk-commands start",
     "deploy": "sdk-commands deploy",

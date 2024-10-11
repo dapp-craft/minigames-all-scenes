@@ -2,8 +2,8 @@
   "ecs7": true,
   "runtimeVersion": "7",
   "display": {
-    "title": "MathHouse",
-    "description": "Minigame 'MathHouse'",
+    "title": "Math Kittens",
+    "description": "Minigame 'Math Kittens'",
     "navmapThumbnail": "images/scene-thumbnail.png",
     "favicon": "favicon_asset"
   },
