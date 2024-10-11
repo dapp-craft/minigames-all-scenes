@@ -35,6 +35,5 @@ export function getImageUV(boardSize: number, tileNumber: number): number[] {
     uvOffset * column,
     uvOffset * (boardSize - row - 1)
   ]
-  console.log(UV)
   return UV
 }
