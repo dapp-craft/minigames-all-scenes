@@ -1,38 +1,26 @@
-import {
-  Animator,
-  Billboard,
-  EasingFunction,
-  Entity,
-  GltfContainer,
-  InputAction,
-  Material,
-  MaterialTransparencyMode,
-  MeshCollider,
-  MeshRenderer,
-  TextureFilterMode,
-  Transform,
-  TransformType,
-  Tween,
-  Vector3Type,
-  VisibilityComponent,
-  engine,
-  pointerEventsSystem
-} from '@dcl/sdk/ecs'
-import { MAX_BOARD_SIZE } from '../config'
+import { Entity } from '@dcl/sdk/ecs'
+import { MAX_BOARD_SIZE, MAX_LEVEL } from '../config'
 import { createTile, getAllTiles, getTileAtPosition } from './gameObjects/tile'
 import { Tile } from './components'
 import { initBoard } from './gameObjects'
 import { setupSynchronizer } from './synchronizer'
-import * as utils from '@dcl-sdk/utils'
 import { levelImages } from '../resources/resources'
 import { generateLevel, getLevelSize } from './utils/levelGenerator'
 import { boardMatrix } from './utils/boardMatrix'
-import { setupGameUI } from './UiObjects'
+import { levelButtons, setupGameUI } from './UiObjects'
+import { queue } from '@dcl-sdk/mini-games/src'
+import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
+import { getPlayer } from '@dcl/sdk/players'
+import * as utils from '@dcl-sdk/utils'
 
 export const stateVariables = {
   inGame: false,
   moves: 0,
-  levelStartTime: 0
+  levelStartTime: 0,
+  levelFinishTime: 0,
+  level: 1,
+  playerName: '',
+  playerAddress: ''
 }
 
 const TileMoveDirection = {
@@ -42,7 +30,7 @@ const TileMoveDirection = {
   RIGHT: { x: 1, y: 0 }
 }
 
-export function initGame() {
+export async function initGame() {
   setupGameUI()
 
   initBoard()
@@ -51,7 +39,7 @@ export function initGame() {
 
   setupSynchronizer()
 
-  startLevel(1)
+  await fetchPlayerProgress()
 }
 
 function initTiles() {
@@ -60,12 +48,30 @@ function initTiles() {
   }
 }
 
+export function getReadyToStart() {
+  console.log('Get ready to start')
+
+  const levetToStart = (playerProgress?.level ?? 0) + 1 > MAX_LEVEL ? MAX_LEVEL : (playerProgress?.level ?? 0) + 1
+  stateVariables.playerName = getPlayer()?.name ?? 'Underfined'
+  stateVariables.playerAddress = getPlayer()?.userId ?? 'Underfined'
+  for (let i = 0; i < levetToStart; i++) {
+    levelButtons[i].enable()
+  }
+
+  utils.timers.setTimeout(() => {
+    startLevel(levetToStart)
+  }, 2000)
+}
+
 export function startLevel(level: keyof typeof levelImages) {
   const size = getLevelSize(level)
   const matrix = generateLevel(size)
   reSetTiles(level, matrix)
   stateVariables.inGame = true
   stateVariables.moves = 0
+  stateVariables.levelStartTime = Date.now()
+  stateVariables.levelFinishTime = 0
+  stateVariables.level = level
 }
 
 function reSetTiles(level: keyof typeof levelImages, matrix: number[][]) {
@@ -148,6 +154,7 @@ function moveMultipleTiles(tile: Entity, direction: keyof typeof TileMoveDirecti
   })
 
   stateVariables.moves++
+  if (isSolved()) finishLevel()
 }
 
 function isMovePossible(tile: Entity) {
@@ -203,4 +210,40 @@ function getMoveDirection(tile: Entity): keyof typeof TileMoveDirection {
 
   // This should never happen
   throw new Error('If you read this, CRY TT')
+}
+
+function isSolved() {
+  const matrix = boardMatrix()
+  const size = matrix.length
+
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      if (matrix[i][j] === -1) continue
+      if (matrix[i][j] !== i * size + j + 1) {
+        return false
+      }
+    }
+  }
+  return true
+}
+
+function finishLevel() {
+  stateVariables.levelFinishTime = Date.now()
+
+  updatePlayerProgress()
+  if (queue.getQueue().length > 1) {
+    exitGame()
+  } else {
+    const levelToStart = stateVariables.level == MAX_LEVEL ? 1 : stateVariables.level + 1
+    console.log('Level to start', levelToStart)
+    levelButtons[levelToStart - 1].enable()
+    startLevel(levelToStart)
+  }
+}
+export function exitGame() {
+  stateVariables.level = 1
+  stateVariables.levelFinishTime = 0
+  stateVariables.levelStartTime = 0
+  stateVariables.moves = 0
+  queue.setNextPlayer()
 }
