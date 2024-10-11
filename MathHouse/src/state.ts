@@ -34,9 +34,6 @@ export const rocketCoords = Vector3.create(8, -3, 4.8)
 
 export const progressState = {
     level: 1,
-    moves: 0,
-    levelStartTime: 0,
-    levelFinishTime: 0
 }
 
 export const entityList: Map<string, Entity> = new Map([])
