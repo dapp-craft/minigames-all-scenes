@@ -221,6 +221,11 @@ export function getReadyToStart() {
 export async function startLevel(level: keyof typeof TILES_LEVEL) {
   console.log('Start level', level)
 
+  levelButtons.forEach((button, i) => {
+    button.buttonShapeEnabled = level === i + 1 ? ui.uiAssets.shapes.SQUARE_YELLOW : ui.uiAssets.shapes.SQUARE_GREEN
+    if (button.enabled) button.enable()
+  })
+
   countdown(async () => {
     await Promise.all(tiles.map((tile) => resetTile(tile)))
     flippedTileQueue = []
