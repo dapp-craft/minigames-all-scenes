@@ -13,7 +13,6 @@ export function getImage(lvl: number) {
  * @returns - UV array for the tiles
  */
 export function getImageUV(boardSize: number, tileNumber: number): number[] {
-  console.log('getImageUV', boardSize, tileNumber)
   const { row, column } = tileRowColumn(boardSize, tileNumber)
   const uvOffset = 1 / boardSize
   const UV = [
