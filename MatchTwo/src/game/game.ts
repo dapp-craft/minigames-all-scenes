@@ -27,7 +27,6 @@ import { movePlayerTo } from '~system/RestrictedActions'
 import { setTilesPositions, tilesPositions } from './tilesPositions'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { playCloseTileSound, playLevelCompleteSound, playOpenTileSound, playPairFoundSound } from './sound'
-import { initStatusBoard } from './statusBoard'
 import { initCountdownNumbers, setupWinAnimations, countdown, startWinAnimation } from './gameEfffects'
 import { setLevelButtonPositions } from './locators/levelButtonPositions'
 import { setStatusBoardPositions } from './locators/statusBoardPositions'
@@ -54,7 +53,8 @@ export const gameState = {
   level: 1,
   moves: 0,
   levelStartTime: 0,
-  levelFinishTime: 0
+  levelFinishTime: 0,
+  pairFound: 0
 }
 
 export async function initGame() {
@@ -65,8 +65,6 @@ export async function initGame() {
   await setStatusBoardPositions()
 
   initGameDataEntity()
-
-  initStatusBoard()
 
   setupWinAnimations()
   initCountdownNumbers()
@@ -231,6 +229,7 @@ export async function startLevel(level: keyof typeof TILES_LEVEL) {
     gameState.levelStartTime = Date.now()
     gameState.moves = 0
     gameState.levelFinishTime = 0
+    gameState.pairFound = 0
 
     tiles.forEach((tile) => {
       disableTile(tile)
@@ -274,6 +273,7 @@ function checkIfMatch() {
     playPairFoundSound()
     Tile.getMutable(tile1.mainEntity).matched = true
     Tile.getMutable(tile2.mainEntity).matched = true
+    gameState.pairFound++
 
     if (
       tiles.filter((tile) => Tile.get(tile.mainEntity).inGame).filter((tile) => !Tile.get(tile.mainEntity).matched)
