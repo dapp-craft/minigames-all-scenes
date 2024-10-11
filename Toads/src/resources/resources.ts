@@ -13,6 +13,9 @@ export const ground: PBGltfContainer = { src: modelsFolder + 'obj_ground.gltf' }
 export const wall: PBGltfContainer = { src: modelsFolder + 'obj_wall.gltf' };
 export const whack: PBGltfContainer = { src: modelsFolder + 'obj_whack.gltf' };
 export const terminal: PBGltfContainer = { src: modelsFolder + 'obj_terminal.gltf' };
+export const rules: PBGltfContainer = { src: modelsFolder + 'obj_rules.gltf' };
+export const logo: PBGltfContainer = { src: modelsFolder + 'obj_logo.gltf' };
+export const text: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
 
 
 export const frog01: PBGltfContainer = { src: modelsFolder + 'obj_frog01.gltf' };

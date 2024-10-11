@@ -71,9 +71,9 @@ const generateInitialEntity = async () => {
 
     parentEntity(hammerEntity, hammerParent)
 
-    Transform.create(hits, { position: { ...data.get('counter_hits')!.position, z: data.get('counter_hits')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
-    Transform.create(miss, { position: { ...data.get('counter_misses')!.position, z: data.get('counter_misses')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
-    Transform.create(counter, { position: { ...data.get('counter_score')!.position, z: data.get('counter_score')!.position.z + .2 }, scale: Vector3.create(.5, .5, .5), rotation: Quaternion.create(0, 100, 0), parent: sceneParentEntity })
+    Transform.create(hits, {...data.get('counter_hits'), parent: sceneParentEntity})
+    Transform.create(miss, {...data.get('counter_misses'), parent: sceneParentEntity})
+    Transform.create(counter, {...data.get('counter_score'), parent: sceneParentEntity})
 
     GltfContainer.createOrReplace(hammerEntity, hammer)
 
