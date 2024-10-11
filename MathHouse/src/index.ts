@@ -33,7 +33,7 @@ const toggleVolume = () => {
   else soundConfig.volume = 0.5
 }
 
-initMiniGame(GAME_ID, [LEVEL], readGltfLocators(`locators/obj_locators_default.gltf`), handlers, undefined, gameTime)
+initMiniGame(GAME_ID, [LEVEL], readGltfLocators(`locators/obj_locators_default.gltf`), handlers, {timeouts: gameTime})
 
 export let rocketBoard: any
 
