@@ -2,8 +2,8 @@
   "ecs7": true,
   "runtimeVersion": "7",
   "display": {
-    "title": "Toads",
-    "description": "Minigame 'Toads'",
+    "title": "Whack-a-frog",
+    "description": "Minigame 'Whack-a-frog'",
     "navmapThumbnail": "images/scene-thumbnail.png",
     "favicon": "favicon_asset"
   },
