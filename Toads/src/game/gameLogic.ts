@@ -11,7 +11,8 @@ const TweenState = TweenStateGetter(engine)
 
 interface EntityObject {
     entity: Entity,
-    available: boolean
+    available: boolean,
+    hitable: boolean
 }
 
 export class GameLogic {
@@ -231,12 +232,13 @@ export class GameLogic {
                     end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight }
                 }),
                 duration: animationConfig.frogEscapeTime,
-                easingFunction: EasingFunction.EF_EASEOUTBACK,
+                easingFunction: EasingFunction.EF_LINEAR,
             })
 
             utils.timers.setTimeout(() => {
                 GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
                 obj.available = true
+                obj.hitable = false
             }, animationConfig.frogEscapeTime)
         }
         console.log(toadsGameState.listOfEntity.get('ground'));

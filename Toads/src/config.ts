@@ -20,7 +20,7 @@ export const animationConfig = {
     hammerSpeed: 10,
     frogStayTime: 5000,
     frogAfterHitHideTime: 100,
-    frogEscapeTime: 2000,
+    frogEscapeTime: 1500,
 }
 
 export const soundConfig = {

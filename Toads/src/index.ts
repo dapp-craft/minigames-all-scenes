@@ -8,16 +8,16 @@ import { GameLogic } from './game/gameLogic'
 import { setupStaticModels } from './staticModels/setupStaticModels'
 import { frog01, hammer } from './resources/resources'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
-import { Quaternion, Vector3 } from '@dcl/sdk/math'
+import { Vector3 } from '@dcl/sdk/math'
 import { mainThereme } from './game/soundManager'
 import { SCORE } from '@dcl-sdk/mini-games/src/ui'
 import { setupEffects } from '../../common/effects'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
-    start: () => { getReadyToStart() },
-    exit: () => { exitCallback() },
-    restart: () => {getReadyToStart()},
+    start: () => getReadyToStart(),
+    exit: () => exitCallback(),
+    restart: () => getReadyToStart(),
     toggleMusic: () => playBackgroundMusic(),
     toggleSfx: () => toggleVolume()
 }
@@ -71,9 +71,9 @@ const generateInitialEntity = async () => {
 
     parentEntity(hammerEntity, hammerParent)
 
-    Transform.create(hits, {...data.get('counter_hits'), parent: sceneParentEntity})
-    Transform.create(miss, {...data.get('counter_misses'), parent: sceneParentEntity})
-    Transform.create(counter, {...data.get('counter_score'), parent: sceneParentEntity})
+    Transform.create(hits, { ...data.get('counter_hits'), parent: sceneParentEntity })
+    Transform.create(miss, { ...data.get('counter_misses'), parent: sceneParentEntity })
+    Transform.create(counter, { ...data.get('counter_score'), parent: sceneParentEntity })
 
     GltfContainer.createOrReplace(hammerEntity, hammer)
 
