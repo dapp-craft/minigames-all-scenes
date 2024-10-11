@@ -4,6 +4,7 @@ const modelsFolder = 'models/'
 const imagesFolder = 'images/'
 
 export const STATIC_MODELS = [
+  { src: modelsFolder + 'obj_rules.gltf' },
   { src: modelsFolder + 'obj_text.gltf' },
   { src: modelsFolder + 'obj_bench.gltf' },
   { src: modelsFolder + 'obj_candies.gltf' },

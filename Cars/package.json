@@ -1,7 +1,7 @@
 {
   "name": "minigame-cars",
   "version": "1.0.0",
-  "description": "Minigame 'Cars'",
+  "description": "Minigame 'Car Park'",
   "scripts": {
     "start": "sdk-commands start",
     "deploy": "sdk-commands deploy",

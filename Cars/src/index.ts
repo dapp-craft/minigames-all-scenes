@@ -27,7 +27,7 @@ const libraryReady = initMiniGame(
   [MOVES, LEVEL, TIME],
   readGltfLocators(`locators/obj_locators_default.gltf`),
   handlers,
-  { labels: {textColor: Color4.Black()} }
+  { labels: {textColor: Color4.Black()}, scoreboard: {sortDirection: 'asc'} }
 )
 
 executeTask(async () => {
