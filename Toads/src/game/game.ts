@@ -2,7 +2,7 @@ import * as utils from '@dcl-sdk/utils'
 import { gameLogic } from '..'
 import { progressState, sceneParentEntity } from '../state'
 import { CameraModeArea, CameraType, engine } from '@dcl/sdk/ecs'
-import { fetchPlayerProgress, updatePlayerProgress } from './syncData'
+import { updatePlayerProgress } from './syncData'
 import { ui } from '@dcl-sdk/mini-games/src'
 import { Vector3, Quaternion } from '@dcl/sdk/math'
 import { readGltfLocators } from '../../../common/locators'
@@ -26,12 +26,12 @@ export const initGame = async () => {
 }
 
 export function getReadyToStart() {
-  playButton.disable()
   console.log('Get Ready to start!')
+  playButton.disable()
   soundManager.playSound('enterSounds', soundConfig.volume)
   utils.timers.clearTimeout(startTimeOut)
   utils.timers.clearTimeout(buttonDisableTimeOut)
-  // exitCallback(false)
+  exitCallback(false)
   buttonDisableTimeOut = utils.timers.setTimeout(() => playButton.disable(), playButton.releaseTime + 200)
   CameraModeArea.createOrReplace(engine.PlayerEntity, {
     area: Vector3.create(1, 1, 1),
@@ -40,10 +40,13 @@ export function getReadyToStart() {
   runCountdown().then(() => startGame())
 }
 
-export function exitCallback(sound: boolean = true) {
+export function exitCallback(exit: boolean = true) {
   cancelCountdown()
   utils.timers.setTimeout(() => {
-    sound == true && soundManager.playSound('exitSounds', soundConfig.volume)
+    if (exit == true){
+      CameraModeArea.deleteFrom(engine.PlayerEntity)
+      soundManager.playSound('exitSounds', soundConfig.volume)
+    }
     gameLogic.stopGame()
     gameLogic.resetData()
     engine.removeSystem('countdown-system')

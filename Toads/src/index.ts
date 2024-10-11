@@ -1,4 +1,4 @@
-import { AudioSource, CameraModeArea, CameraType, ColliderLayer, engine, GltfContainer, Material, MeshRenderer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
+import { AudioSource, ColliderLayer, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { exitCallback, getReadyToStart, initGame } from './game/game'
@@ -17,7 +17,7 @@ import { setupEffects } from '../../common/effects'
 const handlers = {
     start: () => { getReadyToStart() },
     exit: () => { exitCallback() },
-    restart: () => getReadyToStart(),
+    restart: () => {getReadyToStart()},
     toggleMusic: () => playBackgroundMusic(),
     toggleSfx: () => toggleVolume()
 }

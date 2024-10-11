@@ -1,9 +1,9 @@
 import * as utils from '@dcl-sdk/utils'
-import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, Material, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenLoop, TweenSequence, TweenStateStatus, tweenSystem, VisibilityComponent, CameraModeArea, CameraType } from "@dcl/sdk/ecs"
+import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenStateStatus, VisibilityComponent } from "@dcl/sdk/ecs"
 import { animationConfig, soundConfig, toadsGameConfig } from "../config"
 import { toadsGameState } from "../state"
-import { Vector3, Color4 } from "@dcl/sdk/math"
-import { frog01, frog02, hammer } from "../resources/resources"
+import { Vector3 } from "@dcl/sdk/math"
+import { frog01, frog02 } from "../resources/resources"
 import { soundManager } from '../globals'
 import { TweenState as TweenStateGetter } from '@dcl/ecs/dist/components/generated/index.gen'
 
@@ -124,8 +124,10 @@ export class GameLogic {
         raycastSystem.removeRaycasterEntity(engine.CameraEntity)
         console.log("Hammer is stoped")
         const hammerEntity = toadsGameState.listOfEntity.get('hammer')
+        const hammerParent = toadsGameState.listOfEntity.get('hammer')
         MeshRenderer.deleteFrom(hammerEntity)
         MeshCollider.deleteFrom(hammerEntity)
+        Tween.deleteFrom(hammerParent)
         VisibilityComponent.getMutable(hammerEntity).visible = false
     }
 
@@ -305,7 +307,6 @@ export class GameLogic {
 
     public stopGame() {
         console.log("Game is stopped")
-        CameraModeArea.deleteFrom(engine.PlayerEntity)
         pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('board'))
         pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('ground'))
         this.stopHammer()
