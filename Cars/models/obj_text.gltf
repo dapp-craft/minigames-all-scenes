@@ -23,28 +23,6 @@
 	],
 	"materials":[
 		{
-			"alphaMode":"BLEND",
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularFactor":0
-				}
-			},
-			"name":"obj_text01",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.7379237413406372,
-					0.03954564034938812,
-					0.04373428598046303,
-					1
-				],
-				"baseColorTexture":{
-					"index":0
-				},
-				"metallicFactor":0
-			}
-		},
-		{
 			"alphaMode":"MASK",
 			"extensions":{
 				"KHR_materials_specular":{
@@ -54,7 +32,7 @@
 			"name":"obj_text02",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":1
+					"index":0
 				},
 				"metallicFactor":0
 			}
@@ -99,15 +77,6 @@
 					},
 					"indices":7,
 					"material":1
-				},
-				{
-					"attributes":{
-						"POSITION":8,
-						"NORMAL":9,
-						"TEXCOORD_0":10
-					},
-					"indices":11,
-					"material":2
 				}
 			]
 		}
@@ -116,18 +85,9 @@
 		{
 			"sampler":0,
 			"source":0
-		},
-		{
-			"sampler":0,
-			"source":1
 		}
 	],
 	"images":[
-		{
-			"mimeType":"image/png",
-			"name":"obj_text01",
-			"uri":"textures/obj_text01.png"
-		},
 		{
 			"mimeType":"image/png",
 			"name":"obj_text02",
@@ -137,40 +97,6 @@
 	"accessors":[
 		{
 			"bufferView":0,
-			"componentType":5126,
-			"count":4,
-			"max":[
-				-6.92179012298584,
-				2.4650166034698486,
-				4.553231239318848
-			],
-			"min":[
-				-6.92179012298584,
-				0.360867977142334,
-				2.2607531547546387
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":1,
-			"componentType":5126,
-			"count":4,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":2,
-			"componentType":5126,
-			"count":4,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":3,
-			"componentType":5123,
-			"count":6,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":4,
 			"componentType":5126,
 			"count":16,
 			"max":[
@@ -186,25 +112,25 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
+			"bufferView":1,
 			"componentType":5126,
 			"count":16,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
+			"bufferView":2,
 			"componentType":5126,
 			"count":16,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":7,
+			"bufferView":3,
 			"componentType":5123,
 			"count":24,
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":8,
+			"bufferView":4,
 			"componentType":5126,
 			"count":716,
 			"max":[
@@ -220,19 +146,19 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":9,
+			"bufferView":5,
 			"componentType":5126,
 			"count":716,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":10,
+			"bufferView":6,
 			"componentType":5126,
 			"count":716,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":11,
+			"bufferView":7,
 			"componentType":5123,
 			"count":1623,
 			"type":"SCALAR"
@@ -241,74 +167,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":48,
+			"byteLength":192,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":48,
-			"byteOffset":48,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":32,
-			"byteOffset":96,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":12,
-			"byteOffset":128,
-			"target":34963
-		},
-		{
-			"buffer":0,
 			"byteLength":192,
-			"byteOffset":140,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":192,
-			"byteOffset":332,
+			"byteOffset":192,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":128,
-			"byteOffset":524,
+			"byteOffset":384,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":48,
-			"byteOffset":652,
+			"byteOffset":512,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":8592,
-			"byteOffset":700,
+			"byteOffset":560,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":8592,
-			"byteOffset":9292,
+			"byteOffset":9152,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":5728,
-			"byteOffset":17884,
+			"byteOffset":17744,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":3246,
-			"byteOffset":23612,
+			"byteOffset":23472,
 			"target":34963
 		}
 	],
@@ -320,7 +222,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":26860,
+			"byteLength":26720,
 			"uri":"obj_text.bin"
 		}
 	]
