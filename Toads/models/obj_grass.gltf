@@ -73,9 +73,10 @@
 					"attributes":{
 						"POSITION":4,
 						"NORMAL":5,
-						"TEXCOORD_0":6
+						"TEXCOORD_0":6,
+						"TEXCOORD_1":7
 					},
-					"indices":3
+					"indices":8
 				}
 			]
 		}
@@ -135,7 +136,7 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":7831,
+			"count":7855,
 			"max":[
 				7.930132865905762,
 				4.591128826141357,
@@ -151,14 +152,26 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":7831,
+			"count":7855,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":7831,
+			"count":7855,
 			"type":"VEC2"
+		},
+		{
+			"bufferView":7,
+			"componentType":5126,
+			"count":7855,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":8,
+			"componentType":5123,
+			"count":25770,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -188,21 +201,33 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":93972,
+			"byteLength":94260,
 			"byteOffset":302060,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":93972,
-			"byteOffset":396032,
+			"byteLength":94260,
+			"byteOffset":396320,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":62648,
-			"byteOffset":490004,
+			"byteLength":62840,
+			"byteOffset":490580,
 			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":62840,
+			"byteOffset":553420,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":51540,
+			"byteOffset":616260,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -213,7 +238,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":552652,
+			"byteLength":667800,
 			"uri":"obj_grass.bin"
 		}
 	]
