@@ -22,12 +22,11 @@ const handlers = {
   toggleSfx: () => setSfxStatus(!SFX_ENABLED)
 }
 
-initMiniGame(
-  GAME_ID,
-  TIME_LEVEL,
-  readGltfLocators(`locators/obj_locators_default.gltf`),
-  handlers
-)
+initMiniGame(GAME_ID, TIME_LEVEL, readGltfLocators(`locators/obj_locators_default.gltf`), handlers, {
+  scoreboard: {
+    sortDirection: 'asc'
+  }
+})
 
 // initLibrary(engine, syncEntity, players, {
 //   environment: 'dev',
