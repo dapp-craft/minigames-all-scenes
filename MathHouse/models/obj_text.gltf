@@ -64,33 +64,6 @@
 				],
 				"metallicFactor":0
 			}
-		},
-		{
-			"alphaMode":"BLEND",
-			"doubleSided":true,
-			"emissiveFactor":[
-				1,
-				0.3419147729873657,
-				0.028426136821508408
-			],
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularFactor":0
-				}
-			},
-			"name":"obj_text01",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					1,
-					0.3419147729873657,
-					0.028426136821508408,
-					1
-				],
-				"baseColorTexture":{
-					"index":1
-				},
-				"metallicFactor":0
-			}
 		}
 	],
 	"meshes":[
@@ -114,15 +87,6 @@
 					},
 					"indices":7,
 					"material":1
-				},
-				{
-					"attributes":{
-						"POSITION":8,
-						"NORMAL":9,
-						"TEXCOORD_0":10
-					},
-					"indices":11,
-					"material":2
 				}
 			]
 		}
@@ -131,10 +95,6 @@
 		{
 			"sampler":0,
 			"source":0
-		},
-		{
-			"sampler":0,
-			"source":1
 		}
 	],
 	"images":[
@@ -142,11 +102,6 @@
 			"mimeType":"image/png",
 			"name":"obj_text02",
 			"uri":"textures/obj_text02.png"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"obj_text01",
-			"uri":"textures/obj_text01.png"
 		}
 	],
 	"accessors":[
@@ -217,40 +172,6 @@
 			"componentType":5123,
 			"count":1338,
 			"type":"SCALAR"
-		},
-		{
-			"bufferView":8,
-			"componentType":5126,
-			"count":4,
-			"max":[
-				-6.886402606964111,
-				2.382418155670166,
-				5.190008163452148
-			],
-			"min":[
-				-6.886402606964111,
-				0.3943512439727783,
-				3.734814167022705
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":9,
-			"componentType":5126,
-			"count":4,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":10,
-			"componentType":5126,
-			"count":4,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":11,
-			"componentType":5123,
-			"count":6,
-			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -301,30 +222,6 @@
 			"byteLength":2676,
 			"byteOffset":36572,
 			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":48,
-			"byteOffset":39248,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":48,
-			"byteOffset":39296,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":32,
-			"byteOffset":39344,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":12,
-			"byteOffset":39376,
-			"target":34963
 		}
 	],
 	"samplers":[
@@ -335,7 +232,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":39388,
+			"byteLength":39248,
 			"uri":"obj_text.bin"
 		}
 	]

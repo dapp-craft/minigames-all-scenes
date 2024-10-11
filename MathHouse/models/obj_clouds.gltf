@@ -67,7 +67,7 @@
 			]
 		},
 		{
-			"name":"Plane.049",
+			"name":"Plane.024",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,8 +75,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3,
-					"material":0
+					"indices":3
 				}
 			]
 		}
