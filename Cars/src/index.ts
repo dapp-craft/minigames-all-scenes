@@ -1,7 +1,7 @@
 import { engine, executeTask, GltfContainer, Transform } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { TIME_LEVEL } from '@dcl-sdk/mini-games/src/ui'
+import { LEVEL, MOVES, TIME } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { exitGame, gameState, getReadyToStart, initGame, startLevel } from './game'
@@ -24,7 +24,7 @@ const handlers = {
 
 const libraryReady = initMiniGame(
   GAME_ID,
-  TIME_LEVEL,
+  [MOVES, LEVEL, TIME],
   readGltfLocators(`locators/obj_locators_default.gltf`),
   handlers,
   { textColor: Color4.Black(), fontSize: 3 }
@@ -42,3 +42,5 @@ export async function main() {
   // await libraryReady
   initGame()
 }
+
+// https://exploration-games.decentraland.zone/api/games/67ad1757-6796-4817-ac29-5bf1987d24f9/leaderboard?sort=time&direction=DESC
