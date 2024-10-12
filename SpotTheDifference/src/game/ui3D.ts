@@ -2,6 +2,7 @@ import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src";
 import { engine, Entity, PBTextShape, TextAlignMode, TextShape, Transform, TransformType } from "@dcl/sdk/ecs";
 import { readGltfLocators } from "../../../common/locators";
 import { parseTime } from "../../../common/utils/time";
+import { LEVELS } from "./levels";
 
 export class Ui3D {
     private readonly counterObjects = engine.addEntity()
@@ -16,13 +17,19 @@ export class Ui3D {
         this.setTime()
     }
     private init(locators: Map<String, TransformType>) {
-        for (let i = 1; i < 7; i++) this.buttons.push(new ui.MenuButton(
-            {...locators.get(`button_level_${i}`)!, parent: sceneParentEntity},
-            ui.uiAssets.shapes.SQUARE_YELLOW,
-            ui.uiAssets.numbers[i],
-            `START LEVEL ${i}`,
-            () => this.levelButtonCallback(i)
-        ))
+        for (let i = 1; i <= Object.keys(LEVELS).length; i++) {
+            const button = new ui.MenuButton(
+                {...locators.get(`button_level_${i}`), parent: sceneParentEntity},
+                ui.uiAssets.shapes.SQUARE_YELLOW,
+                ui.uiAssets.numbers[i],
+                `START LEVEL ${i}`,
+                () => this.levelButtonCallback(i),
+                false
+            )
+            // FIXME: remove .disable() call as soon as DCL fixes ctor enabledByDefault
+            button.disable()
+            this.buttons.push(button)
+        }
         const textSettings: PBTextShape = {text: '', fontSize: 3, textAlign: TextAlignMode.TAM_MIDDLE_LEFT}
         Transform.create(this.counterObjects, {...locators.get('counter_foundObjects'), parent: sceneParentEntity})
         TextShape.create(this.counterObjects, {...textSettings})
@@ -42,6 +49,9 @@ export class Ui3D {
             if (button.enabled) button.enable()
         })
         this.setTextOptimized(this.counterLevel, `Level: ${level ?? '-'}`)
+    }
+    public async unlockLevel(level: number) {
+        this.buttons[level - 1]?.enable()
     }
     public async setTime(value?: number) {
         await this.ready

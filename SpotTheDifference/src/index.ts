@@ -7,7 +7,7 @@ import { LEVELS } from './game/levels'
 import { GameObject, resetCooldown } from './game/object'
 import { generateLevelObjects, init } from './game'
 import { VARIANT } from './game/types'
-import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
+import { progress, queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { Color3, Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { setupEffects, runWinAnimation, cancelWinAnimation, runCountdown, cancelCountdown } from '../../common/effects'
@@ -15,6 +15,7 @@ import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { ui } from './ui'
 import { Ui3D } from './game/ui3D'
 import '../../common/cleaner'
+(globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 let alt = false
 let currentLevel = 1 as keyof typeof LEVELS
@@ -41,9 +42,11 @@ async function playLevel(level: keyof typeof LEVELS) {
         }
         engine.removeSystem('stopwatch')
         console.log(`Win level ${level}`)
+        progress.upsertProgress({level, time: Math.floor(elapsed * 1000)})
         let pos = await positions.then(data => Vector3.add(data.get('area_playSpawn')!.position, Transform.get(sceneParentEntity).position))
         movePlayerTo({newRelativePosition: pos, cameraTarget: Vector3.add(pos, Vector3.scale(Vector3.Backward(), 5))})
         await Promise.race([runWinAnimation(), abort])
+        ui3d.unlockLevel(level + 1)
     } finally {
         cancelCountdown()
         cancelWinAnimation()
@@ -81,7 +84,9 @@ const handlers = {
 }
 let positions = readGltfLocators(`locators/obj_locators_default.gltf`)
 
-initMiniGame('059739aa-376f-4bcd-adc5-4081d808bc9a', TIME_LEVEL, positions, handlers)
+const library = initMiniGame('2299ece9-d14d-4b2a-8cf8-08b8b1b6231b', TIME_LEVEL, positions, handlers, {
+    scoreboard: {sortDirection: 'asc'}
+})
 let gameObjects: GameObject[] = []
 const ui3d = new Ui3D(level => interruptPlay(level))
 
@@ -117,6 +122,12 @@ export async function main() {
     setupEffects(Vector3.create(0, 2.5, -6))
     ReactEcsRenderer.setUiRenderer(ui)
     await init(sceneParentEntity)
+    await library
+    progress.getProgress('level', progress.SortDirection.DESC, 1).then(([{level} = {level: 1}] = []) => {
+        currentLevel = Math.min(level + 1, Object.keys(LEVELS).length) as typeof currentLevel
+        for (let i = 1; i <= currentLevel; i++) ui3d.unlockLevel(i)
+    })
+    
 
     const locators = await readGltfLocators('locators/obj_locators_unique.gltf')
     const clock = engine.addEntity()
