@@ -1,9 +1,9 @@
 {
-  "name": "spot-the-difference",
+  "name": "minigame-steampunk",
   "version": "1.0.0",
-  "description": "Minigame 'Spot The Difference'",
+  "description": "Minigame 'Gears & Glitches'",
   "scripts": {
-    "start": "sdk-commands start",
+    "start": "sdk-commands start -b",
     "deploy": "sdk-commands deploy",
     "build": "sdk-commands build",
     "upgrade-sdk": "npm install --save-dev @dcl/sdk@latest",
@@ -17,7 +17,9 @@
     "semi": false,
     "singleQuote": true,
     "printWidth": 120,
-    "trailingComma": "none"
+    "trailingComma": "none",
+    "arrowParens": "avoid",
+    "tabWidth": 4
   },
   "devDependencies": {
     "@dcl/js-runtime": "7.6.0"
