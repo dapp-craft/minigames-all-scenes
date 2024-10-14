@@ -4,11 +4,8 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
-		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"scene":0,
 	"scenes":[
@@ -29,9 +26,9 @@
 		{
 			"doubleSided":true,
 			"emissiveFactor":[
-				0.05000000074505806,
-				0.05000000074505806,
-				0.05000000074505806
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -39,9 +36,12 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
 				}
 			},
-			"name":"obj_global_steampunk01",
+			"name":"obj_clock_base",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -52,7 +52,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.009",
+			"name":"Mesh.058",
 			"primitives":[
 				{
 					"attributes":{
@@ -60,19 +60,8 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		}
@@ -90,37 +79,41 @@
 	"images":[
 		{
 			"mimeType":"image/jpeg",
-			"name":"obj_global_steampunk",
-			"uri":"textures/obj_global_steampunk.jpg"
+			"name":"obj_clock_base",
+			"uri":"textures/obj_clock_base.jpg"
 		}
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":3,
 			"max":[
 				0.025262635201215744,
 				0.9029435515403748,
-				-0.01602582447230816
+				-0.016025789082050323
 			],
 			"min":[
 				-0.038239624351263046,
 				-0.21671326458454132,
-				-0.018084509298205376
+				-0.018084656447172165
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":3,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":3,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":3,
 			"type":"SCALAR"
@@ -129,8 +122,27 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":180,
-			"byteOffset":0
+			"byteLength":36,
+			"byteOffset":0,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":36,
+			"byteOffset":36,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":24,
+			"byteOffset":72,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6,
+			"byteOffset":96,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -141,7 +153,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":180,
+			"byteLength":104,
 			"uri":"obj_arrow01_base.bin"
 		}
 	]

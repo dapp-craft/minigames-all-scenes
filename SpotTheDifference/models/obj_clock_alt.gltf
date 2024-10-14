@@ -4,11 +4,8 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
-		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"scene":0,
 	"scenes":[
@@ -23,33 +20,28 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_clock_base"
+			"name":"obj_clock_alt"
 		},
 		{
 			"mesh":1,
-			"name":"obj_clock_base_collider"
+			"name":"obj_clock_alt_collider"
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
-			"emissiveFactor":[
-				0.05000000074505806,
-				0.05000000074505806,
-				0.05000000074505806
-			],
-			"emissiveTexture":{
-				"index":0
-			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
 				}
 			},
-			"name":"obj_global_steampunk01",
+			"name":"obj_clock_alt",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":1
+					"index":0
 				},
 				"metallicFactor":0
 			}
@@ -57,7 +49,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.008",
+			"name":"Mesh.061",
 			"primitives":[
 				{
 					"attributes":{
@@ -65,24 +57,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Cylinder.023",
+			"name":"Mesh.063",
 			"primitives":[
 				{
 					"attributes":{
@@ -90,18 +71,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":3,
-					"mode":4
+					"indices":3
 				}
 			]
 		}
@@ -110,86 +80,121 @@
 		{
 			"sampler":0,
 			"source":0
-		},
-		{
-			"sampler":0,
-			"source":0
 		}
 	],
 	"images":[
 		{
 			"mimeType":"image/jpeg",
-			"name":"obj_global_steampunk",
-			"uri":"textures/obj_global_steampunk.jpg"
+			"name":"obj_clock_alt",
+			"uri":"textures/obj_clock_alt.jpg"
 		}
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
-			"count":755,
+			"count":530,
 			"max":[
-				1.7292677164077759,
+				1.7292678356170654,
 				1.7407435178756714,
 				0.40149760246276855
 			],
 			"min":[
 				-1.7012513875961304,
-				-1.8477275371551514,
-				-0.45566725730895996
+				-1.8477272987365723,
+				-0.4556671380996704
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
-			"count":755,
+			"count":530,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
-			"count":755,
+			"count":530,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
-			"count":1089,
+			"count":1077,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
-			"count":755,
+			"count":530,
 			"max":[
-				1.7292677164077759,
+				1.7292678356170654,
 				1.7407435178756714,
 				0.40149760246276855
 			],
 			"min":[
 				-1.7012513875961304,
-				-1.8477275371551514,
-				-0.45566725730895996
+				-1.8477272987365723,
+				-0.4556671380996704
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
-			"count":755,
+			"count":530,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
-			"count":755,
+			"count":530,
 			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":5733,
-			"byteOffset":0
+			"byteLength":6360,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5733,
-			"byteOffset":5736
+			"byteLength":6360,
+			"byteOffset":6360,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4240,
+			"byteOffset":12720,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":2154,
+			"byteOffset":16960,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":6360,
+			"byteOffset":19116,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6360,
+			"byteOffset":25476,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4240,
+			"byteOffset":31836,
+			"target":34962
 		}
 	],
 	"samplers":[
@@ -200,7 +205,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":11472,
+			"byteLength":36076,
 			"uri":"obj_clock_alt.bin"
 		}
 	]
