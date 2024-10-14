@@ -24,8 +24,8 @@ export const timerConfig = {
 }
 
 export const rocketCoords = [8, 1, 3.5]
-export const startCoords = [14, .5, 3]
-export const finishCoords = [2, .5, 3]
+export const startCoords = [14, .5, 3.5]
+export const finishCoords = [2, .5, 3.5]
 
 export const MAX_LEVEL = 9
 export const mainEntityId = 5000
