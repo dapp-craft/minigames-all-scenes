@@ -1,21 +1,21 @@
-import { PBGltfContainer } from '@dcl/sdk/ecs'
+import { ColliderLayer, PBGltfContainer } from '@dcl/sdk/ecs'
 
 const modelsFolder = 'models/'
 const imagesFolder = 'images/'
 
 // Static models
 export const STATIC_MODELS: PBGltfContainer[] = [
-  // { src: modelsFolder + 'obj_floor.gltf' },
-  // { src: modelsFolder + 'obj_sign.gltf' },
-  // { src: modelsFolder + 'obj_stairs.gltf' },
-  // { src: modelsFolder + 'obj_pillars.gltf' },
-  // { src: modelsFolder + 'obj_title.gltf' },
-  // { src: modelsFolder + 'obj_frame.gltf' },
-  // { src: modelsFolder + 'obj_text.gltf' },
-  // { src: modelsFolder + 'obj_plants.gltf' },
-  // { src: modelsFolder + 'obj_bench.gltf' },
-  // { src: modelsFolder + 'obj_terminal.gltf' }
-  // { src: modelsFolder + 'obj_gamezone.gltf' }
+  { src: modelsFolder + 'obj_floor.gltf' },
+  { src: modelsFolder + 'obj_sign.gltf' },
+  { src: modelsFolder + 'obj_stairs.gltf' },
+  { src: modelsFolder + 'obj_pillars.gltf' },
+  { src: modelsFolder + 'obj_title.gltf' },
+  { src: modelsFolder + 'obj_frame.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS },
+  { src: modelsFolder + 'obj_text.gltf' },
+  { src: modelsFolder + 'obj_plants.gltf' },
+  { src: modelsFolder + 'obj_bench.gltf' },
+  { src: modelsFolder + 'obj_terminal.gltf' },
+  { src: modelsFolder + 'obj_gamezone.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS }
 ]
 
 // Game shapes
