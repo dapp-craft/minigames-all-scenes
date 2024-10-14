@@ -85,7 +85,7 @@ async function initCountdownNumbers() {
     1,
     1,
     false,
-    110
+    24353
   )
   console.log(timer)
   timer.hide()

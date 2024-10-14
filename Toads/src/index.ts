@@ -29,9 +29,9 @@ export const gameLogic = new GameLogic()
 export async function main() {
     setupEffects(Vector3.create(0, 2.5, -3));
 
-    setupStaticModels()
-
     await libraryReady
+
+    setupStaticModels()
 
     await generateInitialEntity()
 
@@ -48,7 +48,6 @@ const generateInitialEntity = async () => {
 
     const hammerParent = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 1]
     const hammerEntity = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 2]
-    const missTarget = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 3]
     const hits = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 4]
     const miss = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 5]
     const counter = toadsGameState.availableEntity[toadsGameConfig.ToadsAmount + 6]
@@ -58,16 +57,15 @@ const generateInitialEntity = async () => {
     TextShape.create(miss, { text: 'Misses \n0', fontSize: 2 })
     TextShape.create(counter, { text: 'Score \n0', fontSize: 2 })
 
-    syncEntity(hammerParent, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 6)
-    syncEntity(hammerEntity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 1)
-    syncEntity(missTarget, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 2)
-    syncEntity(hits, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 3)
-    syncEntity(miss, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 4)
-    syncEntity(counter, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 5)
+    syncEntity(hammerParent, [Transform.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 6)
+    syncEntity(hammerEntity, [Transform.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 1)
+    syncEntity(hits, [Transform.componentId, TextShape.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 3)
+    syncEntity(miss, [Transform.componentId, TextShape.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 4)
+    syncEntity(counter, [Transform.componentId, TextShape.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 5)
 
-    Transform.createOrReplace(hammerParent)
+    Transform.createOrReplace(hammerParent, {position: Vector3.create(8, 2, 2)})
     Transform.createOrReplace(hammerEntity, { parent: hammerParent })
-    VisibilityComponent.create(hammerEntity, { visible: true })
+    VisibilityComponent.create(hammerEntity, { visible: false });
 
     parentEntity(hammerEntity, hammerParent)
 
@@ -79,7 +77,6 @@ const generateInitialEntity = async () => {
 
     toadsGameState.listOfEntity.set('hammerParent', hammerParent)
     toadsGameState.listOfEntity.set('hammer', hammerEntity)
-    toadsGameState.listOfEntity.set('missTarget', missTarget);
     toadsGameState.listOfEntity.set('hits', hits);
     toadsGameState.listOfEntity.set('miss', miss);
     toadsGameState.listOfEntity.set('counter', counter);
@@ -87,12 +84,11 @@ const generateInitialEntity = async () => {
 
     toadsGameState.toadInitialHeight = data.get(`obj_frog_hidden_1`)!.position.y
     toadsGameState.toadFinishHeight = data.get(`obj_frog_shown_1`)!.position.y
-    Transform.create(missTarget, { position: { ...data.get(`obj_frog_hidden_1`)!.position, y: toadsGameState.toadInitialHeight } })
 
     for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) {
         Transform.createOrReplace(toadsGameState.availableEntity[i], { position: { ...data.get(`obj_frog_hidden_${i + 1}`)!.position, y: toadsGameState.toadInitialHeight }, parent: sceneParentEntity })
         GltfContainer.createOrReplace(toadsGameState.availableEntity[i], { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
-        syncEntity(toadsGameState.availableEntity[i], [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Tween.componentId], TOADS_SYNC_ID + i)
+        syncEntity(toadsGameState.availableEntity[i], [Transform.componentId, GltfContainer.componentId], TOADS_SYNC_ID + i)
     }
 }
 

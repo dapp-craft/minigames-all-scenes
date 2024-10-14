@@ -1,4 +1,4 @@
-import { Animator, ColliderLayer, GltfContainer, MeshCollider, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
+import { ColliderLayer, GltfContainer, Transform, engine } from '@dcl/sdk/ecs'
 import { draft, floor, frame, gameZone, grass, ground, logo, rules, terminal, text, wall, whack } from '../resources/resources'
 import { toadsGameState } from '../state'
 

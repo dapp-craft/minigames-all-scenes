@@ -1,7 +1,6 @@
 import { PBGltfContainer } from "@dcl/sdk/ecs";
 
 const modelsFolder = 'models/';
-const imagesFolder = 'images/';
 
 // Static models
 export const draft: PBGltfContainer = { src: modelsFolder + 'obj_draft.gltf' };
