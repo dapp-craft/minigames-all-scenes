@@ -30,7 +30,8 @@ export const stateVariables = {
   levelFinishTime: 0,
   level: 1,
   playerName: '',
-  playerAddress: ''
+  playerAddress: '',
+  gameCounter: 0
 }
 
 const TileMoveDirection = {
@@ -79,13 +80,14 @@ export function getReadyToStart() {
 
 export async function startLevel(level: keyof typeof levelImages) {
   stateVariables.inGame = true
+  const gameCounter = ++stateVariables.gameCounter
   showPreviewImage(levelImages[level])
   let cd = runCountdown(3)
   const size = getLevelSize(level)
   const matrix = generateLevel(size)
   reSetTiles(level, matrix)
   await cd
-  if (!stateVariables.inGame) return
+  if (!stateVariables.inGame || gameCounter != stateVariables.gameCounter) return
   hidePreviewImage()
   stateVariables.moves = 0
   stateVariables.levelStartTime = Date.now()
