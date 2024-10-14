@@ -249,22 +249,26 @@ function isSolved() {
   return true
 }
 
-function finishLevel() {
+async function finishLevel() {
   stateVariables.levelFinishTime = Date.now()
-
   updatePlayerProgress()
+
+  await runWinAnimation()
+
   if (queue.getQueue().length > 1) {
     exitGame()
   } else {
     const levelToStart = stateVariables.level == MAX_LEVEL ? 1 : stateVariables.level + 1
-    console.log('Level to start', levelToStart)
     levelButtons[levelToStart - 1].enable()
+    if (!stateVariables.inGame) return
+    console.log('Level to start', levelToStart)
     startLevel(levelToStart)
   }
 }
 export function exitGame() {
   cancelCountdown()
   hidePreviewImage()
+  stateVariables.inGame = false
   stateVariables.level = 1
   stateVariables.levelFinishTime = 0
   stateVariables.levelStartTime = 0
