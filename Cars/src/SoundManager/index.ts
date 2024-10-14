@@ -10,14 +10,15 @@ import {
 } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { Vector3 } from '@dcl/sdk/math'
-import { moveCarSound } from '../resources/resources'
+import { mainTheme, moveCarSound, startLevelSound, winSound } from '../resources/resources'
 
 export let SOUNDS: { [key: string]: string } = {
-  move_car: moveCarSound
+  move_car: moveCarSound,
+  start_level: startLevelSound,
+  win: winSound
 }
 
-export let THEME = ''
-export const THEME_VOLUME = 0.7
+export const THEME_VOLUME = 0.035
 
 // export const mainThereme = engine.addEntity()
 // Transform.create(mainThereme, {parent: engine.PlayerEntity})
@@ -47,8 +48,9 @@ export class SoundManager {
     })
 
     this.themeEntity = engine.addEntity()
+    Transform.create(this.themeEntity, { parent: engine.PlayerEntity })
     AudioSource.create(this.themeEntity, {
-      audioClipUrl: THEME,
+      audioClipUrl: mainTheme,
       loop: true,
       playing: this.themeStatus,
       volume: this.themeVolume
@@ -72,7 +74,7 @@ export class SoundManager {
     utils.timers.setTimeout(() => {
       audioSource.playing = false
       engine.removeEntity(soundEntity)
-    }, 2000)
+    }, 10000)
   }
 
   public themePlaying(status: boolean) {
@@ -84,6 +86,4 @@ export class SoundManager {
   public getThemeStatus() {
     return this.themeStatus
   }
-
-
 }

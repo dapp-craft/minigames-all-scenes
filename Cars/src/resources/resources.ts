@@ -2,6 +2,7 @@ import { ColliderLayer, PBGltfContainer } from '@dcl/sdk/ecs'
 
 const modelsFolder = 'models/'
 const imagesFolder = 'images/'
+const soundsFolder = 'sounds/'
 
 export const STATIC_MODELS = [
   { src: modelsFolder + 'obj_rules.gltf' },
@@ -31,4 +32,8 @@ export const carModels = {
   3: { src: modelsFolder + 'obj_car01.gltf' }
 }
 
-export const moveCarSound = 'sounds/move_car.mp3'
+export const moveCarSound = soundsFolder + 'move_car.mp3'
+export const startLevelSound = soundsFolder + 'start_level.mp3'
+export const winSound = soundsFolder + 'win_level.mp3'
+
+export const mainTheme = soundsFolder + 'main_theme.mp3'

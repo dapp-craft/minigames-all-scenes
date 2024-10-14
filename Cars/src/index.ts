@@ -7,7 +7,7 @@ import { initMiniGame } from '../../common/library'
 import { exitGame, gameState, getReadyToStart, initGame, startLevel } from './game'
 import { GAME_ID } from './config'
 import { STATIC_MODELS } from './resources/resources'
-import { setSfxStatus, SFX_ENABLED } from './game/sfx'
+import { setSfxStatus, SFX_ENABLED, soundManager } from './game/sfx'
 import { Color4 } from '@dcl/sdk/math'
 
 const handlers = {
@@ -16,7 +16,9 @@ const handlers = {
   restart: () => {
     startLevel(gameState.level)
   },
-  toggleMusic: () => {},
+  toggleMusic: () => {
+    soundManager.themePlaying(!soundManager.getThemeStatus())
+  },
   toggleSfx: () => {
     setSfxStatus(!SFX_ENABLED)
   }
@@ -27,7 +29,7 @@ const libraryReady = initMiniGame(
   [MOVES, LEVEL, TIME],
   readGltfLocators(`locators/obj_locators_default.gltf`),
   handlers,
-  { labels: {textColor: Color4.Black()}, scoreboard: {sortDirection: 'asc'} }
+  { labels: { textColor: Color4.Black() }, scoreboard: { sortDirection: 'asc' } }
 )
 
 executeTask(async () => {

@@ -37,7 +37,7 @@ import {
   cancelWinAnimation
 } from '../../../common/effects'
 import { queue, ui } from '@dcl-sdk/mini-games/src'
-import { playMoveCarSound } from './sfx'
+import { playMoveCarSound, playStartLevelSound, playWinSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
 import { initArrow } from './arrow'
 
@@ -135,6 +135,8 @@ export async function startLevel(level: number) {
     button.buttonShapeEnabled = level === i + 1 ? ui.uiAssets.shapes.SQUARE_YELLOW : ui.uiAssets.shapes.SQUARE_GREEN
     if (button.enabled) button.enable()
   })
+
+  playStartLevelSound()
 
   clearInputBuffer()
 
@@ -272,6 +274,7 @@ function processMovement(start: Cell, end: Cell) {
 
   if (isSolved()) {
     inputAvailable = false
+    playWinSound()
     runWinAnimation().then(finishLevel)
   }
 }
