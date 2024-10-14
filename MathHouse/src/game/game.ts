@@ -11,12 +11,13 @@ import { generateArray, rocketBoard } from ".."
 import { readGltfLocators } from "../../../common/locators"
 import { randomLvl } from "../levels"
 import { soundManager } from "../globals"
-import { fetchPlayerProgress, updatePlayerProgress } from "./syncData"
+import { updatePlayerProgress } from "./syncData"
 import { cancelCountdown, runCountdown, runGameoverAnimation, runWinAnimation } from "../../../common/effects"
 
 export let gameDataEntity: Entity
 export let sessionStartedAt: number
 export let gameButtons: ui.MenuButton[] = []
+export let nextLevelTimeOut: utils.TimerId | undefined = undefined
 
 let playerAnswer = 0
 let entityCounter = -1
@@ -50,9 +51,6 @@ export const restartCallback = () => {
 }
 
 export const initGame = async () => {
-
-    await fetchPlayerProgress()
-
     await initGameButtons()
 }
 
@@ -102,24 +100,23 @@ const initGameButtons = async () => {
                     rocketBoard.setRightCounter(entityCounter)
                     rocketBoard.showBoard(playerAnswer)
                     const time = playerAnswer * timerConfig.additionCatTimeGap + timerConfig.catIconAnimationTime + timerConfig.initialCatTimeGap
-                    utils.timers.setTimeout(() => {
-                        gameButtons[i - 1].disable()
-                    }, gameButtons[i - 1].releaseTime + 200)
+                    utils.timers.setTimeout(() => gameButtons[i - 1].disable(), gameButtons[i - 1].releaseTime + 200)
                     if (entityCounter == playerAnswer) {
                         console.log("WIN")
                         soundManager.playSound('correctAnswerSound', soundConfig.volume)
-                        utils.timers.setTimeout(async () => {
+                        nextLevelTimeOut = utils.timers.setTimeout(async () => {
                             await incrementUserProgress()
                             if (progressState.level >= maxLevel) runGameoverAnimation(WIN_DURATION).then(() => afterGame())
-                            else runWinAnimation(WIN_DURATION).then(async () => startGame())
+                            else {
+                                runWinAnimation(WIN_DURATION)
+                                nextLevelTimeOut = utils.timers.setTimeout(() => startGame(), WIN_DURATION)
+                            }
                         }, time)
                     }
                     else {
                         console.log("LOSE")
                         soundManager.playSound('wrongAnswerSound', soundConfig.volume)
-                        utils.timers.setTimeout(() => {
-                            restartCallback()
-                        }, time + 500)
+                        nextLevelTimeOut = utils.timers.setTimeout(() => restartCallback(), time + 500)
                     }
                 },
             )
@@ -129,9 +126,7 @@ const initGameButtons = async () => {
 
 const afterGame = () => {
     utils.timers.setTimeout(() => {
-        movePlayerTo({
-            newRelativePosition: Vector3.create(8, 1, 13),
-        })
+        movePlayerTo({newRelativePosition: Vector3.create(8, 1, 13),})
         progressState.level = 1
     }, WIN_DURATION)
 }

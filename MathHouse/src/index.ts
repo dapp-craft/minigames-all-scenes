@@ -1,15 +1,13 @@
-// We define the empty imports so the auto-complete feature works as expected.
-import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
+import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { Animator, AudioSource, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState } from './state'
-import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, gameTime, mainEntityId, rocketCoords, soundConfig } from './config'
+import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, gameTime, rocketCoords, soundConfig } from './config'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { setupStaticModels, setupStaticModelsFromGltf } from './staticModels/setupStaticModels'
-import { setupUI } from './ui'
 import { exitCallback, getReadyToStart, initGame, restartCallback } from './game/game'
 import { board } from './board'
 import { randomLvl } from './levels'
-import { kitty, ost } from './resources/resources'
+import { kitty } from './resources/resources'
 import { generatedData } from './Types'
 import { readGltfLocators } from '../../common/locators'
 import { sceneParentEntity } from './globals'
@@ -46,8 +44,6 @@ export async function main() {
   await setupStaticModelsFromGltf()
 
   initGame()
-
-  setupUI()
 
   rocketBoard = new board();
 }

@@ -8,10 +8,8 @@ import { sceneParentEntity } from './globals';
 import { timerConfig } from './config';
 
 export class board {
-
     private numberOfBoardElements: number = 0
     private data: any
-
     private resolveReady!: () => void
     private dataIsDone: Promise<void>
 

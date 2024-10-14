@@ -5,7 +5,7 @@ import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { CartridgeTest, SpawnEntityDelay } from "./Types";
 import { entityList, gameState } from "./state";
 import { rocketBoard } from ".";
-import { gameButtons } from "./game/game";
+import { gameButtons, nextLevelTimeOut } from "./game/game";
 
 export class gameEntityManager {
 
@@ -129,5 +129,7 @@ export class gameEntityManager {
             VisibilityComponent.createOrReplace(entity, { visible: false })
         })
         gameState.availableEntity.forEach((e, k) => Tween.deleteFrom(e))
+        console.log(nextLevelTimeOut)
+        nextLevelTimeOut != undefined && utils.timers.clearTimeout(nextLevelTimeOut)
     }
 }
