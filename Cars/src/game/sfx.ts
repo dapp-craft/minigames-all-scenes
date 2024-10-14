@@ -17,7 +17,7 @@ export function playMoveCarSound() {
 }
 
 export function playStartLevelSound() {
-  playSound('start_level', 1)
+  playSound('start_level', 0.5)
 }
 
 export function playWinSound() {
