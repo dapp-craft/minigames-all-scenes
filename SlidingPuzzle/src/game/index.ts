@@ -1,3 +1,10 @@
+import {
+  runCountdown,
+  runWinAnimation,
+  setupEffects,
+  cancelCountdown,
+  cancelWinAnimation
+} from '../../../common/effects'
 import { Entity } from '@dcl/sdk/ecs'
 import { MAX_BOARD_SIZE, MAX_LEVEL } from '../config'
 import { createTile, getAllTiles, getTileAtPosition } from './gameObjects/tile'
@@ -13,6 +20,8 @@ import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syn
 import { getPlayer } from '@dcl/sdk/players'
 import * as utils from '@dcl-sdk/utils'
 import { playSLideSound } from './sound'
+import { Vector3 } from '@dcl/sdk/math'
+import { showPreviewImage, hidePreviewImage, initPreviewImage } from './previewImage'
 
 export const stateVariables = {
   inGame: false,
@@ -32,9 +41,13 @@ const TileMoveDirection = {
 }
 
 export async function initGame() {
+  setupEffects(Vector3.create(0, 2.5, -6))
+
   setupGameUI()
 
   initBoard()
+
+  initPreviewImage()
 
   initTiles()
 
@@ -64,11 +77,16 @@ export function getReadyToStart() {
   }, 2000)
 }
 
-export function startLevel(level: keyof typeof levelImages) {
+export async function startLevel(level: keyof typeof levelImages) {
+  stateVariables.inGame = true
+  showPreviewImage(levelImages[level])
+  let cd = runCountdown(3)
   const size = getLevelSize(level)
   const matrix = generateLevel(size)
   reSetTiles(level, matrix)
-  stateVariables.inGame = true
+  await cd
+  if (!stateVariables.inGame) return
+  hidePreviewImage()
   stateVariables.moves = 0
   stateVariables.levelStartTime = Date.now()
   stateVariables.levelFinishTime = 0
@@ -243,6 +261,8 @@ function finishLevel() {
   }
 }
 export function exitGame() {
+  cancelCountdown()
+  hidePreviewImage()
   stateVariables.level = 1
   stateVariables.levelFinishTime = 0
   stateVariables.levelStartTime = 0
