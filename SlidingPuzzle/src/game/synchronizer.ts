@@ -25,7 +25,11 @@ export function setupSynchronizer() {
 export function updateTile(tile: Entity) {
   const oldState = tileLatest[tile]
   const newState = Tile.get(tile)
-  if (oldState.position.x !== newState.position.x || oldState.position.y !== newState.position.y) {
+  if (
+    oldState.position.x !== newState.position.x ||
+    oldState.position.y !== newState.position.y ||
+    oldState.boardSize !== newState.boardSize
+  ) {
     Transform.getMutable(tile).position = getTilePosition(newState.boardSize, newState.position.x, newState.position.y)
   }
 
@@ -42,7 +46,7 @@ export function updateTile(tile: Entity) {
     updateTileImage(tile)
   }
 
-  if (oldState.boardSize !== newState.boardSize) {
+  if (oldState.boardSize !== newState.boardSize && newState.inGame) {
     const scale = 3 / newState.boardSize
     Transform.getMutable(tile).scale = Vector3.scale(Vector3.One(), scale)
   }
