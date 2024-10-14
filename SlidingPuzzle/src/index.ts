@@ -30,7 +30,9 @@ const libraryReady = initMiniGame(
   TIME_LEVEL,
   readGltfLocators(`locators/obj_locators_default.gltf`),
   handlers,
-  { textColor: Color4.Black(), fontSize: 3 }
+  {
+    labels: { textColor: Color4.Black(), fontSize: 3 }
+  }
 )
 
 executeTask(async () => {
