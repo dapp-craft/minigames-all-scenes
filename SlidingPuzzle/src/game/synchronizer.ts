@@ -1,10 +1,11 @@
-import { Entity, engine, Transform } from '@dcl/sdk/ecs'
+import { Entity, engine, Transform, Tween, PBTween, EasingFunction } from '@dcl/sdk/ecs'
 import { TileType } from './type'
 import { Tile } from './components'
 import { getTilePosition, tileRowColumn } from './utils/tileCalculation'
 import { Vector3 } from '@dcl/sdk/math'
 import { updateTileImage } from './utils/tile'
 import { getAllTiles } from './gameObjects'
+import * as utils from '@dcl-sdk/utils'
 
 const tileLatest: Record<Entity, TileType> = {}
 
@@ -28,9 +29,17 @@ export function updateTile(tile: Entity) {
   if (
     oldState.position.x !== newState.position.x ||
     oldState.position.y !== newState.position.y ||
-    oldState.boardSize !== newState.boardSize
+    oldState.boardSize !== newState.boardSize ||
+    oldState.inGame !== newState.inGame
   ) {
-    Transform.getMutable(tile).position = getTilePosition(newState.boardSize, newState.position.x, newState.position.y)
+    createTween(tile, {
+      mode: Tween.Mode.Move({
+        start: Transform.get(tile).position,
+        end: getTilePosition(newState.boardSize, newState.position.x, newState.position.y)
+      }),
+      duration: 500,
+      easingFunction: EasingFunction.EF_EASECUBIC
+    })
   }
 
   if (oldState.inGame === false && newState.inGame === true) {
@@ -71,4 +80,11 @@ function setTile(tile: Entity) {
   updateTileImage(tile)
 
   tileLatest[tile] = JSON.parse(JSON.stringify(Tile.get(tile)))
+}
+
+function createTween(entity: Entity, tween: PBTween) {
+  Tween.deleteFrom(entity)
+  utils.timers.setTimeout(() => {
+    Tween.createOrReplace(entity, tween)
+  }, 1)
 }
