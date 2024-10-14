@@ -61,7 +61,7 @@ export class GameLogic {
         console.log("activateHammer")
         const hammerEntity = toadsGameState.listOfEntity.get('hammerParent')
         const hammer = toadsGameState.listOfEntity.get('hammer')
-        if(!this.gameEnd) VisibilityComponent.getMutable(hammer).visible = true
+        if (!this.gameEnd) VisibilityComponent.getMutable(hammer).visible = true
         raycastSystem.registerLocalDirectionRaycast(
             {
                 entity: engine.CameraEntity,
@@ -313,7 +313,16 @@ export class GameLogic {
         pointerEventsSystem.removeOnPointerDown(toadsGameState.listOfEntity.get('ground'))
         this.stopHammer()
         this.gameEnd = true
-        this.availableEntity.forEach(obj => Transform.getMutable(obj.entity).position.y = toadsGameState.toadInitialHeight)
+        this.availableEntity.forEach(obj => {
+            Tween.createOrReplace(obj.entity, {
+                mode: Tween.Mode.Move({
+                    start: { ...Transform.get(obj.entity).position, y: toadsGameState.toadInitialHeight },
+                    end: { ...Transform.get(obj.entity).position, y: toadsGameState.toadInitialHeight },
+                }),
+                duration: 10,
+                easingFunction: EasingFunction.EF_LINEAR,
+            })
+        })
         this.toadsTimer.forEach((e, k) => {
             utils.timers.clearTimeout(e.start)
             this.resolveReady()
