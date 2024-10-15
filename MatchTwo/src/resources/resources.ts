@@ -1,4 +1,4 @@
-import { PBGltfContainer } from '@dcl/sdk/ecs'
+import { ColliderLayer, PBGltfContainer } from '@dcl/sdk/ecs'
 
 const modelsFolder = 'models/'
 const imagesFolder = 'images/'
@@ -11,7 +11,7 @@ export const staticModels: PBGltfContainer[] = [
   { src: modelsFolder + 'obj_frame.gltf' },
   { src: modelsFolder + 'obj_ground.gltf' },
   { src: modelsFolder + 'obj_terminal.gltf' },
-  { src: modelsFolder + 'obj_wall.gltf' },
+  { src: modelsFolder + 'obj_wall.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS },
   { src: modelsFolder + 'obj_tower.gltf' },
   { src: modelsFolder + 'obj_gamezone.gltf' },
   { src: modelsFolder + 'obj_rules.gltf' },
