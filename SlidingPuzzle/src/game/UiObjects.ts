@@ -47,7 +47,7 @@ function setupMoveCouner() {
 
 function seteupTimer() {
   const timer = engine.addEntity()
-  Transform.create(timer, UiLocators['counter_timer'])
+  Transform.create(timer, UiLocators['counter_stopwatch'])
 
   engine.addSystem(() => {
     if (stateVariables.levelStartTime == 0) {

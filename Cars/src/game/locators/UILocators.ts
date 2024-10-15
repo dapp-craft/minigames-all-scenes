@@ -2,7 +2,7 @@ import { TransformType } from '@dcl/sdk/ecs'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { readGltfLocators } from '../../../../common/locators'
 
-export const UiLocatorsNames = ['counter_moves', 'counter_timer']
+export const UiLocatorsNames = ['counter_moves', 'counter_stopwatch']
 
 export const UiLocators: Record<string, TransformType> = {}
 
