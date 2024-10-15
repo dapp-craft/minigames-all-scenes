@@ -4,7 +4,7 @@ import { stateVariables, startLevel } from './index'
 import * as utils from '@dcl-sdk/utils'
 import { levelButtonPositions, setLevelButtonPositions } from './locators/levelButtonPositions'
 import { setLevelUiPositions, UiLocators } from './locators/UILocators'
-import { MeshRenderer, TextShape, Transform, engine } from '@dcl/sdk/ecs'
+import { MeshRenderer, TextAlignMode, TextShape, Transform, engine } from '@dcl/sdk/ecs'
 import { MAX_LEVEL } from '../config'
 
 export const levelButtons: ui.MenuButton[] = []
@@ -39,7 +39,8 @@ function setupMoveCouner() {
     TextShape.createOrReplace(moveCounter, {
       text: `Moves: ${stateVariables.moves}`,
       fontSize: 3,
-      textColor: Color4.Black()
+      textColor: Color4.Black(),
+      textAlign: TextAlignMode.TAM_MIDDLE_LEFT
     })
   })
 }
@@ -53,7 +54,8 @@ function seteupTimer() {
       TextShape.createOrReplace(timer, {
         text: `Time: --:--`,
         fontSize: 3,
-        textColor: Color4.Black()
+        textColor: Color4.Black(),
+        textAlign: TextAlignMode.TAM_MIDDLE_LEFT
       })
       return
     }
@@ -68,7 +70,8 @@ function seteupTimer() {
         useGrouping: false
       })}:${seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}`,
       fontSize: 3,
-      textColor: Color4.Black()
+      textColor: Color4.Black(),
+      textAlign: TextAlignMode.TAM_MIDDLE_LEFT
     })
   })
 }
