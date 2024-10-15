@@ -15,7 +15,6 @@ export let sessionStartedAt: number
 let timer: ui.Timer3D
 let playButton: ui.MenuButton
 let startTimeOut: utils.TimerId
-let buttonDisableTimeOut: utils.TimerId
 
 export const initGame = async () => {
   console.log('INIT GAME')
@@ -30,9 +29,7 @@ export function getReadyToStart() {
   playButton.disable()
   soundManager.playSound('enterSounds', soundConfig.volume)
   utils.timers.clearTimeout(startTimeOut)
-  utils.timers.clearTimeout(buttonDisableTimeOut)
   exitCallback(false)
-  playButton.disable()
   CameraModeArea.createOrReplace(engine.PlayerEntity, {
     area: Vector3.create(1, 1, 1),
     mode: CameraType.CT_FIRST_PERSON,
@@ -61,12 +58,12 @@ async function startGame() {
   countdown(() => {
     gameLogic.stopGame()
     soundManager.playSound('exitSounds', soundConfig.volume)
+    playButton.enable()
   }, toadsGameConfig.gameTime / 1000)
 
   const res = await gameLogic.startGame();
   console.log(res)
 
-  playButton.enable()
 
   progressState.moves = res
   console.log(progressState)
@@ -126,7 +123,7 @@ const spawnButton = async () => {
     () => {
       getReadyToStart()
     },
-    true,
+    false,
     500
   )
 }
