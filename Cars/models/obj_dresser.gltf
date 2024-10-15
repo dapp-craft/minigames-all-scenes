@@ -3,6 +3,13 @@
 		"generator":"Khronos glTF Blender I/O v4.2.57",
 		"version":"2.0"
 	},
+	"extensionsUsed":[
+		"KHR_draco_mesh_compression",
+		"KHR_materials_specular"
+	],
+	"extensionsRequired":[
+		"KHR_draco_mesh_compression"
+	],
 	"scene":0,
 	"scenes":[
 		{
@@ -16,20 +23,42 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_dresser"
+			"name":"obj_dresser",
+			"translation":[
+				1.9450656175613403,
+				0.04611869156360626,
+				1.1067924499511719
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_dresser_collider"
+			"name":"obj_dresser_collider",
+			"translation":[
+				1.9450656175613403,
+				0.04611869156360626,
+				1.1067924499511719
+			]
 		}
 	],
 	"materials":[
 		{
-			"doubleSided":true,
+			"emissiveFactor":[
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
+			],
+			"emissiveTexture":{
+				"index":0
+			},
+			"extensions":{
+				"KHR_materials_specular":{
+					"specularFactor":0
+				}
+			},
 			"name":"obj_dresser",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":0
+					"index":1
 				},
 				"metallicFactor":0
 			}
@@ -45,26 +74,50 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":0,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
 					"indices":3,
-					"material":0
+					"material":0,
+					"mode":4
 				}
 			]
 		},
 		{
-			"name":"Cube.012",
+			"name":"Bounding Box Mesh.009",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":4,
-						"NORMAL":5,
-						"TEXCOORD_0":6
+						"NORMAL":5
 					},
-					"indices":3
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":1,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1
+							}
+						}
+					},
+					"indices":6,
+					"mode":4
 				}
 			]
 		}
 	],
 	"textures":[
+		{
+			"sampler":0,
+			"source":0
+		},
 		{
 			"sampler":0,
 			"source":0
@@ -79,110 +132,71 @@
 	],
 	"accessors":[
 		{
-			"bufferView":0,
 			"componentType":5126,
-			"count":184,
+			"count":220,
 			"max":[
-				2.5282819271087646,
-				0.8648461699485779,
-				1.4027072191238403
+				0.5832163095474243,
+				0.8187274932861328,
+				0.29591476917266846
 			],
 			"min":[
-				1.361849308013916,
-				0.04611869156360626,
-				0.812196671962738
+				-0.5832163095474243,
+				0,
+				-0.29459577798843384
 			],
 			"type":"VEC3"
 		},
 		{
-			"bufferView":1,
 			"componentType":5126,
-			"count":184,
+			"count":220,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":2,
 			"componentType":5126,
-			"count":184,
+			"count":220,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":3,
 			"componentType":5123,
 			"count":342,
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
 			"componentType":5126,
-			"count":184,
+			"count":24,
 			"max":[
-				2.5282819271087646,
-				0.8648461699485779,
-				1.4027072191238403
+				0.5832163095474243,
+				0.8187274932861328,
+				0.29525527358055115
 			],
 			"min":[
-				1.361849308013916,
-				0.04611869156360626,
-				0.812196671962738
+				-0.5832163095474243,
+				0,
+				-0.29525527358055115
 			],
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
 			"componentType":5126,
-			"count":184,
+			"count":24,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
-			"componentType":5126,
-			"count":184,
-			"type":"VEC2"
+			"componentType":5123,
+			"count":36,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":2208,
-			"byteOffset":0,
-			"target":34962
+			"byteLength":2041,
+			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":2208,
-			"byteOffset":2208,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1472,
-			"byteOffset":4416,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":684,
-			"byteOffset":5888,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":2208,
-			"byteOffset":6572,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":2208,
-			"byteOffset":8780,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1472,
-			"byteOffset":10988,
-			"target":34962
+			"byteLength":226,
+			"byteOffset":2044
 		}
 	],
 	"samplers":[
@@ -193,7 +207,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":12460,
+			"byteLength":2272,
 			"uri":"obj_dresser.bin"
 		}
 	]
