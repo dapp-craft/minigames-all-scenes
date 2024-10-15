@@ -2,7 +2,7 @@ import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/m
 import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
 import { getPlayer } from '@dcl/sdk/players'
 import { rotateVectorAroundCenter } from '@dcl-sdk/mini-games/src/utilities'
-import { engine, Transform, TransformType, TextShape, PBTextShape, Entity } from '@dcl/sdk/ecs'
+import { engine, Transform, TransformType, TextShape, PBTextShape, Entity, TextAlignMode, executeTask, NetworkEntity } from '@dcl/sdk/ecs'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
@@ -34,7 +34,7 @@ export interface MiniGameCallbacks {
 }
 
 const DEFAULT_SETTINGS = {
-    labels: <Omit<PBTextShape, 'text'>>{
+    labels: <Omit<PBTextShape, 'text' | 'textAlign'>>{
         fontSize: 3,
         textColor: Color4.White()
     },
@@ -119,17 +119,21 @@ export async function initMiniGame(
         let value = `${activePlayer ? getPlayer({ userId: activePlayer?.address })!.name : '---'}`
         if (TextShape.get(labelNickname).text != value) TextShape.getMutable(labelNickname).text = value
         value = `Next turn: ${sessionTimeLeft !== undefined ? minutes + ':' + seconds : 'now'}`
-        if (counterTimer && TextShape.get(counterTimer).text != value) TextShape.getMutable(counterTimer).text = value
+        if ((isActive || !activePlayer) && counterTimer && TextShape.get(counterTimer).text != value) {
+            TextShape.getMutable(counterTimer).text = value
+        }
     }
     const labelNickname = engine.addEntity()
     Transform.create(labelNickname, { ...positions.get(NODE_NAME.LABEL_NICKNAME), parent: sceneParentEntity })
     TextShape.create(labelNickname, { ...labels, text: '' })
     let counterTimer: Entity | undefined
-    if (positions.has(NODE_NAME.COUNTER_TIMER)) {
+    if (positions.has(NODE_NAME.COUNTER_TIMER)) executeTask(async () => {
         counterTimer = engine.addEntity()
         Transform.create(counterTimer, { ...positions.get(NODE_NAME.COUNTER_TIMER), parent: sceneParentEntity })
-        TextShape.create(counterTimer, { ...labels, text: '' })
-    }
+        TextShape.create(counterTimer, { ...labels, text: '', textAlign: TextAlignMode.TAM_MIDDLE_LEFT })
+        syncEntity(counterTimer, [TextShape.componentId]) 
+        NetworkEntity.createOrReplace(counterTimer, {networkId: 0, entityId: 66666666 as Entity})
+    })
 
     new ui.ScoreBoard(
         { ...positions.get(NODE_NAME.DISPLAY_SCOREBOARD)!, scale: Vector3.One(), parent: sceneParentEntity },
