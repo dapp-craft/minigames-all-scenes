@@ -3,6 +3,12 @@
 		"generator":"Khronos glTF Blender I/O v4.2.57",
 		"version":"2.0"
 	},
+	"extensionsUsed":[
+		"KHR_draco_mesh_compression"
+	],
+	"extensionsRequired":[
+		"KHR_draco_mesh_compression"
+	],
 	"scene":0,
 	"scenes":[
 		{
@@ -52,13 +58,24 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":0,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
 					"indices":3,
-					"material":0
+					"material":0,
+					"mode":4
 				}
 			]
 		},
 		{
-			"name":"obj_railings.001",
+			"name":"obj_railings.002",
 			"primitives":[
 				{
 					"attributes":{
@@ -66,14 +83,24 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":1,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
+					"indices":7,
+					"mode":4
 				}
 			]
 		}
 	],
 	"accessors":[
 		{
-			"bufferView":0,
 			"componentType":5126,
 			"count":1151,
 			"max":[
@@ -89,99 +116,66 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":1,
 			"componentType":5126,
 			"count":1151,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":2,
 			"componentType":5126,
 			"count":1151,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":3,
 			"componentType":5123,
 			"count":3672,
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
 			"componentType":5126,
-			"count":1151,
+			"count":200,
 			"max":[
-				7.874035358428955,
-				0.7933011651039124,
-				7.882829189300537
+				7.899416923522949,
+				0.7991418242454529,
+				7.9079461097717285
 			],
 			"min":[
-				-7.874035358428955,
-				0.10669770836830139,
-				-7.639318943023682
+				-7.899416923522949,
+				0.06457069516181946,
+				-7.663116931915283
 			],
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
 			"componentType":5126,
-			"count":1151,
+			"count":200,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
 			"componentType":5126,
-			"count":1151,
+			"count":200,
 			"type":"VEC2"
+		},
+		{
+			"componentType":5123,
+			"count":702,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":13812,
-			"byteOffset":0,
-			"target":34962
+			"byteLength":7603,
+			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":13812,
-			"byteOffset":13812,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":9208,
-			"byteOffset":27624,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":7344,
-			"byteOffset":36832,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":13812,
-			"byteOffset":44176,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":13812,
-			"byteOffset":57988,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":9208,
-			"byteOffset":71800,
-			"target":34962
+			"byteLength":1572,
+			"byteOffset":7604
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":81008,
+			"byteLength":9176,
 			"uri":"obj_railings.bin"
 		}
 	]
