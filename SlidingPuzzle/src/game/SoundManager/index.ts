@@ -1,10 +1,12 @@
 import { AudioSource, engine, Entity, Transform } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { Vector3 } from '@dcl/sdk/math'
-import { slideSound, mainTheme } from '../../resources/resources'
+import { slideSound, mainTheme, startSound, winSound } from '../../resources/resources'
 
 export let SOUNDS: { [key: string]: string } = {
-  slide: slideSound
+  slide: slideSound,
+  start: startSound,
+  win: winSound
 }
 
 export const THEME_VOLUME = 0.7

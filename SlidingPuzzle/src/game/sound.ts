@@ -15,3 +15,11 @@ export function playSound(sound: string, volume: number = 0.5) {
 export function playSLideSound() {
   playSound('slide', 1)
 }
+
+export function playWinSound() {
+  playSound('win', 1)
+}
+
+export function playStartSound() {
+  playSound('start', 1)
+}

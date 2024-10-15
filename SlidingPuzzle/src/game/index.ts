@@ -19,7 +19,7 @@ import { queue } from '@dcl-sdk/mini-games/src'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { getPlayer } from '@dcl/sdk/players'
 import * as utils from '@dcl-sdk/utils'
-import { playSLideSound } from './sound'
+import { playSLideSound, playStartSound, playWinSound } from './sound'
 import { Vector3 } from '@dcl/sdk/math'
 import { showPreviewImage, hidePreviewImage, initPreviewImage } from './previewImage'
 
@@ -81,6 +81,7 @@ export function getReadyToStart() {
 export async function startLevel(level: keyof typeof levelImages) {
   stateVariables.inGame = true
   const gameCounter = ++stateVariables.gameCounter
+  playStartSound()
   showPreviewImage(levelImages[level])
   let cd = runCountdown(3)
   const size = getLevelSize(level)
@@ -252,6 +253,7 @@ function isSolved() {
 async function finishLevel() {
   stateVariables.levelFinishTime = Date.now()
   updatePlayerProgress()
+  playWinSound()
 
   await runWinAnimation()
 

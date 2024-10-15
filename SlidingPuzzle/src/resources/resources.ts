@@ -2,6 +2,7 @@ import { ColliderLayer, PBGltfContainer } from '@dcl/sdk/ecs'
 
 const modelsFolder = 'models/'
 const imagesFolder = 'images/'
+const soundsFolder = 'sounds/'
 
 // Static models
 export const STATIC_MODELS: PBGltfContainer[] = [
@@ -37,7 +38,9 @@ export const levelImages: Record<number, string> = {
 export const lvl3x3Image = imagesFolder + 'gameImages/image_3x3.png'
 
 // Game sounds
-export const slideSound = 'sounds/game/slide.mp3'
+export const slideSound = soundsFolder + 'game/slide.mp3'
+export const winSound = soundsFolder + 'game/win.mp3'
+export const startSound = soundsFolder + 'game/start.mp3'
 
 // Theme sounds
 export const mainTheme = 'sounds/main_theme.mp3'
