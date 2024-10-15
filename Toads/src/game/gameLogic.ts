@@ -143,7 +143,7 @@ export class GameLogic {
         Tween.createOrReplace(hammerEntity, {
             mode: Tween.Mode.Move({
                 start: Transform.get(hammerEntity).position,
-                end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight - Transform.get(hammerParent).position.y }
+                end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight - Transform.get(hammerParent).position.y + .3}
             }),
             duration: animationConfig.hitTIme,
             easingFunction: EasingFunction.EF_EASEINQUAD,
@@ -161,7 +161,7 @@ export class GameLogic {
             const distanceTOLastPoint = -(Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y - currentPosY)
             currentPosY = Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y
             let hammerZeroYVector = { ...Transform.get(hammerParent).position, y: 0 }
-            if (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= toadsGameState.toadInitialHeight + .7) {
+            if (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= toadsGameState.toadInitialHeight + .4) {
                 soundManager.playSound('missSound', soundConfig.volume)
                 this.changeCounter(-1)
                 hammerFinish()

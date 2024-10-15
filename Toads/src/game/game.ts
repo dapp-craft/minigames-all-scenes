@@ -32,7 +32,7 @@ export function getReadyToStart() {
   utils.timers.clearTimeout(startTimeOut)
   utils.timers.clearTimeout(buttonDisableTimeOut)
   exitCallback(false)
-  buttonDisableTimeOut = utils.timers.setTimeout(() => playButton.disable(), playButton.releaseTime + 200)
+  playButton.disable()
   CameraModeArea.createOrReplace(engine.PlayerEntity, {
     area: Vector3.create(1, 1, 1),
     mode: CameraType.CT_FIRST_PERSON,
