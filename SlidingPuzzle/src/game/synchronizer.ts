@@ -86,5 +86,5 @@ function createTween(entity: Entity, tween: PBTween) {
   Tween.deleteFrom(entity)
   utils.timers.setTimeout(() => {
     Tween.createOrReplace(entity, tween)
-  }, 1)
+  }, 100)
 }
