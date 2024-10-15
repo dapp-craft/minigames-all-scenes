@@ -15,7 +15,7 @@ import { levelImages } from '../resources/resources'
 import { generateLevel, getLevelSize } from './utils/levelGenerator'
 import { boardMatrix } from './utils/boardMatrix'
 import { levelButtons, setupGameUI } from './UiObjects'
-import { queue } from '@dcl-sdk/mini-games/src'
+import { queue, ui } from '@dcl-sdk/mini-games/src'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { getPlayer } from '@dcl/sdk/players'
 import * as utils from '@dcl-sdk/utils'
@@ -81,6 +81,12 @@ export function getReadyToStart() {
 export async function startLevel(level: keyof typeof levelImages) {
   stateVariables.inGame = true
   const gameCounter = ++stateVariables.gameCounter
+
+  levelButtons.forEach((button, i) => {
+    button.buttonShapeEnabled = level === i + 1 ? ui.uiAssets.shapes.SQUARE_YELLOW : ui.uiAssets.shapes.SQUARE_GREEN
+    if (button.enabled) button.enable()
+  })
+
   playStartSound()
   showPreviewImage(levelImages[level])
   let cd = runCountdown(3)
