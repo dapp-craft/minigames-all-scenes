@@ -24,8 +24,8 @@
   ],
   "dependencies": {
     "@dcl-sdk/mini-games": "1.0.0-20241011125057.commit-e9eeb84",
-    "@dcl/js-runtime": "7.6.2",
-    "@dcl/sdk": "7.6.2"
+    "@dcl/js-runtime": "7.6.0",
+    "@dcl/sdk": "7.6.0"
   },
   "prettier": {
     "semi": false,
