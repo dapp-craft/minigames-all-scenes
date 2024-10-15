@@ -153,7 +153,6 @@ export class GameLogic {
             engine.removeSystem('hammerHit')
             this.activateHammer()
             Tween.deleteFrom(hammerEntity)
-            this.isHammerInAction = false
             hammerBounce()
         }
 
@@ -195,6 +194,7 @@ export class GameLogic {
                 duration: animationConfig.hammerBounceTime,
                 easingFunction: EasingFunction.EF_EASEOUTBACK,
             })
+            utils.timers.setTimeout(() => {this.isHammerInAction = false}, 100)
         }
     }
 
@@ -214,7 +214,7 @@ export class GameLogic {
         utils.timers.setTimeout(() => {
             GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
             target.available = true
-        }, animationConfig.frogAfterHitHideTime)
+        }, animationConfig.frogAfterHitHideTime + 200)
     }
 
     private async playGame() {
@@ -232,7 +232,7 @@ export class GameLogic {
             utils.timers.setTimeout(() => {
                 GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
                 obj.available = true
-            }, animationConfig.frogEscapeTime + 100);
+            }, animationConfig.frogEscapeTime + 200);
         }
         console.log(toadsGameState.listOfEntity.get('ground'));
         pointerEventsSystem.onPointerDown(

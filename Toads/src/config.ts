@@ -5,7 +5,7 @@ export const toadsGameConfig = {
     ToadsAmount: 8,
     toadsDistance: .5,
     gameTime: 30000,
-    frogTimeGap: 600,
+    frogTimeGap: 550,
     hammerRadius: .7,
     hammerAltitude: 2,
     priceMultiplier: 10,
@@ -25,4 +25,4 @@ export const soundConfig = {
     volume: 0.5
 }
 
-export const TOADS_SYNC_ID = 3000
+export const TOADS_SYNC_ID = 5000

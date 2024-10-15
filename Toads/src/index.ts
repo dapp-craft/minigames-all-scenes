@@ -57,14 +57,14 @@ const generateInitialEntity = async () => {
     TextShape.create(miss, { text: 'Misses \n0', fontSize: 2 })
     TextShape.create(counter, { text: 'Score \n0', fontSize: 2 })
 
-    syncEntity(hammerParent, [Transform.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 6)
-    syncEntity(hammerEntity, [Transform.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 1)
-    syncEntity(hits, [Transform.componentId, TextShape.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 3)
-    syncEntity(miss, [Transform.componentId, TextShape.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 4)
-    syncEntity(counter, [Transform.componentId, TextShape.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 5)
+    syncEntity(hammerParent, [Transform.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 10 + 6)
+    syncEntity(hammerEntity, [Transform.componentId, VisibilityComponent.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 10 + 1)
+    syncEntity(hits, [Transform.componentId, TextShape.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 10 + 3)
+    syncEntity(miss, [Transform.componentId, TextShape.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 10 + 4)
+    syncEntity(counter, [Transform.componentId, TextShape.componentId], TOADS_SYNC_ID + toadsGameConfig.ToadsAmount + 10 + 5)
 
-    Transform.createOrReplace(hammerParent, {position: Vector3.create(8, 2, 2)})
-    Transform.createOrReplace(hammerEntity, { parent: hammerParent })
+    Transform.createOrReplace(hammerParent, { position: Vector3.create(8, 2, 2) })
+    Transform.createOrReplace(hammerEntity, { parent: hammerParent });
     VisibilityComponent.create(hammerEntity, { visible: false });
 
     parentEntity(hammerEntity, hammerParent)
