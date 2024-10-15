@@ -16,7 +16,8 @@ export const STATIC_MODELS: PBGltfContainer[] = [
   { src: modelsFolder + 'obj_plants.gltf' },
   { src: modelsFolder + 'obj_bench.gltf' },
   { src: modelsFolder + 'obj_terminal.gltf' },
-  { src: modelsFolder + 'obj_gamezone.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS }
+  { src: modelsFolder + 'obj_gamezone.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS },
+  { src: modelsFolder + 'obj_rules.gltf' }
 ]
 
 // Game shapes
