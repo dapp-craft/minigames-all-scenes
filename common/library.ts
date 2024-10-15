@@ -9,6 +9,7 @@ import players from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { parseTime } from './utils/time'
 import { getRealm } from '~system/Runtime'
+import { Player } from '@dcl-sdk/mini-games/src/components/Player'
 
 enum NODE_NAME {
     AREA_TOPLEFT = 'area_topLeft',
@@ -105,7 +106,8 @@ export async function initMiniGame(
     ))
     let activePlayer: PlayerType | null | undefined
     engine.addSystem(() => {
-        const player = queue.getQueue().find(p => p.player.active)?.player ?? null
+        const {player, entity} = queue.getQueue().find(p => p.player.active) ?? {player: null}
+        if (entity) Player.getMutable(entity)
         if (player?.address !== activePlayer?.address) {
             activePlayer = player
             console.log('ACTIVE PLAYER:', activePlayer)
