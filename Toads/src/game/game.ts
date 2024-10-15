@@ -75,7 +75,7 @@ async function initCountdownNumbers() {
   timer = new ui.Timer3D(
     {
       parent: sceneParentEntity,
-      position: data.get('counter_timer')?.position,
+      position: data.get('counter_countdown')?.position,
       rotation: Quaternion.fromEulerDegrees(0, 0, 0),
       scale: Vector3.create(.5, .5, .5)
     },

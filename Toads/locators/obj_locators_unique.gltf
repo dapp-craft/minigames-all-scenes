@@ -34,7 +34,7 @@
 	],
 	"nodes":[
 		{
-			"name":"counter_timer",
+			"name":"counter_countdown",
 			"rotation":[
 				0,
 				0.7071068286895752,
