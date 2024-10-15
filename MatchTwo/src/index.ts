@@ -12,7 +12,7 @@ import { SFX_ENABLED, setSfxStatus } from './game/sound'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { toggleBackgroundMusic } from './SoundManager'
-import { TIME_LEVEL } from '@dcl-sdk/mini-games/src/ui'
+import { LEVEL, MOVES, TIME } from '@dcl-sdk/mini-games/src/ui/scoreboard/columnData'
 
 const handlers = {
   start: () => getReadyToStart(),
@@ -22,7 +22,7 @@ const handlers = {
   toggleSfx: () => setSfxStatus(!SFX_ENABLED)
 }
 
-initMiniGame(GAME_ID, TIME_LEVEL, readGltfLocators(`locators/obj_locators_default.gltf`), handlers, {
+initMiniGame(GAME_ID, [MOVES, LEVEL, TIME], readGltfLocators(`locators/obj_locators_default.gltf`), handlers, {
   scoreboard: {
     sortDirection: 'asc'
   }
