@@ -19,31 +19,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_stairs",
-			"scale":[
-				0.9846489429473877,
-				1,
-				1.000579595565796
-			],
-			"translation":[
-				0,
-				0,
-				4.5
-			]
+			"name":"obj_stairs"
 		},
 		{
 			"mesh":1,
-			"name":"obj_stairs_collider",
-			"scale":[
-				0.9846489429473877,
-				1,
-				1.000579595565796
-			],
-			"translation":[
-				0,
-				0,
-				4.5
-			]
+			"name":"obj_stairs_collider"
 		}
 	],
 	"materials":[
@@ -72,7 +52,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.025",
+			"name":"Plane.001",
 			"primitives":[
 				{
 					"attributes":{
@@ -86,7 +66,7 @@
 			]
 		},
 		{
-			"name":"Plane.074",
+			"name":"Plane.004",
 			"primitives":[
 				{
 					"attributes":{
@@ -122,14 +102,14 @@
 			"componentType":5126,
 			"count":1160,
 			"max":[
-				7.098075866699219,
+				6.989112854003906,
 				0.3082330524921417,
-				2.522739887237549
+				7.024202346801758
 			],
 			"min":[
-				-7.098075866699219,
+				-6.989112854003906,
 				-0.004936377517879009,
-				-9.530025482177734
+				-5.035549163818359
 			],
 			"type":"VEC3"
 		},
@@ -154,35 +134,35 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":532,
+			"count":488,
 			"max":[
-				6.984685897827148,
+				6.853583335876465,
 				0.29661238193511963,
-				2.396430492401123
+				6.897819519042969
 			],
 			"min":[
-				-6.984685897827148,
+				-6.853583335876465,
 				-0.004936377517879009,
-				-9.378129959106445
+				-4.883565902709961
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":532,
+			"count":488,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":532,
+			"count":488,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":7,
 			"componentType":5123,
-			"count":1236,
+			"count":876,
 			"type":"SCALAR"
 		}
 	],
@@ -213,26 +193,26 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":6384,
+			"byteLength":5856,
 			"byteOffset":43768,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6384,
-			"byteOffset":50152,
+			"byteLength":5856,
+			"byteOffset":49624,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4256,
-			"byteOffset":56536,
+			"byteLength":3904,
+			"byteOffset":55480,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2472,
-			"byteOffset":60792,
+			"byteLength":1752,
+			"byteOffset":59384,
 			"target":34963
 		}
 	],
@@ -244,7 +224,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":63264,
+			"byteLength":61136,
 			"uri":"obj_stairs.bin"
 		}
 	]

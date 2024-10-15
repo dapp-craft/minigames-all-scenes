@@ -19,7 +19,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_sign_mesh"
+			"name":"obj_sign"
 		},
 		{
 			"mesh":1,
@@ -66,7 +66,7 @@
 			]
 		},
 		{
-			"name":"Plane.126",
+			"name":"Cube.006",
 			"primitives":[
 				{
 					"attributes":{
@@ -100,7 +100,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1550,
+			"count":1548,
 			"max":[
 				7.744250297546387,
 				5.819093704223633,
@@ -116,13 +116,13 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1550,
+			"count":1548,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1550,
+			"count":1548,
 			"type":"VEC2"
 		},
 		{
@@ -134,85 +134,85 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":684,
+			"count":264,
 			"max":[
-				7.744250297546387,
-				5.819093704223633,
-				7.76097297668457
+				7.758473873138428,
+				5.818559646606445,
+				7.759165287017822
 			],
 			"min":[
-				-7.744250297546387,
-				0.2647646367549896,
-				-7.848928928375244
+				-7.7584733963012695,
+				0.2797584533691406,
+				-7.832622051239014
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":684,
+			"count":264,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":684,
+			"count":264,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":7,
 			"componentType":5123,
-			"count":2232,
+			"count":396,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":18600,
+			"byteLength":18576,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":18600,
-			"byteOffset":18600,
+			"byteLength":18576,
+			"byteOffset":18576,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12400,
-			"byteOffset":37200,
+			"byteLength":12384,
+			"byteOffset":37152,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":8928,
-			"byteOffset":49600,
+			"byteOffset":49536,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":8208,
-			"byteOffset":58528,
+			"byteLength":3168,
+			"byteOffset":58464,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8208,
-			"byteOffset":66736,
+			"byteLength":3168,
+			"byteOffset":61632,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5472,
-			"byteOffset":74944,
+			"byteLength":2112,
+			"byteOffset":64800,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4464,
-			"byteOffset":80416,
+			"byteLength":792,
+			"byteOffset":66912,
 			"target":34963
 		}
 	],
@@ -224,7 +224,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":84880,
+			"byteLength":67704,
 			"uri":"obj_sign.bin"
 		}
 	]

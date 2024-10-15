@@ -66,7 +66,7 @@
 			]
 		},
 		{
-			"name":"Plane.124",
+			"name":"Cube",
 			"primitives":[
 				{
 					"attributes":{
@@ -134,35 +134,35 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":456,
+			"count":72,
 			"max":[
-				7.266128063201904,
+				7.303554058074951,
 				4.649672508239746,
 				5.754949569702148
 			],
 			"min":[
-				-7.266128063201904,
+				-7.303554058074951,
 				0.5206048488616943,
-				-7.15183162689209
+				-7.150669097900391
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":456,
+			"count":72,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":456,
+			"count":72,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":7,
 			"componentType":5123,
-			"count":1224,
+			"count":108,
 			"type":"SCALAR"
 		}
 	],
@@ -193,26 +193,26 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":5472,
+			"byteLength":864,
 			"byteOffset":37920,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5472,
-			"byteOffset":43392,
+			"byteLength":864,
+			"byteOffset":38784,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3648,
-			"byteOffset":48864,
+			"byteLength":576,
+			"byteOffset":39648,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2448,
-			"byteOffset":52512,
+			"byteLength":216,
+			"byteOffset":40224,
 			"target":34963
 		}
 	],
@@ -224,7 +224,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":54960,
+			"byteLength":40440,
 			"uri":"obj_frame.bin"
 		}
 	]

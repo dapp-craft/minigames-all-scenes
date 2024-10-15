@@ -18,12 +18,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_floor"
+			"name":"obj_rules"
 		}
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -37,7 +36,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_floor",
+			"name":"obj_rules",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -48,7 +47,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.073",
+			"name":"Plane.074",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,69 +74,69 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_floor",
-			"uri":"textures/obj_floor.png"
+			"name":"obj_rules",
+			"uri":"textures/obj_rules.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":16,
+			"count":4,
 			"max":[
-				8,
-				0,
-				8
+				-7.095909595489502,
+				3.070254325866699,
+				5.497453689575195
 			],
 			"min":[
-				-8,
-				0,
-				-8
+				-7.095909595489502,
+				0.7781082391738892,
+				3.2053072452545166
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":16,
+			"count":4,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":16,
+			"count":4,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":24,
+			"count":6,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":192,
+			"byteLength":48,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":192,
-			"byteOffset":192,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":128,
-			"byteOffset":384,
-			"target":34962
-		},
-		{
-			"buffer":0,
 			"byteLength":48,
-			"byteOffset":512,
+			"byteOffset":48,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":32,
+			"byteOffset":96,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":12,
+			"byteOffset":128,
 			"target":34963
 		}
 	],
@@ -149,8 +148,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":560,
-			"uri":"obj_floor.bin"
+			"byteLength":140,
+			"uri":"obj_rules.bin"
 		}
 	]
 }
