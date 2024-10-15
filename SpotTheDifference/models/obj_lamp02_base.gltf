@@ -4,13 +4,17 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
+		"KHR_draco_mesh_compression",
 		"KHR_materials_specular",
 		"KHR_materials_ior"
+	],
+	"extensionsRequired":[
+		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
 		{
-			"name":"obj_lamp02_base",
+			"name":"Scene",
 			"nodes":[
 				0,
 				1
@@ -29,7 +33,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -65,8 +68,19 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":0,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
 					"indices":3,
-					"material":0
+					"material":0,
+					"mode":4
 				}
 			]
 		},
@@ -79,7 +93,18 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":7
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":1,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
+					"indices":7,
+					"mode":4
 				}
 			]
 		}
@@ -103,7 +128,6 @@
 	],
 	"accessors":[
 		{
-			"bufferView":0,
 			"componentType":5126,
 			"count":1243,
 			"max":[
@@ -119,25 +143,21 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":1,
 			"componentType":5126,
 			"count":1243,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":2,
 			"componentType":5126,
 			"count":1243,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":3,
 			"componentType":5123,
 			"count":2115,
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
 			"componentType":5126,
 			"count":48,
 			"max":[
@@ -153,19 +173,16 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
 			"componentType":5126,
 			"count":48,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
 			"componentType":5126,
 			"count":48,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":7,
 			"componentType":5123,
 			"count":72,
 			"type":"SCALAR"
@@ -174,51 +191,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":14916,
-			"byteOffset":0,
-			"target":34962
+			"byteLength":10134,
+			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":14916,
-			"byteOffset":14916,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":9944,
-			"byteOffset":29832,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4230,
-			"byteOffset":39776,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":576,
-			"byteOffset":44008,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":576,
-			"byteOffset":44584,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":384,
-			"byteOffset":45160,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":144,
-			"byteOffset":45544,
-			"target":34963
+			"byteLength":515,
+			"byteOffset":10136
 		}
 	],
 	"samplers":[
@@ -229,7 +208,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":45688,
+			"byteLength":10652,
 			"uri":"obj_lamp02_base.bin"
 		}
 	]

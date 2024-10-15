@@ -4,13 +4,17 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
+		"KHR_draco_mesh_compression",
 		"KHR_materials_specular",
 		"KHR_materials_ior"
+	],
+	"extensionsRequired":[
+		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
 		{
-			"name":"obj_well01_alt",
+			"name":"Scene",
 			"nodes":[
 				0,
 				1
@@ -29,7 +33,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -65,21 +68,45 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":0,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
 					"indices":3,
-					"material":0
+					"material":0,
+					"mode":4
 				}
 			]
 		},
 		{
-			"name":"Mesh.013",
+			"name":"Mesh.087",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":4,
 						"NORMAL":5,
-						"TEXCOORD_0":6
+						"TEXCOORD_0":6,
+						"TEXCOORD_1":7
 					},
-					"indices":7
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":1,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2,
+								"TEXCOORD_1":3
+							}
+						}
+					},
+					"indices":8,
+					"mode":4
 				}
 			]
 		}
@@ -103,7 +130,6 @@
 	],
 	"accessors":[
 		{
-			"bufferView":0,
 			"componentType":5126,
 			"count":2327,
 			"max":[
@@ -119,106 +145,66 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":1,
 			"componentType":5126,
 			"count":2327,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":2,
 			"componentType":5126,
 			"count":2327,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":3,
 			"componentType":5123,
 			"count":4224,
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
 			"componentType":5126,
-			"count":70,
+			"count":145,
 			"max":[
-				0.8060537576675415,
-				1.400855541229248,
-				0.5082541108131409
+				0.8080486059188843,
+				1.5186933279037476,
+				0.613935112953186
 			],
 			"min":[
-				-0.5974887013435364,
-				-1.1728295135071676e-07,
-				-0.6282370686531067
+				-0.579992949962616,
+				-2.3448930619451858e-07,
+				-0.6115978956222534
 			],
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
 			"componentType":5126,
-			"count":70,
+			"count":145,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
 			"componentType":5126,
-			"count":70,
+			"count":145,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":7,
+			"componentType":5126,
+			"count":145,
+			"type":"VEC2"
+		},
+		{
 			"componentType":5123,
-			"count":102,
+			"count":252,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":27924,
-			"byteOffset":0,
-			"target":34962
+			"byteLength":20192,
+			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":27924,
-			"byteOffset":27924,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":18616,
-			"byteOffset":55848,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":8448,
-			"byteOffset":74464,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":840,
-			"byteOffset":82912,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":840,
-			"byteOffset":83752,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":560,
-			"byteOffset":84592,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":204,
-			"byteOffset":85152,
-			"target":34963
+			"byteLength":1417,
+			"byteOffset":20192
 		}
 	],
 	"samplers":[
@@ -229,7 +215,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":85356,
+			"byteLength":21612,
 			"uri":"obj_well01_alt.bin"
 		}
 	]

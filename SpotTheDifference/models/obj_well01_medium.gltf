@@ -4,13 +4,17 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
+		"KHR_draco_mesh_compression",
 		"KHR_materials_specular",
 		"KHR_materials_ior"
+	],
+	"extensionsRequired":[
+		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
 		{
-			"name":"obj_well01_medium",
+			"name":"Scene",
 			"nodes":[
 				0,
 				1
@@ -20,16 +24,15 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_well01_medium_collider"
+			"name":"obj_well01_medium"
 		},
 		{
 			"mesh":1,
-			"name":"obj_well01_medium"
+			"name":"obj_well01_medium_collider"
 		}
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -57,7 +60,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.281",
+			"name":"Mesh.012",
 			"primitives":[
 				{
 					"attributes":{
@@ -65,21 +68,45 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"indices":3
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":0,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
+					"indices":3,
+					"material":0,
+					"mode":4
 				}
 			]
 		},
 		{
-			"name":"Mesh.012",
+			"name":"Mesh.087",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":4,
 						"NORMAL":5,
-						"TEXCOORD_0":6
+						"TEXCOORD_0":6,
+						"TEXCOORD_1":7
 					},
-					"indices":7,
-					"material":0
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":1,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2,
+								"TEXCOORD_1":3
+							}
+						}
+					},
+					"indices":8,
+					"mode":4
 				}
 			]
 		}
@@ -103,41 +130,6 @@
 	],
 	"accessors":[
 		{
-			"bufferView":0,
-			"componentType":5126,
-			"count":40,
-			"max":[
-				0.5974887609481812,
-				1.400855541229248,
-				0.50825434923172
-			],
-			"min":[
-				-0.5974887013435364,
-				0,
-				-0.6282368898391724
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":1,
-			"componentType":5126,
-			"count":40,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":2,
-			"componentType":5126,
-			"count":40,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":3,
-			"componentType":5123,
-			"count":54,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":4,
 			"componentType":5126,
 			"count":2327,
 			"max":[
@@ -153,72 +145,66 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
 			"componentType":5126,
 			"count":2327,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
 			"componentType":5126,
 			"count":2327,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":7,
 			"componentType":5123,
 			"count":4224,
+			"type":"SCALAR"
+		},
+		{
+			"componentType":5126,
+			"count":145,
+			"max":[
+				0.8080486059188843,
+				1.5186933279037476,
+				0.613935112953186
+			],
+			"min":[
+				-0.579992949962616,
+				-2.3448930619451858e-07,
+				-0.6115978956222534
+			],
+			"type":"VEC3"
+		},
+		{
+			"componentType":5126,
+			"count":145,
+			"type":"VEC3"
+		},
+		{
+			"componentType":5126,
+			"count":145,
+			"type":"VEC2"
+		},
+		{
+			"componentType":5126,
+			"count":145,
+			"type":"VEC2"
+		},
+		{
+			"componentType":5123,
+			"count":252,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":480,
-			"byteOffset":0,
-			"target":34962
+			"byteLength":20201,
+			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":480,
-			"byteOffset":480,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":320,
-			"byteOffset":960,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":108,
-			"byteOffset":1280,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":27924,
-			"byteOffset":1388,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":27924,
-			"byteOffset":29312,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":18616,
-			"byteOffset":57236,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":8448,
-			"byteOffset":75852,
-			"target":34963
+			"byteLength":1417,
+			"byteOffset":20204
 		}
 	],
 	"samplers":[
@@ -229,7 +215,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":84300,
+			"byteLength":21624,
 			"uri":"obj_well01_medium.bin"
 		}
 	]

@@ -4,8 +4,12 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
+		"KHR_draco_mesh_compression",
 		"KHR_materials_specular",
 		"KHR_materials_ior"
+	],
+	"extensionsRequired":[
+		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -29,7 +33,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -65,8 +68,19 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":0,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
 					"indices":3,
-					"material":0
+					"material":0,
+					"mode":4
 				}
 			]
 		},
@@ -79,7 +93,18 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":1,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
+					"indices":3,
+					"mode":4
 				}
 			]
 		}
@@ -103,7 +128,6 @@
 	],
 	"accessors":[
 		{
-			"bufferView":0,
 			"componentType":5126,
 			"count":500,
 			"max":[
@@ -119,25 +143,21 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":1,
 			"componentType":5126,
 			"count":500,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":2,
 			"componentType":5126,
 			"count":500,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":3,
 			"componentType":5123,
 			"count":1029,
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
 			"componentType":5126,
 			"count":500,
 			"max":[
@@ -153,13 +173,11 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
 			"componentType":5126,
 			"count":500,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
 			"componentType":5126,
 			"count":500,
 			"type":"VEC2"
@@ -168,45 +186,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":6000,
-			"byteOffset":0,
-			"target":34962
+			"byteLength":4179,
+			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":6000,
-			"byteOffset":6000,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4000,
-			"byteOffset":12000,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":2058,
-			"byteOffset":16000,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":6000,
-			"byteOffset":18060,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6000,
-			"byteOffset":24060,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4000,
-			"byteOffset":30060,
-			"target":34962
+			"byteLength":4179,
+			"byteOffset":4180
 		}
 	],
 	"samplers":[
@@ -217,7 +203,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":34060,
+			"byteLength":8360,
 			"uri":"obj_clock_base.bin"
 		}
 	]
