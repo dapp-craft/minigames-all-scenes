@@ -48,7 +48,7 @@ export class GameLogic {
     public resetData() {
         this.correctSmashCounter = 0
         this.miss = 0
-        this.initialTimeGap = 900
+        this.initialTimeGap = 200
         this.gameEnd = false
         this.isHammerInAction = false
         TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `Hits \n${0}`
@@ -145,7 +145,7 @@ export class GameLogic {
         Tween.createOrReplace(hammerEntity, {
             mode: Tween.Mode.Move({
                 start: Transform.get(hammerEntity).position,
-                end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight - Transform.get(hammerParent).position.y + .3 }
+                end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight - Transform.get(hammerParent).position.y + .4 }
             }),
             duration: animationConfig.hitTIme,
             easingFunction: EasingFunction.EF_EASEINQUAD,
@@ -162,7 +162,7 @@ export class GameLogic {
             const distanceTOLastPoint = -(Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y - currentPosY)
             currentPosY = Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y
             let hammerZeroYVector = { ...Transform.get(hammerParent).position, y: 0 }
-            if (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= toadsGameState.toadInitialHeight + .4) {
+            if (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= toadsGameState.toadInitialHeight + .6) {
                 soundManager.playSound('missSound', soundConfig.volume)
                 this.changeCounter(-1)
                 hammerFinish()
@@ -181,7 +181,6 @@ export class GameLogic {
                     this.changeCounter(1)
                     this.hitEntity(obj)
                     this.toadsTimer.forEach((e, k) => { if (e.entity == obj.entity) utils.timers.clearTimeout(e.finish) })
-                    obj.available = false
                     break;
                 }
             }
@@ -217,7 +216,7 @@ export class GameLogic {
         utils.timers.setTimeout(() => {
             GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
             target.available = true
-        }, animationConfig.frogAfterHitHideTime + 200)
+        }, animationConfig.frogAfterHitHideTime)
     }
 
     private async playGame() {
@@ -235,7 +234,7 @@ export class GameLogic {
             utils.timers.setTimeout(() => {
                 GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
                 obj.available = true
-            }, animationConfig.frogEscapeTime + 200);
+            }, animationConfig.frogEscapeTime);
         }
         console.log(toadsGameState.listOfEntity.get('ground'));
         pointerEventsSystem.onPointerDown(
