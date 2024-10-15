@@ -4,7 +4,11 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
+		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
+	],
+	"extensionsRequired":[
+		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -28,7 +32,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -61,13 +64,24 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":0,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
 					"indices":3,
-					"material":0
+					"material":0,
+					"mode":4
 				}
 			]
 		},
 		{
-			"name":"Mesh.007",
+			"name":"Mesh.026",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,7 +89,18 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":1,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
+					"indices":7,
+					"mode":4
 				}
 			]
 		}
@@ -99,7 +124,6 @@
 	],
 	"accessors":[
 		{
-			"bufferView":0,
 			"componentType":5126,
 			"count":122,
 			"max":[
@@ -115,94 +139,61 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":1,
 			"componentType":5126,
 			"count":122,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":2,
 			"componentType":5126,
 			"count":122,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":3,
 			"componentType":5123,
 			"count":384,
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
 			"componentType":5126,
-			"count":122,
+			"count":63,
 			"max":[
 				0.2822946310043335,
-				0.8977329134941101,
+				0.8977329730987549,
 				0.28229308128356934
 			],
 			"min":[
 				-1.4813200235366821,
-				-1.2429291018634103e-06,
-				-0.28229430317878723
+				-8.644683191505464e-08,
+				-0.28229451179504395
 			],
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
 			"componentType":5126,
-			"count":122,
+			"count":63,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
 			"componentType":5126,
-			"count":122,
+			"count":63,
 			"type":"VEC2"
+		},
+		{
+			"componentType":5123,
+			"count":168,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1464,
-			"byteOffset":0,
-			"target":34962
+			"byteLength":1048,
+			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":1464,
-			"byteOffset":1464,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":976,
-			"byteOffset":2928,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":768,
-			"byteOffset":3904,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":1464,
-			"byteOffset":4672,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1464,
-			"byteOffset":6136,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":976,
-			"byteOffset":7600,
-			"target":34962
+			"byteLength":658,
+			"byteOffset":1048
 		}
 	],
 	"samplers":[
@@ -213,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":8576,
+			"byteLength":1708,
 			"uri":"obj_hammer.bin"
 		}
 	]
