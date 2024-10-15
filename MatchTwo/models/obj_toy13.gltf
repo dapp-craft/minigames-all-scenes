@@ -4,13 +4,17 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
+		"KHR_draco_mesh_compression",
 		"KHR_materials_specular",
 		"KHR_materials_ior"
+	],
+	"extensionsRequired":[
+		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
 		{
-			"name":"obj_toy13",
+			"name":"Scene",
 			"nodes":[
 				0
 			]
@@ -24,7 +28,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.15000000596046448,
 				0.15000000596046448,
@@ -60,8 +63,19 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":0,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
 					"indices":3,
-					"material":0
+					"material":0,
+					"mode":4
 				}
 			]
 		}
@@ -85,7 +99,6 @@
 	],
 	"accessors":[
 		{
-			"bufferView":0,
 			"componentType":5126,
 			"count":488,
 			"max":[
@@ -101,19 +114,16 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":1,
 			"componentType":5126,
 			"count":488,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":2,
 			"componentType":5126,
 			"count":488,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":3,
 			"componentType":5123,
 			"count":1560,
 			"type":"SCALAR"
@@ -122,27 +132,8 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":5856,
-			"byteOffset":0,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5856,
-			"byteOffset":5856,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3904,
-			"byteOffset":11712,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3120,
-			"byteOffset":15616,
-			"target":34963
+			"byteLength":3797,
+			"byteOffset":0
 		}
 	],
 	"samplers":[
@@ -153,7 +144,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":18736,
+			"byteLength":3800,
 			"uri":"obj_toy13.bin"
 		}
 	]

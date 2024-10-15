@@ -4,8 +4,12 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
+		"KHR_draco_mesh_compression",
 		"KHR_materials_specular",
 		"KHR_materials_ior"
+	],
+	"extensionsRequired":[
+		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -66,13 +70,24 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":0,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
 					"indices":3,
-					"material":0
+					"material":0,
+					"mode":4
 				}
 			]
 		},
 		{
-			"name":"Mesh.176",
+			"name":"Mesh.027",
 			"primitives":[
 				{
 					"attributes":{
@@ -80,7 +95,18 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":1,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
+					"indices":7,
+					"mode":4
 				}
 			]
 		}
@@ -104,7 +130,6 @@
 	],
 	"accessors":[
 		{
-			"bufferView":0,
 			"componentType":5126,
 			"count":1443,
 			"max":[
@@ -120,94 +145,61 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":1,
 			"componentType":5126,
 			"count":1443,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":2,
 			"componentType":5126,
 			"count":1443,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":3,
 			"componentType":5123,
 			"count":5148,
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
 			"componentType":5126,
-			"count":1443,
+			"count":552,
 			"max":[
-				6.019599914550781,
-				1.359327793121338,
+				6.02703857421875,
+				1.359329342842102,
 				7.236343860626221
 			],
 			"min":[
-				-6.091574668884277,
-				0.15000006556510925,
-				0.9951257109642029
+				-6.091575622558594,
+				0.1451413482427597,
+				0.9971862435340881
 			],
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
 			"componentType":5126,
-			"count":1443,
+			"count":552,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":6,
 			"componentType":5126,
-			"count":1443,
+			"count":552,
 			"type":"VEC2"
+		},
+		{
+			"componentType":5123,
+			"count":954,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":17316,
-			"byteOffset":0,
-			"target":34962
+			"byteLength":6853,
+			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":17316,
-			"byteOffset":17316,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":11544,
-			"byteOffset":34632,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":10296,
-			"byteOffset":46176,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":17316,
-			"byteOffset":56472,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":17316,
-			"byteOffset":73788,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":11544,
-			"byteOffset":91104,
-			"target":34962
+			"byteLength":2583,
+			"byteOffset":6856
 		}
 	],
 	"samplers":[
@@ -218,7 +210,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":102648,
+			"byteLength":9440,
 			"uri":"obj_fence.bin"
 		}
 	]
