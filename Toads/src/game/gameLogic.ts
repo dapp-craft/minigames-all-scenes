@@ -42,7 +42,7 @@ export class GameLogic {
     }
 
     private async initializeEntity() {
-        for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) this.availableEntity.set(i + 1, { entity: toadsGameState.availableEntity[i], available: true})
+        for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) this.availableEntity.set(i + 1, { entity: toadsGameState.availableEntity[i], available: true })
     }
 
     public resetData() {
@@ -145,7 +145,7 @@ export class GameLogic {
         Tween.createOrReplace(hammerEntity, {
             mode: Tween.Mode.Move({
                 start: Transform.get(hammerEntity).position,
-                end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight - Transform.get(hammerParent).position.y + .3}
+                end: { ...Transform.get(hammerEntity).position, y: toadsGameState.toadInitialHeight - Transform.get(hammerParent).position.y + .3 }
             }),
             duration: animationConfig.hitTIme,
             easingFunction: EasingFunction.EF_EASEINQUAD,
@@ -171,16 +171,17 @@ export class GameLogic {
             for (const obj of this.availableEntity.values()) {
                 const entityPosition = { ...utils.getWorldPosition(obj.entity), y: 0 };
                 const distance = Vector3.distance(hammerZeroYVector, entityPosition);
-                if ((Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= Transform.get(obj.entity).position.y
+                if (
+                    (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= Transform.get(obj.entity).position.y
                         || currentPosY - distanceTOLastPoint * toadsGameConfig.hammerHitDistMult <= Transform.get(obj.entity).position.y)
-                    && distance <= toadsGameConfig.hammerRadius) {
+                    && distance <= toadsGameConfig.hammerRadius
+                ) {
                     soundManager.playSound('hitSound', soundConfig.volume)
+                    hammerFinish()
                     this.changeCounter(1)
                     this.hitEntity(obj)
                     this.toadsTimer.forEach((e, k) => { if (e.entity == obj.entity) utils.timers.clearTimeout(e.finish) })
                     obj.available = false
-                    obj.hitable = false
-                    hammerFinish()
                     break;
                 }
             }
@@ -196,7 +197,7 @@ export class GameLogic {
                 duration: animationConfig.hammerBounceTime,
                 easingFunction: EasingFunction.EF_EASEOUTBACK,
             })
-            utils.timers.setTimeout(() => {this.isHammerInAction = false}, 100)
+            utils.timers.setTimeout(() => { this.isHammerInAction = false }, 100)
         }
     }
 
@@ -242,13 +243,7 @@ export class GameLogic {
                 entity: toadsGameState.listOfEntity.get('ground'),
                 opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH' },
             },
-            () => {
-                if (this.isHammerInAction) {
-                    console.log('Miss BUT HAMMER IN ACTION')
-                    return
-                }
-                this.hitHammer()
-            }
+            () => this.hitHammer()
         )
 
         for (let i = 1; i <= 100; i++) {
@@ -258,7 +253,7 @@ export class GameLogic {
                     let random = Math.floor(Math.random() * toadsGameConfig.ToadsAmount) + 1
                     const obj = this.availableEntity.get(random)
                     if (!obj.available) return
-                    obj.available = true
+                    obj.available = false
                     const entity = obj.entity
                     let y = Transform.get(entity).position.y;
                     Tween.deleteFrom(entity)
@@ -275,13 +270,7 @@ export class GameLogic {
                             entity: entity,
                             opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH' },
                         },
-                        () => {
-                            if (this.isHammerInAction) {
-                                console.log('CLICKED BUT HAMMER IN ACTION')
-                                return
-                            }
-                            this.hitHammer()
-                        }
+                        () => this.hitHammer()
                     )
                     this.toadsTimer.get(i).finish = utils.timers.setTimeout(() => hideEntity(obj, y), animationConfig.frogStayTime)
                     this.toadsTimer.get(i).entity = entity
