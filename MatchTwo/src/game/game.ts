@@ -14,6 +14,13 @@ import {
   engine,
   pointerEventsSystem
 } from '@dcl/sdk/ecs'
+import {
+  runCountdown,
+  runWinAnimation,
+  setupEffects,
+  cancelCountdown,
+  cancelWinAnimation
+} from '../../../common/effects'
 import { GameData, Tile } from './components/idnex'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { FLIP_DURATION, TILES_LEVEL, SYNC_ENTITY_OFFSET, MAX_IMAGES, openAngle } from '../config'
@@ -28,7 +35,6 @@ import { movePlayerTo } from '~system/RestrictedActions'
 import { setTilesPositions, tilesPositions } from './tilesPositions'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { playCloseTileSound, playLevelCompleteSound, playOpenTileSound, playPairFoundSound } from './sound'
-import { initCountdownNumbers, setupWinAnimations, countdown, startWinAnimation } from './gameEfffects'
 import { setLevelButtonPositions } from './locators/levelButtonPositions'
 import { setStatusBoardPositions } from './locators/statusBoardPositions'
 
@@ -58,6 +64,9 @@ export const gameState = {
   pairFound: 0
 }
 
+let inGame = false
+let gameCounter = 0
+
 export async function initGame() {
   await fetchPlayerProgress()
 
@@ -67,8 +76,7 @@ export async function initGame() {
 
   initGameDataEntity()
 
-  setupWinAnimations()
-  initCountdownNumbers()
+  setupEffects(Vector3.create(0, 2.5, -6))
 
   setupGameUI()
 
@@ -226,34 +234,40 @@ export async function startLevel(level: keyof typeof TILES_LEVEL) {
     if (button.enabled) button.enable()
   })
 
-  countdown(async () => {
-    await Promise.all(tiles.map((tile) => resetTile(tile)))
-    flippedTileQueue = []
+  inGame = true
+  const gc = ++gameCounter
 
-    console.log('TILES LEVEL', TILES_LEVEL)
+  const cb = runCountdown()
+  await Promise.all(tiles.map((tile) => resetTile(tile)))
+  flippedTileQueue = []
 
-    const tilesInUse = tiles.filter((tile) => TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
-    const tilesNotInUse = tiles.filter((tile) => !TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
+  await cb
 
-    gameState.tilesCount = TILES_LEVEL[level].length
-    gameState.level = level
-    gameState.levelStartTime = Date.now()
-    gameState.moves = 0
-    gameState.levelFinishTime = 0
-    gameState.pairFound = 0
+  if (gc !== gameCounter || !inGame) return
 
-    tiles.forEach((tile) => {
-      disableTile(tile)
-    })
+  console.log('TILES LEVEL', TILES_LEVEL)
 
-    const toys = getToys(level)
-    shuffleArray(toys)
-    // Might couse a bug if player click on the tile vefore it has been reset
-    tilesInUse.forEach((tile) => resetTile(tile))
-    tilesInUse.forEach((tile, index) => {
-      setTileToy(tile, toys[index].src)
-    })
-  }, 4)
+  const tilesInUse = tiles.filter((tile) => TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
+  const tilesNotInUse = tiles.filter((tile) => !TILES_LEVEL[level].includes(Tile.get(tile.mainEntity).tileNumber))
+
+  gameState.tilesCount = TILES_LEVEL[level].length
+  gameState.level = level
+  gameState.levelStartTime = Date.now()
+  gameState.moves = 0
+  gameState.levelFinishTime = 0
+  gameState.pairFound = 0
+
+  tiles.forEach((tile) => {
+    disableTile(tile)
+  })
+
+  const toys = getToys(level)
+  shuffleArray(toys)
+  // Might couse a bug if player click on the tile vefore it has been reset
+  tilesInUse.forEach((tile) => resetTile(tile))
+  tilesInUse.forEach((tile, index) => {
+    setTileToy(tile, toys[index].src)
+  })
 }
 
 function setImages() {
@@ -271,7 +285,7 @@ function setTileToy(tile: TileType, toyModel: string) {
   GltfContainer.createOrReplace(tile.toyEntity, { src: toyModel })
 }
 
-function checkIfMatch() {
+async function checkIfMatch() {
   if (flippedTileQueue.length < 2) {
     return
   }
@@ -291,10 +305,7 @@ function checkIfMatch() {
         .length === 0
     ) {
       console.log('Game over')
-      startWinAnimation(() => {
-        playLevelCompleteSound()
-        finishLevel()
-      })
+      finishLevel()
     }
   } else {
     console.log('No match')
@@ -309,22 +320,30 @@ function disableTile(tile: TileType) {
   Tile.getMutable(tile.mainEntity).inGame = false
 }
 
-function finishLevel() {
+async function finishLevel() {
   console.log('Level finished')
 
   gameState.levelFinishTime = Date.now()
   updatePlayerProgress(gameState)
+
+  playLevelCompleteSound()
+  await runWinAnimation()
 
   if (queue.getQueue().length > 1) {
     exitGame()
   } else {
     const levelToStart = gameState.level == Object.keys(TILES_LEVEL).length ? 1 : gameState.level + 1
     if (levelButtons[gameState.level]) levelButtons[gameState.level].enable()
+    if (!inGame) return
     startLevel(levelToStart as keyof typeof TILES_LEVEL)
   }
 }
 
 export function exitGame() {
+  cancelWinAnimation()
+  cancelCountdown()
+  inGame = false
+
   movePlayerTo({
     newRelativePosition: Vector3.create(8, 1, 14)
   })
