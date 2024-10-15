@@ -61,6 +61,7 @@ export class GameLogic {
         const hammerEntity = toadsGameState.listOfEntity.get('hammerParent')
         const hammer = toadsGameState.listOfEntity.get('hammer')
         if (!this.gameEnd) VisibilityComponent.getMutable(hammer).visible = true
+        let animStart = 0
         raycastSystem.registerLocalDirectionRaycast(
             {
                 entity: engine.CameraEntity,
@@ -111,7 +112,8 @@ export class GameLogic {
                             easingFunction: EasingFunction.EF_LINEAR,
                             currentTime: 0
                         })
-                    } else if (currentState == TweenStateStatus.TS_COMPLETED) Tween.deleteFrom(hammerEntity)
+                        animStart = Date.now()
+                    } else if (Date.now() - animStart > 50) Tween.deleteFrom(hammerEntity)
                 } else {
                     Tween.deleteFrom(hammerEntity)
                     Transform.createOrReplace(hammerEntity, { position: end })
