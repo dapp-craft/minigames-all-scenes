@@ -343,6 +343,10 @@ export function exitGame() {
   cancelWinAnimation()
   cancelCountdown()
   inGame = false
+  gameState.levelFinishTime = 0
+  gameState.levelStartTime = 0
+  gameState.pairFound = 0
+  gameState.moves = 0
 
   movePlayerTo({
     newRelativePosition: Vector3.create(8, 1, 14)
