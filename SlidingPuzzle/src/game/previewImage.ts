@@ -28,6 +28,7 @@ export function initPreviewImage() {
   previewImageEntity = engine.addEntity()
   Transform.create(previewImageEntity, {
     position: Vector3.add(Transform.get(BOARD).position, Vector3.create(0, 0, 0.02)),
+    rotation: Quaternion.fromEulerDegrees(0, 180, 0),
     scale: Vector3.create(3, 3, 3)
   })
   MeshRenderer.setPlane(previewImageEntity)
