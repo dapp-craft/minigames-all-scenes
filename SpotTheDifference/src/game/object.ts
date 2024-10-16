@@ -13,6 +13,7 @@ export function resetCooldown() {
 
 engine.addSystem(dt => cooldown.value = Math.max(0, cooldown.value - dt))
 import { parentEntity, syncEntity } from "@dcl/sdk/network"
+import { soundManager } from ".."
 export class GameObject {
     private entity: Entity
     private baseSrc: string
@@ -52,6 +53,7 @@ export class GameObject {
                     this.mark()
                     cooldwnBase = cooldownDefault
                 } else {
+                    soundManager.playSound('object_same')
                     cooldown.value = cooldwnBase
                     cooldwnBase = cooldwnBase < 50 ? cooldwnBase * 2 : cooldwnBase
                 }

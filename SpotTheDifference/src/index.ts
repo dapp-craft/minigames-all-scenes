@@ -16,6 +16,7 @@ import { ui } from './ui'
 import { Ui3D } from './game/ui3D'
 import '../../common/cleaner'
 import { syncEntity } from '@dcl/sdk/network'
+import { SoundManager } from './game/soundManager'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 let alt = false
@@ -39,10 +40,12 @@ async function playLevel(level: keyof typeof LEVELS) {
             let t = await Promise.race([...Array.from(targets).map(t => t.isMarked), abort])
             targets.delete(t)
             console.log("Found", t) 
+            if (sfxEnabled) soundManager.playSound('object_differs')
             ui3d.setObjects(i+1, LEVELS[level].goal)
         }
         engine.removeSystem('stopwatch')
         console.log(`Win level ${level}`)
+        if (sfxEnabled) soundManager.playSound('win')
         progress.upsertProgress({level, time: Math.floor(elapsed * 1000)})
         let pos = await positions.then(data => Vector3.add(data.get('area_playSpawn')!.position, Transform.get(sceneParentEntity).position))
         movePlayerTo({newRelativePosition: pos, cameraTarget: Vector3.add(pos, Vector3.scale(Vector3.Backward(), 5))})
@@ -65,6 +68,7 @@ const handlers = {
     start: async () => {
         console.log("Game START")
         resetCooldown()
+        soundManager.background(true, 1)
         let next: Number | null
         do next = await playLevel(currentLevel)
             .then(() => currentLevel + 1 in LEVELS ? currentLevel++ : null)
@@ -74,14 +78,19 @@ const handlers = {
     },
     exit: () => {
         console.log("Game EXIT")
+        soundManager.background(false, 1)
         interruptPlay()
         resetCooldown()
     },
     restart: () => {
         interruptPlay(currentLevel)
     },
-    toggleMusic: () => {},
-    toggleSfx: () => {}
+    toggleMusic: () => {
+        soundManager.themePlaying(!soundManager.getThemeStatus())
+    },
+    toggleSfx: () => {
+        sfxEnabled = !sfxEnabled
+    }
 }
 let positions = readGltfLocators(`locators/obj_locators_default.gltf`)
 
@@ -90,6 +99,8 @@ const library = initMiniGame('2299ece9-d14d-4b2a-8cf8-08b8b1b6231b', TIME_LEVEL,
 })
 let gameObjects: GameObject[] = []
 const ui3d = new Ui3D(level => interruptPlay(level))
+export const soundManager = new SoundManager()
+export let sfxEnabled = true
 
 const STATIC_MODELS = {
     [VARIANT.BASE]: [
@@ -245,6 +256,7 @@ export async function main() {
                 PointerEvents.getMutable(clock).pointerEvents = Array.from(events)
             }, 500)
             alt = !alt
+            soundManager.background(true, alt ? 0.7 : 1)
             await Promise.all(gameObjects.map(o => o.toggle(alt)))
             staticModels[VARIANT.ALT].forEach(o => VisibilityComponent.getMutable(o).visible = alt)
             staticModels[VARIANT.BASE].forEach(o => VisibilityComponent.getMutable(o).visible = !alt)
