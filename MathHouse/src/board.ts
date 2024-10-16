@@ -1,11 +1,11 @@
 import * as utils from '@dcl-sdk/utils'
 import { Vector3 } from "@dcl/sdk/math";
 import { gameState, rocketCoords } from "./state";
-import { EasingFunction, engine, GltfContainer, Transform, Tween } from "@dcl/sdk/ecs";
+import { EasingFunction, GltfContainer, Transform, Tween } from "@dcl/sdk/ecs";
 import { background, cat01, cat02 } from "./resources/resources";
 import { readGltfLocators } from "../../common/locators";
 import { sceneParentEntity } from './globals';
-import { timerConfig } from './config';
+import { catIconAnimationMaxScale, numberIconAnimationScaleMultiplier, timerConfig } from './config';
 
 export class board {
     private numberOfBoardElements: number = 0
@@ -37,7 +37,7 @@ export class board {
     }
 
     private async initBoardElements() {
-        let delay = timerConfig.initialCatTimeGap
+        let delay = timerConfig.initialAnimationTimeGap
         for (let i = 0; i < gameState.entityInRoket.length - 1; i++) {
             const entity = gameState.entityInRoket[i]
             GltfContainer.createOrReplace(entity, { src: cat01.src })
@@ -49,7 +49,7 @@ export class board {
                 GltfContainer.createOrReplace(entity, { src: cat02.src })
                 Tween.createOrReplace(entity, {
                     mode: Tween.Mode.Scale({
-                        start: Vector3.create(.2, .2, .2),
+                        start: Vector3.create(catIconAnimationMaxScale, catIconAnimationMaxScale, catIconAnimationMaxScale),
                         end: this.data.get(`cat01`)?.scale,
                     }),
                     duration: timerConfig.catIconAnimationTime,
@@ -57,7 +57,7 @@ export class board {
                     playing: true
                 })
             }, delay)
-            delay = delay + timerConfig.additionCatTimeGap
+            delay = delay + timerConfig.iconAnimationGap
         }
     }
 
@@ -69,7 +69,7 @@ export class board {
                 start: Transform.get(gameState.rocketWindow!).position,
                 end: { ...Transform.get(gameState.rocketWindow!).position, y: rocketCoords.y + 5 },
             }),
-            duration: 500,
+            duration: timerConfig.boardActionDuration,
             easingFunction: EasingFunction.EF_LINEAR,
         })
         await this.initBoardElements();
@@ -81,7 +81,7 @@ export class board {
                 start: Transform.get(gameState.rocketWindow!).position,
                 end: { ...Transform.get(gameState.rocketWindow!).position, y: rocketCoords.y - 5 },
             }),
-            duration: 500,
+            duration: timerConfig.boardActionDuration,
             easingFunction: EasingFunction.EF_LINEAR,
         })
     }
@@ -96,7 +96,7 @@ export class board {
 
     private async showNumber(leftCounter: boolean, showNumber: number) {
         await this.dataIsDone;
-        let delay = 400
+        let delay = timerConfig.initialAnimationTimeGap
         const entity = gameState.counterEntity[leftCounter ? 0 : 1]
         for (let i = 0; i <= showNumber; i++) {
             Tween.deleteFrom(entity)
@@ -104,14 +104,14 @@ export class board {
                 GltfContainer.createOrReplace(entity, { src: `models/obj_0${i}.gltf` });
                 Tween.createOrReplace(entity, {
                     mode: Tween.Mode.Scale({
-                        start: Vector3.create(.5 + i / 20, .5 + i / 20, .5 + i / 20),
+                        start: Vector3.create(numberIconAnimationScaleMultiplier + i / 20, numberIconAnimationScaleMultiplier + i / 20, numberIconAnimationScaleMultiplier + i / 20),
                         end: this.data.get(`counter_correctAnswer`)?.scale,
                     }),
-                    duration: 100,
+                    duration: timerConfig.numberIconAnimationDuration,
                     easingFunction: EasingFunction.EF_LINEAR,
                 })
             }, delay)
-            delay = delay + 100
+            delay = delay + timerConfig.iconAnimationGap
         }
     }
 }

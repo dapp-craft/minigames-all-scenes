@@ -54,7 +54,7 @@ export class gameEntityManager {
                 this.currentWaveStateMaxEntity = waveData.itemQueue;
                 gameState.availableEntity.forEach((e, k) => Tween.deleteFrom(e))
                 for (let j = 0; j < waveData.itemQueue; j++) {
-                    this.spawnEntity("test", waveData.goOut);
+                    this.spawnEntity(waveData.goOut);
                     utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? 200 : this.spawnEntityDelay.time);
                     await this.entityMoved;
                     this.entityMoved = new Promise(r => this.entityReady = r);
@@ -78,7 +78,7 @@ export class gameEntityManager {
         return this.entityCounter;
     }
 
-    private spawnEntity(modelName: string, isOut: boolean) {
+    private spawnEntity(isOut: boolean) {
         const entity = gameState.availableEntity[this.entityIndex]
         VisibilityComponent.createOrReplace(entity, { visible: true })
         console.log(this.entityIndex)

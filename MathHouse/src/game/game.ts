@@ -97,7 +97,7 @@ const initGameButtons = async () => {
                     rocketBoard.setLeftCounter(playerAnswer)
                     rocketBoard.setRightCounter(entityCounter)
                     rocketBoard.showBoard(playerAnswer)
-                    const time = playerAnswer * timerConfig.additionCatTimeGap + timerConfig.catIconAnimationTime + timerConfig.initialCatTimeGap
+                    const time = playerAnswer * timerConfig.iconAnimationGap + timerConfig.catIconAnimationTime + timerConfig.initialAnimationTimeGap
                     if (entityCounter == playerAnswer) {
                         console.log("WIN")
                         soundManager.playSound('correctAnswerSound', soundConfig.volume)

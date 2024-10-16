@@ -15,9 +15,14 @@ export const entityConfig = {
 
 export const timerConfig = {
   catIconAnimationTime: 300,
-  initialCatTimeGap: 400,
-  additionCatTimeGap: 100,
+  initialAnimationTimeGap: 400,
+  boardActionDuration: 500,
+  numberIconAnimationDuration: 100,
+  iconAnimationGap: 100,
 }
+
+export const catIconAnimationMaxScale = 0.2
+export const numberIconAnimationScaleMultiplier = 0.3
 
 export const rocketCoords = [8, 1, 3.5]
 export const startCoords = [14, .5, 3.5]
