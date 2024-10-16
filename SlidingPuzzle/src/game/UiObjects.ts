@@ -39,7 +39,7 @@ function setupMoveCouner() {
     TextShape.createOrReplace(moveCounter, {
       text: `Moves: ${stateVariables.moves}`,
       fontSize: 3,
-      textColor: Color4.Black(),
+      textColor: Color4.White(),
       textAlign: TextAlignMode.TAM_MIDDLE_LEFT
     })
   })
@@ -54,7 +54,7 @@ function seteupTimer() {
       TextShape.createOrReplace(timer, {
         text: `Time: --:--`,
         fontSize: 3,
-        textColor: Color4.Black(),
+        textColor: Color4.White(),
         textAlign: TextAlignMode.TAM_MIDDLE_LEFT
       })
       return
@@ -70,7 +70,7 @@ function seteupTimer() {
         useGrouping: false
       })}:${seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}`,
       fontSize: 3,
-      textColor: Color4.Black(),
+      textColor: Color4.White(),
       textAlign: TextAlignMode.TAM_MIDDLE_LEFT
     })
   })

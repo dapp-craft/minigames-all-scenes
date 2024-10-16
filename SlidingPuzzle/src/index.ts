@@ -31,7 +31,7 @@ const libraryReady = initMiniGame(
   readGltfLocators(`locators/obj_locators_default.gltf`),
   handlers,
   {
-    labels: { textColor: Color4.Black(), fontSize: 3 }
+    labels: { textColor: Color4.White(), fontSize: 3 }
   }
 )
 
