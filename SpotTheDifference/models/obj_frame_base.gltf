@@ -81,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Bounding Box Mesh",
+			"name":"Bounding Box Mesh.010",
 			"primitives":[
 				{
 					"attributes":{
@@ -153,7 +153,7 @@
 		},
 		{
 			"componentType":5126,
-			"count":72,
+			"count":96,
 			"max":[
 				7.378854274749756,
 				2.786932945251465,
@@ -168,12 +168,12 @@
 		},
 		{
 			"componentType":5126,
-			"count":72,
+			"count":96,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5123,
-			"count":108,
+			"count":156,
 			"type":"SCALAR"
 		}
 	],
@@ -185,7 +185,7 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":443,
+			"byteLength":551,
 			"byteOffset":34576
 		}
 	],
@@ -197,7 +197,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":35020,
+			"byteLength":35128,
 			"uri":"obj_frame_base.bin"
 		}
 	]
