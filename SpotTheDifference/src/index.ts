@@ -1,4 +1,4 @@
-import { EasingFunction, engine, EngineInfo, Entity, executeTask, GltfContainer, GltfContainerLoadingState, InputAction, inputSystem, LoadingState, Material, MeshCollider, MeshRenderer, PointerEvents, pointerEventsSystem, PointerEventType, Transform, Tween, TweenLoop, TweenSequence, VisibilityComponent } from '@dcl/sdk/ecs'
+import { ColliderLayer, EasingFunction, engine, EngineInfo, Entity, executeTask, GltfContainer, GltfContainerLoadingState, InputAction, inputSystem, LoadingState, Material, MeshCollider, MeshRenderer, PointerEvents, pointerEventsSystem, PointerEventType, Transform, Tween, TweenLoop, TweenSequence, VisibilityComponent } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../common/locators'
 import * as utils from '@dcl-sdk/utils'
 import { initMiniGame } from '../../common/library'
@@ -167,7 +167,7 @@ export async function main() {
     for (const [variant, models] of Object.entries(STATIC_MODELS)) {
         for (const model of models) {
             const entity = engine.addEntity()
-            GltfContainer.create(entity, {src: model})
+            GltfContainer.create(entity, {src: model, invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS})
             Transform.create(entity, {parent: sceneParentEntity})
             VisibilityComponent.create(entity, {visible: variant === VARIANT.BASE})
             staticModels[variant as keyof typeof staticModels].push(entity)
