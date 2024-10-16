@@ -16,7 +16,7 @@ export const SOUNDS = {
   win: 'sounds/Level_Up.mp3'
 }
 // const mainTheme = 'sounds/Whispers_of_the_Mechanica_1.mp3'
-const mainTheme = 'sounds/Geras.mp3'
+const mainTheme = 'sounds/Steamp_loop_Orig.mp3'
 const backgroundTheme = 'sounds/Clocks_Ticking.mp3'
 
 export const THEME_VOLUME = 0.3
