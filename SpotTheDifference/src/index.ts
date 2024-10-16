@@ -260,6 +260,7 @@ export async function main() {
             await Promise.all(gameObjects.map(o => o.toggle(alt)))
             staticModels[VARIANT.ALT].forEach(o => VisibilityComponent.getMutable(o).visible = alt)
             staticModels[VARIANT.BASE].forEach(o => VisibilityComponent.getMutable(o).visible = !alt)
+            GltfContainer.getMutable(clock).src = `models/obj_clock_${alt ? 'alt' : 'base'}.gltf`
         }, 1250);
     })
     
