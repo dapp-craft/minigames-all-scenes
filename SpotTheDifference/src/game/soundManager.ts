@@ -11,14 +11,15 @@ import {
 import * as utils from '@dcl-sdk/utils'
 
 export const SOUNDS = {
-  object_same: 'sounds/subject-selection.mp3',
+  object_same: 'sounds/error.mp3',
   object_differs: 'sounds/difference-found.mp3',
   win: 'sounds/Level_Up.mp3'
 }
-const mainTheme = 'sounds/Whispers_of_the_Mechanica_1.mp3'
+// const mainTheme = 'sounds/Whispers_of_the_Mechanica_1.mp3'
+const mainTheme = 'sounds/Geras.mp3'
 const backgroundTheme = 'sounds/Clocks_Ticking.mp3'
 
-export const THEME_VOLUME = 0.7
+export const THEME_VOLUME = 0.3
 
 // export const mainThereme = engine.addEntity()
 // Transform.create(mainThereme, {parent: engine.PlayerEntity})
@@ -65,7 +66,7 @@ export class SoundManager {
       audioClipUrl: backgroundTheme,
       loop: true,
       playing: false,
-      volume: this.themeVolume / 10,
+      volume: this.themeVolume / 2,
       pitch: 1,
       global: true
     })
@@ -92,14 +93,13 @@ export class SoundManager {
   }
 
   public themePlaying(status: boolean) {
-    this.themeStatus = status
-    let audioSource = AudioSource.getMutable(this.themeEntity)
-    audioSource.playing = this.themeStatus
+    AudioSource.getMutable(this.themeEntity).playing = this.themeStatus = status
+    AudioSource.getMutable(this.backgroundEntity).playing = this.themeStatus = status
   }
 
   public background(playing: boolean, pitch: number) {
     AudioSource.getMutable(this.backgroundEntity).pitch = pitch
-    utils.timers.setTimeout(() => AudioSource.getMutable(this.backgroundEntity).playing = playing, 1)
+    utils.timers.setTimeout(() => AudioSource.getMutable(this.backgroundEntity).playing = playing && this.themeStatus, 1)
   }
 
   public getThemeStatus() {
