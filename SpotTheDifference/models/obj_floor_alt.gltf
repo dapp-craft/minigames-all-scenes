@@ -29,7 +29,7 @@
 		},
 		{
 			"mesh":1,
-			"name":"obj_grass_alt"
+			"name":"obj_ground03_alt"
 		}
 	],
 	"materials":[
@@ -121,23 +121,15 @@
 			}
 		},
 		{
-			"emissiveFactor":[
-				0.10000000149011612,
-				0.10000000149011612,
-				0.10000000149011612
-			],
-			"emissiveTexture":{
-				"index":4
-			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
 				}
 			},
-			"name":"obj_grass_alt",
+			"name":"obj_ground03_alt",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":5
+					"index":4
 				},
 				"metallicFactor":0
 			}
@@ -235,10 +227,6 @@
 		{
 			"sampler":0,
 			"source":2
-		},
-		{
-			"sampler":0,
-			"source":2
 		}
 	],
 	"images":[
@@ -254,8 +242,8 @@
 		},
 		{
 			"mimeType":"image/jpeg",
-			"name":"obj_grass_alt",
-			"uri":"textures/obj_grass_alt.jpg"
+			"name":"obj_ground03_alt",
+			"uri":"textures/obj_ground03_alt.jpg"
 		}
 	],
 	"accessors":[
