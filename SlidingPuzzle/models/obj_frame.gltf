@@ -23,11 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_frame"
+			"name":"obj_frame_collider"
 		},
 		{
 			"mesh":1,
-			"name":"obj_frame_collider"
+			"name":"obj_frame"
 		}
 	],
 	"materials":[
@@ -56,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.102",
+			"name":"Cube",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,13 +75,12 @@
 						}
 					},
 					"indices":3,
-					"material":0,
 					"mode":4
 				}
 			]
 		},
 		{
-			"name":"Cube",
+			"name":"Plane.002",
 			"primitives":[
 				{
 					"attributes":{
@@ -100,6 +99,7 @@
 						}
 					},
 					"indices":7,
+					"material":0,
 					"mode":4
 				}
 			]
@@ -123,36 +123,6 @@
 		}
 	],
 	"accessors":[
-		{
-			"componentType":5126,
-			"count":1032,
-			"max":[
-				7.266128063201904,
-				4.649672508239746,
-				5.754949569702148
-			],
-			"min":[
-				-7.266128063201904,
-				0.5206048488616943,
-				-7.15183162689209
-			],
-			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":1032,
-			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":1032,
-			"type":"VEC2"
-		},
-		{
-			"componentType":5123,
-			"count":2448,
-			"type":"SCALAR"
-		},
 		{
 			"componentType":5126,
 			"count":72,
@@ -182,18 +152,48 @@
 			"componentType":5123,
 			"count":108,
 			"type":"SCALAR"
+		},
+		{
+			"componentType":5126,
+			"count":1070,
+			"max":[
+				7.266128063201904,
+				4.649672508239746,
+				5.754949569702148
+			],
+			"min":[
+				-7.266128063201904,
+				0.5206048488616943,
+				-7.15183162689209
+			],
+			"type":"VEC3"
+		},
+		{
+			"componentType":5126,
+			"count":1070,
+			"type":"VEC3"
+		},
+		{
+			"componentType":5126,
+			"count":1070,
+			"type":"VEC2"
+		},
+		{
+			"componentType":5123,
+			"count":2556,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":5188,
+			"byteLength":617,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":617,
-			"byteOffset":5188
+			"byteLength":5541,
+			"byteOffset":620
 		}
 	],
 	"samplers":[
@@ -204,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":5808,
+			"byteLength":6164,
 			"uri":"obj_frame.bin"
 		}
 	]
