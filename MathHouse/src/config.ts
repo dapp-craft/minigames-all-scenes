@@ -1,8 +1,4 @@
-import { Vector3 } from "@dcl/sdk/math"
-
 export const GAME_ID = "040ff183-c10a-4fba-8800-881cf9bda930"
-
-export const SESSION_DURATION = 1000 * 60 * 5
 
 export const modelPath = new Map([
 ])
@@ -27,7 +23,6 @@ export const rocketCoords = [8, 1, 3.5]
 export const startCoords = [14, .5, 3.5]
 export const finishCoords = [2, .5, 3.5]
 
-export const MAX_LEVEL = 9
 export const mainEntityId = 5000
 export const catEntityId = 3000
 export const catInRocketEntityId = 4000
@@ -48,5 +43,7 @@ export const maxLevel = 50
 export const gameTime = {
   inactivity: 45
 }
+
+export const WIN_DURATION = 2000
 
 

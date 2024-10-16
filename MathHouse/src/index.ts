@@ -49,33 +49,29 @@ export async function main() {
 }
 
 const spawnInitialEntityPoll = async () => {
+  syncEntity(gameState.rocketWindow, [Tween.componentId], 5200)
+  syncEntity(gameState.levelCounter, [TextShape.componentId], catInRocketEntityId + entityAmount + counterEntity + 100)
 
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
     GltfContainer.createOrReplace(entity, { src: kitty.src })
-    Transform.createOrReplace(entity, {
-      position: Vector3.create(...rocketCoords),
-    })
+    Transform.createOrReplace(entity, {position: Vector3.create(...rocketCoords)})
     VisibilityComponent.createOrReplace(entity, { visible: false })
     gameState.availableEntity.push(entity)
-    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catEntityId + i)
-  };
-
-  syncEntity(gameState.rocketWindow, [Transform.componentId], 5200)
-
+    syncEntity(entity, [Tween.componentId, VisibilityComponent.componentId], catEntityId + i)
+  }
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
     gameState.entityInRoket.push(entity)
-    syncEntity(entity, [Tween.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catInRocketEntityId + i)
+    syncEntity(entity, [Tween.componentId, GltfContainer.componentId], catInRocketEntityId + i)
     parentEntity(entity, gameState.rocketWindow)
   }
   for (let i = 0; i <= counterEntity; i++) {
     const entity = engine.addEntity()
     gameState.counterEntity.push(entity)
-    syncEntity(entity, [Tween.componentId, VisibilityComponent.componentId, GltfContainer.componentId], catInRocketEntityId + entityAmount + 10 + i)
+    syncEntity(entity, [Tween.componentId, GltfContainer.componentId], catInRocketEntityId + entityAmount + 10 + i)
     parentEntity(entity, gameState.rocketWindow)
   }
-
   for (let i = 0; i <= 3; i++) {
     const entity = engine.addEntity()
     gameState.syncModels.push(entity);
@@ -83,14 +79,12 @@ const spawnInitialEntityPoll = async () => {
   }
 
   const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
-
   TextShape.create(gameState.levelCounter, {
     text: 'Level: 0',
     fontSize: 3,
     textAlign: 3
   })
   Transform.create(gameState.levelCounter, { ...data.get('counter_level'), rotation: Quaternion.create(0, -.414, .175, 0), parent: sceneParentEntity })
-  syncEntity(gameState.levelCounter, [TextShape.componentId], catInRocketEntityId + entityAmount + counterEntity + 100)
 }
 
 export const generateArray = (data: generatedData) => {

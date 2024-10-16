@@ -1,5 +1,5 @@
 import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
-import { initialLevels, maxLevel, soundConfig, timerConfig } from "../config"
+import { initialLevels, maxLevel, soundConfig, timerConfig, WIN_DURATION } from "../config"
 import { Vector3 } from "@dcl/sdk/math"
 import { Entity, TextShape } from "@dcl/sdk/ecs"
 import { getPlayer } from "@dcl/sdk/players"
@@ -22,8 +22,6 @@ export let nextLevelTimeOut: utils.TimerId | undefined = undefined
 let playerAnswer = 0
 let entityCounter = -1
 let entityManager: gameEntityManager
-
-const WIN_DURATION = 2000
 
 export const exitCallback = () => {
     soundManager.playSound('exitSounds', soundConfig.volume)
@@ -100,7 +98,6 @@ const initGameButtons = async () => {
                     rocketBoard.setRightCounter(entityCounter)
                     rocketBoard.showBoard(playerAnswer)
                     const time = playerAnswer * timerConfig.additionCatTimeGap + timerConfig.catIconAnimationTime + timerConfig.initialCatTimeGap
-                    utils.timers.setTimeout(() => gameButtons[i - 1].disable(), gameButtons[i - 1].releaseTime + 200)
                     if (entityCounter == playerAnswer) {
                         console.log("WIN")
                         soundManager.playSound('correctAnswerSound', soundConfig.volume)

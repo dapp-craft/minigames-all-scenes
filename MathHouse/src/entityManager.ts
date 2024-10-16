@@ -125,9 +125,7 @@ export class gameEntityManager {
         this.gameEnd = true
         this.resolveReady()
         this.answerReady()
-        gameState.availableEntity.forEach(entity => {
-            VisibilityComponent.createOrReplace(entity, { visible: false })
-        })
+        gameState.availableEntity.forEach(entity => VisibilityComponent.createOrReplace(entity, { visible: false }))
         gameState.availableEntity.forEach((e, k) => Tween.deleteFrom(e))
         console.log(nextLevelTimeOut)
         nextLevelTimeOut != undefined && utils.timers.clearTimeout(nextLevelTimeOut)
