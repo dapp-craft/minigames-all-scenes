@@ -18,7 +18,7 @@ export class GameLogic {
     private availableEntity = new Map()
     private correctSmashCounter = 0
     private miss = 0
-    private initialTimeGap = 200
+    private initialTimeGap = toadsGameConfig.initialTimeGap
     private resolveReady!: () => void
     private isHammerInAction = false
     private gameEnd = false
@@ -48,7 +48,7 @@ export class GameLogic {
     public resetData() {
         this.correctSmashCounter = 0
         this.miss = 0
-        this.initialTimeGap = 200
+        this.initialTimeGap = toadsGameConfig.initialTimeGap
         this.gameEnd = false
         this.isHammerInAction = false
         TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `Hits \n${0}`
@@ -179,7 +179,7 @@ export class GameLogic {
                     soundManager.playSound('hitSound', soundConfig.volume)
                     hammerFinish()
                     this.changeCounter(1)
-                    this.hitEntity(obj)
+                    this.hideEntity(obj, true)
                     this.toadsTimer.forEach((e, k) => { if (e.entity == obj.entity) utils.timers.clearTimeout(e.finish) })
                     break;
                 }
@@ -200,16 +200,16 @@ export class GameLogic {
         }
     }
 
-    private hitEntity(target: EntityObject) {
+    private hideEntity(target: EntityObject, hit: boolean) {
         const entity = target.entity
-        GltfContainer.createOrReplace(entity, { src: frog02.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
+        hit && GltfContainer.createOrReplace(entity, { src: frog02.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
 
         Tween.createOrReplace(entity, {
             mode: Tween.Mode.Move({
                 start: Transform.get(entity).position,
                 end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight }
             }),
-            duration: animationConfig.frogAfterHitHideTime,
+            duration: hit ? animationConfig.frogAfterHitHideTime : animationConfig.frogEscapeTime,
             easingFunction: EasingFunction.EF_LINEAR,
         },)
 
@@ -220,23 +220,6 @@ export class GameLogic {
     }
 
     private async playGame() {
-        const hideEntity = (obj: EntityObject, pos: number) => {
-            const entity = obj.entity
-            Tween.createOrReplace(entity, {
-                mode: Tween.Mode.Move({
-                    start: Transform.get(entity).position,
-                    end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight }
-                }),
-                duration: animationConfig.frogEscapeTime,
-                easingFunction: EasingFunction.EF_LINEAR,
-            })
-
-            utils.timers.setTimeout(() => {
-                GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
-                obj.available = true
-            }, animationConfig.frogEscapeTime);
-        }
-        console.log(toadsGameState.listOfEntity.get('ground'));
         pointerEventsSystem.onPointerDown(
             {
                 entity: toadsGameState.listOfEntity.get('ground'),
@@ -254,7 +237,6 @@ export class GameLogic {
                     if (!obj.available) return
                     obj.available = false
                     const entity = obj.entity
-                    let y = Transform.get(entity).position.y;
                     Tween.deleteFrom(entity)
                     Tween.createOrReplace(entity, {
                         mode: Tween.Mode.Move({
@@ -271,7 +253,7 @@ export class GameLogic {
                         },
                         () => this.hitHammer()
                     )
-                    this.toadsTimer.get(i).finish = utils.timers.setTimeout(() => hideEntity(obj, y), animationConfig.frogStayTime)
+                    this.toadsTimer.get(i).finish = utils.timers.setTimeout(() => this.hideEntity(obj, false), animationConfig.frogStayTime)
                     this.toadsTimer.get(i).entity = entity
                 }, this.initialTimeGap)
             })
