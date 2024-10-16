@@ -30,7 +30,7 @@ const toggleVolume = () => {
   else soundConfig.volume = 0.5
 }
 
-initMiniGame(GAME_ID, [MOVES, LEVEL], readGltfLocators(`locators/obj_locators_default.gltf`), handlers, {timeouts: gameTime})
+initMiniGame(GAME_ID, [MOVES, LEVEL], readGltfLocators(`locators/obj_locators_default.gltf`), handlers, { timeouts: gameTime })
 
 export let rocketBoard: any
 
@@ -54,23 +54,26 @@ const spawnInitialEntityPoll = async () => {
 
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
+    syncEntity(entity, [Transform.componentId, VisibilityComponent.componentId], catEntityId + i)
+    if (Transform.getOrNull(entity) != null) return
     GltfContainer.createOrReplace(entity, { src: kitty.src })
-    Transform.createOrReplace(entity, {position: Vector3.create(...rocketCoords)})
+    Transform.createOrReplace(entity, { position: Vector3.create(...rocketCoords) })
     VisibilityComponent.createOrReplace(entity, { visible: false })
     gameState.availableEntity.push(entity)
-    syncEntity(entity, [Tween.componentId, VisibilityComponent.componentId], catEntityId + i)
   }
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
-    gameState.entityInRoket.push(entity)
     syncEntity(entity, [Tween.componentId, GltfContainer.componentId], catInRocketEntityId + i)
+    if (Transform.getOrNull(entity) != null) return
     parentEntity(entity, gameState.rocketWindow)
+    gameState.entityInRoket.push(entity)
   }
   for (let i = 0; i <= counterEntity; i++) {
     const entity = engine.addEntity()
-    gameState.counterEntity.push(entity)
     syncEntity(entity, [Tween.componentId, GltfContainer.componentId], catInRocketEntityId + entityAmount + 10 + i)
+    if (Transform.getOrNull(entity) != null) return
     parentEntity(entity, gameState.rocketWindow)
+    gameState.counterEntity.push(entity)
   }
   for (let i = 0; i <= 3; i++) {
     const entity = engine.addEntity()
@@ -84,6 +87,7 @@ const spawnInitialEntityPoll = async () => {
     fontSize: 3,
     textAlign: 3
   })
+  if (Transform.getOrNull(gameState.levelCounter) != null) return
   Transform.create(gameState.levelCounter, { ...data.get('counter_level'), rotation: Quaternion.create(0, -.414, .175, 0), parent: sceneParentEntity })
 }
 
