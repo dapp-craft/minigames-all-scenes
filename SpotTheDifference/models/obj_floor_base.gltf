@@ -17,7 +17,8 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0
+				0,
+				1
 			]
 		}
 	],
@@ -25,6 +26,10 @@
 		{
 			"mesh":0,
 			"name":"obj_floor_base"
+		},
+		{
+			"mesh":1,
+			"name":"obj_grass_base"
 		}
 	],
 	"materials":[
@@ -114,6 +119,28 @@
 				},
 				"metallicFactor":0
 			}
+		},
+		{
+			"emissiveFactor":[
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
+			],
+			"emissiveTexture":{
+				"index":4
+			},
+			"extensions":{
+				"KHR_materials_specular":{
+					"specularFactor":0
+				}
+			},
+			"name":"obj_grass_base",
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":5
+				},
+				"metallicFactor":0
+			}
 		}
 	],
 	"meshes":[
@@ -161,6 +188,31 @@
 					"mode":4
 				}
 			]
+		},
+		{
+			"name":"Mesh.021",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":8,
+						"NORMAL":9,
+						"TEXCOORD_0":10
+					},
+					"extensions":{
+						"KHR_draco_mesh_compression":{
+							"bufferView":2,
+							"attributes":{
+								"POSITION":0,
+								"NORMAL":1,
+								"TEXCOORD_0":2
+							}
+						}
+					},
+					"indices":11,
+					"material":2,
+					"mode":4
+				}
+			]
 		}
 	],
 	"textures":[
@@ -179,6 +231,14 @@
 		{
 			"sampler":0,
 			"source":1
+		},
+		{
+			"sampler":0,
+			"source":2
+		},
+		{
+			"sampler":0,
+			"source":2
 		}
 	],
 	"images":[
@@ -191,6 +251,11 @@
 			"mimeType":"image/jpeg",
 			"name":"obj_ground02_base",
 			"uri":"textures/obj_ground02_base.jpg"
+		},
+		{
+			"mimeType":"image/jpeg",
+			"name":"obj_grass",
+			"uri":"textures/obj_grass.jpg"
 		}
 	],
 	"accessors":[
@@ -253,6 +318,36 @@
 			"componentType":5123,
 			"count":147,
 			"type":"SCALAR"
+		},
+		{
+			"componentType":5126,
+			"count":12,
+			"max":[
+				7.080545902252197,
+				6.408961326087592e-07,
+				1.1959822177886963
+			],
+			"min":[
+				-7.080545902252197,
+				-6.348603847072809e-07,
+				-6.634555339813232
+			],
+			"type":"VEC3"
+		},
+		{
+			"componentType":5126,
+			"count":12,
+			"type":"VEC3"
+		},
+		{
+			"componentType":5126,
+			"count":12,
+			"type":"VEC2"
+		},
+		{
+			"componentType":5123,
+			"count":30,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -265,6 +360,11 @@
 			"buffer":0,
 			"byteLength":506,
 			"byteOffset":184
+		},
+		{
+			"buffer":0,
+			"byteLength":262,
+			"byteOffset":692
 		}
 	],
 	"samplers":[
@@ -275,7 +375,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":692,
+			"byteLength":956,
 			"uri":"obj_floor_base.bin"
 		}
 	]
