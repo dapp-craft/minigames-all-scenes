@@ -140,7 +140,7 @@ const STATIC_MODELS = {
         'models/obj_floor_alt.gltf',
         'models/obj_frame_alt.gltf',
         'models/obj_grass_alt.gltf',
-        'models/obj_hydrant01_alt.gltf',
+        'models/obj_hydrants_alt.gltf',
         'models/obj_lamp01_alt.gltf',
         'models/obj_pipes_alt.gltf',
         'models/obj_smoker01_alt.gltf',
