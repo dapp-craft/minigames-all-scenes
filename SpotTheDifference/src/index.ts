@@ -15,6 +15,7 @@ import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { ui } from './ui'
 import { Ui3D } from './game/ui3D'
 import '../../common/cleaner'
+import { syncEntity } from '@dcl/sdk/network'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 let alt = false
@@ -92,15 +93,57 @@ const ui3d = new Ui3D(level => interruptPlay(level))
 
 const STATIC_MODELS = {
     [VARIANT.BASE]: [
-        'models/obj_exterior_base.gltf',
         'models/obj_floor_base.gltf',
-        'models/obj_panel_base.gltf',
+        'models/obj_bench_base.gltf',
+        'models/obj_chest02_base.gltf',
+        'models/obj_dresser01_base.gltf',
+        'models/obj_drums01_base.gltf',
+        'models/obj_fence_base.gltf',
+        'models/obj_floor_base.gltf',
+        'models/obj_frame_base.gltf',
+        'models/obj_grass_base.gltf',
+        'models/obj_hydrants_base.gltf',
+        'models/obj_lamp01_base.gltf',
+        'models/obj_pipes_base.gltf',
+        'models/obj_smoker01_base.gltf',
+        'models/obj_table01_base.gltf',
+        'models/obj_table02_base.gltf',
+        'models/obj_terminal_base.gltf',
+        'models/obj_text_base.gltf',
+        'models/obj_tree01_base.gltf',
+        'models/obj_tree02_base.gltf',
+        'models/obj_tree03_base.gltf',
+        'models/obj_wall_base.gltf',
+        'models/obj_wheels01_base.gltf',
+        
+        'models/obj_rules.gltf',
         'models/obj_gamezone.gltf'
     ],
     [VARIANT.ALT]: [
-        'models/obj_exterior_alt.gltf',
         'models/obj_floor_alt.gltf',
-        'models/obj_panel_alt.gltf'
+        'models/obj_bench_alt.gltf',
+        'models/obj_chest02_alt.gltf',
+        'models/obj_dresser01_alt.gltf',
+        'models/obj_drums01_alt.gltf',
+        'models/obj_fence_alt.gltf',
+        'models/obj_floor_alt.gltf',
+        'models/obj_frame_alt.gltf',
+        'models/obj_grass_alt.gltf',
+        'models/obj_hydrant01_alt.gltf',
+        'models/obj_lamp01_alt.gltf',
+        'models/obj_pipes_alt.gltf',
+        'models/obj_smoker01_alt.gltf',
+        'models/obj_table01_alt.gltf',
+        'models/obj_table02_alt.gltf',
+        'models/obj_terminal_alt.gltf',
+        'models/obj_text_alt.gltf',
+        'models/obj_tree01_alt.gltf',
+        'models/obj_tree02_alt.gltf',
+        'models/obj_tree03_alt.gltf',
+        'models/obj_wall_alt.gltf',
+        'models/obj_wheels01_alt.gltf',
+
+        'models/obj_rules.gltf',
     ]
 }
 
@@ -109,6 +152,7 @@ export async function main() {
         [VARIANT.BASE]: [] as Entity[],
         [VARIANT.ALT]: [] as Entity[]
     }
+    let i = 0
     for (const [variant, models] of Object.entries(STATIC_MODELS)) {
         for (const model of models) {
             const entity = engine.addEntity()
@@ -116,6 +160,7 @@ export async function main() {
             Transform.create(entity, {parent: sceneParentEntity})
             VisibilityComponent.create(entity, {visible: variant === VARIANT.BASE})
             staticModels[variant as keyof typeof staticModels].push(entity)
+            syncEntity(entity, [VisibilityComponent.componentId], 66666 + i++)
         }
     }
 
