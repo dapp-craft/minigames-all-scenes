@@ -439,7 +439,7 @@
 		},
 		{
 			"componentType":5126,
-			"count":408,
+			"count":456,
 			"max":[
 				11.653112411499023,
 				3.6695799827575684,
@@ -454,12 +454,12 @@
 		},
 		{
 			"componentType":5126,
-			"count":408,
+			"count":456,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5123,
-			"count":558,
+			"count":654,
 			"type":"SCALAR"
 		}
 	],
@@ -486,7 +486,7 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":1663,
+			"byteLength":1852,
 			"byteOffset":45628
 		}
 	],
@@ -498,7 +498,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":47292,
+			"byteLength":47480,
 			"uri":"obj_frame.bin"
 		}
 	]
