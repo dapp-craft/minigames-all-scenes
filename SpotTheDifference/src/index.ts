@@ -208,7 +208,7 @@ export async function main() {
     pointerEventsSystem.onPointerDown({
         entity: clock,
         opts: {
-            button: InputAction.IA_PRIMARY,
+            button: InputAction.IA_POINTER,
             hoverText: "PRESS ME"
         }
     }, () => {
