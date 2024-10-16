@@ -23,11 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_wall_alt"
+			"name":"obj_wall_alt_collider"
 		},
 		{
 			"mesh":1,
-			"name":"obj_wall_alt_collider"
+			"name":"obj_wall_alt"
 		}
 	],
 	"materials":[
@@ -56,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.001",
+			"name":"Cylinder.008",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,13 +75,12 @@
 						}
 					},
 					"indices":3,
-					"material":0,
 					"mode":4
 				}
 			]
 		},
 		{
-			"name":"Cylinder.008",
+			"name":"Cylinder.002",
 			"primitives":[
 				{
 					"attributes":{
@@ -100,6 +99,7 @@
 						}
 					},
 					"indices":7,
+					"material":0,
 					"mode":4
 				}
 			]
@@ -123,36 +123,6 @@
 		}
 	],
 	"accessors":[
-		{
-			"componentType":5126,
-			"count":1892,
-			"max":[
-				7.734232425689697,
-				9.66054916381836,
-				7.778098106384277
-			],
-			"min":[
-				-7.734232425689697,
-				6.777305543437251e-07,
-				-7.618767738342285
-			],
-			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":1892,
-			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":1892,
-			"type":"VEC2"
-		},
-		{
-			"componentType":5123,
-			"count":4158,
-			"type":"SCALAR"
-		},
 		{
 			"componentType":5126,
 			"count":479,
@@ -182,18 +152,48 @@
 			"componentType":5123,
 			"count":912,
 			"type":"SCALAR"
+		},
+		{
+			"componentType":5126,
+			"count":1239,
+			"max":[
+				7.734232425689697,
+				9.66054916381836,
+				7.778098106384277
+			],
+			"min":[
+				-7.734232425689697,
+				6.777305543437251e-07,
+				-7.618767738342285
+			],
+			"type":"VEC3"
+		},
+		{
+			"componentType":5126,
+			"count":1239,
+			"type":"VEC3"
+		},
+		{
+			"componentType":5126,
+			"count":1239,
+			"type":"VEC2"
+		},
+		{
+			"componentType":5123,
+			"count":4158,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":15248,
+			"byteLength":4441,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":4441,
-			"byteOffset":15248
+			"byteLength":10799,
+			"byteOffset":4444
 		}
 	],
 	"samplers":[
@@ -204,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":19692,
+			"byteLength":15244,
 			"uri":"obj_wall_alt.bin"
 		}
 	]

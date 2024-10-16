@@ -47,6 +47,7 @@
 			}
 		},
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
 				1,
 				1,

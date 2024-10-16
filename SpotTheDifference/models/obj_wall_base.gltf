@@ -125,7 +125,7 @@
 	"accessors":[
 		{
 			"componentType":5126,
-			"count":1892,
+			"count":1239,
 			"max":[
 				7.734232425689697,
 				9.66054916381836,
@@ -140,12 +140,12 @@
 		},
 		{
 			"componentType":5126,
-			"count":1892,
+			"count":1239,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":1892,
+			"count":1239,
 			"type":"VEC2"
 		},
 		{
@@ -187,13 +187,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":15242,
+			"byteLength":10799,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
 			"byteLength":4441,
-			"byteOffset":15244
+			"byteOffset":10800
 		}
 	],
 	"samplers":[
@@ -204,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":19688,
+			"byteLength":15244,
 			"uri":"obj_wall_base.bin"
 		}
 	]
