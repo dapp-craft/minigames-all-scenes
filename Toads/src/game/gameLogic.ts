@@ -24,6 +24,7 @@ export class GameLogic {
     private gameEnd = false
     private gameIsDone: Promise<void>
     private toadsTimer = new Map()
+    private activeHammer = false
 
     constructor() {
         this.gameIsDone = new Promise((res) => { this.resolveReady = res })
@@ -33,6 +34,7 @@ export class GameLogic {
         this.resetData()
         await this.initializeEntity()
         this.activateHammer()
+        this.activeHammer = true
         this.playGame()
         this.gameIsDone = new Promise(r => this.resolveReady = r)
         await this.gameIsDone;
@@ -73,6 +75,7 @@ export class GameLogic {
                 },
             },
             (hit) => {
+                if (!this.activeHammer) return
                 if (this.gameEnd) return
                 if (hit.hits.length == 0) return
                 const hitPos = hit.hits[0].position
@@ -131,6 +134,7 @@ export class GameLogic {
         MeshCollider.deleteFrom(hammerEntity)
         Tween.deleteFrom(hammerParent)
         VisibilityComponent.getMutable(hammerEntity).visible = false
+        this.activeHammer = false
     }
 
     private hitHammer() {
@@ -140,7 +144,7 @@ export class GameLogic {
         const hammerParent = toadsGameState.listOfEntity.get('hammerParent')
         let currentPosY: number = Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y
 
-        raycastSystem.removeRaycasterEntity(engine.CameraEntity)
+        this.activeHammer = false
 
         Tween.createOrReplace(hammerEntity, {
             mode: Tween.Mode.Move({
@@ -153,7 +157,7 @@ export class GameLogic {
 
         const hammerFinish = () => {
             engine.removeSystem('hammerHit')
-            this.activateHammer()
+            this.activeHammer = true
             Tween.deleteFrom(hammerEntity)
             hammerBounce()
         }
@@ -196,7 +200,7 @@ export class GameLogic {
                 duration: animationConfig.hammerBounceTime,
                 easingFunction: EasingFunction.EF_EASEOUTBACK,
             })
-            utils.timers.setTimeout(() => { this.isHammerInAction = false }, 100)
+            utils.timers.setTimeout(() => { this.isHammerInAction = false }, animationConfig.hammerBounceTime / 4)
         }
     }
 
@@ -292,4 +296,4 @@ export class GameLogic {
             this.resolveReady()
         })
     }
-}
+    }
