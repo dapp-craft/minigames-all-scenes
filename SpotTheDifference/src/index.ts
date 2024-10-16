@@ -98,8 +98,8 @@ const library = initMiniGame('2299ece9-d14d-4b2a-8cf8-08b8b1b6231b', TIME_LEVEL,
     scoreboard: {sortDirection: 'asc'}
 })
 let gameObjects: GameObject[] = []
-const ui3d = new Ui3D(level => interruptPlay(level))
-export const soundManager = new SoundManager()
+let ui3d: Ui3D
+export let soundManager: SoundManager
 export let sfxEnabled = true
 
 const STATIC_MODELS = {
@@ -174,7 +174,8 @@ export async function main() {
             syncEntity(entity, [VisibilityComponent.componentId], 66666 + i++)
         }
     }
-
+    ui3d = new Ui3D(level => interruptPlay(level))
+    soundManager = new SoundManager()
     setupEffects(Vector3.create(0, 2.5, -6))
     ReactEcsRenderer.setUiRenderer(ui)
     await init(sceneParentEntity)

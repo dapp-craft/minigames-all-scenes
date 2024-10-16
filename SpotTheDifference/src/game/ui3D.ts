@@ -1,5 +1,6 @@
 import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src";
 import { engine, Entity, PBTextShape, TextAlignMode, TextShape, Transform, TransformType } from "@dcl/sdk/ecs";
+import { syncEntity } from "@dcl/sdk/network";
 import { readGltfLocators } from "../../../common/locators";
 import { parseTime } from "../../../common/utils/time";
 import { LEVELS } from "./levels";
@@ -11,6 +12,13 @@ export class Ui3D {
     private readonly buttons: ui.MenuButton[] = []
     private readonly ready
     constructor(private levelButtonCallback: (arg: Number) => void) {
+        const textSettings: PBTextShape = {text: '', fontSize: 3, textAlign: TextAlignMode.TAM_MIDDLE_LEFT}
+        syncEntity(this.counterObjects, [TextShape.componentId], 666666+1)
+        syncEntity(this.counterLevel, [TextShape.componentId], 666666+2)
+        syncEntity(this.counterStopwatch, [TextShape.componentId], 666666+3)
+        TextShape.create(this.counterObjects, {...textSettings})
+        TextShape.create(this.counterLevel, {...textSettings})
+        TextShape.create(this.counterStopwatch, {...textSettings})
         this.ready = readGltfLocators(`locators/obj_locators_unique.gltf`).then(this.init.bind(this))
         this.setObjects()
         this.setLevel()
@@ -30,13 +38,10 @@ export class Ui3D {
             button.disable()
             this.buttons.push(button)
         }
-        const textSettings: PBTextShape = {text: '', fontSize: 3, textAlign: TextAlignMode.TAM_MIDDLE_LEFT}
-        Transform.create(this.counterObjects, {...locators.get('counter_foundObjects'), parent: sceneParentEntity})
-        TextShape.create(this.counterObjects, {...textSettings})
-        Transform.create(this.counterLevel, {...locators.get('counter_level'), parent: sceneParentEntity})
-        TextShape.create(this.counterLevel, {...textSettings})
-        Transform.create(this.counterStopwatch, {...locators.get('counter_stopwatch'), parent: sceneParentEntity})
-        TextShape.create(this.counterStopwatch, {...textSettings})
+        // FIXME: get rid of 'OrReplace' if DCL fixes excessive initial state sync
+        Transform.createOrReplace(this.counterObjects, {...locators.get('counter_foundObjects'), parent: sceneParentEntity})
+        Transform.createOrReplace(this.counterLevel, {...locators.get('counter_level'), parent: sceneParentEntity})
+        Transform.createOrReplace(this.counterStopwatch, {...locators.get('counter_stopwatch'), parent: sceneParentEntity})
     }
     public async setObjects(current?: number, total?: number) {
         await this.ready
