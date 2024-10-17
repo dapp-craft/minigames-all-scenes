@@ -10,7 +10,10 @@ import * as utils from '@dcl-sdk/utils'
 const tileLatest: Record<Entity, TileType> = {}
 
 export function setupSynchronizer() {
-  getAllTiles().forEach(setTile)
+  getAllTiles().forEach((tile) => {
+    setTile(tile)
+    tileLatest[tile] = JSON.parse(JSON.stringify(Tile.get(tile)))
+  })
   engine.addSystem(() => {
     for (const [tileEntity] of engine.getEntitiesWith(Tile)) {
       const tileDataHash = hash(Tile.get(tileEntity))
@@ -26,12 +29,20 @@ export function setupSynchronizer() {
 export function updateTile(tile: Entity) {
   const oldState = tileLatest[tile]
   const newState = Tile.get(tile)
-  if (
-    oldState.position.x !== newState.position.x ||
-    oldState.position.y !== newState.position.y ||
-    oldState.boardSize !== newState.boardSize ||
-    oldState.inGame !== newState.inGame
-  ) {
+
+  if (!oldState.inGame && !newState.inGame) return
+
+  if ((oldState.inGame || newState.inGame) && oldState.inGame !== newState.inGame) {
+    setTile(tile)
+    return
+  }
+
+  if (oldState.boardSize !== newState.boardSize) {
+    setTile(tile)
+    return
+  }
+
+  if (oldState.position.x !== newState.position.x || oldState.position.y !== newState.position.y) {
     createTween(tile, {
       mode: Tween.Mode.Move({
         start: Transform.get(tile).position,
@@ -40,24 +51,6 @@ export function updateTile(tile: Entity) {
       duration: 500,
       easingFunction: EasingFunction.EF_EASECUBIC
     })
-  }
-
-  if (oldState.inGame === false && newState.inGame === true) {
-    const scale = 3 / newState.boardSize
-    Transform.getMutable(tile).scale = Vector3.scale(Vector3.One(), scale)
-  }
-
-  if (oldState.inGame === true && newState.inGame === false) {
-    Transform.getMutable(tile).scale = Vector3.Zero()
-  }
-
-  if (oldState.image !== newState.image) {
-    updateTileImage(tile)
-  }
-
-  if (oldState.boardSize !== newState.boardSize && newState.inGame) {
-    const scale = 3 / newState.boardSize
-    Transform.getMutable(tile).scale = Vector3.scale(Vector3.One(), scale)
   }
 }
 
@@ -78,8 +71,6 @@ function setTile(tile: Entity) {
 
   Transform.getMutable(tile).position = getTilePosition(tileData.boardSize, tileData.position.x, tileData.position.y)
   updateTileImage(tile)
-
-  tileLatest[tile] = JSON.parse(JSON.stringify(Tile.get(tile)))
 }
 
 function createTween(entity: Entity, tween: PBTween) {
