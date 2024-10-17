@@ -130,7 +130,7 @@ const afterGame = () => {
 
 const incrementUserProgress = async () => {
     progressState.level++
-    TextShape.getMutable(gameState.levelCounter).text = `Level: ${progressState.level - 1}`
+    TextShape.getMutable(gameState.levelCounter).text = `Level: ${progressState.level}`
     await updatePlayerProgress(progressState)
 }
 

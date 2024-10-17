@@ -83,7 +83,7 @@ const spawnInitialEntityPoll = async () => {
 
   const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
   TextShape.create(gameState.levelCounter, {
-    text: 'Level: 0',
+    text: 'Level: 1',
     fontSize: 3,
     textAlign: 3
   })
