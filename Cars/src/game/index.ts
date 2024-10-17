@@ -40,7 +40,6 @@ import { queue, ui } from '@dcl-sdk/mini-games/src'
 import { playMoveCarSound, playStartLevelSound, playWinSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
 import { initArrow } from './arrow'
-import { disableCamera, enableCamera, init as initCamera } from './cameraEntity'
 
 export let lookingAt: Cell | undefined = undefined
 
@@ -91,8 +90,6 @@ export const inputBuffer: {
 export async function initGame() {
   setupEffects(Vector3.create(0, 2.5, -6))
 
-  initCamera()
-
   createBoard()
 
   setUpRaycast()
@@ -127,7 +124,6 @@ export function getReadyToStart() {
   }
 
   startLevel(levetToStart)
-  enableCamera()
 }
 
 export async function startLevel(level: number) {
@@ -327,7 +323,6 @@ export function exitGame() {
   clearInputBuffer()
   cancelCountdown()
   cancelWinAnimation()
-  disableCamera()
   inGame = false
   lastStart = 0
   inputAvailable = false
