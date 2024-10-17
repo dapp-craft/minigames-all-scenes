@@ -89,7 +89,7 @@ export async function startLevel(level: keyof typeof levelImages) {
 
   playStartSound()
   showPreviewImage(levelImages[level])
-  let cd = runCountdown(3)
+  let cd = runCountdown(5)
   const size = getLevelSize(level)
   const matrix = generateLevel(size)
   reSetTiles(level, matrix)
