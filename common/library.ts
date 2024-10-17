@@ -130,10 +130,12 @@ export async function initMiniGame(
     TextShape.create(labelNickname, { ...labels, text: '' })
     let counterTimer: Entity | undefined
     if (positions.has(NODE_NAME.COUNTER_TIMER)) executeTask(async () => {
-        counterTimer = engine.addEntity()
-        Transform.create(counterTimer, { ...positions.get(NODE_NAME.COUNTER_TIMER), parent: sceneParentEntity })
-        TextShape.create(counterTimer, { ...labels, text: '', textAlign: TextAlignMode.TAM_MIDDLE_LEFT })
-        syncEntity(counterTimer, [TextShape.componentId]) 
+        [counterTimer] = Array.from(engine.getEntitiesWith(NetworkEntity)).filter(([, {entityId}]) => entityId == 66666666)[0] ?? []
+        counterTimer ??= engine.addEntity() 
+        // FIXME: get rid of OrReplace cause Transform should not be synced, but in fact - it is
+        Transform.createOrReplace(counterTimer, { ...positions.get(NODE_NAME.COUNTER_TIMER), parent: sceneParentEntity })
+        TextShape.getOrCreateMutable(counterTimer, { ...labels, text: '', textAlign: TextAlignMode.TAM_MIDDLE_LEFT })
+        syncEntity(counterTimer, [TextShape.componentId])
         NetworkEntity.createOrReplace(counterTimer, {networkId: 0, entityId: 66666666 as Entity})
     })
 
