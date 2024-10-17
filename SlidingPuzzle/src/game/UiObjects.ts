@@ -6,6 +6,7 @@ import { levelButtonPositions, setLevelButtonPositions } from './locators/levelB
 import { setLevelUiPositions, UiLocators } from './locators/UILocators'
 import { MeshRenderer, TextAlignMode, TextShape, Transform, engine } from '@dcl/sdk/ecs'
 import { MAX_LEVEL } from '../config'
+import { syncEntity } from '@dcl/sdk/network'
 
 export const levelButtons: ui.MenuButton[] = []
 
@@ -34,6 +35,13 @@ export async function setupGameUI() {
 function setupMoveCouner() {
   const moveCounter = engine.addEntity()
   Transform.create(moveCounter, UiLocators['counter_moves'])
+  TextShape.createOrReplace(moveCounter, {
+    text: `Moves: ${0}`,
+    fontSize: 3,
+    textColor: Color4.White(),
+    textAlign: TextAlignMode.TAM_MIDDLE_LEFT
+  })
+  syncEntity(moveCounter, [TextShape.componentId], 5200)
 
   engine.addSystem(() => {
     TextShape.createOrReplace(moveCounter, {
@@ -48,8 +56,18 @@ function setupMoveCouner() {
 function seteupTimer() {
   const timer = engine.addEntity()
   Transform.create(timer, UiLocators['counter_stopwatch'])
+  TextShape.createOrReplace(timer, {
+    text: `Time: --:--`,
+    fontSize: 3,
+    textColor: Color4.White(),
+    textAlign: TextAlignMode.TAM_MIDDLE_LEFT
+  })
+  syncEntity(timer, [TextShape.componentId], 5201)
 
   engine.addSystem(() => {
+    // Only current playing level can update the timer
+    if (!stateVariables.inGame) return
+
     if (stateVariables.levelStartTime == 0) {
       TextShape.createOrReplace(timer, {
         text: `Time: --:--`,
