@@ -109,6 +109,10 @@ export async function initGame() {
   }
 
   await fetchPlayerProgress()
+
+  engine.addSystem(function () {
+    console.log('Input available:', inputAvailable)
+  })
 }
 
 export function getReadyToStart() {
@@ -150,8 +154,12 @@ export async function startLevel(level: number) {
   gameState.levelFinishTime = 0
   gameState.level = level
   gameState.moves = 0
-  inputAvailable = true
   loadLevel(level)
+
+  utils.timers.setTimeout(() => {
+    if (start != lastStart) return
+    inputAvailable = true
+  }, 1000)
 }
 
 function finishLevel() {
