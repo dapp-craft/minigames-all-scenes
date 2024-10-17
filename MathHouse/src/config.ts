@@ -24,9 +24,9 @@ export const timerConfig = {
 export const catIconAnimationMaxScale = 0.2
 export const numberIconAnimationScaleMultiplier = 0.3
 
-export const rocketCoords = [8, .7, 3.5]
-export const startCoords = [14, .5, 3.5]
-export const finishCoords = [2, .5, 3.5]
+export const rocketCoords = [8, 1, 3.5]
+export const startCoords = [14, .4, 3.5]
+export const finishCoords = [2, .4, 3.5]
 
 export const mainEntityId = 5000
 export const catEntityId = 3000
