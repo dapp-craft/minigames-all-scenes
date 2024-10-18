@@ -75,7 +75,7 @@ export function getReadyToStart() {
 
   utils.timers.setTimeout(() => {
     startLevel(levetToStart)
-  }, 2000)
+  }, 100)
 }
 
 export async function startLevel(level: keyof typeof levelImages) {
