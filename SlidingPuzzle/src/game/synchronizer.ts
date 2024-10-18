@@ -42,6 +42,11 @@ export function updateTile(tile: Entity) {
     return
   }
 
+  if (oldState.image !== newState.image) {
+    setTile(tile)
+    return
+  }
+
   if (oldState.position.x !== newState.position.x || oldState.position.y !== newState.position.y) {
     createTween(tile, {
       mode: Tween.Mode.Move({
