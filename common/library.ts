@@ -1,15 +1,17 @@
-import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/mini-games/src'
+import { initLibrary, sceneParentEntity, ui, queue, utilities, StartGameButtonCheck } from '@dcl-sdk/mini-games/src'
 import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
 import { getPlayer } from '@dcl/sdk/players'
 import { rotateVectorAroundCenter } from '@dcl-sdk/mini-games/src/utilities'
-import { engine, Transform, TransformType, TextShape, PBTextShape, Entity, TextAlignMode, executeTask, NetworkEntity } from '@dcl/sdk/ecs'
+import { engine, Transform, TransformType, TextShape, PBTextShape, Entity, TextAlignMode, executeTask, NetworkEntity, RealmInfo } from '@dcl/sdk/ecs'
 import { Color4, Vector3 } from '@dcl/sdk/math'
-import { syncEntity } from '@dcl/sdk/network'
+import { isStateSyncronized, syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { parseTime } from './utils/time'
 import { getRealm } from '~system/Runtime'
 import { Player } from '@dcl-sdk/mini-games/src/components/Player'
+import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
+import { hideSyncLoader, showSyncLoader, uiComponent } from './sync'
 
 enum NODE_NAME {
     AREA_TOPLEFT = 'area_topLeft',
@@ -68,11 +70,13 @@ export async function initMiniGame(
 ) {
     for (let [key, value] of Entries(DEFAULT_SETTINGS)) settings[key] = { ...value, ...settings[key] }
     let { timeouts, debug, scoreboard, labels } = settings as typeof DEFAULT_SETTINGS
-    const { realmInfo: { realmName, isPreview } = {} } = await getRealm({})
+    const { realmInfo: { realmName, isPreview, isConnectedSceneRoom } = {} } = await getRealm({})
     const environment = realmName && !realmName.match(/^.*eth$/) && !isPreview ? 'prd' : 'dev'
-    console.log(`Minigame environment: '${environment}'; Realm: ${realmName}; Settings: `, settings)
+    console.log(`Minigame environment: '${environment}'; Realm: ${realmName}; Conn: ${isConnectedSceneRoom}; Settings: `, settings)
+    if (isPreview) RealmInfo.getOrCreateMutable(engine.RootEntity).isConnectedSceneRoom = true
+    ReactEcsRenderer.setUiRenderer(uiComponent) 
 
-    initLibrary(engine, syncEntity, players, {
+    initLibrary(engine, syncEntity, players, isStateSyncronized, {
         environment,
         gameId: id,
         gameTimeoutMs: timeouts.session * 1000,
@@ -104,8 +108,10 @@ export async function initMiniGame(
         positions.get(NODE_NAME.AREA_BOTTOMRIGHT)!.position,
         positions.get(NODE_NAME.AREA_EXITSPAWN)!.position
     ))
+    let resolveSynced: Function
     let activePlayer: PlayerType | null | undefined
     engine.addSystem(() => {
+        if (isStateSyncronized()) resolveSynced()
         const {player, entity} = queue.getQueue().find(p => p.player.active) ?? {player: null}
         if (entity) Player.getMutable(entity)
         if (player?.address !== activePlayer?.address) {
@@ -152,12 +158,19 @@ export async function initMiniGame(
         { ...positions.get(NODE_NAME.DISPLAY_QUEUE)!, parent: sceneParentEntity }
     )
     
-    new ui.MenuButton(
+    let playBtn = new ui.MenuButton(
         { ...positions.get(NODE_NAME.BUTTON_PLAY)!, parent: sceneParentEntity },
         ui.uiAssets.shapes.RECT_GREEN,
         ui.uiAssets.icons.playText,
         'PLAY GAME',
-        () => queue.addPlayer()
+        async () => {
+            showSyncLoader()
+            playBtn.disable()
+            await synced
+            playBtn.enable()
+            hideSyncLoader()
+            queue.addPlayer()
+        }
     )
 
     new ui.MenuButton(
@@ -191,6 +204,9 @@ export async function initMiniGame(
         'Play/Stop Music',
         callbacks.toggleMusic
     )
+
+    let synced = new Promise(r => resolveSynced = r)
+    await synced
 }
 
 function validatePositionData(positionData: Map<String, TransformType>) {

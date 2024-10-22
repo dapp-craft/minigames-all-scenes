@@ -3,7 +3,7 @@ name: kittens
 on:
   push:
     branches:
-      - main
+      - sync-lock
     paths:
       - 'MathHouse/**'
       - 'common/**'
