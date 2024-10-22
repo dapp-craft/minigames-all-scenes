@@ -13,7 +13,7 @@ export const STATIC_MODELS = [
   { src: modelsFolder + 'obj_dresser.gltf' },
   { src: modelsFolder + 'obj_floor.gltf' },
   { src: modelsFolder + 'obj_frame.gltf' },
-  { src: modelsFolder + 'obj_grid.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS },
+  { src: modelsFolder + 'obj_grid.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_NONE },
   { src: modelsFolder + 'obj_ground.gltf' },
   { src: modelsFolder + 'obj_lamp.gltf' },
   { src: modelsFolder + 'obj_terminal.gltf' },
