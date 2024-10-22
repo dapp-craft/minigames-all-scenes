@@ -31,7 +31,7 @@ export const exitCallback = () => {
         entityManager.stopGame()
         rocketBoard.hideBoard()
         progressState.level = 1
-        TextShape.getMutable(gameState.levelCounter).text = `Level: ${progressState.level - 1}`
+        TextShape.getMutable(gameState.levelCounter).text = `Level: ${progressState.level}`
         GameData.createOrReplace(gameDataEntity, {
             playerAddress: '',
             playerName: '',
