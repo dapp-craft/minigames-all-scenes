@@ -132,6 +132,7 @@ export function getReadyToStart() {
 
 export async function startLevel(level: number) {
   console.log('Start level', level)
+  inputAvailable = false
   const start = ++lastStart
   inGame = true
 
