@@ -37,6 +37,7 @@ import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syn
 import { playCloseTileSound, playLevelCompleteSound, playOpenTileSound, playPairFoundSound } from './sound'
 import { setLevelButtonPositions } from './locators/levelButtonPositions'
 import { setStatusBoardPositions } from './locators/statusBoardPositions'
+import { disableCamera, enableCamera } from './cameraEntity'
 
 type TileType = {
   mainEntity: Entity
@@ -205,6 +206,7 @@ async function closeTile(tile: TileType) {
 
 export function getReadyToStart() {
   console.log('Get ready to start')
+  enableCamera()
 
   const levetToStart =
     (playerProgress?.level ?? 0) + 1 > Object.keys(TILES_LEVEL).length
@@ -340,6 +342,7 @@ async function finishLevel() {
 }
 
 export function exitGame() {
+  disableCamera()
   cancelWinAnimation()
   cancelCountdown()
   inGame = false
