@@ -110,7 +110,7 @@ export const generateArray = (data: generatedData) => {
         continue
       }
 
-      let maxNum = Math.min(availableSum - (remainingSlots - 1), 6)
+      let maxNum = Math.min(availableSum - (remainingSlots - 1), 4)
       let num = generateNumber(1, maxNum);
       if (!data.positive) num = -num
 
@@ -120,7 +120,7 @@ export const generateArray = (data: generatedData) => {
   } else {
     while (array.length < data.length) {
       let num
-      do num = Math.floor(Math.random() * 13) - 6;
+      do num = Math.floor(Math.random() * 9) - 4;
       while (num == 0)
 
       if (currentSum + num <= 0 || currentSum + num > 9) continue;
