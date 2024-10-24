@@ -13,6 +13,7 @@ import { randomLvl } from "../levels"
 import { soundManager } from "../globals"
 import { updatePlayerProgress } from "./syncData"
 import { cancelCountdown, runCountdown, runGameoverAnimation, runWinAnimation } from "../../../common/effects"
+import { disableCamera, enableCamera } from "./cameraEntity"
 
 export let gameDataEntity: Entity
 export let sessionStartedAt: number
@@ -24,6 +25,7 @@ let entityCounter = -1
 let entityManager: gameEntityManager
 
 export const exitCallback = () => {
+    disableCamera()
     soundManager.playSound('exitSounds', soundConfig.volume)
     cancelCountdown()
     // TODO delete setTimeout
@@ -54,6 +56,7 @@ export const initGame = async () => {
 
 export function getReadyToStart() {
     console.log('Get Ready to start!')
+    enableCamera()
     gameButtons.forEach((button, i) => button.disable())
     runCountdown().then(() => startGame())
 }
