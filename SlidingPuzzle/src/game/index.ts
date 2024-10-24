@@ -42,7 +42,7 @@ const TileMoveDirection = {
 }
 
 export async function initGame() {
-  setupEffects(Vector3.create(0, 2.5, -6))
+  setupEffects(Vector3.create(0, 2.5, -6), Vector3.create(-2.8, 1.2, -0.5))
 
   setupGameUI()
 
