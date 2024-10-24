@@ -8,7 +8,7 @@ const winEntities: Entity[] = []
 let gameoverEntities: Entity[] = []
 let countdown: ui.Timer3D
 
-export function setupEffects(position: Vector3) {
+export function setupEffects(position: Vector3, countdownOffset = Vector3.Zero()) {
     let entity: Entity
     for (let angle of [135, 90, 45]) {
         winEntities.push((entity = engine.addEntity()))
@@ -71,7 +71,7 @@ export function setupEffects(position: Vector3) {
         syncEntity(entity, [VisibilityComponent.componentId, Animator.componentId])
     }
 
-    countdown = new ui.Timer3D({ parent: sceneParentEntity, position }, 1, 1, false, 10)
+    countdown = new ui.Timer3D({ parent: sceneParentEntity, position: Vector3.add(position, countdownOffset) }, 1, 1, false, 10)
     countdown.hide()
 }
 
