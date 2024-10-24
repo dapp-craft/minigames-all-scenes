@@ -28,10 +28,10 @@ export function init() {
   camera = engine.addEntity()
   cameraviewPoint = engine.addEntity()
   Transform.create(camera, {
-    position: Vector3.create(8, 4.4, 7.3),
+    position: Vector3.create(8, 3.2, 7.3),
     rotation: Quaternion.fromEulerDegrees(40, 180, 0)
   })
-  Transform.create(cameraviewPoint, {position: Vector3.create(8, 3.7, 1)})
+  Transform.create(cameraviewPoint, {position: Vector3.create(8, 3.9, 1)})
   //   MeshRenderer.setBox(camera)
   VirtualCamera.create(camera, {
     defaultTransition: { transitionMode: VirtualCamera.Transition.Speed(20) },
