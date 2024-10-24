@@ -1,10 +1,10 @@
-import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/mini-games/src'
+import { initLibrary, sceneParentEntity, ui, queue, utilities, StartGameButtonCheck } from '@dcl-sdk/mini-games/src'
 import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
 import { getPlayer } from '@dcl/sdk/players'
 import { rotateVectorAroundCenter } from '@dcl-sdk/mini-games/src/utilities'
-import { engine, Transform, TransformType, TextShape, PBTextShape, Entity, TextAlignMode, executeTask, NetworkEntity } from '@dcl/sdk/ecs'
+import { engine, Transform, TransformType, TextShape, PBTextShape, Entity, TextAlignMode, executeTask, NetworkEntity, RealmInfo } from '@dcl/sdk/ecs'
 import { Color4, Vector3 } from '@dcl/sdk/math'
-import { syncEntity } from '@dcl/sdk/network'
+import { isStateSyncronized, syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
 import { movePlayerTo } from '~system/RestrictedActions'
 import { parseTime } from './utils/time'
@@ -68,11 +68,16 @@ export async function initMiniGame(
 ) {
     for (let [key, value] of Entries(DEFAULT_SETTINGS)) settings[key] = { ...value, ...settings[key] }
     let { timeouts, debug, scoreboard, labels } = settings as typeof DEFAULT_SETTINGS
-    const { realmInfo: { realmName, isPreview } = {} } = await getRealm({})
-    const environment = realmName && !realmName.match(/^.*eth$/) && !isPreview ? 'prd' : 'dev'
-    console.log(`Minigame environment: '${environment}'; Realm: ${realmName}; Settings: `, settings)
+    const { realmInfo: { realmName } = {} } = await getRealm({})
+    const environment = realmName && !realmName.match(/^LocalPreview$|.*eth$/) ? 'prd' : 'dev'
+    const platform = eval('UnityOpsApi') === undefined ? 'web' : 'desktop'
+    console.log(`Minigame environment: '${environment}'; Realm: ${realmName}; Platform: ${platform}; Settings: `, settings)
+    // FIXME: remove when local preview will be able to pass isStateSyncronized check
+    if (platform == 'web' || realmName?.match(/^LocalPreview$/)){
+        executeTask(async () => RealmInfo.getOrCreateMutable(engine.RootEntity).isConnectedSceneRoom = true)
+    }
 
-    initLibrary(engine, syncEntity, players, {
+    initLibrary(engine, syncEntity, players, isStateSyncronized, {
         environment,
         gameId: id,
         gameTimeoutMs: timeouts.session * 1000,
@@ -152,13 +157,13 @@ export async function initMiniGame(
         { ...positions.get(NODE_NAME.DISPLAY_QUEUE)!, parent: sceneParentEntity }
     )
     
-    new ui.MenuButton(
+    StartGameButtonCheck(new ui.MenuButton(
         { ...positions.get(NODE_NAME.BUTTON_PLAY)!, parent: sceneParentEntity },
         ui.uiAssets.shapes.RECT_GREEN,
         ui.uiAssets.icons.playText,
         'PLAY GAME',
         () => queue.addPlayer()
-    )
+    ))
 
     new ui.MenuButton(
         { ...positions.get(NODE_NAME.BUTTON_RESTART)!, parent: sceneParentEntity },
