@@ -16,7 +16,8 @@ import {
   VisibilityComponent,
   TextShape,
   TransformType,
-  PBVirtualCamera
+  PBVirtualCamera,
+  InputModifier
 } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 
@@ -27,7 +28,7 @@ export function init() {
   camera = engine.addEntity()
   cameraviewPoint = engine.addEntity()
   Transform.create(camera, {
-    position: Vector3.create(8, 3, 7.3),
+    position: Vector3.create(8, 4, 7.3),
     rotation: Quaternion.fromEulerDegrees(40, 180, 0)
   })
   Transform.create(cameraviewPoint, {position: Vector3.create(8, 3.7, 1)})
@@ -42,10 +43,26 @@ export function enableCamera() {
   const mainCamera = MainCamera.getMutableOrNull(engine.CameraEntity)
   if (!mainCamera) return
   mainCamera.virtualCameraEntity = camera
+  InputModifier.createOrReplace(engine.PlayerEntity, {
+    mode: {
+      $case: 'standard',
+      standard: {
+        disableAll: true,
+      },
+    },
+  })
 }
 
 export function disableCamera() {
   const mainCamera = MainCamera.getMutableOrNull(engine.CameraEntity)
   if (!mainCamera) return
   mainCamera.virtualCameraEntity = undefined
+  InputModifier.createOrReplace(engine.PlayerEntity, {
+    mode: {
+      $case: 'standard',
+      standard: {
+        disableAll: false,
+      },
+    },
+  })
 }
