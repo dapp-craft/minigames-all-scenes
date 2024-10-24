@@ -28,7 +28,7 @@ export function init() {
   camera = engine.addEntity()
   cameraviewPoint = engine.addEntity()
   Transform.create(camera, {
-    position: Vector3.create(8, 2, 8),
+    position: Vector3.create(8, 3, 9.5),
     rotation: Quaternion.fromEulerDegrees(40, 180, 0)
   })
   Transform.create(cameraviewPoint, {position: Vector3.create(8, 1, 1)})
