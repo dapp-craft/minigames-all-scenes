@@ -22,6 +22,8 @@ export let nextLevelTimeOut: utils.TimerId | undefined = undefined
 
 let playerAnswer = 0
 let entityCounter = -1
+let timeBeforeStart = 3
+let startTimeOut: utils.TimerId
 let entityManager: gameEntityManager
 
 export const exitCallback = () => {
@@ -46,6 +48,7 @@ export const exitCallback = () => {
 
 export const restartCallback = () => {
     entityManager?.stopGame()
+    utils.timers.clearTimeout(startTimeOut)
     gameButtons.forEach((button, i) => button.disable())
     startGame()
 }
@@ -54,11 +57,12 @@ export const initGame = async () => {
     await initGameButtons()
 }
 
-export function getReadyToStart() {
+export async function getReadyToStart() {
     console.log('Get Ready to start!')
     enableCamera()
     gameButtons.forEach((button, i) => button.disable())
-    runCountdown().then(() => startGame())
+    runCountdown(timeBeforeStart)
+    startTimeOut = utils.timers.setTimeout(() => startGame(), timeBeforeStart * 1000 + 200)
 }
 
 async function startGame() {
@@ -126,7 +130,7 @@ const initGameButtons = async () => {
 
 const afterGame = () => {
     utils.timers.setTimeout(() => {
-        movePlayerTo({newRelativePosition: Vector3.create(8, 1, 13),})
+        movePlayerTo({ newRelativePosition: Vector3.create(8, 1, 13), })
         progressState.level = 1
     }, WIN_DURATION)
 }
