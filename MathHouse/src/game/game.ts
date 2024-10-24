@@ -29,6 +29,7 @@ let entityManager: gameEntityManager
 export const exitCallback = () => {
     disableCamera()
     soundManager.playSound('exitSounds', soundConfig.volume)
+    utils.timers.clearTimeout(startTimeOut)
     cancelCountdown()
     // TODO delete setTimeout
     utils.timers.setTimeout(() => {
