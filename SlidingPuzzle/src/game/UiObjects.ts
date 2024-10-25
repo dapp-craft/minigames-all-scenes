@@ -44,8 +44,11 @@ function setupMoveCouner() {
   syncEntity(moveCounter, [TextShape.componentId], 5200)
 
   engine.addSystem(() => {
+    const text = `Moves: ${stateVariables.moves}`
+    if (TextShape.get(moveCounter).text == text) return
+    if (!stateVariables.inGame) return
     TextShape.createOrReplace(moveCounter, {
-      text: `Moves: ${stateVariables.moves}`,
+      text,
       fontSize: 3,
       textColor: Color4.White(),
       textAlign: TextAlignMode.TAM_MIDDLE_LEFT
@@ -68,25 +71,22 @@ function seteupTimer() {
     // Only current playing level can update the timer
     if (!stateVariables.inGame) return
 
+    let text
     if (stateVariables.levelStartTime == 0) {
-      TextShape.createOrReplace(timer, {
-        text: `Time: --:--`,
-        fontSize: 3,
-        textColor: Color4.White(),
-        textAlign: TextAlignMode.TAM_MIDDLE_LEFT
-      })
-      return
-    }
-
-    const gameElapsedTime = (Date.now() - stateVariables.levelStartTime) / 1000
-    const minutes = Math.max(Math.floor(gameElapsedTime / 60), 0)
-    const seconds = Math.max(Math.round(gameElapsedTime) - minutes * 60, 0)
-
-    TextShape.createOrReplace(timer, {
-      text: `Time: ${minutes.toLocaleString('en-US', {
+      text = `Time: --:--`
+    } else {
+      const gameElapsedTime = (Date.now() - stateVariables.levelStartTime) / 1000
+      const minutes = Math.max(Math.floor(gameElapsedTime / 60), 0)
+      const seconds = Math.max(Math.round(gameElapsedTime) - minutes * 60, 0)
+      text = `Time: ${minutes.toLocaleString('en-US', {
         minimumIntegerDigits: 2,
         useGrouping: false
-      })}:${seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}`,
+      })}:${seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}`
+    }
+    if (TextShape.get(timer).text == text) return
+
+    TextShape.createOrReplace(timer, {
+      text,
       fontSize: 3,
       textColor: Color4.White(),
       textAlign: TextAlignMode.TAM_MIDDLE_LEFT
