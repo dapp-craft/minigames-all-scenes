@@ -66,9 +66,10 @@ export function setupEffects(position: Vector3, countdownOffset = Vector3.Zero()
         states: [{ clip: 'Animation', playing: false, loop: false, shouldReset: true }]
     })
 
+    let i = 0
     for (let entity of [...winEntities, ...gameoverEntities]) {
         VisibilityComponent.create(entity, { visible: false })
-        syncEntity(entity, [VisibilityComponent.componentId, Animator.componentId])
+        syncEntity(entity, [VisibilityComponent.componentId, Animator.componentId], 666666666 + i++)
     }
 
     countdown = new ui.Timer3D({ parent: sceneParentEntity, position: Vector3.add(position, countdownOffset) }, 1, 1, false, 10)
