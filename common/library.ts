@@ -111,15 +111,24 @@ export async function initMiniGame(
     ))
     let activePlayer: PlayerType | null | undefined
     engine.addSystem(() => {
-        const {player, entity} = queue.getQueue().find(p => p.player.active) ?? {player: null}
-        if (entity) Player.getMutable(entity)
+        const {player} = queue.getQueue().find(p => p.player.active) ?? {player: null}
         if (player?.address !== activePlayer?.address) {
             activePlayer = player
             console.log('ACTIVE PLAYER:', activePlayer)
             onActivePlayerChange(activePlayer)
         }
         updateLabels()
+        forceSyncSelf()
     })
+
+    let lastSyncTimestamp = 0
+    function forceSyncSelf() {
+        if (Date.now() - lastSyncTimestamp < 1000) return
+        lastSyncTimestamp = Date.now()
+        for (const [entity, player] of engine.getEntitiesWith(Player)) {
+            if (player.address === getPlayer()?.userId) Player.getMutable(entity)
+        }
+    }
 
     function updateLabels() {
         const { minutes, seconds } = parseTime(sessionTimeLeft)
