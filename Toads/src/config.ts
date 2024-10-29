@@ -1,3 +1,5 @@
+import { frog01, frog03, frog04, snake } from "./resources/resources"
+
 export const GAME_ID = "5e68058a-2f02-4c51-9e22-198070bbcdcf"
 
 export const toadsGameConfig = {
@@ -21,6 +23,37 @@ export const animationConfig = {
     frogAfterHitHideTime: 100,
     frogEscapeTime: 1500,
 }
+
+export const hitTargetsConfig = new Map([
+    ['DEFAULT', {
+        weight: 7,
+        frogStayTime: 3000,
+        frogEscapeTime: 1500,
+        price: 1,
+        model: frog01
+    }],
+    ['GOLDEN', {
+        weight: 3,
+        frogStayTime: 2000,
+        frogEscapeTime: 800,
+        price: 2,
+        model: frog03
+    }],
+    ['RUBY', {
+        weight: 1,
+        frogStayTime: 1000,
+        frogEscapeTime: 500,
+        price: 3,
+        model: frog04
+    }],
+    ['SNAKE', {
+        weight: 3,
+        frogStayTime: 3000,
+        frogEscapeTime: 1500,
+        price: -3,
+        model: snake
+    }]
+])
 
 export const soundConfig = {
     volume: 0.5

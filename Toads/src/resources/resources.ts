@@ -16,12 +16,12 @@ export const rules: PBGltfContainer = { src: modelsFolder + 'obj_rules.gltf' };
 export const logo: PBGltfContainer = { src: modelsFolder + 'obj_logo.gltf' };
 export const text: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
 
-
 export const frog01: PBGltfContainer = { src: modelsFolder + 'obj_frog01.gltf' };
 export const frog02: PBGltfContainer = { src: modelsFolder + 'obj_frog02.gltf' };
+export const frog03: PBGltfContainer = { src: modelsFolder + 'obj_frog03.gltf' };
+export const frog04: PBGltfContainer = { src: modelsFolder + 'obj_frog04.gltf' };
+export const snake: PBGltfContainer = { src: modelsFolder + 'obj_snake01.gltf' };
 export const hammer: PBGltfContainer = { src: modelsFolder + 'obj_hammer.gltf' };
-
-
 
 //Game Zone Collider
 export const gameZone: PBGltfContainer = { src: modelsFolder + 'obj_gamezone.gltf' };

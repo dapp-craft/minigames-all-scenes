@@ -1,6 +1,6 @@
 import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, InputAction, MeshCollider, MeshRenderer, pointerEventsSystem, RaycastQueryType, raycastSystem, TextShape, Transform, Tween, TweenStateStatus, VisibilityComponent } from "@dcl/sdk/ecs"
-import { animationConfig, soundConfig, toadsGameConfig } from "../config"
+import { animationConfig, hitTargetsConfig, soundConfig, toadsGameConfig } from "../config"
 import { toadsGameState } from "../state"
 import { Vector3 } from "@dcl/sdk/math"
 import { frog01, frog02 } from "../resources/resources"
@@ -44,7 +44,7 @@ export class GameLogic {
     }
 
     private async initializeEntity() {
-        for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) this.availableEntity.set(i + 1, { entity: toadsGameState.availableEntity[i], available: true })
+        for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) this.availableEntity.set(i + 1, { entity: toadsGameState.availableEntity[i], available: true, type: 'DEFAULT'})
     }
 
     public resetData() {
@@ -168,7 +168,7 @@ export class GameLogic {
             let hammerZeroYVector = { ...Transform.get(hammerParent).position, y: 0 }
             if (Transform.get(hammerEntity).position.y + Transform.get(hammerParent).position.y <= toadsGameState.toadInitialHeight + .6) {
                 soundManager.playSound('missSound', soundConfig.volume)
-                this.changeCounter(-1)
+                this.changeCounter()
                 hammerFinish()
                 return
             }
@@ -182,8 +182,8 @@ export class GameLogic {
                 ) {
                     soundManager.playSound('hitSound', soundConfig.volume)
                     hammerFinish()
-                    this.changeCounter(1)
-                    this.hideEntity(obj, true)
+                    this.changeCounter(obj.type)
+                    this.hideEntity(obj, true, obj.type)
                     this.toadsTimer.forEach((e, k) => { if (e.entity == obj.entity) utils.timers.clearTimeout(e.finish) })
                     break;
                 }
@@ -204,7 +204,7 @@ export class GameLogic {
         }
     }
 
-    private hideEntity(target: EntityObject, hit: boolean) {
+    private hideEntity(target: EntityObject, hit: boolean, type: string) {
         const entity = target.entity
         hit && GltfContainer.createOrReplace(entity, { src: frog02.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
 
@@ -213,14 +213,24 @@ export class GameLogic {
                 start: Transform.get(entity).position,
                 end: { ...Transform.get(entity).position, y: toadsGameState.toadInitialHeight }
             }),
-            duration: hit ? animationConfig.frogAfterHitHideTime : animationConfig.frogEscapeTime,
+            duration: hit ? animationConfig.frogAfterHitHideTime : hitTargetsConfig.get(type)!.frogEscapeTime,
             easingFunction: EasingFunction.EF_LINEAR,
-        },)
+        })
 
         utils.timers.setTimeout(() => {
             GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
             target.available = true
-        }, animationConfig.frogAfterHitHideTime)
+        }, hit ? animationConfig.frogAfterHitHideTime : hitTargetsConfig.get(type)!.frogEscapeTime)
+    }
+
+    private getRandomItemByWeight(targetsConfig: any) {
+        let totalWeight = 0
+        hitTargetsConfig.forEach((data) => totalWeight += data.weight)
+        let random = Math.random() * totalWeight
+        for (const [targetType, config] of targetsConfig) {
+            random -= config.weight
+            if (random <= 0) {return targetType}
+        }
     }
 
     private async playGame() {
@@ -232,7 +242,7 @@ export class GameLogic {
             () => this.hitHammer()
         )
 
-        for (let i = 1; i <= 100; i++) {
+        for (let i = 1; i <= 200; i++) {
             this.initialTimeGap = this.initialTimeGap + toadsGameConfig.frogTimeGap
             this.toadsTimer.set(i, {
                 start: utils.timers.setTimeout(() => {
@@ -240,7 +250,10 @@ export class GameLogic {
                     const obj = this.availableEntity.get(random)
                     if (!obj.available) return
                     obj.available = false
+                    let type = this.getRandomItemByWeight(hitTargetsConfig)
+                    obj.type = type
                     const entity = obj.entity
+                    GltfContainer.getMutable(entity).src = hitTargetsConfig.get(type)!.model.src
                     Tween.deleteFrom(entity)
                     Tween.createOrReplace(entity, {
                         mode: Tween.Mode.Move({
@@ -257,16 +270,16 @@ export class GameLogic {
                         },
                         () => this.hitHammer()
                     )
-                    this.toadsTimer.get(i).finish = utils.timers.setTimeout(() => this.hideEntity(obj, false), animationConfig.frogStayTime)
+                    this.toadsTimer.get(i).finish = utils.timers.setTimeout(() => this.hideEntity(obj, false, type), hitTargetsConfig.get(type)!.frogStayTime)
                     this.toadsTimer.get(i).entity = entity
                 }, this.initialTimeGap)
             })
         }
     }
 
-    private changeCounter(number: number) {
-        if (number >= 0) {
-            this.correctSmashCounter++
+    private changeCounter(type?: string) {
+        if (type) {
+            this.correctSmashCounter = this.correctSmashCounter + hitTargetsConfig.get(type)!.price
             TextShape.getMutable(toadsGameState.listOfEntity.get('hits')).text = `Hits \n${this.correctSmashCounter}`
         } else {
             this.miss++
