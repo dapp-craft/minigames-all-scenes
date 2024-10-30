@@ -34,7 +34,7 @@ export const hitTargetsConfig = new Map([
     }],
     ['GOLDEN', {
         weight: 3,
-        frogStayTime: 1500,
+        frogStayTime: 1300,
         frogEscapeTime: 800,
         price: 2,
         model: frog03
