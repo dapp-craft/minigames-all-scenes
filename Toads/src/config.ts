@@ -7,7 +7,7 @@ export const toadsGameConfig = {
     ToadsAmount: 8,
     toadsDistance: .5,
     gameTime: 30000,
-    frogTimeGap: 600,
+    frogTimeGap: 500,
     hammerRadius: .7,
     hammerAltitude: 2,
     priceMultiplier: 10,
@@ -34,14 +34,14 @@ export const hitTargetsConfig = new Map([
     }],
     ['GOLDEN', {
         weight: 3,
-        frogStayTime: 2000,
+        frogStayTime: 1500,
         frogEscapeTime: 800,
         price: 2,
         model: frog03
     }],
     ['RUBY', {
         weight: 1,
-        frogStayTime: 1000,
+        frogStayTime: 700,
         frogEscapeTime: 500,
         price: 3,
         model: frog04

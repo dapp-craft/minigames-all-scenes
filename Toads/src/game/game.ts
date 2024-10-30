@@ -119,7 +119,7 @@ const spawnButton = async () => {
     { ...data.get("button_start")!, parent: sceneParentEntity },
     ui.uiAssets.shapes.SQUARE_GREEN,
     ui.uiAssets.icons.play,
-    ``,
+    `PLAY`,
     () => {
       getReadyToStart()
     },
