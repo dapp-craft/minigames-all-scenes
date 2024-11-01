@@ -180,7 +180,8 @@ export class GameLogic {
                         || currentPosY - distanceTOLastPoint * toadsGameConfig.hammerHitDistMult <= Transform.get(obj.entity).position.y)
                     && distance <= toadsGameConfig.hammerRadius
                 ) {
-                    soundManager.playSound('hitSound', soundConfig.volume)
+                    console.log(obj)
+                    soundManager.playSound(hitTargetsConfig.get(obj.type)!.sounds, soundConfig.volume)
                     hammerFinish()
                     this.changeCounter(obj.type)
                     this.hideEntity(obj, true, obj.type)
