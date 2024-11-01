@@ -20,7 +20,9 @@
     "SpotTheDifference",
     "MathHouse",
     "Cars",
-    "Toads"
+    "Toads",
+    "Snake",
+    "Steampunk"
   ],
   "dependencies": {
     "@dcl-sdk/mini-games": "1.0.0-20241018222100.commit-7c28043",
