@@ -1,4 +1,4 @@
-import { initLibrary, sceneParentEntity, ui, queue, utilities, StartGameButtonCheck } from '@dcl-sdk/mini-games/src'
+import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/mini-games/src'
 import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
 import { getPlayer } from '@dcl/sdk/players'
 import { rotateVectorAroundCenter } from '@dcl-sdk/mini-games/src/utilities'
@@ -166,13 +166,13 @@ export async function initMiniGame(
         { ...positions.get(NODE_NAME.DISPLAY_QUEUE)!, parent: sceneParentEntity }
     )
     
-    StartGameButtonCheck(new ui.MenuButton(
+    new ui.MenuButton(
         { ...positions.get(NODE_NAME.BUTTON_PLAY)!, parent: sceneParentEntity },
         ui.uiAssets.shapes.RECT_GREEN,
         ui.uiAssets.icons.playText,
         'PLAY GAME',
         () => queue.addPlayer()
-    ))
+    )
 
     new ui.MenuButton(
         { ...positions.get(NODE_NAME.BUTTON_RESTART)!, parent: sceneParentEntity },
