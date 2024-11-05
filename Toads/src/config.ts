@@ -55,7 +55,7 @@ export const hitTargetsConfig = new Map([
         frogEscapeTime: 1500,
         price: -3,
         model: snake,
-        sounds: "missSound"
+        sounds: "snakeSound"
     }]
 ])
 

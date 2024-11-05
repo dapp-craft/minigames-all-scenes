@@ -4,13 +4,14 @@ import {
     Entity,
     Transform  } from '@dcl/sdk/ecs'
   import * as utils from '@dcl-sdk/utils'
-import { hitSound, enterSound, exitSound, missSound } from '../resources/resources'
+import { hitSound, enterSound, exitSound, missSound, snakeSound } from '../resources/resources'
   
   export let SOUNDS: { [key: string]: string } = {
     "enterSounds": enterSound, 
     "exitSounds": exitSound,
     "missSound": missSound,
     "hitSound": hitSound,
+    "snakeSound": snakeSound
   }
   
   export let THEME = ''
