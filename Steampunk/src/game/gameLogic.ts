@@ -1,28 +1,24 @@
-import { InputAction, pointerEventsSystem, TextShape } from "@dcl/sdk/ecs"
+import { InputAction, Material, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode } from "@dcl/sdk/ecs"
 import { correctEntity, data, steampunkGameState } from "../gameState"
+import { steampunkGameConfig } from "../gameConfig"
 
 export class GameLogic {
-    // private listOfCorrectTarget = new Map()
     private correctSmashCounter = 0
     private miss = 0
 
     public async startGame() {
-        this.initializeGame()
-
         this.playGame()
     }
 
-    private async initializeGame() {
-        // this.listOfCorrectTarget = new Map()
-        for (let i = 0; i <= data.size; i++) {
-            // if (data.has(correctEntity[i])) this.listOfCorrectTarget.set(correctEntity[i], steampunkGameState.availableEntity[i])
-            console.log("Here", correctEntity[i], steampunkGameState.availableEntity[i])
+    private async playGame() {
+        for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
             pointerEventsSystem.onPointerDown(
                 {
                     entity: steampunkGameState.availableEntity[i],
                     opts: { button: InputAction.IA_POINTER, hoverText: 'Click' },
                 },
                 () => {
+                    pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
                     if (correctEntity.find(name => name == correctEntity[i])) {
                         this.changeCounter(true)
                     } else {
@@ -30,7 +26,6 @@ export class GameLogic {
                     }
                 }
             )
-
         }
     }
 
@@ -45,9 +40,5 @@ export class GameLogic {
             console.log(-1)
         }
         TextShape.getMutable(steampunkGameState.listOfEntity.get('counter')).text = `Score \n${(this.correctSmashCounter - this.miss)}`
-    }
-
-    private playGame() {
-
     }
 }

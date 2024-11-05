@@ -9,12 +9,14 @@ import { data, steampunkGameState } from './gameState'
 import { Vector3 } from '@dcl/sdk/math'
 import { syncEntity, parentEntity } from '@dcl/sdk/network'
 import { GameLogic } from './game/gameLogic'
+import { setupStaticModels } from './staticModels/setupStaticModels'
+import { getReadyToStart, initGame } from './game/game'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
-    start: () => {},
+    start: () => getReadyToStart(),
     exit: () => {},
-    restart: () => {},
+    restart: () => getReadyToStart(),
     toggleMusic: () => {},
     toggleSfx: () => {}
 }
@@ -37,7 +39,11 @@ executeTask(async () => {
 export async function main() {
     await libraryReady
 
+    await setupStaticModels()
+
     await generateInitialEntity()
+
+    initGame()
 
     let game = new GameLogic()
 
@@ -55,7 +61,6 @@ const generateInitialEntity = async () => {
     const hits = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 4]
     const miss = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 5]
     const counter = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 6]
-    // const cameraTrigger = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 7]
     
     syncEntity(firstBoard, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 2)
     syncEntity(secondBoard, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 3)
@@ -64,13 +69,22 @@ const generateInitialEntity = async () => {
     syncEntity(counter, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 6)
     for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) syncEntity(steampunkGameState.availableEntity[i], [Transform.componentId, GltfContainer.componentId], STEAMPUNK_SYNC_ID + i)
     
-    // const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
     steampunkGameState.listOfEntity.set('firstBoard', firstBoard);
     steampunkGameState.listOfEntity.set('secondBoard', secondBoard);
     steampunkGameState.listOfEntity.set('hits', hits);
     steampunkGameState.listOfEntity.set('miss', miss);
     steampunkGameState.listOfEntity.set('counter', counter);
-    // steampunkGameState.listOfEntity.set('cameraTrigger', cameraTrigger);
+
+    console.log(Transform.get(steampunkGameState.listOfEntity.get('display')))
+
+    // Transform.create(firstBoard, {
+    //     ...Transform.get(steampunkGameState.listOfEntity.get('display')), scale: Vector3.create(5, 5, 5)
+    // })
+    // MeshRenderer.setPlane(firstBoard)
+    // MeshCollider.setPlane(firstBoard)
+
+    // console.log(Transform.get(firstBoard))
+
 
     if (Transform.getOrNull(hits) == null || TextShape.getOrNull(hits) == null) {
         Transform.create(hits, { ...data.get('counter_hits'), parent: sceneParentEntity })
@@ -84,6 +98,11 @@ const generateInitialEntity = async () => {
         TextShape.create(counter, { text: 'Score \n0', fontSize: 2 })
         Transform.create(counter, { ...data.get('counter_score'), parent: sceneParentEntity })
     }
+
+    const locator = await readGltfLocators(`locators/obj_loc_display1.gltf`)
+
+    // Transform.createOrReplace(steampunkGameState.listOfEntity.get('target'), {...locator.get('obj_loc_display1'), parent: steampunkGameState.listOfEntity.get('display')})
+    // console.log(Transform.get(steampunkGameState.listOfEntity.get('target')).position)
 
     for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
         if (Transform.getOrNull(steampunkGameState.availableEntity[i]) == null || GltfContainer.getOrNull(steampunkGameState.availableEntity[i]) == null) {

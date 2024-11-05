@@ -12,6 +12,9 @@ export const data = new Map([
     ['plane2', {position: Vector3.create(4, 2, 3), scale: Vector3.create(.3, .8, .3)}],
     ['plane3', {position: Vector3.create(2, 2, 3), scale: Vector3.create(.3, .3, .3)}],
     ['plane4', {position: Vector3.create(3, 3, 3), scale: Vector3.create(.3, .3, .2)}],
+    ['counter_hits', {position: Vector3.create(4, 3, 3), scale: Vector3.create(.3, .3, .2)}],
+    ['counter_misses', {position: Vector3.create(5, 3, 3), scale: Vector3.create(.3, .3, .2)}],
+    ['counter_score', {position: Vector3.create(6, 3, 3), scale: Vector3.create(.3, .3, .2)}],
 ])
 
 export const correctEntity = [
