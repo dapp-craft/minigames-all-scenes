@@ -1,6 +1,8 @@
-import { InputAction, Material, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode } from "@dcl/sdk/ecs"
+import { ColliderLayer, GltfContainer, InputAction, Material, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform } from "@dcl/sdk/ecs"
 import { correctEntity, data, steampunkGameState } from "../gameState"
 import { steampunkGameConfig } from "../gameConfig"
+import { readGltfLocators } from "../../../common/locators"
+import { Vector3 } from "@dcl/sdk/math"
 
 export class GameLogic {
     private correctSmashCounter = 0
@@ -11,7 +13,17 @@ export class GameLogic {
     }
 
     private async playGame() {
+        const data = await readGltfLocators(`locators/locator1.gltf`)
         for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
+            const path: PBGltfContainer = { src: `models/target1_${i + 1}/target1_${i + 1}.gltf` };
+            GltfContainer.create(steampunkGameState.availableEntity[i], {
+                ...path,
+                invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS,
+                visibleMeshesCollisionMask: ColliderLayer.CL_POINTER
+            })
+            Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`target1_${i + 1}`), parent: steampunkGameState.listOfEntity.get('display') })
+            console.log(GltfContainer.get(steampunkGameState.availableEntity[i]), Transform.get(steampunkGameState.availableEntity[i]))
+            // Transform.getMutable(steampunkGameState.availableEntity[i]).scale = Vector3.create(1, 1, 1)
             pointerEventsSystem.onPointerDown(
                 {
                     entity: steampunkGameState.availableEntity[i],

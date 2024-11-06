@@ -4,8 +4,8 @@ import { steampunkGameState } from '../gameState'
 
 const staticModels = [
     display,
-    image1,
-    test,
+    // image1,
+    // test,
     frame,
     grass,
     ground,
@@ -25,6 +25,7 @@ export const setupStaticModels = () => {
         GltfContainer.create(enitity, { ...model })
         if (model == display) {
             steampunkGameState.listOfEntity.set('display', enitity)
+            // GltfContainer.deleteFrom(enitity)
         }
         if (model == image1) {
             steampunkGameState.listOfEntity.set('target', enitity)

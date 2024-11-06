@@ -99,17 +99,17 @@ const generateInitialEntity = async () => {
         Transform.create(counter, { ...data.get('counter_score'), parent: sceneParentEntity })
     }
 
-    const locator = await readGltfLocators(`locators/obj_loc_display1.gltf`)
+    // const locator = await readGltfLocators(`locators/obj_loc_display1.gltf`)
 
-    // Transform.createOrReplace(steampunkGameState.listOfEntity.get('target'), {...locator.get('obj_loc_display1'), parent: steampunkGameState.listOfEntity.get('display')})
-    // console.log(Transform.get(steampunkGameState.listOfEntity.get('target')).position)
+    // // Transform.createOrReplace(steampunkGameState.listOfEntity.get('target'), {...locator.get('obj_loc_display1'), parent: steampunkGameState.listOfEntity.get('display')})
+    // // console.log(Transform.get(steampunkGameState.listOfEntity.get('target')).position)
 
-    for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
-        if (Transform.getOrNull(steampunkGameState.availableEntity[i]) == null || GltfContainer.getOrNull(steampunkGameState.availableEntity[i]) == null) {
-            Transform.create(steampunkGameState.availableEntity[i], {...data.get(`plane${i + 1}`), parent: sceneParentEntity })
-            // GltfContainer.createOrReplace(steampunkGameState.availableEntity[i], { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
-            MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
-            MeshCollider.setPlane(steampunkGameState.availableEntity[i])
-        }
-    }
+    // for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
+    //     if (Transform.getOrNull(steampunkGameState.availableEntity[i]) == null || GltfContainer.getOrNull(steampunkGameState.availableEntity[i]) == null) {
+    //         Transform.create(steampunkGameState.availableEntity[i], {...data.get(`plane${i + 1}`), parent: sceneParentEntity })
+    //         // GltfContainer.createOrReplace(steampunkGameState.availableEntity[i], { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
+    //         MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
+    //         MeshCollider.setPlane(steampunkGameState.availableEntity[i])
+    //     }
+    // }
 }

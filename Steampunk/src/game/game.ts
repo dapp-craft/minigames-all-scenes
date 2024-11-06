@@ -16,7 +16,8 @@ export const initGame = async () => {
 
 export function getReadyToStart() {
     console.log('Get Ready to start!')
-    runCountdown().then(() => startGame())
+    // runCountdown().then(() => startGame())
+    startGame()
 }
 
 async function startGame() {}
