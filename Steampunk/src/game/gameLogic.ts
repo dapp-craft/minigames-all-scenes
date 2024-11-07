@@ -1,4 +1,4 @@
-import { ColliderLayer, GltfContainer, InputAction, Material, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform } from "@dcl/sdk/ecs"
+import { ColliderLayer, GltfContainer, InputAction, Material, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { correctTargetAmount, data, steampunkGameState } from "../gameState"
 import { steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
@@ -15,9 +15,11 @@ export class GameLogic {
 
     private resetProgress() {
         this.playerLevel = 1
+        this.correctSmashCounter = 0
     }
 
     private async playGame() {
+        this.correctSmashCounter = 0
         const data = await readGltfLocators(`locators/obj_locators_unique1.gltf`)
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber}.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber}.png` }) })
@@ -37,9 +39,11 @@ export class GameLogic {
                     opts: { button: InputAction.IA_POINTER, hoverText: 'Click' },
                 },
                 () => {
-                    pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
-                    if (i < correctTargetAmount[i]) {
+                    console.log(i)
+                    if (i <= correctTargetAmount[this.playerLevel]) {
+                        pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
                         this.changeCounter()
+                        VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
                     }
                 }
             )
@@ -49,6 +53,10 @@ export class GameLogic {
     private changeCounter() {
         this.correctSmashCounter = this.correctSmashCounter + 1
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Hits \n${this.correctSmashCounter}`
-        console.log(+1)
+        console.log(this.playerLevel)
+        if (this.correctSmashCounter == 5) {
+            this.playerLevel++
+            this.playGame()
+        }
     }
 }
