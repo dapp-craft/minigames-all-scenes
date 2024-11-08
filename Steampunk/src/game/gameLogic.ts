@@ -1,3 +1,4 @@
+import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, GltfContainer, InputAction, Material, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { correctTargetAmount, data, steampunkGameState } from "../gameState"
 import { steampunkGameConfig } from "../gameConfig"
@@ -7,6 +8,8 @@ export class GameLogic {
     private correctSmashCounter = 0
     private playerLevel = 1
     private pictureNumber = 1
+    private differencesFound: Array<number | undefined> = []
+    private hintTimeOut: utils.TimerId = 0
 
     public async startGame() {
         this.resetProgress()
@@ -15,16 +18,19 @@ export class GameLogic {
 
     private resetProgress() {
         this.playerLevel = 1
+        this.pictureNumber - 1
         this.correctSmashCounter = 0
+        this.differencesFound = []
+        utils.timers.clearInterval(this.hintTimeOut)
     }
 
     private async playGame() {
         this.correctSmashCounter = 0
         const data = await readGltfLocators(`locators/obj_locators_unique1.gltf`)
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber}.png` }) })
-        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber}.png` }) })
-
+        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber + 1}.png` }) })
         for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
+            VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
             const path: PBGltfContainer = { src: `models/target${this.playerLevel}_${i + 1}/target${this.playerLevel}_${i + 1}.gltf` };
             GltfContainer.create(steampunkGameState.availableEntity[i], {
                 ...path,
@@ -32,7 +38,6 @@ export class GameLogic {
                 visibleMeshesCollisionMask: ColliderLayer.CL_POINTER
             })
             Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`target${this.playerLevel}_${i + 1}`), parent: steampunkGameState.listOfEntity.get('display') })
-            // console.log(GltfContainer.get(steampunkGameState.availableEntity[i]), Transform.get(steampunkGameState.availableEntity[i]))
             pointerEventsSystem.onPointerDown(
                 {
                     entity: steampunkGameState.availableEntity[i],
@@ -41,9 +46,10 @@ export class GameLogic {
                 () => {
                     console.log(i)
                     if (i <= correctTargetAmount[this.playerLevel]) {
+                        utils.timers.clearInterval(this.hintTimeOut)
+                        this.differencesFound[i] = i
                         pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
                         this.changeCounter()
-                        VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
                     }
                 }
             )
@@ -58,5 +64,26 @@ export class GameLogic {
             this.playerLevel++
             this.playGame()
         }
+    }
+
+    public getHint() {
+        let hintEntityId = undefined
+        for (let i = 0; i < correctTargetAmount[this.playerLevel]; i++) {
+            if (this.differencesFound[i] == undefined) {
+                hintEntityId = i
+                break
+            }
+        }
+        console.log(hintEntityId)
+        if (hintEntityId == undefined) return
+        let hintShowCounter = 0
+        this.hintTimeOut = utils.timers.setInterval(() => {
+            VisibilityComponent.getMutable(steampunkGameState.availableEntity[hintEntityId]).visible = !VisibilityComponent.getMutable(steampunkGameState.availableEntity[hintEntityId]).visible
+            hintShowCounter++
+            if (hintShowCounter >= steampunkGameConfig.hintShowTimes * 2) {
+                VisibilityComponent.getMutable(steampunkGameState.availableEntity[hintEntityId]).visible = false
+                utils.timers.clearInterval(this.hintTimeOut)
+            }
+        }, steampunkGameConfig.hintDelay)
     }
 }

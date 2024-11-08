@@ -5,8 +5,8 @@ import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { STEAMPUNK_SYNC_ID, steampunkGameConfig } from './gameConfig'
-import { data, steampunkGameState } from './gameState'
-import { syncEntity, parentEntity } from '@dcl/sdk/network'
+import {  steampunkGameState } from './gameState'
+import { syncEntity } from '@dcl/sdk/network'
 import { GameLogic } from './game/gameLogic'
 import { setupStaticModels } from './staticModels/setupStaticModels'
 import { getReadyToStart, initGame } from './game/game'
@@ -34,6 +34,7 @@ executeTask(async () => {
     }
 })
 
+export let gameLogic = new GameLogic()
 
 export async function main() {
     await libraryReady
@@ -44,9 +45,7 @@ export async function main() {
 
     initGame()
 
-    let game = new GameLogic()
-
-    game.startGame()
+    gameLogic.startGame()
 }
 
 const generateInitialEntity = async () => {
