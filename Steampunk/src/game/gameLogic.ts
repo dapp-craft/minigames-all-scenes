@@ -1,6 +1,6 @@
 import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, GltfContainer, InputAction, Material, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
-import { correctTargetAmount, data, steampunkGameState } from "../gameState"
+import { correctTargetAmount, steampunkGameState } from "../gameState"
 import { steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
 
@@ -11,15 +11,16 @@ export class GameLogic {
     private differencesFound: Array<number | undefined> = []
     private hintTimeOut: utils.TimerId = 0
 
-    public async startGame() {
+    public async startGame(level: number = 1) {
         this.resetProgress()
+        this.playerLevel = level
         this.playGame()
     }
 
     private resetProgress(resetGame: boolean = true) {
         if (resetGame) {
             this.playerLevel = 1
-            this.pictureNumber - 1
+            this.pictureNumber = 1
         }
         for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
             VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], {visible: false})
@@ -66,7 +67,7 @@ export class GameLogic {
         this.correctSmashCounter = this.correctSmashCounter + 1
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Hits \n${this.correctSmashCounter}`
         console.log(this.playerLevel)
-        if (this.correctSmashCounter == 5) {
+        if (this.correctSmashCounter >= 5) {
             this.playerLevel++
             this.playGame()
         }
