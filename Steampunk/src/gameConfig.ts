@@ -1,7 +1,7 @@
 export const steampunkGameConfig = {
     initialEntityAmount: 30,
     targetEntityAmount: 20,
-    hintShowTimes: 5,
+    hintShowTimes: 3,
     hintDelay: 1000
 }
 

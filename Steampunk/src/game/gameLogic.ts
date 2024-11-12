@@ -23,12 +23,15 @@ export class GameLogic {
             this.pictureNumber = 1
         }
         for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
-            VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], {visible: false})
+            VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
         }
+        VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
         this.correctSmashCounter = 0
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Hits \n${this.correctSmashCounter}`
         this.differencesFound = []
         utils.timers.clearInterval(this.hintTimeOut)
+
+        console.log(this.playerLevel, this.pictureNumber, this.correctSmashCounter, this.differencesFound)
     }
 
     private async playGame() {
@@ -50,10 +53,11 @@ export class GameLogic {
                     opts: { button: InputAction.IA_POINTER, hoverText: 'Click' },
                 },
                 () => {
-                    console.log(i)
-                    if (i <= correctTargetAmount[this.playerLevel]) {
+                    console.log("Heeeere")
+                    console.log(i, correctTargetAmount[this.playerLevel])
+                    if (i <= correctTargetAmount[this.playerLevel - 1]) {
                         utils.timers.clearInterval(this.hintTimeOut)
-                        VisibilityComponent.getMutable(steampunkGameState.availableEntity[i]).visible = false
+                        VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
                         this.differencesFound[i] = i
                         pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
                         this.changeCounter()
@@ -75,7 +79,7 @@ export class GameLogic {
 
     public getHint() {
         let hintEntityId = undefined
-        for (let i = 0; i < correctTargetAmount[this.playerLevel]; i++) {
+        for (let i = 0; i < correctTargetAmount[this.playerLevel - 1]; i++) {
             if (this.differencesFound[i] == undefined) {
                 hintEntityId = i
                 break
@@ -85,10 +89,11 @@ export class GameLogic {
         if (hintEntityId == undefined) return
         let hintShowCounter = 0
         this.hintTimeOut = utils.timers.setInterval(() => {
-            VisibilityComponent.getMutable(steampunkGameState.availableEntity[hintEntityId]).visible = !VisibilityComponent.getMutable(steampunkGameState.availableEntity[hintEntityId]).visible
+            Transform.getMutable(steampunkGameState.listOfEntity.get("hitZone")).position = Transform.get(steampunkGameState.availableEntity[hintEntityId]).position
+            VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = !VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible
             hintShowCounter++
             if (hintShowCounter >= steampunkGameConfig.hintShowTimes * 2) {
-                VisibilityComponent.getMutable(steampunkGameState.availableEntity[hintEntityId]).visible = false
+                VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
                 utils.timers.clearInterval(this.hintTimeOut)
             }
         }, steampunkGameConfig.hintDelay)
