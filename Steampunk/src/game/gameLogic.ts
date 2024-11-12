@@ -1,7 +1,7 @@
 import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, GltfContainer, InputAction, Material, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { correctTargetAmount, steampunkGameState } from "../gameState"
-import { steampunkGameConfig } from "../gameConfig"
+import { hintsAmount, steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
 
 export class GameLogic {
@@ -10,6 +10,7 @@ export class GameLogic {
     private pictureNumber = 1
     private differencesFound: Array<number | undefined> = []
     private hintTimeOut: utils.TimerId = 0
+    private hintsAmount: number = hintsAmount[0]
 
     public async startGame(level: number = 1) {
         this.resetProgress()
@@ -21,10 +22,12 @@ export class GameLogic {
         if (resetGame) {
             this.playerLevel = 1
             this.pictureNumber = 1
+            this.hintsAmount = hintsAmount[0]
         }
         for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
             VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
         }
+        this.hintsAmount = hintsAmount[this.playerLevel - 1]
         VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
         this.correctSmashCounter = 0
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Hits \n${this.correctSmashCounter}`
@@ -78,6 +81,7 @@ export class GameLogic {
     }
 
     public getHint() {
+        if (this.hintsAmount <= 0) return
         let hintEntityId = undefined
         for (let i = 0; i < correctTargetAmount[this.playerLevel - 1]; i++) {
             if (this.differencesFound[i] == undefined) {
@@ -87,6 +91,7 @@ export class GameLogic {
         }
         console.log(hintEntityId)
         if (hintEntityId == undefined) return
+        this.hintsAmount--
         let hintShowCounter = 0
         this.hintTimeOut = utils.timers.setInterval(() => {
             Transform.getMutable(steampunkGameState.listOfEntity.get("hitZone")).position = Transform.get(steampunkGameState.availableEntity[hintEntityId]).position
