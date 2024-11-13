@@ -41,10 +41,6 @@ export async function main() {
 
     initGame()
 
-    let res = await gameLogic.startGame()
-
-    console.log("Response after game: ")
-    console.log(res)
 }
 
 const generateInitialEntity = async () => {

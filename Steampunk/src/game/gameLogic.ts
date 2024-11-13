@@ -6,6 +6,7 @@ import { readGltfLocators } from "../../../common/locators"
 import { runWinAnimation } from '../../../common/effects'
 import { soundManager } from '..'
 import { Color4 } from '@dcl/sdk/math'
+import { queue } from '@dcl-sdk/mini-games/src'
 
 export class GameLogic {
     private correctSmashCounter = 0
@@ -137,6 +138,7 @@ export class GameLogic {
     }
 
     public gameEnd() {
+        queue.setNextPlayer()
         this.resolveReady()
     }
 }

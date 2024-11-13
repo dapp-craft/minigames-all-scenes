@@ -22,7 +22,14 @@ export function getReadyToStart() {
     startGame()
 }
 
-async function startGame() { }
+async function startGame() {
+    console.log("Start game")
+    let res = await gameLogic.startGame()
+
+    console.log("Response after game: ")
+    console.log(res)
+
+}
 
 const spawnButton = async () => {
     const data = await readGltfLocators(`locators/obj_locators_unique1.gltf`)
