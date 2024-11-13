@@ -2,7 +2,7 @@ name: steampunk
 on:
     push:
         branches:
-            - mainx
+            - main
         paths:
             - 'Steampunk/**'
             - 'common/**'
