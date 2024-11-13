@@ -4,7 +4,9 @@ export const steampunkGameConfig = {
     hintShowTimes: 3,
     hintDelay: 1000,
     awardMultiplier: 10,
-    winAnimationDuration: 3000
+    winAnimationDuration: 3000,
+    visibleFeedbackAlpha: 0.5,
+    visibleFeedbackSpeed: 0.05
 }
 
 // TODO: Change to 3 level system
