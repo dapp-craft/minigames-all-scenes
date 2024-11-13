@@ -5,7 +5,7 @@ import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { STEAMPUNK_SYNC_ID, steampunkGameConfig } from './gameConfig'
-import {  steampunkGameState } from './gameState'
+import { steampunkGameState } from './gameState'
 import { syncEntity } from '@dcl/sdk/network'
 import { GameLogic } from './game/gameLogic'
 import { setupStaticModels } from './staticModels/setupStaticModels'
@@ -13,9 +13,10 @@ import { getReadyToStart, initGame } from './game/game'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
+//temp
 const handlers = {
     start: () => getReadyToStart(),
-    exit: () => { },
+    exit: () => { gameLogic.gameEnd() },
     restart: () => getReadyToStart(),
     toggleMusic: () => { },
     toggleSfx: () => { }
@@ -46,7 +47,10 @@ export async function main() {
 
     initGame()
 
-    gameLogic.startGame()
+    let res = await gameLogic.startGame()
+
+    console.log("Response after game: ")
+    console.log(res)
 }
 
 const generateInitialEntity = async () => {
@@ -86,7 +90,7 @@ const generateInitialEntity = async () => {
     MeshRenderer.setPlane(secondBoard)
     MeshRenderer.setCylinder(hitZone)
 
-    VisibilityComponent.createOrReplace(hitZone, {visible: false})
+    VisibilityComponent.createOrReplace(hitZone, { visible: false })
 
     Material.setPbrMaterial(hitZone, {
         albedoColor: Color4.create(1, 0, 0, 0.5),

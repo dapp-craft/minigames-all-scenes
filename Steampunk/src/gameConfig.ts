@@ -3,7 +3,12 @@ export const steampunkGameConfig = {
     targetEntityAmount: 20,
     hintShowTimes: 3,
     hintDelay: 1000,
+    awardMultiplier: 10,
+    winAnimationDuration: 3000
 }
+
+// TODO: Change to 3 level system
+export const levelAmount = 3
 
 export const STEAMPUNK_SYNC_ID = 3000
 

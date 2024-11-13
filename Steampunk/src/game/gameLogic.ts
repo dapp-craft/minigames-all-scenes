@@ -1,8 +1,9 @@
 import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, GltfContainer, InputAction, Material, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { correctTargetAmount, steampunkGameState } from "../gameState"
-import { hintsAmount, steampunkGameConfig } from "../gameConfig"
+import { hintsAmount, levelAmount, steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
+import { runWinAnimation } from '../../../common/effects'
 
 export class GameLogic {
     private correctSmashCounter = 0
@@ -11,11 +12,24 @@ export class GameLogic {
     private differencesFound: Array<number | undefined> = []
     private hintTimeOut: utils.TimerId = 0
     private hintsAmount: number = hintsAmount[0]
+    private resolveReady!: () => void
+    private gameIsDone: Promise<void>
+    private playerReturnData = {
+        playerScore: 0,
+        playerTime: undefined
+    }
+
+    constructor() {
+        this.gameIsDone = new Promise((res) => { this.resolveReady = res })
+    }
 
     public async startGame(level: number = 1) {
         this.resetProgress()
         this.playerLevel = level
         this.playGame()
+        this.gameIsDone = new Promise(r => this.resolveReady = r)
+        await this.gameIsDone;
+        return this.playerReturnData
     }
 
     private resetProgress(resetGame: boolean = true) {
@@ -24,16 +38,13 @@ export class GameLogic {
             this.pictureNumber = 1
             this.hintsAmount = hintsAmount[0]
         }
-        for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
-            VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
-        }
+        for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
         this.hintsAmount = hintsAmount[this.playerLevel - 1]
         VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
         this.correctSmashCounter = 0
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Hits \n${this.correctSmashCounter}`
         this.differencesFound = []
         utils.timers.clearInterval(this.hintTimeOut)
-
         console.log(this.playerLevel, this.pictureNumber, this.correctSmashCounter, this.differencesFound)
     }
 
@@ -56,32 +67,33 @@ export class GameLogic {
                     opts: { button: InputAction.IA_POINTER, hoverText: 'Click' },
                 },
                 () => {
-                    console.log("Heeeere")
                     console.log(i, correctTargetAmount[this.playerLevel])
-                    if (i <= correctTargetAmount[this.playerLevel - 1]) {
-                        utils.timers.clearInterval(this.hintTimeOut)
-                        VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
-                        this.differencesFound[i] = i
-                        pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
-                        this.changeCounter()
-                    }
+                    if (i > correctTargetAmount[this.playerLevel - 1]) return
+                    utils.timers.clearInterval(this.hintTimeOut)
+                    VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
+                    this.differencesFound[i] = i
+                    pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
+                    this.changeCounter()
+                    if (this.correctSmashCounter < 5) return
+                    runWinAnimation(steampunkGameConfig.winAnimationDuration).then(() => {
+                        this.playerLevel++
+                        if (this.playerLevel > levelAmount) return this.gameEnd()
+                        this.playGame()
+                    })
                 }
             )
         }
     }
 
     private changeCounter() {
-        this.correctSmashCounter = this.correctSmashCounter + 1
-        TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Hits \n${this.correctSmashCounter}`
+        this.correctSmashCounter++
+        this.playerReturnData.playerScore = this.correctSmashCounter * steampunkGameConfig.awardMultiplier
+        TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Hits \n${this.playerReturnData.playerScore}`
         console.log(this.playerLevel)
-        if (this.correctSmashCounter >= 5) {
-            this.playerLevel++
-            this.playGame()
-        }
     }
 
     public getHint() {
-        if (this.hintsAmount <= 0) return
+        if (this.hintsAmount <= 0) { return console.log("No available hints") }
         let hintEntityId = undefined
         for (let i = 0; i < correctTargetAmount[this.playerLevel - 1]; i++) {
             if (this.differencesFound[i] == undefined) {
@@ -89,7 +101,6 @@ export class GameLogic {
                 break
             }
         }
-        console.log(hintEntityId)
         if (hintEntityId == undefined) return
         this.hintsAmount--
         let hintShowCounter = 0
@@ -97,10 +108,13 @@ export class GameLogic {
             Transform.getMutable(steampunkGameState.listOfEntity.get("hitZone")).position = Transform.get(steampunkGameState.availableEntity[hintEntityId]).position
             VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = !VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible
             hintShowCounter++
-            if (hintShowCounter >= steampunkGameConfig.hintShowTimes * 2) {
-                VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
-                utils.timers.clearInterval(this.hintTimeOut)
-            }
+            if (hintShowCounter < steampunkGameConfig.hintShowTimes * 2) return
+            VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
+            utils.timers.clearInterval(this.hintTimeOut)
         }, steampunkGameConfig.hintDelay)
+    }
+
+    public gameEnd() {
+        this.resolveReady()
     }
 }
