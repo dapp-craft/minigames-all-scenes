@@ -1,21 +1,34 @@
 import { ColliderLayer, GltfContainer, Transform, engine } from '@dcl/sdk/ecs'
-import { display, image1, frame, gameZone, grass, ground, logo, rules, terminal, text, wall, whack, test } from '../resources/resources'
 import { steampunkGameState } from '../gameState'
+import { display, floor, frame, grass, wall, terminal, rules, text, image1, bench, chest02, dresser01, drums01, fence, gamezone, hydrants, lamp01, pipes, smoker01, table01, table02, tree01, tree02, tree03, wheels01 } from '../resources/resources'
 
 const staticModels = [
     display,
     // image1,
     // test,
+    floor,
+    bench,
+    chest02,
+    dresser01,
+    drums01,
+    fence,
     frame,
     grass,
-    ground,
+    hydrants,
+    lamp01,
+    pipes,
+    smoker01,
+    table01,
+    table02,
+    // terminal,
+    text,
+    tree01,
+    tree02,
+    tree03,
     wall,
-    whack,
-    gameZone,
-    terminal,
+    wheels01,
     rules,
-    logo,
-    text
+    gamezone
 ]
 
 export const setupStaticModels = () => {
