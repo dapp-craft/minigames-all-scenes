@@ -56,7 +56,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_gameboy01",
+			"name":"obj_frame01",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":0
@@ -71,7 +71,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_gameboy02",
+			"name":"obj_frame02",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -194,13 +194,13 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_gameboy01",
-			"uri":"textures/obj_gameboy01.png"
+			"name":"obj_frame01",
+			"uri":"textures/obj_frame01.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"obj_gameboy02",
-			"uri":"textures/obj_gameboy02.png"
+			"name":"obj_frame02",
+			"uri":"textures/obj_frame02.png"
 		},
 		{
 			"mimeType":"image/png",
@@ -540,7 +540,7 @@
 	"buffers":[
 		{
 			"byteLength":237212,
-			"uri":"obj_gameboy.bin"
+			"uri":"obj_frame.bin"
 		}
 	]
 }
