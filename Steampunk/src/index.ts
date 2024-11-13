@@ -97,5 +97,3 @@ const generateInitialEntity = async () => {
         TextShape.create(hits, { text: 'Hits \n0', fontSize: 2 })
     }
 }
-
-
