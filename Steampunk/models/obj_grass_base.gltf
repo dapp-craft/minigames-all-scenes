@@ -22,17 +22,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_rules",
-			"scale":[
-				1.10435152053833,
-				1.10435152053833,
-				1.10435152053833
-			],
-			"translation":[
-				-7.269590854644775,
-				1.4679367542266846,
-				4.156310081481934
-			]
+			"name":"obj_grass_base"
 		}
 	],
 	"materials":[
@@ -51,7 +41,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_rules",
+			"name":"obj_grass_base",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -62,7 +52,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane",
+			"name":"Mesh.021",
 			"primitives":[
 				{
 					"attributes":{
@@ -100,46 +90,46 @@
 	"images":[
 		{
 			"mimeType":"image/jpeg",
-			"name":"obj_rules",
-			"uri":"textures/obj_rules.jpg"
+			"name":"obj_grass",
+			"uri":"textures/obj_grass.jpg"
 		}
 	],
 	"accessors":[
 		{
 			"componentType":5126,
-			"count":8,
+			"count":12,
 			"max":[
+				7.080545902252197,
 				0,
-				1.1224606037139893,
-				1.1224607229232788
+				1.1959822177886963
 			],
 			"min":[
+				-7.080545902252197,
 				0,
-				-1.1224606037139893,
-				-1.1224607229232788
+				-6.634555339813232
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":8,
+			"count":12,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":8,
+			"count":12,
 			"type":"VEC2"
 		},
 		{
 			"componentType":5123,
-			"count":18,
+			"count":30,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":225,
+			"byteLength":262,
 			"byteOffset":0
 		}
 	],
@@ -151,8 +141,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":228,
-			"uri":"obj_rules.bin"
+			"byteLength":264,
+			"uri":"obj_grass_base.bin"
 		}
 	]
 }

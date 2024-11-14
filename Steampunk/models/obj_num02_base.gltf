@@ -24,15 +24,48 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_num02_glass"
+			"name":"obj_num02_glass",
+			"rotation":[
+				0,
+				0.4147928059101105,
+				0,
+				0.9099158644676208
+			],
+			"translation":[
+				-4.093779563903809,
+				0,
+				-3.576314926147461
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_num02_base"
+			"name":"obj_num02_base",
+			"rotation":[
+				0,
+				0.4147928059101105,
+				0,
+				0.9099158644676208
+			],
+			"translation":[
+				-4.093779563903809,
+				0,
+				-3.576314926147461
+			]
 		},
 		{
 			"mesh":2,
-			"name":"obj_num02_base_collider"
+			"name":"obj_num02_base_collider",
+			"rotation":[
+				0,
+				0.4147928059101105,
+				0,
+				0.9099158644676208
+			],
+			"translation":[
+				-4.093779563903809,
+				0,
+				-3.576314926147461
+			]
 		}
 	],
 	"materials":[
@@ -81,7 +114,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.039",
+			"name":"Mesh.048",
 			"primitives":[
 				{
 					"attributes":{
@@ -106,7 +139,7 @@
 			]
 		},
 		{
-			"name":"Mesh.038",
+			"name":"Mesh.049",
 			"primitives":[
 				{
 					"attributes":{
@@ -131,7 +164,7 @@
 			]
 		},
 		{
-			"name":"Mesh.040",
+			"name":"Mesh.050",
 			"primitives":[
 				{
 					"attributes":{

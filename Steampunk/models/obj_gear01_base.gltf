@@ -23,11 +23,33 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_gear01_base"
+			"name":"obj_gear01_base",
+			"rotation":[
+				0,
+				-0.38877174258232117,
+				0,
+				0.9213341474533081
+			],
+			"translation":[
+				4.911184310913086,
+				0,
+				-2.6210999488830566
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_gear01_base_collider"
+			"name":"obj_gear01_base_collider",
+			"rotation":[
+				0,
+				-0.38877174258232117,
+				0,
+				0.9213341474533081
+			],
+			"translation":[
+				4.911184310913086,
+				0,
+				-2.6210999488830566
+			]
 		}
 	],
 	"materials":[

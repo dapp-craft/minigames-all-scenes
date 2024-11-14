@@ -23,11 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_terminal_base_collider"
+			"name":"obj_terminal_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_terminal_base"
+			"name":"obj_terminal_base_collider"
 		}
 	],
 	"materials":[
@@ -78,7 +78,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.012",
+			"name":"Mesh.053",
 			"primitives":[
 				{
 					"attributes":{
@@ -97,13 +97,9 @@
 						}
 					},
 					"indices":3,
+					"material":0,
 					"mode":4
-				}
-			]
-		},
-		{
-			"name":"Mesh.001",
-			"primitives":[
+				},
 				{
 					"attributes":{
 						"POSITION":4,
@@ -121,9 +117,14 @@
 						}
 					},
 					"indices":7,
-					"material":0,
+					"material":1,
 					"mode":4
-				},
+				}
+			]
+		},
+		{
+			"name":"Mesh.012",
+			"primitives":[
 				{
 					"attributes":{
 						"POSITION":8,
@@ -141,7 +142,6 @@
 						}
 					},
 					"indices":11,
-					"material":1,
 					"mode":4
 				}
 			]
@@ -165,36 +165,6 @@
 		}
 	],
 	"accessors":[
-		{
-			"componentType":5126,
-			"count":323,
-			"max":[
-				0.7194746136665344,
-				2.3846895694732666,
-				3.1595492362976074
-			],
-			"min":[
-				-1.3639920949935913,
-				-2.9513152810523025e-08,
-				1.9140318632125854
-			],
-			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":323,
-			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":323,
-			"type":"VEC2"
-		},
-		{
-			"componentType":5123,
-			"count":522,
-			"type":"SCALAR"
-		},
 		{
 			"componentType":5126,
 			"count":3350,
@@ -254,23 +224,53 @@
 			"componentType":5123,
 			"count":144,
 			"type":"SCALAR"
+		},
+		{
+			"componentType":5126,
+			"count":323,
+			"max":[
+				0.7194746136665344,
+				2.3846895694732666,
+				3.1595492362976074
+			],
+			"min":[
+				-1.3639920949935913,
+				-2.9513152810523025e-08,
+				1.9140318632125854
+			],
+			"type":"VEC3"
+		},
+		{
+			"componentType":5126,
+			"count":323,
+			"type":"VEC3"
+		},
+		{
+			"componentType":5126,
+			"count":323,
+			"type":"VEC2"
+		},
+		{
+			"componentType":5123,
+			"count":522,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":2104,
+			"byteLength":25738,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":25738,
-			"byteOffset":2104
+			"byteLength":459,
+			"byteOffset":25740
 		},
 		{
 			"buffer":0,
-			"byteLength":459,
-			"byteOffset":27844
+			"byteLength":2104,
+			"byteOffset":26200
 		}
 	],
 	"samplers":[

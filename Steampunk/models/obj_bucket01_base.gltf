@@ -23,11 +23,33 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_bucket01_base"
+			"name":"obj_bucket01_base",
+			"rotation":[
+				0,
+				-0.7877572178840637,
+				0,
+				0.6159858703613281
+			],
+			"translation":[
+				6.593506813049316,
+				0,
+				-1.558962345123291
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_bucket01_base_collider"
+			"name":"obj_bucket01_base_collider",
+			"rotation":[
+				0,
+				-0.7877572178840637,
+				0,
+				0.6159858703613281
+			],
+			"translation":[
+				6.593506813049316,
+				0,
+				-1.558962345123291
+			]
 		}
 	],
 	"materials":[
@@ -81,7 +103,7 @@
 			]
 		},
 		{
-			"name":"Mesh.023",
+			"name":"Mesh.009",
 			"primitives":[
 				{
 					"attributes":{

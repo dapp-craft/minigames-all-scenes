@@ -23,15 +23,36 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_wall_base"
+			"name":"obj_wall_base",
+			"scale":[
+				1,
+				1,
+				0.778540313243866
+			],
+			"translation":[
+				0,
+				0,
+				-7.232393264770508
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_wall_base_collider"
+			"name":"obj_wall_base_collider",
+			"scale":[
+				1,
+				1,
+				0.778540313243866
+			],
+			"translation":[
+				0,
+				0,
+				-7.232393264770508
+			]
 		}
 	],
 	"materials":[
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -125,27 +146,27 @@
 	"accessors":[
 		{
 			"componentType":5126,
-			"count":1239,
+			"count":1880,
 			"max":[
 				7.734232425689697,
 				9.66054916381836,
-				7.778098106384277
+				19.28030014038086
 			],
 			"min":[
 				-7.734232425689697,
-				6.777305543437251e-07,
-				-7.618767738342285
+				-1.7468769328843337e-06,
+				-0.4962807297706604
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":1239,
+			"count":1880,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":1239,
+			"count":1880,
 			"type":"VEC2"
 		},
 		{
@@ -155,27 +176,27 @@
 		},
 		{
 			"componentType":5126,
-			"count":479,
+			"count":483,
 			"max":[
 				7.728168964385986,
 				9.66054916381836,
-				7.77667236328125
+				19.27846908569336
 			],
 			"min":[
 				-7.72816801071167,
-				6.805020120737026e-07,
-				-7.607394218444824
+				-1.7468769328843337e-06,
+				-0.48167139291763306
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":479,
+			"count":483,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":479,
+			"count":483,
 			"type":"VEC2"
 		},
 		{
@@ -187,13 +208,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":10799,
+			"byteLength":15079,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":4441,
-			"byteOffset":10800
+			"byteLength":4531,
+			"byteOffset":15080
 		}
 	],
 	"samplers":[
@@ -204,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":15244,
+			"byteLength":19612,
 			"uri":"obj_wall_base.bin"
 		}
 	]

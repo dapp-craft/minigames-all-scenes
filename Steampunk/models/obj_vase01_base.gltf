@@ -56,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.020",
+			"name":"Mesh.105",
 			"primitives":[
 				{
 					"attributes":{
@@ -81,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.021",
+			"name":"Mesh.106",
 			"primitives":[
 				{
 					"attributes":{

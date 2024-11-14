@@ -23,11 +23,21 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_gear02_base"
+			"name":"obj_gear02_base",
+			"translation":[
+				-2.458970308303833,
+				0,
+				-6.005561828613281
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_gear02_base_collider"
+			"name":"obj_gear02_base_collider",
+			"translation":[
+				-2.458970308303833,
+				0,
+				-6.005561828613281
+			]
 		}
 	],
 	"materials":[

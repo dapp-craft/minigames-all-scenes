@@ -23,15 +23,38 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_hydrant01_base"
+			"name":"obj_hydrant01_base",
+			"rotation":[
+				0,
+				0.6661739349365234,
+				0,
+				0.7457964420318604
+			],
+			"translation":[
+				-1.8511452674865723,
+				0,
+				0.5019543170928955
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_hydrant01_base_collider"
+			"name":"obj_hydrant01_base_collider",
+			"rotation":[
+				0,
+				0.6661739349365234,
+				0,
+				0.7457964420318604
+			],
+			"translation":[
+				-1.8511452674865723,
+				0,
+				0.5019543170928955
+			]
 		}
 	],
 	"materials":[
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -56,7 +79,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.024",
+			"name":"Mesh.031",
 			"primitives":[
 				{
 					"attributes":{
@@ -81,7 +104,7 @@
 			]
 		},
 		{
-			"name":"Mesh.025",
+			"name":"Mesh.032",
 			"primitives":[
 				{
 					"attributes":{

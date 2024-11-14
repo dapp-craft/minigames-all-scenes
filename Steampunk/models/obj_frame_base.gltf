@@ -32,6 +32,7 @@
 	],
 	"materials":[
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -81,7 +82,7 @@
 			]
 		},
 		{
-			"name":"Bounding Box Mesh.010",
+			"name":"Bounding Box Mesh",
 			"primitives":[
 				{
 					"attributes":{
@@ -123,70 +124,70 @@
 	"accessors":[
 		{
 			"componentType":5126,
-			"count":4911,
+			"count":9822,
 			"max":[
 				7.378854751586914,
-				2.786932945251465,
+				5.138875484466553,
 				5.490316390991211
 			],
 			"min":[
 				-7.378856182098389,
 				0.14894044399261475,
-				-6.713305950164795
+				-6.736345291137695
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":4911,
+			"count":9822,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":4911,
+			"count":9822,
 			"type":"VEC2"
 		},
 		{
 			"componentType":5123,
-			"count":11832,
+			"count":23664,
 			"type":"SCALAR"
 		},
 		{
 			"componentType":5126,
-			"count":96,
+			"count":144,
 			"max":[
 				7.378854274749756,
-				2.786932945251465,
+				5.138875484466553,
 				5.490316867828369
 			],
 			"min":[
 				-7.378856182098389,
 				0.1489405632019043,
-				-6.713305950164795
+				-6.736345291137695
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":96,
+			"count":144,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5123,
-			"count":156,
+			"count":216,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":34576,
+			"byteLength":66557,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":551,
-			"byteOffset":34576
+			"byteLength":635,
+			"byteOffset":66560
 		}
 	],
 	"samplers":[
@@ -197,7 +198,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":35128,
+			"byteLength":67196,
 			"uri":"obj_frame_base.bin"
 		}
 	]
