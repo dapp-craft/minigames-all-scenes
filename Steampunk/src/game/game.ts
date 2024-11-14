@@ -28,7 +28,6 @@ async function startGame() {
 
     console.log("Response after game: ")
     console.log(res)
-
 }
 
 const spawnButton = async () => {

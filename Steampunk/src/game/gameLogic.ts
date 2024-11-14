@@ -1,5 +1,5 @@
 import * as utils from '@dcl-sdk/utils'
-import { ColliderLayer, GltfContainer, InputAction, Material, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
+import { ColliderLayer, Entity, GltfContainer, InputAction, Material, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { correctTargetAmount, steampunkGameState } from "../gameState"
 import { hintsAmount, levelAmount, steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
@@ -56,18 +56,11 @@ export class GameLogic {
         const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber}.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber + 1}.png` }) })
-        for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
-            const path: PBGltfContainer = { src: `models/target${this.playerLevel}_${i + 1}/target${this.playerLevel}_${i + 1}.gltf` };
-            GltfContainer.createOrReplace(steampunkGameState.availableEntity[i], {
-                ...path,
-                invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS,
-                visibleMeshesCollisionMask: ColliderLayer.CL_POINTER
-            })
-            Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`target${this.playerLevel}_${i + 1}`), parent: steampunkGameState.listOfEntity.get('display') })
+        for (let i = 0; i < steampunkGameConfig.targetEntityAmount + 3; i++) {
             pointerEventsSystem.onPointerDown(
                 {
                     entity: steampunkGameState.availableEntity[i],
-                    opts: { button: InputAction.IA_POINTER, hoverText: 'Click' },
+                    opts: { button: InputAction.IA_POINTER, hoverText: '1' },
                 },
                 () => {
                     console.log(i, correctTargetAmount[this.playerLevel])
@@ -90,6 +83,15 @@ export class GameLogic {
                     })
                 }
             )
+            if (i <= steampunkGameConfig.targetEntityAmount) {
+                const path: PBGltfContainer = { src: `models/target${this.playerLevel}_${i + 1}/target${this.playerLevel}_${i + 1}.gltf` };
+                GltfContainer.createOrReplace(steampunkGameState.availableEntity[i], {
+                    ...path,
+                    invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS,
+                    visibleMeshesCollisionMask: ColliderLayer.CL_POINTER
+                })
+                Transform.createOrReplace(steampunkGameState.availableEntity[i], { position: { ...data.get(`target${this.playerLevel}_${i + 1}`)!.position, z: data.get(`target${this.playerLevel}_${i + 1}`)!.position.z + .01 }, parent: steampunkGameState.listOfEntity.get('display') })
+            }
         }
     }
 
@@ -140,5 +142,7 @@ export class GameLogic {
     public gameEnd() {
         queue.setNextPlayer()
         this.resolveReady()
+        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
+        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
     }
 }

@@ -1,5 +1,5 @@
 import * as utils from '@dcl-sdk/utils'
-import { engine, executeTask, GltfContainer, Material, MeshCollider, MeshRenderer, TextShape, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
+import { engine, executeTask, GltfContainer, InputAction, Material, MeshCollider, MeshRenderer, pointerEventsSystem, TextShape, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
@@ -52,15 +52,15 @@ const generateInitialEntity = async () => {
         steampunkGameState.availableEntity.push(entity)
     }
 
-    const hitZone = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 1]
-    const firstBoard = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 2]
-    const secondBoard = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 3]
+    const firstBoard = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 1]
+    const secondBoard = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 2]
+    const hitZone = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 3]
     const hits = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 4]
     const visibleFeedback = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 5]
 
-    syncEntity(hitZone, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 1)
-    syncEntity(firstBoard, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 2)
-    syncEntity(secondBoard, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 3)
+    syncEntity(firstBoard, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 1)
+    syncEntity(secondBoard, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 2)
+    syncEntity(hitZone, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 3)
     syncEntity(hits, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 4)
     syncEntity(hitZone, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 5)
 
@@ -83,9 +83,15 @@ const generateInitialEntity = async () => {
 
     MeshRenderer.setPlane(firstBoard)
     MeshRenderer.setPlane(secondBoard)
+    MeshCollider.setPlane(firstBoard)
+    MeshCollider.setPlane(secondBoard)
+
     MeshRenderer.setCylinder(hitZone)
     MeshRenderer.setCylinder(visibleFeedback)
-
+    
+    Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
+    Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
+    
     VisibilityComponent.createOrReplace(hitZone, { visible: false })
     VisibilityComponent.createOrReplace(visibleFeedback, { visible: false })
 
