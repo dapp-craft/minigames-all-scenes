@@ -5,6 +5,7 @@ import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { initGame } from './game'
+import { STATIC_MODELS } from './resources'
 
 const handlers = {
   start: () => {},
@@ -24,9 +25,9 @@ const libraryReady = initMiniGame(
 const MODELS: string[] = ['models/obj_floor.gltf']
 
 executeTask(async () => {
-  for (const model of MODELS) {
+  for (const model of STATIC_MODELS) {
     const entity = engine.addEntity()
-    GltfContainer.create(entity, { src: model })
+    GltfContainer.create(entity, model)
     Transform.create(entity, { parent: sceneParentEntity })
   }
 })
