@@ -1,9 +1,9 @@
 import * as utils from "@dcl-sdk/utils"
 import { Animator, EasingFunction, engine, Entity, Transform, Tween, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs";
-import { finishCoords, rocketCoords, startCoords } from "./config";
+import { finishCoords, maxLevel, rocketCoords, startCoords, timerConfig } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { CartridgeTest, SpawnEntityDelay } from "./Types";
-import { entityList, gameState } from "./state";
+import { entityList, gameState, progressState } from "./state";
 import { rocketBoard } from ".";
 import { gameButtons, nextLevelTimeOut } from "./game/game";
 
@@ -17,6 +17,9 @@ export class gameEntityManager {
     private currentWaveStateEntityCount = 0
     private entityIndex = 1
     private rocketCoordinate = Vector3.create(...rocketCoords)
+    private gameEnd: boolean = false
+    private catsSpeed = timerConfig.initialCatsSpeed
+    private catsInterval = timerConfig.initialCatsInterval
 
     private resolveReady!: () => void
     private entityReady!: () => void
@@ -24,7 +27,6 @@ export class gameEntityManager {
     private waveIsDone: Promise<void>
     private entityMoved: Promise<void>
     private answerIsDone: Promise<void>
-    private gameEnd: boolean = false
 
     constructor(roundData: {
         wave: Map<number, CartridgeTest>,
@@ -42,6 +44,7 @@ export class gameEntityManager {
 
     public async startGame() {
         console.log("Start")
+        this.speedController()
         this.gameEnd = false
         utils.timers.setTimeout(async () => {
             rocketBoard.hideBoard()
@@ -55,7 +58,7 @@ export class gameEntityManager {
                 gameState.availableEntity.forEach((e, k) => Tween.deleteFrom(e))
                 for (let j = 0; j < waveData.itemQueue; j++) {
                     this.spawnEntity(waveData.goOut);
-                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.spawnEntityDelay.random ? 200 : this.spawnEntityDelay.time);
+                    utils.timers.setTimeout(async () => { this.entityReady(); }, this.catsInterval);
                     await this.entityMoved;
                     this.entityMoved = new Promise(r => this.entityReady = r);
                 }
@@ -102,7 +105,7 @@ export class gameEntityManager {
                 start: isOut ? this.rocketCoordinate : Vector3.create(...startCoords),
                 end: isOut ? Vector3.create(...finishCoords) : this.rocketCoordinate,
             }),
-            duration: 2000,
+            duration: this.catsSpeed,
             easingFunction: EasingFunction.EF_LINEAR,
         })
         utils.timers.setTimeout(async () => {
@@ -112,13 +115,27 @@ export class gameEntityManager {
             VisibilityComponent.createOrReplace(entity, { visible: false });
             if (this.currentWaveStateMaxEntity == this.currentWaveStateEntityCount) {
                 this.currentWaveStateEntityCount = 0
-                utils.timers.setTimeout(async () => { this.resolveReady() }, this.spawnEntityDelay.random ? Math.floor(Math.random() * (this.spawnEntityDelay.time - 1000 + 1)) + 1000 : this.spawnEntityDelay.time);
+                utils.timers.setTimeout(async () => { this.resolveReady() }, this.catsSpeed + 100);
                 Animator.playSingleAnimation(entityList.get('rocket')!, 'stand')
                 Animator.playSingleAnimation(entityList.get('leftBusEntity')!, 'stand')
                 Animator.playSingleAnimation(entityList.get('rightBusEntity')!, 'stand')
                 console.log("Wave is end")
             }
-        }, 2100)
+        }, this.catsSpeed + 100)
+    }
+
+    private speedController() {
+        console.log("LEVEL", progressState.level)
+        console.log(`
+            Before CatSpeed:     ${this.catsSpeed}
+            Before CatsInterval: ${this.catsInterval}
+          `);
+        this.catsSpeed = this.catsSpeed * (1 - progressState.level / (maxLevel * 2))
+        this.catsInterval = this.catsInterval * (1 - progressState.level / (maxLevel * 2))
+        console.log(`
+            CatSpeed:     ${this.catsSpeed}
+            CatsInterval: ${this.catsInterval}
+          `);
     }
 
     public stopGame() {
