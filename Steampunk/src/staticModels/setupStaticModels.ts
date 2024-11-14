@@ -20,7 +20,7 @@ const staticModels = [
     smoker01,
     table01,
     table02,
-    // terminal,
+    terminal,
     text,
     tree01,
     tree02,
