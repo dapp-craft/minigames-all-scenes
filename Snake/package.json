@@ -21,5 +21,9 @@
     "singleQuote": true,
     "printWidth": 120,
     "trailingComma": "none"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "cross-env-shell": "^7.0.3"
   }
 }
