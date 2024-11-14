@@ -74,7 +74,7 @@ const generateInitialEntity = async () => {
 
     console.log(Transform.get(steampunkGameState.listOfEntity.get('display')))
 
-    const data = await readGltfLocators(`locators/obj_locators_unique1.gltf`)
+    const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
 
     Transform.create(firstBoard, { ...data.get('Image1'), parent: steampunkGameState.listOfEntity.get('display') })
     Transform.create(secondBoard, { ...data.get('Image2'), parent: steampunkGameState.listOfEntity.get('display') })

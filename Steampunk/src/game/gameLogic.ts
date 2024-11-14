@@ -53,7 +53,7 @@ export class GameLogic {
 
     private async playGame() {
         this.resetProgress(false)
-        const data = await readGltfLocators(`locators/obj_locators_unique1.gltf`)
+        const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber}.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber + 1}.png` }) })
         for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {

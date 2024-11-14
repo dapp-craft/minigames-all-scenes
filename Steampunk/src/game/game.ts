@@ -32,7 +32,7 @@ async function startGame() {
 }
 
 const spawnButton = async () => {
-    const data = await readGltfLocators(`locators/obj_locators_unique1.gltf`)
+    const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
     playButton = new ui.MenuButton(
         { ...data.get("Counter")!, parent: sceneParentEntity },
         ui.uiAssets.shapes.SQUARE_GREEN,
