@@ -1,6 +1,6 @@
 import * as utils from "@dcl-sdk/utils"
 import { Animator, EasingFunction, engine, Entity, Transform, Tween, tweenSystem, VisibilityComponent } from "@dcl/sdk/ecs";
-import { finishCoords, maxLevel, rocketCoords, startCoords, timerConfig } from "./config";
+import { finishCoords, maxLevel, playerHealth, rocketCoords, startCoords, timerConfig } from "./config";
 import { Quaternion, Vector3 } from "@dcl/sdk/math";
 import { CartridgeTest, SpawnEntityDelay } from "./Types";
 import { entityList, gameState, progressState } from "./state";
@@ -143,6 +143,7 @@ export class gameEntityManager {
     }
 
     public stopGame() {
+        gameState.playerHealth = playerHealth
         this.gameEnd = true
         this.resolveReady()
         this.answerReady()

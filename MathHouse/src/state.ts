@@ -1,5 +1,6 @@
 import { engine, Entity, Schemas } from "@dcl/sdk/ecs";
 import { Vector3 } from "@dcl/sdk/math";
+import { playerHealth } from "./config";
 
 type GameState = {
     availableEntity: Array<Entity>
@@ -8,7 +9,8 @@ type GameState = {
     levelCounter: Entity
     rocketWindow: Entity
     generatedCartrige: any,
-    syncModels: Array<Entity>
+    syncModels: Array<Entity>,
+    playerHealth: number
 }
 
 export let gameState: GameState = {
@@ -18,7 +20,8 @@ export let gameState: GameState = {
     levelCounter: engine.addEntity(),
     rocketWindow: engine.addEntity(),
     generatedCartrige: new Map(),
-    syncModels: []
+    syncModels: [],
+    playerHealth: playerHealth
 }
 
 export const GameData = engine.defineComponent('game-data', {

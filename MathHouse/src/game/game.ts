@@ -1,5 +1,5 @@
 import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
-import { initialLevels, maxLevel, soundConfig, timerConfig, WIN_DURATION } from "../config"
+import { initialLevels, maxLevel, playerHealth, soundConfig, timerConfig, WIN_DURATION } from "../config"
 import { Vector3 } from "@dcl/sdk/math"
 import { Entity, TextShape } from "@dcl/sdk/ecs"
 import { getPlayer } from "@dcl/sdk/players"
@@ -98,7 +98,7 @@ const initGameButtons = async () => {
                 ui.uiAssets.shapes.SQUARE_PURPLE,
                 ui.uiAssets.numbers[i],
                 `${i}`,
-                () => {
+                async () => {
                     playerAnswer = i
                     gameButtons.forEach((button, i) => button.disable())
                     console.log(entityCounter, playerAnswer)
@@ -120,6 +120,12 @@ const initGameButtons = async () => {
                     }
                     else {
                         console.log("LOSE")
+                        gameState.playerHealth--
+                        if (gameState.playerHealth <= 0) {
+                            await incrementUserProgress()
+                            runGameoverAnimation(WIN_DURATION).then(() => afterGame())
+                            return
+                        }
                         soundManager.playSound('wrongAnswerSound', soundConfig.volume)
                         nextLevelTimeOut = utils.timers.setTimeout(() => restartCallback(), time + 500)
                     }
