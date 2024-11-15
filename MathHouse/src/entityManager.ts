@@ -18,8 +18,9 @@ export class gameEntityManager {
     private entityIndex = 1
     private rocketCoordinate = Vector3.create(...rocketCoords)
     private gameEnd: boolean = false
-    private catsSpeed = timerConfig.initialCatsSpeed
+    private catsMovingDuration = timerConfig.initialCatsSpeed
     private catsInterval = timerConfig.initialCatsInterval
+    private catsWaveDelay = timerConfig.catsWaveDelay
 
     private resolveReady!: () => void
     private entityReady!: () => void
@@ -105,7 +106,7 @@ export class gameEntityManager {
                 start: isOut ? this.rocketCoordinate : Vector3.create(...startCoords),
                 end: isOut ? Vector3.create(...finishCoords) : this.rocketCoordinate,
             }),
-            duration: this.catsSpeed,
+            duration: this.catsMovingDuration,
             easingFunction: EasingFunction.EF_LINEAR,
         })
         utils.timers.setTimeout(async () => {
@@ -115,26 +116,29 @@ export class gameEntityManager {
             VisibilityComponent.createOrReplace(entity, { visible: false });
             if (this.currentWaveStateMaxEntity == this.currentWaveStateEntityCount) {
                 this.currentWaveStateEntityCount = 0
-                utils.timers.setTimeout(async () => { this.resolveReady() }, this.catsSpeed + 100);
+                utils.timers.setTimeout(async () => { this.resolveReady() }, this.catsWaveDelay);
                 Animator.playSingleAnimation(entityList.get('rocket')!, 'stand')
                 Animator.playSingleAnimation(entityList.get('leftBusEntity')!, 'stand')
                 Animator.playSingleAnimation(entityList.get('rightBusEntity')!, 'stand')
                 console.log("Wave is end")
             }
-        }, this.catsSpeed + 100)
+        }, this.catsMovingDuration + 100)
     }
 
     private speedController() {
         console.log("LEVEL", progressState.level)
         console.log(`
-            Before CatSpeed:     ${this.catsSpeed}
-            Before CatsInterval: ${this.catsInterval}
+            Before catsMovingDuration:     ${this.catsMovingDuration}
+            Before CatsInterval:           ${this.catsInterval}
+            Before catsWaveDelay:          ${this.catsWaveDelay}
           `);
-        this.catsSpeed = this.catsSpeed * (1 - progressState.level / (maxLevel * 2))
-        this.catsInterval = this.catsInterval * (1 - progressState.level / (maxLevel * 2))
+        this.catsMovingDuration = this.catsMovingDuration * (1 - progressState.level / (maxLevel * timerConfig.catsTimingCoefficient))
+        this.catsInterval = this.catsInterval * (1 - progressState.level / (maxLevel * timerConfig.catsTimingCoefficient))
+        this.catsWaveDelay = this.catsWaveDelay * (1 - progressState.level / (maxLevel * (timerConfig.catsTimingCoefficient * .75)))
         console.log(`
-            CatSpeed:     ${this.catsSpeed}
-            CatsInterval: ${this.catsInterval}
+            catsMovingDuration:            ${this.catsMovingDuration}
+            CatsInterval:                  ${this.catsInterval}
+            catsWaveDelay:                 ${this.catsWaveDelay}
           `);
     }
 

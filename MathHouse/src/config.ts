@@ -19,8 +19,10 @@ export const timerConfig = {
   boardActionDuration: 500,
   numberIconAnimationDuration: 100,
   iconAnimationGap: 100,
-  initialCatsSpeed: 2000,
-  initialCatsInterval: 200
+  initialCatsSpeed: 1500,
+  initialCatsInterval: 150,
+  catsWaveDelay: 1500,
+  catsTimingCoefficient: 1.5
 }
 
 export const catIconAnimationMaxScale = 0.2
