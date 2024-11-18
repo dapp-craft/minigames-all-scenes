@@ -13,6 +13,7 @@ export class GameController {
 
   public boardRenderer: BoardRenderer | undefined
 
+  private _inGame: boolean = false // Game state
   private score: number = 0
 
   private timer: number = 0
@@ -48,15 +49,13 @@ export class GameController {
     this._snake = new SnakeHead({ x: 0, y: 0 })
     this._snake.addTail()
     this._snake.addTail()
-    this._snake.addTail()
-    this._snake.addTail()
-    this._snake.addTail()
-    this._snake.addTail()
-    this._snake.addTail()
-    this._snake.addTail()
+
+    this._inGame = true
+    this.addFood()
   }
 
   public finish() {
+    console.log('Game Over')
     let snakePart: SnakePart | undefined = this._snake
     if (snakePart) {
       while (snakePart) {
@@ -68,6 +67,8 @@ export class GameController {
     if (this._food) {
       this._food.terminate()
     }
+
+    this._inGame = false
   }
 
   private update() {
@@ -80,10 +81,15 @@ export class GameController {
         this._snake.addTail()
         this._food.terminate()
         this._food = undefined
+
         // Update score
         this.score += 1
+
+        this.addFood()
       }
     }
+
+    this.check_state()
   }
 
   public setSnakeDirection(dir: Direction) {
@@ -101,5 +107,54 @@ export class GameController {
   public get boardSize() {
     return this._boardSize
   }
+
+  public get inGame() {
+    return this._inGame
+  }
+
+  private addFood() {
+    if (!this._snake) {
+      throw new Error('Failed to add Food: Snake is not initialized')
+    }
+    let pos
+    do {
+      pos = generateFoodPosition(this._boardSize)
+    } while (!validateFoodPosition(pos, this._snake))
+    this._food = new Food(pos)
+  }
+
+  private check_state() {
+    // Check if the snake is out of the board
+    if (this._snake) {
+      const head = this._snake
+      if (
+        head.position.x < 0 ||
+        head.position.x >= this._boardSize.width ||
+        head.position.y < 0 ||
+        head.position.y >= this._boardSize.height
+      ) {
+        this.finish()
+      }
+    }
+  }
 }
+
 const SPEED = [1, 0.8, 0.6, 0.5] // Itervals between moves in seconds
+
+function generateFoodPosition(boardSize: { width: number; height: number }) {
+  return {
+    x: Math.floor(Math.random() * boardSize.width),
+    y: Math.floor(Math.random() * boardSize.height)
+  }
+}
+
+function validateFoodPosition(pos: Position, snake: SnakeHead) {
+  let snakePart: any = snake
+  while (snakePart) {
+    if (snakePart.position.x === pos.x && snakePart.position.y === pos.y) {
+      return false
+    }
+    snakePart = snakePart.next
+  }
+  return true
+}

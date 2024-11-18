@@ -1,7 +1,7 @@
-import { Quaternion, Vector3 } from '@dcl/sdk/math'
+import { Quaternion, Vector3, Color4 } from '@dcl/sdk/math'
 import { GameController } from './gameController'
 import { Position } from './objects/type'
-import { Entity, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
+import { Entity, Material, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
 
 const CELL_SIZE = 1 / 4
 
@@ -35,6 +35,8 @@ export class BoardRenderer {
   }
 
   public render() {
+    // console.log('In game', this._gameController.inGame)
+    if (!this._gameController.inGame) return
     // Render Snake
     let snakePart = this._gameController.snake
     if (snakePart) {
@@ -48,6 +50,21 @@ export class BoardRenderer {
         snakePart = snakePart.next
         // console.log('Snake part rendered', snakePart)
       }
+    }
+
+    // Render Food
+    const food = this._gameController.food
+    if (food) {
+      const entity = food.entity
+      Material.setPbrMaterial(entity, {
+        albedoColor: Color4.Red()
+      })
+      Transform.createOrReplace(entity, {
+        position: this._relativePosition(food.position),
+        parent: this._entity,
+        scale: Vector3.create(0.8, 0.8, 0.8)
+      })
+      MeshRenderer.setBox(entity)
     }
   }
 
