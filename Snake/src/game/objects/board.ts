@@ -3,7 +3,6 @@ import { Direction, MoveDelta, Position, SnakePart } from './type'
 import { SnakeHead } from './snakeHead'
 import * as utils from '@dcl-sdk/utils'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { screenModel } from '../../resources'
 
 const CELL_SIZE = 1 / 3
 
@@ -29,7 +28,6 @@ export class Board {
     })
 
     const shapeEntity = engine.addEntity()
-    GltfContainer.create(shapeEntity, screenModel)
     Transform.create(shapeEntity, {
       rotation: Quaternion.fromEulerDegrees(90, 0, 0),
       scale: Vector3.create(1 / CELL_SIZE, 1 / CELL_SIZE, 1 / CELL_SIZE),

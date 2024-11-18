@@ -1,9 +1,9 @@
-import { Vector3 } from '@dcl/sdk/math'
+import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { GameController } from './gameController'
 import { Position } from './objects/type'
 import { Entity, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
 
-const CELL_SIZE = 1 / 3
+const CELL_SIZE = 1 / 4
 
 export class BoardRenderer {
   private _gameController: GameController
@@ -26,6 +26,7 @@ export class BoardRenderer {
     this._entity = engine.addEntity()
     Transform.create(this._entity, {
       position: boardPosition,
+      rotation: Quaternion.fromEulerDegrees(0, 180, 0),
       scale: Vector3.create(CELL_SIZE, CELL_SIZE, CELL_SIZE)
     })
     this._gameController = gameController

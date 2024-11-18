@@ -6,11 +6,11 @@ import { engine } from '@dcl/sdk/ecs'
 import { BoardRenderer } from './boardRender'
 import { GameController } from './gameController'
 
-const BoardPosition = Vector3.create(8, 3, 8)
+const BoardPosition = Vector3.create(0.019831180572509766 + 8, 3.940518856048584, -5.991234302520752 + 8)
 
 const inputController = new InputController()
 
-const gameController = new GameController(10, 10)
+const gameController = new GameController(20, 15)
 
 const renderController = new BoardRenderer(BoardPosition, gameController)
 
