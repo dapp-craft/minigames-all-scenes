@@ -25,9 +25,9 @@
 		{
 			"alphaMode":"MASK",
 			"emissiveFactor":[
-				0.10000000149011612,
-				0.10000000149011612,
-				0.10000000149011612
+				1,
+				1,
+				1
 			],
 			"emissiveTexture":{
 				"index":0

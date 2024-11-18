@@ -29,7 +29,7 @@
 			"translation":[
 				0.003577500581741333,
 				0.15000098943710327,
-				2.526043176651001
+				2.174895763397217
 			]
 		},
 		{
@@ -44,13 +44,21 @@
 			"translation":[
 				0.003577500581741333,
 				0.15000098943710327,
-				2.526043176651001
+				2.174895763397217
 			]
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
+			"emissiveFactor":[
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
+			],
+			"emissiveTexture":{
+				"index":0
+			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
@@ -59,7 +67,7 @@
 			"name":"obj_terminal",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":0
+					"index":1
 				},
 				"metallicFactor":0
 			}
@@ -94,6 +102,10 @@
 		}
 	],
 	"textures":[
+		{
+			"sampler":0,
+			"source":0
+		},
 		{
 			"sampler":0,
 			"source":0

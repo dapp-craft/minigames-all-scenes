@@ -24,6 +24,14 @@
 	"materials":[
 		{
 			"doubleSided":true,
+			"emissiveFactor":[
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
+			],
+			"emissiveTexture":{
+				"index":0
+			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
@@ -32,7 +40,7 @@
 			"name":"obj_wall01",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":0
+					"index":1
 				},
 				"metallicFactor":0
 			}
@@ -55,6 +63,10 @@
 		}
 	],
 	"textures":[
+		{
+			"sampler":0,
+			"source":0
+		},
 		{
 			"sampler":0,
 			"source":0
