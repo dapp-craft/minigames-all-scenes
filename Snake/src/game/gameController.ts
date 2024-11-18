@@ -72,6 +72,8 @@ export class GameController {
   }
 
   private update() {
+    if (!this._inGame) return
+
     // Move the snake
     if (this._snake) this._snake.move()
 
