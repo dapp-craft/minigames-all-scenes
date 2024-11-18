@@ -20,9 +20,9 @@ export const timerConfig = {
   boardActionDuration: 500,
   numberIconAnimationDuration: 100,
   iconAnimationGap: 100,
-  initialCatsSpeed: 1500,
-  initialCatsInterval: 150,
-  catsWaveDelay: 1500,
+  initialCatsSpeed: 750,
+  initialCatsInterval: 75,
+  catsWaveDelay: 750,
   catsTimingCoefficient: 1.5
 }
 
