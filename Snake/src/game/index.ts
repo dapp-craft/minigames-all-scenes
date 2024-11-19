@@ -15,8 +15,13 @@ const gameController = new GameController(20, 15)
 const renderController = new BoardRenderer(BoardPosition, gameController)
 
 export async function initGame() {
-  gameController.start()
   inputController.gameController = gameController
-  console.log('Game started')
-  console.log('Snake:', gameController.snake)
+}
+
+export function startGame() {
+  gameController.start()
+}
+
+export function finishGame() {
+  gameController.finish()
 }

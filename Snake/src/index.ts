@@ -4,13 +4,13 @@ import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
-import { initGame } from './game'
+import { finishGame, initGame, startGame } from './game'
 import { STATIC_MODELS } from './resources'
 
 const handlers = {
-  start: () => {},
-  exit: () => {},
-  restart: () => {},
+  start: startGame,
+  exit: finishGame,
+  restart: startGame,
   toggleMusic: () => {},
   toggleSfx: () => {}
 }

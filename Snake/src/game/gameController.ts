@@ -13,6 +13,9 @@ export class GameController {
 
   public boardRenderer: BoardRenderer | undefined
 
+  public onStartCallback: () => void = () => {}
+  public onFinishCallback: () => void = () => {}
+
   private _inGame: boolean = false // Game state
   private score: number = 0
 
@@ -51,7 +54,9 @@ export class GameController {
     this._snake.addTail()
 
     this._inGame = true
+    this.score = 0
     this.addFood()
+    this.onStartCallback()
   }
 
   public finish() {
@@ -69,6 +74,7 @@ export class GameController {
     }
 
     this._inGame = false
+    this.onFinishCallback()
   }
 
   private update() {
@@ -85,13 +91,25 @@ export class GameController {
         this._food = undefined
 
         // Update score
-        this.score += 1
+        let scoreToAdd = 1
+        if (this.speed == SPEED.length - 1) {
+          // MAX speed
+          scoreToAdd = +2
+        }
 
+        let snakeLength = this._snake.getLength()
+        let multiplier = 1
+        if (snakeLength > 20) multiplier = 1.5
+        if (snakeLength > 40) multiplier = 2
+
+        this.score += scoreToAdd * multiplier
+
+        // Generate new food
         this.addFood()
       }
     }
 
-    this.check_state()
+    this.checkState()
   }
 
   public setSnakeDirection(dir: Direction) {
@@ -125,7 +143,7 @@ export class GameController {
     this._food = new Food(pos)
   }
 
-  private check_state() {
+  private checkState() {
     // Check if the snake is out of the board
     if (this._snake) {
       const head = this._snake
@@ -139,6 +157,8 @@ export class GameController {
       }
     }
   }
+
+  private modifySpeed() {}
 }
 
 const SPEED = [1, 0.8, 0.6, 0.5] // Itervals between moves in seconds
