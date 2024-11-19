@@ -6,10 +6,6 @@ export const steampunkGameState = {
     listOfEntity: new Map()
 }
 
-export const correctTargetAmount = [
-    5, 5, 5
-]
-
 // temp
 export const data = new Map([
     ['counter_hits', { position: Vector3.create(4, 3, 3), scale: Vector3.create(.3, .3, .2) }],

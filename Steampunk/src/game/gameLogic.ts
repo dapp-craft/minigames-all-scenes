@@ -1,12 +1,13 @@
 import * as utils from '@dcl-sdk/utils'
-import { ColliderLayer, Entity, GltfContainer, InputAction, Material, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
-import { correctTargetAmount, steampunkGameState } from "../gameState"
-import { hintsAmount, levelAmount, steampunkGameConfig } from "../gameConfig"
+import { ColliderLayer, engine, Entity, GltfContainer, InputAction, Material, MeshCollider, MeshRenderer, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
+import { steampunkGameState } from "../gameState"
+import { correctTargetAmount, hintsAmount, levelAmount, steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
 import { runWinAnimation } from '../../../common/effects'
 import { soundManager } from '..'
-import { Color4 } from '@dcl/sdk/math'
-import { queue } from '@dcl-sdk/mini-games/src'
+import { Color4, Vector3 } from '@dcl/sdk/math'
+import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
+import { countdown } from './game'
 
 export class GameLogic {
     private correctSmashCounter = 0
@@ -17,6 +18,7 @@ export class GameLogic {
     private hintsAmount: number = hintsAmount[0]
     private resolveReady!: () => void
     private gameIsDone: Promise<void>
+    private animationInterval: utils.TimerId = 0
     private playerReturnData = {
         playerScore: 0,
         playerTime: undefined
@@ -35,13 +37,36 @@ export class GameLogic {
         return this.playerReturnData
     }
 
+    private startTimer () {
+        engine.removeSystem('countdown-system')
+        countdown(() => {
+            this.gameEnd()
+          }, steampunkGameConfig.gameTime / 1000)
+    }
+
+    private playMissAnimation() {
+        utils.timers.clearInterval(this.animationInterval)
+        const entity = steampunkGameState.listOfEntity.get('missIndicator');
+        VisibilityComponent.getMutable(entity).visible = true
+        let alpha = steampunkGameConfig.visibleFeedbackAlpha
+        Material.setPbrMaterial(entity, { albedoColor: Color4.create(1, 0, 0, alpha) })
+        this.animationInterval = utils.timers.setInterval(() => {
+            alpha = alpha - steampunkGameConfig.visibleFeedbackSpeed
+            console.log(alpha)
+            Material.setPbrMaterial(entity, { albedoColor: Color4.create(1, 0, 0, alpha) })
+            if (alpha >= 0) return
+            VisibilityComponent.getMutable(entity).visible = false
+            utils.timers.clearInterval(this.animationInterval)
+        }, 100)
+    }
+
     private resetProgress(resetGame: boolean = true) {
         if (resetGame) {
             this.playerLevel = 1
             this.pictureNumber = 1
             this.hintsAmount = hintsAmount[0]
         }
-        for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
+        // for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
         this.hintsAmount = hintsAmount[this.playerLevel - 1]
         VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
         this.correctSmashCounter = 0
@@ -53,7 +78,8 @@ export class GameLogic {
 
     private async playGame() {
         this.resetProgress(false)
-        const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+        this.startTimer()
+        const data = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber}.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber + 1}.png` }) })
         for (let i = 0; i < steampunkGameConfig.targetEntityAmount + 3; i++) {
@@ -65,7 +91,8 @@ export class GameLogic {
                 () => {
                     console.log(i, correctTargetAmount[this.playerLevel])
                     if (i > correctTargetAmount[this.playerLevel - 1]) {
-                        this.visibleFeedback(false, i)
+                        // this.visibleFeedback(false, i)
+                        this.playMissAnimation();
                         return soundManager.playSound('incorrect')
                     }
                     soundManager.playSound('correct')
@@ -75,7 +102,8 @@ export class GameLogic {
                     this.differencesFound[i] = i
                     pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
                     this.changeCounter()
-                    if (this.correctSmashCounter < 5) return
+                    if (this.correctSmashCounter < correctTargetAmount[this.playerLevel]) return
+                    engine.removeSystem('countdown-system')
                     runWinAnimation(steampunkGameConfig.winAnimationDuration).then(() => {
                         this.playerLevel++
                         if (this.playerLevel > levelAmount) return this.gameEnd()
@@ -83,14 +111,11 @@ export class GameLogic {
                     })
                 }
             )
-            if (i <= steampunkGameConfig.targetEntityAmount) {
-                const path: PBGltfContainer = { src: `models/target${this.playerLevel}_${i + 1}/target${this.playerLevel}_${i + 1}.gltf` };
-                GltfContainer.createOrReplace(steampunkGameState.availableEntity[i], {
-                    ...path,
-                    invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS,
-                    visibleMeshesCollisionMask: ColliderLayer.CL_POINTER
-                })
-                Transform.createOrReplace(steampunkGameState.availableEntity[i], { position: { ...data.get(`target${this.playerLevel}_${i + 1}`)!.position, z: data.get(`target${this.playerLevel}_${i + 1}`)!.position.z + .01 }, parent: steampunkGameState.listOfEntity.get('display') })
+            if (i <= correctTargetAmount[this.playerLevel] - 1) {
+                console.log(steampunkGameState.availableEntity[i], `obj_difference_${i + 1}`)
+                MeshRenderer.setSphere(steampunkGameState.availableEntity[i])
+                MeshCollider.setSphere(steampunkGameState.availableEntity[i])
+                Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${i + 1}`), parent: sceneParentEntity })
             }
         }
     }
