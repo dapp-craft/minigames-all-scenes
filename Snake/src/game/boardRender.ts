@@ -1,8 +1,9 @@
 import { Quaternion, Vector3, Color4 } from '@dcl/sdk/math'
 import { GameController } from './gameController'
 import { Position } from './objects/type'
-import { Entity, Material, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
+import { Entity, GltfContainer, Material, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../../common/locators'
+import { snakeBodyModel, snakeHeadModel } from '../resources'
 
 let CELL_SIZE = 1
 
@@ -34,7 +35,7 @@ export class BoardRenderer {
       scale: Vector3.create(1, 1, 1)
     })
     this._gameController = gameController
-    // MeshRenderer.setPlane(this._entity)
+    MeshRenderer.setPlane(this._entity)
 
     engine.addSystem(this.update)
     this.setPosition()
@@ -65,7 +66,11 @@ export class BoardRenderer {
           scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1),
           parent: this._entity
         })
-        MeshRenderer.setBox(entity)
+
+        // Choose model based on snake part or head
+        let model = snakePart.prev ? snakeBodyModel : snakeHeadModel
+        GltfContainer.createOrReplace(entity, model)
+
         snakePart = snakePart.next
         // console.log('Snake part rendered', snakePart)
       }
@@ -94,8 +99,6 @@ export class BoardRenderer {
     const x = -0.5 + pos.x * (1 / boardSize.width) + 1 / boardSize.width / 2
     const y = -0.5 + pos.y * (1 / boardSize.height) + 1 / boardSize.height / 2
 
-    console.log('Relative position', { x, y })
-
     return { x: x, y: y, z: 0 }
   }
 
@@ -107,7 +110,6 @@ export class BoardRenderer {
 
     // Center offset
     transform.position = Vector3.add(transform.position, Vector3.create(8, 0, 8))
-    transform.rotation = Quaternion.fromEulerDegrees(0, 180, 0)
     Transform.createOrReplace(this._entity, transform)
     this.xk = 1 / transform.scale.x
     this.yk = 1 / transform.scale.y
