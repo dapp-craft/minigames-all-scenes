@@ -7,13 +7,11 @@ import { BoardRenderer } from './boardRender'
 import { GameController } from './gameController'
 import { queue } from '@dcl-sdk/mini-games/src'
 
-const BoardPosition = Vector3.create(0.019831180572509766 + 8, 3.940518856048584, -5.991234302520752 + 8)
-
 const inputController = new InputController()
 
 const gameController = new GameController(20, 15)
 
-const renderController = new BoardRenderer(BoardPosition, gameController)
+const renderController = new BoardRenderer(gameController)
 
 export async function initGame() {
   inputController.gameController = gameController

@@ -2,8 +2,9 @@ import { Quaternion, Vector3, Color4 } from '@dcl/sdk/math'
 import { GameController } from './gameController'
 import { Position } from './objects/type'
 import { Entity, Material, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
+import { readGltfLocators } from '../../../common/locators'
 
-const CELL_SIZE = 1 / 4
+let CELL_SIZE = 1
 
 export class BoardRenderer {
   private _gameController: GameController
@@ -11,6 +12,9 @@ export class BoardRenderer {
 
   private counter = 0
   private renderInterval = 1 // 6 frames per render
+
+  private xk = 1
+  private yk = 1
 
   private update = () => {
     // if (this.counter >= this.renderInterval) {
@@ -22,21 +26,35 @@ export class BoardRenderer {
     this.render()
   }
 
-  constructor(boardPosition: Vector3, gameController: GameController) {
+  constructor(gameController: GameController) {
     this._entity = engine.addEntity()
     Transform.create(this._entity, {
-      position: boardPosition,
+      position: Vector3.create(0, 0, 0),
       rotation: Quaternion.fromEulerDegrees(0, 180, 0),
-      scale: Vector3.create(CELL_SIZE, CELL_SIZE, CELL_SIZE)
+      scale: Vector3.create(1, 1, 1)
     })
     this._gameController = gameController
+    // MeshRenderer.setPlane(this._entity)
 
     engine.addSystem(this.update)
+    this.setPosition()
+
+    // bottom left corner sphere
+    const entity = engine.addEntity()
+    Transform.create(entity, {
+      position: Vector3.create(-0.5, -0.5, 0),
+      scale: Vector3.create(0.1, 0.1, 0.1),
+      parent: this._entity
+    })
+    MeshRenderer.setSphere(entity)
   }
 
   public render() {
     // console.log('In game', this._gameController.inGame)
     if (!this._gameController.inGame) return
+
+    const boardSize = this._gameController.boardSize
+
     // Render Snake
     let snakePart = this._gameController.snake
     if (snakePart) {
@@ -44,6 +62,7 @@ export class BoardRenderer {
         const entity = snakePart.entity
         Transform.createOrReplace(entity, {
           position: this._relativePosition(snakePart.position),
+          scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1),
           parent: this._entity
         })
         MeshRenderer.setBox(entity)
@@ -62,7 +81,7 @@ export class BoardRenderer {
       Transform.createOrReplace(entity, {
         position: this._relativePosition(food.position),
         parent: this._entity,
-        scale: Vector3.create(0.8, 0.8, 0.8)
+        scale: Vector3.scale(Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1), 0.8)
       })
       MeshRenderer.setBox(entity)
     }
@@ -71,21 +90,26 @@ export class BoardRenderer {
   private _relativePosition(pos: Position) {
     const boardSize = this._gameController.boardSize
 
-    // 0, 0 is the left bottom corner
-    let x
-    if (boardSize.width % 2 === 0) {
-      x = pos.x - boardSize.width / 2 + CELL_SIZE / 2
-    } else {
-      x = pos.x - Math.floor(boardSize.width / 2)
-    }
+    // -0.5, -0.5 is the left bottom corner
+    const x = -0.5 + pos.x * (1 / boardSize.width) + 1 / boardSize.width / 2
+    const y = -0.5 + pos.y * (1 / boardSize.height) + 1 / boardSize.height / 2
 
-    let y
-    if (boardSize.height % 2 === 0) {
-      y = pos.y - boardSize.height / 2 + CELL_SIZE / 2
-    } else {
-      y = pos.y - Math.floor(boardSize.height / 2)
-    }
+    console.log('Relative position', { x, y })
 
     return { x: x, y: y, z: 0 }
+  }
+
+  private async setPosition() {
+    const locators = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+    const transform = locators.get('obj_screen')
+
+    if (!transform) return
+
+    // Center offset
+    transform.position = Vector3.add(transform.position, Vector3.create(8, 0, 8))
+    transform.rotation = Quaternion.fromEulerDegrees(0, 180, 0)
+    Transform.createOrReplace(this._entity, transform)
+    this.xk = 1 / transform.scale.x
+    this.yk = 1 / transform.scale.y
   }
 }
