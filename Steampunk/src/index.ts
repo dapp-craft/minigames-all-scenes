@@ -1,10 +1,10 @@
 import * as utils from '@dcl-sdk/utils'
 import { engine, executeTask, GltfContainer, InputAction, Material, MeshCollider, MeshRenderer, pointerEventsSystem, TextShape, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
+import { MOVES, POINTS_TIME, SCORE, TIME, TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
-import { STEAMPUNK_SYNC_ID, steampunkGameConfig } from './gameConfig'
+import { GAME_ID, STEAMPUNK_SYNC_ID, steampunkGameConfig } from './gameConfig'
 import { steampunkGameState } from './gameState'
 import { syncEntity } from '@dcl/sdk/network'
 import { GameLogic } from './game/gameLogic'
@@ -24,7 +24,7 @@ const handlers = {
     toggleSfx: () => { }
 }
 
-const libraryReady = initMiniGame('', TIME_LEVEL_MOVES, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
+const libraryReady = initMiniGame(GAME_ID, [TIME], readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
 
 export let gameLogic = new GameLogic()
 
@@ -35,7 +35,7 @@ export async function main() {
 
     await libraryReady
 
-    setupStaticModels()
+    setupStaticModels();
 
     await generateInitialEntity()
 

@@ -1,3 +1,5 @@
+export const GAME_ID = "2299ece9-d14d-4b2a-8cf8-08b8b1b6231b"
+
 export const steampunkGameConfig = {
     initialEntityAmount: 30,
     targetEntityAmount: 20,

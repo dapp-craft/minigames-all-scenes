@@ -1,13 +1,13 @@
 import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, engine, Entity, GltfContainer, InputAction, Material, MeshCollider, MeshRenderer, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
-import { steampunkGameState } from "../gameState"
+import { PlayerReturnData, steampunkGameState } from "../gameState"
 import { correctTargetAmount, hintsAmount, levelAmount, steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
 import { runWinAnimation } from '../../../common/effects'
 import { soundManager } from '..'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { countdown } from './game'
+import { countdown, timer } from './game'
 
 export class GameLogic {
     private correctSmashCounter = 0
@@ -19,9 +19,11 @@ export class GameLogic {
     private resolveReady!: () => void
     private gameIsDone: Promise<void>
     private animationInterval: utils.TimerId = 0
-    private playerReturnData = {
+    private playerReturnData: PlayerReturnData = {
+        playerStartTime: Date.now(),
+        playerFinishTime: 999999999,
+        playerLevel: [],
         playerScore: 0,
-        playerTime: undefined
     }
 
     constructor() {
@@ -37,7 +39,7 @@ export class GameLogic {
         return this.playerReturnData
     }
 
-    private startTimer () {
+    private startTimer() {
         engine.removeSystem('countdown-system')
         countdown(() => this.gameEnd(), steampunkGameConfig.gameTime / 1000)
     }
@@ -63,6 +65,10 @@ export class GameLogic {
             this.playerLevel = 1
             this.pictureNumber = 1
             this.hintsAmount = hintsAmount[0]
+            this.playerReturnData.playerScore = 0
+            this.playerReturnData.playerLevel = []
+            this.playerReturnData.playerStartTime = Date.now()
+            this.playerReturnData.playerFinishTime = 999999999
         }
         // for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
         this.hintsAmount = hintsAmount[this.playerLevel - 1]
@@ -91,6 +97,7 @@ export class GameLogic {
                     if (i > correctTargetAmount[this.playerLevel - 1]) {
                         // this.visibleFeedback(false, i)
                         this.playMissAnimation();
+                        this.changeCounter(false)
                         return soundManager.playSound('incorrect')
                     }
                     soundManager.playSound('correct')
@@ -103,6 +110,7 @@ export class GameLogic {
                     if (this.correctSmashCounter < correctTargetAmount[this.playerLevel - 1]) return
                     engine.removeSystem('countdown-system')
                     runWinAnimation(steampunkGameConfig.winAnimationDuration).then(() => {
+                        this.playerReturnData.playerLevel[this.playerLevel - 1] = this.playerLevel
                         this.playerLevel++
                         if (this.playerLevel > levelAmount) return this.gameEnd()
                         this.playGame()
@@ -118,11 +126,13 @@ export class GameLogic {
         }
     }
 
-    private changeCounter() {
-        this.correctSmashCounter++
-        this.playerReturnData.playerScore = this.correctSmashCounter * steampunkGameConfig.awardMultiplier
+    private changeCounter(correct: boolean = true) {
+        if (correct) {
+            this.correctSmashCounter++
+            this.playerReturnData.playerScore = this.playerReturnData.playerScore + steampunkGameConfig.awardMultiplier
+        } else this.playerReturnData.playerScore = this.playerReturnData.playerScore - steampunkGameConfig.awardMultiplier
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Hits \n${this.playerReturnData.playerScore}`
-        console.log(this.playerLevel)
+        console.log("Score: ", this.correctSmashCounter, "Return Score: ", this.playerReturnData.playerScore)
     }
 
     // TODO: circle looks not finished
@@ -163,6 +173,9 @@ export class GameLogic {
     }
 
     public gameEnd() {
+        engine.removeSystem('countdown-system')
+        this.playerReturnData.playerFinishTime = Date.now()
+        timer.hide();
         queue.setNextPlayer()
         this.resolveReady()
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
