@@ -40,7 +40,6 @@ export async function main() {
     await generateInitialEntity()
 
     initGame()
-
 }
 
 const generateInitialEntity = async () => {

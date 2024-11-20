@@ -39,9 +39,7 @@ export class GameLogic {
 
     private startTimer () {
         engine.removeSystem('countdown-system')
-        countdown(() => {
-            this.gameEnd()
-          }, steampunkGameConfig.gameTime / 1000)
+        countdown(() => this.gameEnd(), steampunkGameConfig.gameTime / 1000)
     }
 
     private playMissAnimation() {
@@ -102,7 +100,7 @@ export class GameLogic {
                     this.differencesFound[i] = i
                     pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
                     this.changeCounter()
-                    if (this.correctSmashCounter < correctTargetAmount[this.playerLevel]) return
+                    if (this.correctSmashCounter < correctTargetAmount[this.playerLevel - 1]) return
                     engine.removeSystem('countdown-system')
                     runWinAnimation(steampunkGameConfig.winAnimationDuration).then(() => {
                         this.playerLevel++
@@ -111,8 +109,8 @@ export class GameLogic {
                     })
                 }
             )
-            if (i <= correctTargetAmount[this.playerLevel] - 1) {
-                console.log(steampunkGameState.availableEntity[i], `obj_difference_${i + 1}`)
+            if (i <= correctTargetAmount[this.playerLevel - 1]) {
+                console.log("Here: ", steampunkGameState.availableEntity[i], `obj_difference_${i + 1}`, this.playerLevel)
                 MeshRenderer.setSphere(steampunkGameState.availableEntity[i])
                 MeshCollider.setSphere(steampunkGameState.availableEntity[i])
                 Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${i + 1}`), parent: sceneParentEntity })
