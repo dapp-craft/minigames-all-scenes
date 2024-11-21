@@ -33,6 +33,7 @@ export class GameLogic {
     public async startGame(level: number = 1) {
         this.resetProgress()
         this.playerLevel = level
+        this.generateDifference()
         this.playGame()
         this.gameIsDone = new Promise(r => this.resolveReady = r)
         await this.gameIsDone;
@@ -126,6 +127,38 @@ export class GameLogic {
         }
     }
 
+    private async generateDifference() {
+        let objectDifference = new Map()
+        console.log("generateDifference in ACTION")
+        // Temp, until the locators
+        const boardLocators = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
+        // boardLocators.size
+        // const boardLocatorsSize = 15
+        const getRandomNumbers = () => {
+            const numbers = Array.from({ length: correctTargetAmount[this.playerLevel - 1] }, (_, i) => i + 1);
+            const result = [];
+            while (result.length < boardLocators.size) {
+                const randomIndex = Math.floor(Math.random() * numbers.length)
+                result.push(numbers[randomIndex])
+                numbers.splice(randomIndex, 1)
+            }
+            return result;
+        }
+        const differenceId = getRandomNumbers()
+
+        for (let i = 0; i <= boardLocators.size - 1; i++) {
+            console.log(`obj_difference_${i + 1}`)
+            const transform = boardLocators.get(`obj_difference_${i + 1}`)
+            let isCorrect = differenceId.find(element => element == i + 1) ? false : true
+            let type = "circle"
+            if (transform!.scale.x - transform!.scale.y <= -0.5) type = "horisontal"
+            else if (transform!.scale.x - transform!.scale.y >= 0.5) type = "vertical"
+            objectDifference.set(i, { transform, isCorrect, type })
+        }
+        console.log("difference ID: ", differenceId)
+        objectDifference.forEach(e => console.log(e))
+    }
+
     private changeCounter(correct: boolean = true) {
         if (correct) {
             this.correctSmashCounter++
@@ -176,7 +209,6 @@ export class GameLogic {
         engine.removeSystem('countdown-system')
         this.playerReturnData.playerFinishTime = Date.now()
         timer.hide();
-        queue.setNextPlayer()
         this.resolveReady()
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })

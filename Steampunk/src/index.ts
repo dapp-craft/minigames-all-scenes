@@ -24,7 +24,7 @@ const handlers = {
     toggleSfx: () => { }
 }
 
-const libraryReady = initMiniGame(GAME_ID, [TIME], readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
+const libraryReady = initMiniGame(GAME_ID, POINTS_TIME, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
 
 export let gameLogic = new GameLogic()
 

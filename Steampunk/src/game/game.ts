@@ -1,5 +1,5 @@
 import * as utils from '@dcl-sdk/utils'
-import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
+import { queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
 import { gameLogic } from '..'
 import { readGltfLocators } from '../../../common/locators'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
@@ -35,6 +35,7 @@ async function startGame() {
     console.log("Update Player Progress")
     await updatePlayerProgress(res);
   // }
+  // queue.setNextPlayer()
 }
 
 async function initCountdownNumbers() {

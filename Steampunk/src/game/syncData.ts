@@ -8,8 +8,8 @@ export let playerProgress: IProgress
 export async function updatePlayerProgress(data: typeof progressState) {
     console.log('Updating progress', playerProgress)
     await progress.upsertProgress({
-        time: progressState.playerFinishTime - progressState.playerStartTime,
-        level: progressState.playerLevel[levelAmount - 1],
-        moves: progressState.playerScore
+        time: data.playerFinishTime - data.playerStartTime,
+        level: data.playerLevel[levelAmount - 1],
+        score: data.playerScore
     })
 }
