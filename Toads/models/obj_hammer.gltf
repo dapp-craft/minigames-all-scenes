@@ -1,22 +1,17 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
 		{
 			"name":"Scene",
 			"nodes":[
-				0,
-				1
+				0
 			]
 		}
 	],
@@ -24,10 +19,6 @@
 		{
 			"mesh":0,
 			"name":"obj_hammer"
-		},
-		{
-			"mesh":1,
-			"name":"obj_hammer_collider"
 		}
 	],
 	"materials":[
@@ -64,43 +55,8 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
-				}
-			]
-		},
-		{
-			"name":"Mesh.026",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":4,
-						"NORMAL":5,
-						"TEXCOORD_0":6
-					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":7,
-					"mode":4
+					"material":0
 				}
 			]
 		}
@@ -124,6 +80,7 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":122,
 			"max":[
@@ -139,61 +96,48 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":122,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":122,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":384,
-			"type":"SCALAR"
-		},
-		{
-			"componentType":5126,
-			"count":63,
-			"max":[
-				0.2822946310043335,
-				0.8977329730987549,
-				0.28229308128356934
-			],
-			"min":[
-				-1.4813200235366821,
-				-8.644683191505464e-08,
-				-0.28229451179504395
-			],
-			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":63,
-			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":63,
-			"type":"VEC2"
-		},
-		{
-			"componentType":5123,
-			"count":168,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1048,
-			"byteOffset":0
+			"byteLength":1464,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":658,
-			"byteOffset":1048
+			"byteLength":1464,
+			"byteOffset":1464,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":976,
+			"byteOffset":2928,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":768,
+			"byteOffset":3904,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -204,7 +148,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":1708,
+			"byteLength":4672,
 			"uri":"obj_hammer.bin"
 		}
 	]
