@@ -83,6 +83,11 @@ export class GameController {
     // Move the snake
     if (this._snake) this._snake.move()
 
+    if (this.checkCollision()) {
+      this.finish()
+      return
+    }
+
     // Check if snake eats the food
     if (this._snake && this._food) {
       if (this._snake.position.x === this._food.position.x && this._snake.position.y === this._food.position.y) {
@@ -113,7 +118,22 @@ export class GameController {
   }
 
   public setSnakeDirection(dir: Direction) {
-    if (this._snake) this._snake.direction = dir
+
+    if (!this._snake) return
+
+    const opposite = {
+      [Direction.UP]: Direction.DOWN,
+      [Direction.DOWN]: Direction.UP,
+      [Direction.LEFT]: Direction.RIGHT,
+      [Direction.RIGHT]: Direction.LEFT,
+    };
+
+    if (opposite[dir] == this._snake?.direction) {
+      console.log('Invalid direction')
+      return
+    };
+
+    this._snake.direction = dir
   }
 
   public get snake(): SnakePart | undefined {
@@ -159,6 +179,21 @@ export class GameController {
   }
 
   private modifySpeed() {}
+
+  private checkCollision() {
+    if (!this._snake) return
+
+    let snakeHeadPos = this._snake.position
+
+    let snakePart: SnakePart | undefined = this._snake.next
+    while (snakePart) {
+      if (snakePart.position.x === snakeHeadPos.x && snakePart.position.y === snakeHeadPos.y) {
+        return true
+      }
+      snakePart = snakePart.next
+    }
+    return false
+  }
 }
 
 const SPEED = [1, 0.8, 0.6, 0.5] // Itervals between moves in seconds
