@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -18,12 +18,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_snake02",
-			"scale":[
-				0.9917425513267517,
-				1.0150383710861206,
-				0.9939035177230835
-			]
+			"name":"obj_snake02"
 		}
 	],
 	"materials":[
@@ -88,29 +83,29 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":15,
+			"count":12,
 			"max":[
-				0.12831757962703705,
-				1.5603390579599363e-08,
-				0.12586331367492676
+				0.5018934607505798,
+				0.49849405884742737,
+				6.0746074836970365e-09
 			],
 			"min":[
-				-0.12831757962703705,
-				-1.5603390579599363e-08,
-				-0.12586331367492676
+				-0.49810653924942017,
+				-0.501505970954895,
+				-5.960702154084174e-09
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":15,
+			"count":12,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":15,
+			"count":12,
 			"type":"VEC2"
 		},
 		{
@@ -123,26 +118,26 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":180,
+			"byteLength":144,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":180,
-			"byteOffset":180,
+			"byteLength":144,
+			"byteOffset":144,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":120,
-			"byteOffset":360,
+			"byteLength":96,
+			"byteOffset":288,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":60,
-			"byteOffset":480,
+			"byteOffset":384,
 			"target":34963
 		}
 	],
@@ -154,7 +149,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":540,
+			"byteLength":444,
 			"uri":"obj_snake02.bin"
 		}
 	]
