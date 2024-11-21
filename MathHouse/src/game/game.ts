@@ -37,6 +37,7 @@ export const exitCallback = () => {
         rocketBoard.hideBoard()
         progressState.level = 1
         TextShape.getMutable(gameState.levelCounter).text = `Level: ${progressState.level}`
+        gameState.playerHealth = playerHealth
         GameData.createOrReplace(gameDataEntity, {
             playerAddress: '',
             playerName: '',
@@ -47,11 +48,13 @@ export const exitCallback = () => {
     }, 100)
 }
 
-export const restartCallback = () => {
+export const restartCallback = async () => {
     entityManager?.stopGame()
+    gameState.playerHealth--
+    let playerStatus = await cheackPlayerHealthStatus()
     utils.timers.clearTimeout(startTimeOut)
     gameButtons.forEach((button, i) => button.disable())
-    startGame()
+    playerStatus && startGame()
 }
 
 export const initGame = async () => {
@@ -120,12 +123,6 @@ const initGameButtons = async () => {
                     }
                     else {
                         console.log("LOSE")
-                        gameState.playerHealth--
-                        if (gameState.playerHealth <= 0) {
-                            await incrementUserProgress()
-                            runGameoverAnimation(WIN_DURATION).then(() => afterGame())
-                            return
-                        }
                         soundManager.playSound('wrongAnswerSound', soundConfig.volume)
                         nextLevelTimeOut = utils.timers.setTimeout(() => restartCallback(), time + 500)
                     }
@@ -133,6 +130,16 @@ const initGameButtons = async () => {
             )
         )
     }
+}
+
+const cheackPlayerHealthStatus = async () => {
+    console.log("Player Health: ", gameState.playerHealth )
+    if (gameState.playerHealth <= 0) {
+        await incrementUserProgress()
+        runGameoverAnimation(WIN_DURATION).then(() => afterGame())
+        return false
+    }
+    return true
 }
 
 const afterGame = () => {

@@ -143,7 +143,6 @@ export class gameEntityManager {
     }
 
     public stopGame() {
-        gameState.playerHealth = playerHealth
         this.gameEnd = true
         this.resolveReady()
         this.answerReady()
