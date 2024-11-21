@@ -17,5 +17,5 @@ export const STATIC_MODELS = [
   { src: modelsFolder + 'obj_wall.gltf' }
 ]
 
-export const snakeHeadModel: PBGltfContainer = { src: modelsFolder + 'obj_snake02.gltf' }
+export const foodModel: PBGltfContainer = { src: modelsFolder + 'obj_snake02.gltf' }
 export const snakeBodyModel: PBGltfContainer = { src: modelsFolder + 'obj_snake01.gltf' }

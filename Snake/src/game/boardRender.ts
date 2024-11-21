@@ -3,7 +3,7 @@ import { GameController } from './gameController'
 import { Position } from './objects/type'
 import { Entity, GltfContainer, Material, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../../common/locators'
-import { snakeBodyModel, snakeHeadModel } from '../resources'
+import { snakeBodyModel, foodModel } from '../resources'
 
 let CELL_SIZE = 1
 
@@ -68,8 +68,7 @@ export class BoardRenderer {
         })
 
         // Choose model based on snake part or head
-        let model = snakePart.prev ? snakeBodyModel : snakeHeadModel
-        GltfContainer.createOrReplace(entity, model)
+        GltfContainer.createOrReplace(entity, snakeBodyModel)
 
         snakePart = snakePart.next
         // console.log('Snake part rendered', snakePart)
@@ -88,7 +87,7 @@ export class BoardRenderer {
         parent: this._entity,
         scale: Vector3.scale(Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1), 0.8)
       })
-      MeshRenderer.setBox(entity)
+      GltfContainer.createOrReplace(entity, foodModel)
     }
   }
 
