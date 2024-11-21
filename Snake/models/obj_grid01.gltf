@@ -18,16 +18,16 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_text"
+			"name":"obj_grid01"
 		}
 	],
 	"materials":[
 		{
-			"alphaMode":"MASK",
+			"doubleSided":true,
 			"emissiveFactor":[
-				1,
-				1,
-				1
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -37,7 +37,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_text02",
+			"name":"obj_grid01",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -48,7 +48,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.010",
+			"name":"Mesh.003",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,69 +75,69 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_text02",
-			"uri":"textures/obj_text02.png"
+			"name":"obj_grid01",
+			"uri":"textures/obj_grid01.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":580,
+			"count":4,
 			"max":[
-				6.994429588317871,
-				8.30697250366211,
-				6.093242645263672
+				0.5018934607505798,
+				0.49849405884742737,
+				6.0746074836970365e-09
 			],
 			"min":[
-				-7.00634241104126,
-				0.005709215998649597,
-				-6.507138729095459
+				-0.49810653924942017,
+				-0.501505970954895,
+				-5.960702154084174e-09
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":580,
+			"count":4,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":580,
+			"count":4,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1575,
+			"count":6,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":6960,
+			"byteLength":48,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6960,
-			"byteOffset":6960,
+			"byteLength":48,
+			"byteOffset":48,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4640,
-			"byteOffset":13920,
+			"byteLength":32,
+			"byteOffset":96,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3150,
-			"byteOffset":18560,
+			"byteLength":12,
+			"byteOffset":128,
 			"target":34963
 		}
 	],
@@ -149,8 +149,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":21712,
-			"uri":"obj_text.bin"
+			"byteLength":140,
+			"uri":"obj_grid01.bin"
 		}
 	]
 }
