@@ -1,23 +1,23 @@
-name: puzzle
+name: snake
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'SlidingPuzzle/**'
+      - 'Snake/**'
       - 'common/**'
       - 'package.json'
     tags:
-      - 'preview/puzzle-v*'
-      - 'release/puzzle-v*'
+      - 'preview/snake-v*'
+      - 'release/snake-v*'
 
 jobs:
   testing:
     if: github.ref_type != 'tag'
     uses: ./.github/workflows/.deploy_worlds.yml
     with:
-      directory: SlidingPuzzle
+      directory: Snake
       worlds: snikes.eth
     secrets:
       DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
@@ -26,8 +26,8 @@ jobs:
     if: github.ref_type == 'tag'
     uses: ./.github/workflows/.deploy_genesis.yml
     with:
-      directory: SlidingPuzzle
-      coordinates: '["79,-30"]'
+      directory: Snake
+      coordinates: '["0,0"]'
       mainnet: ${{ startsWith(github.ref_name, 'release') }}
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
