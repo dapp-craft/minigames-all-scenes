@@ -18,3 +18,4 @@ export const STATIC_MODELS = [
 
 export const foodModel: PBGltfContainer = { src: modelsFolder + 'obj_snake02.gltf' }
 export const snakeBodyModel: PBGltfContainer = { src: modelsFolder + 'obj_snake01.gltf' }
+export const cellModel: PBGltfContainer = { src: modelsFolder + 'obj_grid01.gltf' }
