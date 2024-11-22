@@ -30,7 +30,6 @@ export class SnakeHead implements SnakePart, Drawable {
   }
 
   public set direction(dir: Direction) {
-    console.log('Setting direction', dir)
     this._direction = dir
   }
 

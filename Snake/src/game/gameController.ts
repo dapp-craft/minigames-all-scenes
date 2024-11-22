@@ -19,6 +19,10 @@ export class GameController {
   private _inGame: boolean = false // Game state
   private score: number = 0
 
+  // Is needed to not allow the snake to change direction several times in one frame
+  // Otherwise, it is possible to turn the snake 180 degrees in one frame
+  private _directionToUpdate: Direction | undefined = undefined
+
   private timer: number = 0
   private speed: number = 0
   private system = (dt: number) => {
@@ -80,6 +84,13 @@ export class GameController {
   private update() {
     if (!this._inGame) return
 
+    // Update snake direction
+    if (this._directionToUpdate != undefined) {
+      if (this._snake) {
+        this._snake.direction = this._directionToUpdate
+      }
+    }
+
     // Move the snake
     if (this._snake) this._snake.move()
 
@@ -133,7 +144,7 @@ export class GameController {
       return
     };
 
-    this._snake.direction = dir
+    this._directionToUpdate = dir
   }
 
   public get snake(): SnakePart | undefined {
