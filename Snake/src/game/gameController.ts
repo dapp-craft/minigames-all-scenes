@@ -121,23 +121,23 @@ export class GameController {
     }
 
     this.checkState()
+    this.modifySpeed()
   }
 
   public setSnakeDirection(dir: Direction) {
-
     if (!this._snake) return
 
     const opposite = {
       [Direction.UP]: Direction.DOWN,
       [Direction.DOWN]: Direction.UP,
       [Direction.LEFT]: Direction.RIGHT,
-      [Direction.RIGHT]: Direction.LEFT,
-    };
+      [Direction.RIGHT]: Direction.LEFT
+    }
 
     if (opposite[dir] == this._snake?.direction) {
       console.log('Invalid direction')
       return
-    };
+    }
 
     this._directionToUpdate = dir
   }
@@ -184,7 +184,9 @@ export class GameController {
     }
   }
 
-  private modifySpeed() {}
+  private modifySpeed() {
+    this.speed = Math.min(Math.floor(this.score / 5), 10)
+  }
 
   private checkCollision() {
     if (!this._snake) return
@@ -202,7 +204,7 @@ export class GameController {
   }
 }
 
-const SPEED = [1, 0.8, 0.6, 0.5] // Itervals between moves in seconds
+const SPEED = [1, 0.95, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55, 0.55] // Itervals between moves in seconds
 
 function generateFoodPosition(boardSize: { width: number; height: number }) {
   return {
