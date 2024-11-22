@@ -1,0 +1,30 @@
+name: NAME
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'FOLDER/**'
+      - 'common/**'
+    tags:
+      - 'stage/NAME-v*'
+
+jobs:
+  testing:
+    if: github.ref_type != 'tag'
+    uses: ./.github/workflows/.deploy_worlds.yml
+    with:
+      directory: FOLDER
+      worlds: 
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
+
+  staging:
+    if: github.ref_type == 'tag'
+    uses: ./.github/workflows/.deploy_genesis.yml
+    with:
+      directory: FOLDER
+      server: linker-server.decentraland.today
+      coordinates: '[""]'
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
