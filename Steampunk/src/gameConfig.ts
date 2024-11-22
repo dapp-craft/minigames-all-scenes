@@ -1,8 +1,8 @@
 export const GAME_ID = "2299ece9-d14d-4b2a-8cf8-08b8b1b6231b"
 
 export const steampunkGameConfig = {
-    initialEntityAmount: 30,
-    targetEntityAmount: 20,
+    initialEntityAmount: 100,
+    targetEntityAmount: 80,
     hintShowTimes: 3,
     hintDelay: 1000,
     awardMultiplier: 10,
