@@ -1,7 +1,7 @@
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { Animator, AudioSource, engine, GltfContainer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { gameState } from './state'
-import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, gameTime, rocketCoords, soundConfig } from './config'
+import { catEntityId, catInRocketEntityId, counterEntity, entityAmount, GAME_ID, gameTime, playerHealth, rocketCoords, soundConfig } from './config'
 import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { setupStaticModels, setupStaticModelsFromGltf } from './staticModels/setupStaticModels'
 import { exitCallback, getReadyToStart, initGame, restartCallback } from './game/game'
@@ -54,6 +54,7 @@ export async function main() {
 const spawnInitialEntityPoll = async () => {
   syncEntity(gameState.rocketWindow, [Tween.componentId], 5200)
   syncEntity(gameState.levelCounter, [TextShape.componentId], catInRocketEntityId + entityAmount + counterEntity + 100)
+  syncEntity(gameState.healthPoints, [TextShape.componentId], catInRocketEntityId + entityAmount + counterEntity + 101)
 
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
@@ -92,6 +93,14 @@ const spawnInitialEntityPoll = async () => {
   })
   if (Transform.getOrNull(gameState.levelCounter) != null) return
   Transform.create(gameState.levelCounter, { ...data.get('counter_level'), rotation: Quaternion.create(0, -.414, .175, 0), parent: sceneParentEntity })
+  
+  TextShape.create(gameState.healthPoints, {
+    text: `HP: ${playerHealth}`,
+    fontSize: 3,
+    textAlign: 3
+  })
+  if (Transform.getOrNull(gameState.healthPoints) != null) return
+  Transform.create(gameState.healthPoints, { ...data.get('counter_lives'), parent: sceneParentEntity })
 }
 
 export const generateArray = (data: generatedData) => {

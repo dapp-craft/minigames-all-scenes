@@ -63,6 +63,7 @@ export const initGame = async () => {
 
 export async function getReadyToStart() {
     console.log('Get Ready to start!')
+    cheackPlayerHealthStatus()
     enableCamera()
     gameButtons.forEach((button, i) => button.disable())
     runCountdown(timeBeforeStart)
@@ -134,6 +135,7 @@ const initGameButtons = async () => {
 
 const cheackPlayerHealthStatus = async () => {
     console.log("Player Health: ", gameState.playerHealth )
+    TextShape.getMutable(gameState.healthPoints).text = `HP: ${gameState.playerHealth}`
     if (gameState.playerHealth <= 0) {
         await incrementUserProgress()
         runGameoverAnimation(WIN_DURATION).then(() => afterGame())
