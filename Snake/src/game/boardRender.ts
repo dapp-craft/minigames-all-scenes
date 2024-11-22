@@ -35,19 +35,9 @@ export class BoardRenderer {
       scale: Vector3.create(1, 1, 1)
     })
     this._gameController = gameController
-    MeshRenderer.setPlane(this._entity)
 
     engine.addSystem(this.update)
     this.setPosition()
-
-    // bottom left corner sphere
-    const entity = engine.addEntity()
-    Transform.create(entity, {
-      position: Vector3.create(-0.5, -0.5, 0),
-      scale: Vector3.create(0.1, 0.1, 0.1),
-      parent: this._entity
-    })
-    MeshRenderer.setSphere(entity)
   }
 
   public render() {
@@ -85,7 +75,7 @@ export class BoardRenderer {
       Transform.createOrReplace(entity, {
         position: this._relativePosition(food.position),
         parent: this._entity,
-        scale: Vector3.scale(Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1), 0.8)
+        scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1)
       })
       GltfContainer.createOrReplace(entity, foodModel)
     }
