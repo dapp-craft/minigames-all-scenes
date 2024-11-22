@@ -113,12 +113,7 @@ export class GameController {
           scoreToAdd = +2
         }
 
-        let snakeLength = this._snake.getLength()
-        let multiplier = 1
-        if (snakeLength > 20) multiplier = 1.5
-        if (snakeLength > 40) multiplier = 2
-
-        this.score += scoreToAdd * multiplier
+        this.score += 4
 
         // Generate new food
         this.addFood()
