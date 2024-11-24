@@ -88,8 +88,8 @@ export class GameLogic {
         console.log("Player level: ", this.playerLevel)
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${correctTargetAmount[this.playerLevel - 1]}`
         const data = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
-        // Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber}.png` }) })
-        // Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/level${this.playerLevel}_${this.pictureNumber + 1}.png` }) })
+        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/map_${this.playerLevel}.png` }) })
+        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/map_${this.playerLevel}.png` }) })
         for (let i = 0; i < steampunkGameConfig.targetEntityAmount + 3; i++) {
             pointerEventsSystem.onPointerDown(
                 {
@@ -121,27 +121,36 @@ export class GameLogic {
                     })
                 }
             )
-            // if (i <= correctTargetAmount[this.playerLevel - 1]) {
-            //     console.log("Here: ", steampunkGameState.availableEntity[i], `obj_difference_${i + 1}`, this.playerLevel)
-            //     MeshRenderer.setSphere(steampunkGameState.availableEntity[i])
-            //     MeshCollider.setSphere(steampunkGameState.availableEntity[i])
-            //     Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${i + 1}`), parent: sceneParentEntity })
-            // }
-            // data.forEach((e, d) => console.log(d, e))
-            // const differenceData = this.generateDifference()
-            for (let i = 1; i <= data.size; i++) {
-                // console.log(i)
-                MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
-                MeshCollider.setPlane(steampunkGameState.availableEntity[i])
-                Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${i}`), parent: sceneParentEntity })
-                this.objectDifference.get(i)
-                Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
-                    texture: Material.Texture.Common({
-                        src: `images/${this.objectDifference.get(i).type}/${Math.floor(Math.random() * 5) + 1}.png`,
-                    }),
-                })
-            }
         }
+        const imageRandomArray = Array.from({ length: data.size }, () => Math.floor(Math.random() * 6) + 1);
+        console.log(imageRandomArray)
+        for (let i = 0; i < data.size; i++) {
+            console.log(i)
+            MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
+            MeshCollider.setPlane(steampunkGameState.availableEntity[i])
+            Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${i + 1}`), position: { ...data.get(`obj_difference_${i + 1}`)!.position, z: data.get(`obj_difference_${i + 1}`)!.position.z + .04 }, parent: sceneParentEntity })
+            this.objectDifference.get(i)
+            Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
+                texture: Material.Texture.Common({
+                    src: `images/${this.objectDifference.get(i).type}/${imageRandomArray[i]}.png`,
+                }),
+            })
+        }
+        // TEMP
+        for (let i = data.size; i < (data.size * 2); i++) {
+            let iterator = i - data.size
+            console.log(i, data.size * 2, iterator);
+            MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
+            MeshCollider.setPlane(steampunkGameState.availableEntity[i])
+            Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${iterator + 1}`), position: { ...data.get(`obj_difference_${iterator + 1}`)!.position, z: data.get(`obj_difference_${iterator + 1}`)!.position.z + .04, x: data.get(`obj_difference_${iterator + 1}`)!.position.x - 2.9}, parent: sceneParentEntity })
+            this.objectDifference.get(iterator + 1)
+            Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
+                texture: Material.Texture.Common({
+                    src: `images/${this.objectDifference.get(iterator).type}${!this.objectDifference.get(iterator)?.isCorrect ? '_alt' : ''}/${imageRandomArray[iterator]}.png`,
+                }),
+            })
+        }
+
     }
 
     private async generateDifference() {
@@ -168,7 +177,7 @@ export class GameLogic {
             let type = "circle"
             if (transform!.scale.x - transform!.scale.y <= -0.1) type = "vertical"
             else if (transform!.scale.x - transform!.scale.y >= 0.1) type = "horizontal"
-            this.objectDifference.set(i + 1, { transform, isCorrect, type })
+            this.objectDifference.set(i, { transform, isCorrect, type })
         }
         this.objectDifference.forEach(e => console.log(e))
     }
