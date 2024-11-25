@@ -128,7 +128,7 @@ export class GameLogic {
             console.log(i)
             MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
             MeshCollider.setPlane(steampunkGameState.availableEntity[i])
-            Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${i + 1}`), position: { ...data.get(`obj_difference_${i + 1}`)!.position, z: data.get(`obj_difference_${i + 1}`)!.position.z + .04 }, parent: sceneParentEntity })
+            Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${i + 1}`), position: { ...data.get(`obj_difference_${i + 1}`)!.position }, parent: sceneParentEntity })
             this.objectDifference.get(i)
             Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
                 texture: Material.Texture.Common({
@@ -142,7 +142,7 @@ export class GameLogic {
             console.log(i, data.size * 2, iterator);
             MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
             MeshCollider.setPlane(steampunkGameState.availableEntity[i])
-            Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${iterator + 1}`), position: { ...data.get(`obj_difference_${iterator + 1}`)!.position, z: data.get(`obj_difference_${iterator + 1}`)!.position.z + .04, x: data.get(`obj_difference_${iterator + 1}`)!.position.x - 2.9}, parent: sceneParentEntity })
+            Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${iterator + 1}`), position: { ...data.get(`obj_difference_${iterator + 1}`)!.position, x: data.get(`obj_difference_${iterator + 1}`)!.position.x - 2.9}, parent: sceneParentEntity })
             this.objectDifference.get(iterator + 1)
             Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
                 texture: Material.Texture.Common({
