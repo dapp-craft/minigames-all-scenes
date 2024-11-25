@@ -84,7 +84,6 @@ const generateInitialEntity = async () => {
     Transform.create(firstBoard, { ...data.get('obj_screen_1'), parent: steampunkGameState.listOfEntity.get('display') })
     Transform.create(secondBoard, { ...data.get('obj_screen_2'), parent: steampunkGameState.listOfEntity.get('display') })
     Transform.create(hitZone, { position: Vector3.create(0, 0, -6), rotation: Quaternion.create(1, 1, 1, 1), scale: Vector3.create(.5, 0, .5), parent: steampunkGameState.listOfEntity.get('display') })
-    Transform.create(visibleFeedback, { position: Vector3.create(1, 2, -6), rotation: Quaternion.create(1, 1, 1, 1), scale: Vector3.create(.3, 0, .3), parent: steampunkGameState.listOfEntity.get('display') })
     Transform.create(missIndicator, { position: {...Transform.get(hitZone).position, z: Transform.get(hitZone).position.z + .001}, rotation: Quaternion.create(0, 0, 1, 1), scale: Vector3.create(1, 1, 1), parent: steampunkGameState.listOfEntity.get('display') })
 
     MeshRenderer.setPlane(firstBoard)
@@ -95,7 +94,7 @@ const generateInitialEntity = async () => {
     // MeshCollider.setPlane(secondBoard)
 
     MeshRenderer.setCylinder(hitZone)
-    MeshRenderer.setCylinder(visibleFeedback)
+    MeshRenderer.setPlane(visibleFeedback)
 
     Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
     Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
