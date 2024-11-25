@@ -135,22 +135,17 @@ export class GameLogic {
                 }
             )
         }
-        const imageRandomArray = Array.from({ length: data.size }, () => Math.floor(Math.random() * 6) + 1);
+        const imageRandomArray = Array.from({ length: data.size / 2 }, () => Math.floor(Math.random() * 6) + 1);
         console.log(imageRandomArray)
-        for (let i = 0; i < (data.size * 2); i++) {
-            const secondBoard = i < data.size ? false : true
-            let iterator = secondBoard ? i - data.size : i
-            console.log(iterator)
+        for (let i = 0; i < data.size; i++) {
+            const secondBoard = i < data.size / 2 ? false : true
+            let iterator = secondBoard ? i - data.size / 2 : i
+            // console.log(iterator)
             MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
             MeshCollider.setPlane(steampunkGameState.availableEntity[i])
-            // TEMP
             Transform.createOrReplace(steampunkGameState.availableEntity[i], {
-                ...data.get(`obj_difference_${iterator + 1}`),
-                position: {
-                    ...data.get(`obj_difference_${iterator + 1}`)!.position,
-                    x: secondBoard ? data.get(`obj_difference_${iterator + 1}`)!.position.x - 2.9 :
-                        data.get(`obj_difference_${iterator + 1}`)!.position.x
-                }, parent: sceneParentEntity
+                ...data.get(`obj_difference${secondBoard ? '1' : '2'}_${iterator + 1}`),
+                 parent: sceneParentEntity
             })
             this.objectDifference.get(iterator)
             Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
@@ -171,7 +166,7 @@ export class GameLogic {
             const result = [];
             for (let i = 0; i < correctTargetAmount[this.playerLevel - 1]; i++) {
                 let random;
-                do { random = Math.floor(Math.random() * boardLocators.size) + 1 }
+                do { random = Math.floor(Math.random() * boardLocators.size/2) + 1 }
                 while (result[random] !== undefined)
                 result[random] = random
             }
@@ -180,9 +175,9 @@ export class GameLogic {
         const differenceId = getRandomNumbers()
         console.log(differenceId)
 
-        for (let i = 0; i <= boardLocators.size - 1; i++) {
-            console.log(`obj_difference_${i + 1}`)
-            const transform = boardLocators.get(`obj_difference_${i + 1}`)
+        for (let i = 0; i <= (boardLocators.size/2 - 1); i++) {
+            console.log(`obj_difference1_${i + 1}`)
+            const transform = boardLocators.get(`obj_difference1_${i + 1}`)
             let isCorrect = differenceId[i + 1] == i + 1 ? false : true
             let type = "circle"
             if (transform!.scale.x - transform!.scale.y <= -0.1) type = "vertical"
