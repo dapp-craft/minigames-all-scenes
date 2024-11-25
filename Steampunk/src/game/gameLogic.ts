@@ -1,5 +1,5 @@
 import * as utils from '@dcl-sdk/utils'
-import { ColliderLayer, engine, Entity, GltfContainer, InputAction, Material, MeshCollider, MeshRenderer, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
+import { ColliderLayer, engine, Entity, GltfContainer, InputAction, Material, MaterialTransparencyMode, MeshCollider, MeshRenderer, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { PlayerReturnData, steampunkGameState } from "../gameState"
 import { correctTargetAmount, hintsAmount, levelAmount, steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
@@ -88,13 +88,13 @@ export class GameLogic {
         console.log("Player level: ", this.playerLevel)
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${correctTargetAmount[this.playerLevel - 1]}`
         const data = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
-        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/map_${this.playerLevel}.png` }) })
-        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/map_${this.playerLevel}.png` }) })
+        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
+        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
         for (let i = 0; i < steampunkGameConfig.targetEntityAmount + 3; i++) {
             pointerEventsSystem.onPointerDown(
                 {
                     entity: steampunkGameState.availableEntity[i],
-                    opts: { button: InputAction.IA_POINTER, hoverText: '1' },
+                    opts: { button: InputAction.IA_POINTER, hoverText: 'Click' },
                 },
                 () => {
                     console.log(i, correctTargetAmount[this.playerLevel])
@@ -104,7 +104,20 @@ export class GameLogic {
                         this.changeCounter(false)
                         return soundManager.playSound('incorrect')
                     }
+                    this.objectDifference.get(i).isCorrect = !this.objectDifference.get(i).isCorrect
                     soundManager.playSound('correct')
+                    Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
+                        texture: Material.Texture.Common({
+                            src: `images/${this.objectDifference.get(i).type}/${imageRandomArray[i]}.png`,
+                        }),
+                        transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
+                    })
+                    Material.setPbrMaterial(steampunkGameState.availableEntity[i + data.size], {
+                        texture: Material.Texture.Common({
+                            src: `images/${this.objectDifference.get(i).type}/${imageRandomArray[i]}.png`,
+                        }),
+                        transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
+                    })
                     this.visibleFeedback(true, i)
                     utils.timers.clearInterval(this.hintTimeOut)
                     VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
@@ -124,33 +137,30 @@ export class GameLogic {
         }
         const imageRandomArray = Array.from({ length: data.size }, () => Math.floor(Math.random() * 6) + 1);
         console.log(imageRandomArray)
-        for (let i = 0; i < data.size; i++) {
-            console.log(i)
+        for (let i = 0; i < (data.size * 2); i++) {
+            const secondBoard = i < data.size ? false : true
+            let iterator = secondBoard ? i - data.size : i
+            console.log(iterator)
             MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
             MeshCollider.setPlane(steampunkGameState.availableEntity[i])
-            Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${i + 1}`), position: { ...data.get(`obj_difference_${i + 1}`)!.position }, parent: sceneParentEntity })
-            this.objectDifference.get(i)
+            // TEMP
+            Transform.createOrReplace(steampunkGameState.availableEntity[i], {
+                ...data.get(`obj_difference_${iterator + 1}`),
+                position: {
+                    ...data.get(`obj_difference_${iterator + 1}`)!.position,
+                    x: secondBoard ? data.get(`obj_difference_${iterator + 1}`)!.position.x - 2.9 :
+                        data.get(`obj_difference_${iterator + 1}`)!.position.x
+                }, parent: sceneParentEntity
+            })
+            this.objectDifference.get(iterator)
             Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
                 texture: Material.Texture.Common({
-                    src: `images/${this.objectDifference.get(i).type}/${imageRandomArray[i]}.png`,
+                    src: `images/${this.objectDifference.get(iterator).type}${(!this.objectDifference.get(iterator)?.isCorrect && secondBoard) ? '_alt' : ''}/${imageRandomArray[iterator]}.png`,
+                    wrapMode: TextureWrapMode.TWM_CLAMP,
                 }),
+                transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
             })
         }
-        // TEMP
-        for (let i = data.size; i < (data.size * 2); i++) {
-            let iterator = i - data.size
-            console.log(i, data.size * 2, iterator);
-            MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
-            MeshCollider.setPlane(steampunkGameState.availableEntity[i])
-            Transform.createOrReplace(steampunkGameState.availableEntity[i], { ...data.get(`obj_difference_${iterator + 1}`), position: { ...data.get(`obj_difference_${iterator + 1}`)!.position, x: data.get(`obj_difference_${iterator + 1}`)!.position.x - 2.9}, parent: sceneParentEntity })
-            this.objectDifference.get(iterator + 1)
-            Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
-                texture: Material.Texture.Common({
-                    src: `images/${this.objectDifference.get(iterator).type}${!this.objectDifference.get(iterator)?.isCorrect ? '_alt' : ''}/${imageRandomArray[iterator]}.png`,
-                }),
-            })
-        }
-
     }
 
     private async generateDifference() {
@@ -196,7 +206,7 @@ export class GameLogic {
     private visibleFeedback(isEntityCorrect: boolean, entityId: number) {
         let alpha = steampunkGameConfig.visibleFeedbackAlpha
         VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("visibleFeedback")).visible = true
-        Transform.getMutable(steampunkGameState.listOfEntity.get("visibleFeedback")).position = Transform.get(steampunkGameState.availableEntity[entityId]).position
+        Transform.getMutable(steampunkGameState.listOfEntity.get("visibleFeedback")).position = {...Transform.get(steampunkGameState.availableEntity[entityId]).position, z: Transform.get(steampunkGameState.availableEntity[entityId]).position.z + .1}
         const interval = utils.timers.setInterval(() => {
             alpha = alpha - steampunkGameConfig.visibleFeedbackSpeed
             console.log(alpha)

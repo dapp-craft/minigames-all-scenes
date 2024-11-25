@@ -8,7 +8,7 @@ export const steampunkGameConfig = {
     awardMultiplier: 10,
     winAnimationDuration: 3000,
     visibleFeedbackAlpha: 0.5,
-    visibleFeedbackSpeed: 0.07,
+    visibleFeedbackSpeed: 0.04,
     gameTime: 30000
 }
 
