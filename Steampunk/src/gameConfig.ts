@@ -17,7 +17,7 @@ export const steampunkGameConfig = {
 export const levelAmount = 5
 
 export const correctTargetAmount = [
-    6, 6, 6, 6, 6
+    1, 2, 6, 6, 6, 6, 6
 ]
 
 export const STEAMPUNK_SYNC_ID = 3000

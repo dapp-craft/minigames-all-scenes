@@ -236,8 +236,8 @@ export class GameLogic {
             const transform = boardLocators.get(`obj_difference1_${i + 1}`)
             let isCorrect = differenceId[i + 1] == i + 1 ? false : true
             let type = "circle"
-            if (transform!.scale.x - transform!.scale.y <= -0.1) type = "vertical"
-            else if (transform!.scale.x - transform!.scale.y >= 0.1) type = "horizontal"
+            if (transform!.scale.x - transform!.scale.y <= -0.05) type = "vertical"
+            else if (transform!.scale.x - transform!.scale.y >= 0.05) type = "horizontal"
             this.objectDifference.set(i, { transform, isCorrect, type, imageNumber: 1 })
             this.objectDifference.set(i + boardLocators.size / 2, { transform, isCorrect, type, imageNumber: 1 })
             typeHandler(i)
