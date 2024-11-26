@@ -24,26 +24,22 @@ export class InputController {
   private update = () => {
     if (!this.gameController) return
     if (
-      inputSystem.isTriggered(InputAction.IA_FORWARD, PointerEventType.PET_DOWN) &&
-      PointerLock.get(engine.CameraEntity).isPointerLocked
+      inputSystem.isTriggered(InputAction.IA_FORWARD, PointerEventType.PET_DOWN)
     ) {
       this.gameController.setSnakeDirection(Direction.UP)
     }
     if (
-      inputSystem.isTriggered(InputAction.IA_BACKWARD, PointerEventType.PET_DOWN) &&
-      PointerLock.get(engine.CameraEntity).isPointerLocked
+      inputSystem.isTriggered(InputAction.IA_BACKWARD, PointerEventType.PET_DOWN)
     ) {
       this.gameController.setSnakeDirection(Direction.DOWN)
     }
     if (
-      inputSystem.isTriggered(InputAction.IA_LEFT, PointerEventType.PET_DOWN) &&
-      PointerLock.get(engine.CameraEntity).isPointerLocked
+      inputSystem.isTriggered(InputAction.IA_LEFT, PointerEventType.PET_DOWN)
     ) {
       this.gameController.setSnakeDirection(Direction.LEFT)
     }
     if (
-      inputSystem.isTriggered(InputAction.IA_RIGHT, PointerEventType.PET_DOWN) &&
-      PointerLock.get(engine.CameraEntity).isPointerLocked
+      inputSystem.isTriggered(InputAction.IA_RIGHT, PointerEventType.PET_DOWN)
     ) {
       this.gameController.setSnakeDirection(Direction.RIGHT)
     }
