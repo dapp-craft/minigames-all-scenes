@@ -109,18 +109,25 @@ export class GameLogic {
                     this.objectDifference.get(!secondBoard ? i + data.size / 2 : i - data.size / 2).isCorrect = true
                     soundManager.playSound('correct')
                     const objectDifferenceData = this.objectDifference.get(i)
-                    Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
-                        texture: Material.Texture.Common({
-                            src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`,
-                        }),
-                        transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
-                    })
-                    Material.setPbrMaterial(steampunkGameState.availableEntity[!secondBoard ? i + data.size / 2 : i - data.size / 2], {
-                        texture: Material.Texture.Common({
-                            src: `images/${this.objectDifference.get(i).type}/${objectDifferenceData.imageNumber}.png`,
-                        }),
-                        transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
-                    })
+
+                    const leftBoardEntity = Material.getMutable(steampunkGameState.availableEntity[i]).material
+                    if (leftBoardEntity?.$case === "pbr" && leftBoardEntity.pbr.texture?.tex?.$case === 'texture') { leftBoardEntity.pbr.texture.tex.texture.src = `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png` }
+
+                    const rightBoardEntity = Material.getMutable(steampunkGameState.availableEntity[!secondBoard ? i + data.size / 2 : i - data.size / 2]).material
+                    if (rightBoardEntity?.$case === "pbr" && rightBoardEntity.pbr.texture?.tex?.$case === 'texture') { rightBoardEntity.pbr.texture.tex.texture.src = `images/${this.objectDifference.get(i).type}/${objectDifferenceData.imageNumber}.png` }
+
+                    // Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
+                    //     texture: Material.Texture.Common({
+                    //         src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`,
+                    //     }),
+                    //     transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
+                    // })
+                    // Material.setPbrMaterial(steampunkGameState.availableEntity[!secondBoard ? i + data.size / 2 : i - data.size / 2], {
+                    //     texture: Material.Texture.Common({
+                    //         src: `images/${this.objectDifference.get(i).type}/${objectDifferenceData.imageNumber}.png`,
+                    //     }),
+                    //     transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
+                    // })
 
                     this.visibleFeedback(true, i)
                     utils.timers.clearInterval(this.hintTimeOut)
@@ -148,12 +155,48 @@ export class GameLogic {
                 parent: sceneParentEntity
             })
             this.objectDifference.get(iterator)
-            Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
-                texture: Material.Texture.Common({
-                    src: `images/${this.objectDifference.get(iterator).type}${(!this.objectDifference.get(iterator)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(iterator).imageNumber}.png`,
-                    wrapMode: TextureWrapMode.TWM_CLAMP,
-                }),
-                transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
+            // Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
+            //     texture: Material.Texture.Common({
+            //         src: `images/${this.objectDifference.get(iterator).type}${(!this.objectDifference.get(iterator)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(iterator).imageNumber}.png`,
+            //         wrapMode: TextureWrapMode.TWM_CLAMP,
+            //     }),
+            //     transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
+            // })
+            // TODO REFACTOR
+            Material.createOrReplace(steampunkGameState.availableEntity[i], {
+                material: {
+                    $case: 'pbr',
+                    pbr: {
+                        texture: {
+                            tex: {
+                                $case: 'texture',
+                                texture: { src: `images/${this.objectDifference.get(iterator).type}${(!this.objectDifference.get(iterator)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(iterator).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
+                            }
+                        },
+                        alphaTexture: {
+                            tex: {
+                                $case: 'texture',
+                                texture: {
+                                    src: 'images/alpha/alpha_screen.png',
+                                    filterMode: TextureFilterMode.TFM_TRILINEAR,
+                                    wrapMode: TextureWrapMode.TWM_REPEAT
+                                }
+                            }
+                        },
+                        emissiveColor: Color4.White(),
+                        emissiveIntensity: 0.9,
+                        emissiveTexture: {
+                            tex: {
+                                $case: 'texture',
+                                texture: { src: `images/${this.objectDifference.get(iterator).type}${(!this.objectDifference.get(iterator)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(iterator).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
+                            }
+                        },
+                        roughness: 1.0,
+                        specularIntensity: 0,
+                        metallic: 0,
+                        transparencyMode: MaterialTransparencyMode.MTM_AUTO
+                    }
+                }
             })
         }
     }
