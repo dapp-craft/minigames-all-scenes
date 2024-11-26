@@ -61,6 +61,8 @@ export class GameController {
     this.score = 0
     this.addFood()
     this.onStartCallback()
+
+    this.setSnakeDirection(Direction.UP)
   }
 
   public finish() {
