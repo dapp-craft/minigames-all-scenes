@@ -83,15 +83,16 @@ export class GameLogic {
     }
 
     private async playGame() {
+        await this.generateDifference()
         this.resetProgress(false)
         this.startTimer()
-        this.generateDifference()
         console.log("Player level: ", this.playerLevel)
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${correctTargetAmount[this.playerLevel - 1]}`
         const data = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
         for(let i = 0; i <= steampunkGameConfig.targetEntityAmount; i++) {
+            // Transform.getMutable(steampunkGameState.availableEntity[i]).scale = Vector3.Zero()
             VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
             pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
         }
@@ -186,7 +187,7 @@ export class GameLogic {
                     })
                     this.visibleFeedback(true, i)
                     utils.timers.clearInterval(this.hintTimeOut)
-                    VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
+                    // VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
                     this.differencesFound[i] = i
                     this.changeCounter()
                     if (this.correctSmashCounter < correctTargetAmount[this.playerLevel - 1]) return
@@ -252,6 +253,7 @@ export class GameLogic {
 
     private async generateDifference() {
         console.log("generateDifference in ACTION")
+        this.objectDifference.clear()
         // TODO REFACTOR
         const boardLocators = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
         const getRandomNumbers = () => {
