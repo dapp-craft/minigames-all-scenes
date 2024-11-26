@@ -205,8 +205,6 @@ export class GameLogic {
         console.log("generateDifference in ACTION")
         // TODO REFACTOR
         const boardLocators = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
-        const imageRandomArray = Array.from({ length: boardLocators.size / 2 }, () => Math.floor(Math.random() * 6) + 1);
-        console.log(imageRandomArray)
         const getRandomNumbers = () => {
             const result = [];
             for (let i = 0; i < correctTargetAmount[this.playerLevel - 1]; i++) {
@@ -219,17 +217,32 @@ export class GameLogic {
         }
         const differenceId = getRandomNumbers()
         // console.log(differenceId)
+        function generateUniqueArray(): number[] {return Array.from({ length: steampunkGameConfig.maximumTexturePerType }, (_, i) => i + 1).sort(() => Math.random() - 0.5);}
+        let typeCounter: Map<string, any> = new Map([
+            ['circle', {randomArray: [], index: 0}],
+            ['vertical', {randomArray: [], index: 0}],
+            ['horizontal', {randomArray: [], index: 0}],
+        ])
+        typeCounter.forEach((_, key) => typeCounter.get(key).randomArray = generateUniqueArray())
 
+        const typeHandler = (i: number) => {
+            console.log(typeCounter.get(this.objectDifference.get(i).type));
+            console.log(this.objectDifference.get(i).type)
+            this.objectDifference.get(i).imageNumber = typeCounter.get(this.objectDifference.get(i).type).randomArray[typeCounter.get(this.objectDifference.get(i).type).index]
+            this.objectDifference.get(i + boardLocators.size / 2).imageNumber = typeCounter.get(this.objectDifference.get(i).type).randomArray[typeCounter.get(this.objectDifference.get(i).type).index]
+            typeCounter.get(this.objectDifference.get(i).type).index++
+        }
         for (let i = 0; i <= (boardLocators.size / 2 - 1); i++) {
             const transform = boardLocators.get(`obj_difference1_${i + 1}`)
             let isCorrect = differenceId[i + 1] == i + 1 ? false : true
             let type = "circle"
             if (transform!.scale.x - transform!.scale.y <= -0.1) type = "vertical"
             else if (transform!.scale.x - transform!.scale.y >= 0.1) type = "horizontal"
-            this.objectDifference.set(i, { transform, isCorrect, type, imageNumber: imageRandomArray[i] })
-            this.objectDifference.set(i + boardLocators.size / 2, { transform, isCorrect, type, imageNumber: imageRandomArray[i] })
+            this.objectDifference.set(i, { transform, isCorrect, type, imageNumber: 1 })
+            this.objectDifference.set(i + boardLocators.size / 2, { transform, isCorrect, type, imageNumber: 1 })
+            typeHandler(i)
         }
-        this.objectDifference.forEach(e => console.log(e))
+        this.objectDifference.forEach((e, key) => console.log(key, e))
     }
 
     private changeCounter(correct: boolean = true) {

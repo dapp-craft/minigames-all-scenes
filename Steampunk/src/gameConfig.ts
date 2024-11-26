@@ -9,7 +9,8 @@ export const steampunkGameConfig = {
     winAnimationDuration: 3000,
     visibleFeedbackAlpha: 0.5,
     visibleFeedbackSpeed: 0.04,
-    gameTime: 30000
+    gameTime: 30000,
+    maximumTexturePerType: 13
 }
 
 // TODO: Change to 3 level system
