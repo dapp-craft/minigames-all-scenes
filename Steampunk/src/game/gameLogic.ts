@@ -91,10 +91,10 @@ export class GameLogic {
         const data = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
-        steampunkGameState.availableEntity.forEach(e => {
-            VisibilityComponent.createOrReplace(e, { visible: false })
-            pointerEventsSystem.removeOnPointerDown(e)
-        })
+        for(let i = 0; i <= steampunkGameConfig.targetEntityAmount; i++) {
+            VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
+            pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
+        }
         for (let i = 0; i < data.size; i++) {
             pointerEventsSystem.onPointerDown(
                 {
@@ -149,7 +149,7 @@ export class GameLogic {
                             }
                         }
                     })
-                    Material.createOrReplace(steampunkGameState.availableEntity[secondBoard ? i + data.size / 2 : i - data.size / 2], {
+                    Material.createOrReplace(steampunkGameState.availableEntity[!secondBoard ? i + data.size / 2 : i - data.size / 2], {
                         material: {
                             $case: 'pbr',
                             pbr: {
@@ -184,19 +184,6 @@ export class GameLogic {
                             }
                         }
                     })
-                    // Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
-                    //     texture: Material.Texture.Common({
-                    //         src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`,
-                    //     }),
-                    //     transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
-                    // })
-                    // Material.setPbrMaterial(steampunkGameState.availableEntity[!secondBoard ? i + data.size / 2 : i - data.size / 2], {
-                    //     texture: Material.Texture.Common({
-                    //         src: `images/${this.objectDifference.get(i).type}/${objectDifferenceData.imageNumber}.png`,
-                    //     }),
-                    //     transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
-                    // })
-
                     this.visibleFeedback(true, i)
                     utils.timers.clearInterval(this.hintTimeOut)
                     VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
@@ -224,13 +211,6 @@ export class GameLogic {
                 parent: sceneParentEntity
             })
             this.objectDifference.get(iterator)
-            // Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
-            //     texture: Material.Texture.Common({
-            //         src: `images/${this.objectDifference.get(iterator).type}${(!this.objectDifference.get(iterator)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(iterator).imageNumber}.png`,
-            //         wrapMode: TextureWrapMode.TWM_CLAMP,
-            //     }),
-            //     transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND,
-            // })
             // TODO REFACTOR
             Material.createOrReplace(steampunkGameState.availableEntity[i], {
                 material: {
@@ -365,6 +345,10 @@ export class GameLogic {
 
     public gameEnd() {
         engine.removeSystem('countdown-system')
+        for(let i = 0; i <= steampunkGameConfig.targetEntityAmount; i++) {
+            VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
+            pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
+        }
         this.playerReturnData.playerFinishTime = Date.now()
         timer.hide();
         this.resolveReady()
