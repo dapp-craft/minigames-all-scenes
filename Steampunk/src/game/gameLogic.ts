@@ -91,7 +91,11 @@ export class GameLogic {
         const data = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
-        for (let i = 0; i < steampunkGameConfig.targetEntityAmount + 3; i++) {
+        steampunkGameState.availableEntity.forEach(e => {
+            VisibilityComponent.createOrReplace(e, { visible: false })
+            pointerEventsSystem.removeOnPointerDown(e)
+        })
+        for (let i = 0; i < data.size; i++) {
             pointerEventsSystem.onPointerDown(
                 {
                     entity: steampunkGameState.availableEntity[i],
@@ -109,13 +113,77 @@ export class GameLogic {
                     this.objectDifference.get(!secondBoard ? i + data.size / 2 : i - data.size / 2).isCorrect = true
                     soundManager.playSound('correct')
                     const objectDifferenceData = this.objectDifference.get(i)
-
-                    const leftBoardEntity = Material.getMutable(steampunkGameState.availableEntity[i]).material
-                    if (leftBoardEntity?.$case === "pbr" && leftBoardEntity.pbr.texture?.tex?.$case === 'texture') { leftBoardEntity.pbr.texture.tex.texture.src = `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png` }
-
-                    const rightBoardEntity = Material.getMutable(steampunkGameState.availableEntity[!secondBoard ? i + data.size / 2 : i - data.size / 2]).material
-                    if (rightBoardEntity?.$case === "pbr" && rightBoardEntity.pbr.texture?.tex?.$case === 'texture') { rightBoardEntity.pbr.texture.tex.texture.src = `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png` }
-
+                    // TODO ReFACTOR
+                    Material.createOrReplace(steampunkGameState.availableEntity[i], {
+                        material: {
+                            $case: 'pbr',
+                            pbr: {
+                                texture: {
+                                    tex: {
+                                        $case: 'texture',
+                                        texture: { src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
+                                    }
+                                },
+                                alphaTexture: {
+                                    tex: {
+                                        $case: 'texture',
+                                        texture: {
+                                            src: 'images/alpha/alpha_screen.png',
+                                            filterMode: TextureFilterMode.TFM_TRILINEAR,
+                                            wrapMode: TextureWrapMode.TWM_REPEAT
+                                        }
+                                    }
+                                },
+                                emissiveColor: Color4.White(),
+                                emissiveIntensity: 0.9,
+                                emissiveTexture: {
+                                    tex: {
+                                        $case: 'texture',
+                                        texture: { src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
+                                    }
+                                },
+                                roughness: 1.0,
+                                specularIntensity: 0,
+                                metallic: 0,
+                                transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
+                            }
+                        }
+                    })
+                    Material.createOrReplace(steampunkGameState.availableEntity[secondBoard ? i + data.size / 2 : i - data.size / 2], {
+                        material: {
+                            $case: 'pbr',
+                            pbr: {
+                                texture: {
+                                    tex: {
+                                        $case: 'texture',
+                                        texture: { src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
+                                    }
+                                },
+                                alphaTexture: {
+                                    tex: {
+                                        $case: 'texture',
+                                        texture: {
+                                            src: 'images/alpha/alpha_screen.png',
+                                            filterMode: TextureFilterMode.TFM_TRILINEAR,
+                                            wrapMode: TextureWrapMode.TWM_REPEAT
+                                        }
+                                    }
+                                },
+                                emissiveColor: Color4.White(),
+                                emissiveIntensity: 0.9,
+                                emissiveTexture: {
+                                    tex: {
+                                        $case: 'texture',
+                                        texture: { src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
+                                    }
+                                },
+                                roughness: 1.0,
+                                specularIntensity: 0,
+                                metallic: 0,
+                                transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
+                            }
+                        }
+                    })
                     // Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
                     //     texture: Material.Texture.Common({
                     //         src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`,
@@ -146,6 +214,7 @@ export class GameLogic {
             )
         }
         for (let i = 0; i < data.size; i++) {
+            VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: true })
             const secondBoard = i < data.size / 2 ? false : true
             let iterator = secondBoard ? i - data.size / 2 : i
             MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
@@ -217,11 +286,11 @@ export class GameLogic {
         }
         const differenceId = getRandomNumbers()
         // console.log(differenceId)
-        function generateUniqueArray(): number[] {return Array.from({ length: steampunkGameConfig.maximumTexturePerType }, (_, i) => i + 1).sort(() => Math.random() - 0.5);}
+        function generateUniqueArray(): number[] { return Array.from({ length: steampunkGameConfig.maximumTexturePerType }, (_, i) => i + 1).sort(() => Math.random() - 0.5); }
         let typeCounter: Map<string, any> = new Map([
-            ['circle', {randomArray: [], index: 0}],
-            ['vertical', {randomArray: [], index: 0}],
-            ['horizontal', {randomArray: [], index: 0}],
+            ['circle', { randomArray: [], index: 0 }],
+            ['vertical', { randomArray: [], index: 0 }],
+            ['horizontal', { randomArray: [], index: 0 }],
         ])
         typeCounter.forEach((_, key) => typeCounter.get(key).randomArray = generateUniqueArray())
 
