@@ -114,7 +114,7 @@ export class GameLogic {
                     if (leftBoardEntity?.$case === "pbr" && leftBoardEntity.pbr.texture?.tex?.$case === 'texture') { leftBoardEntity.pbr.texture.tex.texture.src = `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png` }
 
                     const rightBoardEntity = Material.getMutable(steampunkGameState.availableEntity[!secondBoard ? i + data.size / 2 : i - data.size / 2]).material
-                    if (rightBoardEntity?.$case === "pbr" && rightBoardEntity.pbr.texture?.tex?.$case === 'texture') { rightBoardEntity.pbr.texture.tex.texture.src = `images/${this.objectDifference.get(i).type}/${objectDifferenceData.imageNumber}.png` }
+                    if (rightBoardEntity?.$case === "pbr" && rightBoardEntity.pbr.texture?.tex?.$case === 'texture') { rightBoardEntity.pbr.texture.tex.texture.src = `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png` }
 
                     // Material.setPbrMaterial(steampunkGameState.availableEntity[i], {
                     //     texture: Material.Texture.Common({
@@ -194,7 +194,7 @@ export class GameLogic {
                         roughness: 1.0,
                         specularIntensity: 0,
                         metallic: 0,
-                        transparencyMode: MaterialTransparencyMode.MTM_AUTO
+                        transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
                     }
                 }
             })
