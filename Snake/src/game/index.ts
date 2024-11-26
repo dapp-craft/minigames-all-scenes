@@ -6,6 +6,7 @@ import { engine } from '@dcl/sdk/ecs'
 import { BoardRenderer } from './boardRender'
 import { GameController } from './gameController'
 import { queue } from '@dcl-sdk/mini-games/src'
+import { initCamera, activateCamera, deactivateCamera } from './camera'
 
 const inputController = new InputController()
 
@@ -16,15 +17,19 @@ const renderController = new BoardRenderer(gameController)
 export async function initGame() {
   inputController.gameController = gameController
   gameController.onFinishCallback = onFinish
+
+  initCamera()
 }
 
 export async function startGame() {
+  activateCamera()
+  // activateCamera()
   gameController.start()
 }
 
 export async function onFinish() {
   // Upload the score to the leaderboard
-
+  deactivateCamera()
   queue.setNextPlayer()
 }
 
