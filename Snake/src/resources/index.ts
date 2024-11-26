@@ -13,7 +13,8 @@ export const STATIC_MODELS = [
   { src: modelsFolder + 'obj_terminal.gltf' },
   { src: modelsFolder + 'obj_text.gltf' },
   { src: modelsFolder + 'obj_sofa.gltf' },
-  { src: modelsFolder + 'obj_wall.gltf' }
+  { src: modelsFolder + 'obj_wall.gltf' },
+  { src: modelsFolder + 'obj_rules.gltf' },
 ]
 
 export const foodModel: PBGltfContainer = { src: modelsFolder + 'obj_snake02.gltf' }
