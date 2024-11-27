@@ -26,9 +26,9 @@
 			"alphaMode":"BLEND",
 			"doubleSided":true,
 			"emissiveFactor":[
-				1,
-				0.3419147729873657,
-				0.028426136821508408
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"extensions":{
 				"KHR_materials_specular":{
@@ -37,12 +37,6 @@
 			},
 			"name":"obj_heart",
 			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					1,
-					0.3419147729873657,
-					0.028426136821508408,
-					1
-				],
 				"baseColorTexture":{
 					"index":0
 				},
@@ -52,7 +46,7 @@
 	],
 	"meshes":[
 		{
-			"name":"obj_heart",
+			"name":"label_lives",
 			"primitives":[
 				{
 					"attributes":{
