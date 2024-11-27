@@ -18,7 +18,6 @@ const staticModels = [
     text,
     rules,
     bench,
-    heart
 ]
 
 export const setupStaticModels = () => {

@@ -11,7 +11,8 @@ type GameState = {
     rocketWindow: Entity
     generatedCartrige: any,
     syncModels: Array<Entity>,
-    playerHealth: number
+    playerHealth: number,
+    heartIcon: Entity
 }
 
 export let gameState: GameState = {
@@ -23,7 +24,8 @@ export let gameState: GameState = {
     rocketWindow: engine.addEntity(),
     generatedCartrige: new Map(),
     syncModels: [],
-    playerHealth: playerHealth
+    playerHealth: playerHealth,
+    heartIcon: engine.addEntity()
 }
 
 export const GameData = engine.defineComponent('game-data', {

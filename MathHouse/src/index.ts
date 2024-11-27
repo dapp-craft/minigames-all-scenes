@@ -7,7 +7,7 @@ import { setupStaticModels, setupStaticModelsFromGltf } from './staticModels/set
 import { exitCallback, getReadyToStart, initGame, restartCallback } from './game/game'
 import { board } from './board'
 import { randomLvl } from './levels'
-import { kitty } from './resources/resources'
+import { heart, kitty } from './resources/resources'
 import { generatedData } from './Types'
 import { readGltfLocators } from '../../common/locators'
 import { sceneParentEntity } from './globals'
@@ -55,6 +55,7 @@ const spawnInitialEntityPoll = async () => {
   syncEntity(gameState.rocketWindow, [Tween.componentId], 5200)
   syncEntity(gameState.levelCounter, [TextShape.componentId], catInRocketEntityId + entityAmount + counterEntity + 100)
   syncEntity(gameState.healthPoints, [TextShape.componentId], catInRocketEntityId + entityAmount + counterEntity + 101)
+  syncEntity(gameState.healthPoints, [TextShape.componentId], catInRocketEntityId + entityAmount + counterEntity + 102)
 
   for (let i = 0; i <= entityAmount; i++) {
     const entity = engine.addEntity()
@@ -95,12 +96,16 @@ const spawnInitialEntityPoll = async () => {
   Transform.create(gameState.levelCounter, { ...data.get('counter_level'), rotation: Quaternion.create(0, -.414, .175, 0), parent: sceneParentEntity })
   
   TextShape.create(gameState.healthPoints, {
-    text: `HP: ${playerHealth}`,
+    text: `${playerHealth}`,
     fontSize: 3,
     textAlign: 3
   })
   if (Transform.getOrNull(gameState.healthPoints) != null) return
   Transform.create(gameState.healthPoints, { ...data.get('counter_lives'), parent: sceneParentEntity })
+
+  GltfContainer.create(gameState.heartIcon, heart)
+  if (Transform.getOrNull(gameState.heartIcon) != null) return
+  Transform.create(gameState.heartIcon, { ...data.get('label_lives'), parent: sceneParentEntity })
 }
 
 export const generateArray = (data: generatedData) => {

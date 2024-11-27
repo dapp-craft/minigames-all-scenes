@@ -112,7 +112,7 @@ const initGameButtons = async () => {
                     const time = playerAnswer * timerConfig.iconAnimationGap + timerConfig.catIconAnimationTime + timerConfig.initialAnimationTimeGap
                     if (entityCounter == playerAnswer) {
                         console.log("WIN")
-                        soundManager.playSound('correctAnswerSound', soundConfig.volume)
+                        utils.timers.setTimeout(() => soundManager.playSound('correctAnswerSound', soundConfig.volume), time - 500)
                         nextLevelTimeOut = utils.timers.setTimeout(async () => {
                             await incrementUserProgress()
                             if (progressState.level >= maxLevel) runGameoverAnimation(WIN_DURATION).then(() => afterGame())
@@ -126,11 +126,8 @@ const initGameButtons = async () => {
                     }
                     else {
                         console.log("LOSE")
-                        utils.timers.setTimeout(() => {
-                            utils.timers.setTimeout(() => soundManager.playSound('wrongAnswerSound', 1), time - 200)
-                            nextLevelTimeOut = utils.timers.setTimeout(() => restartCallback(), time + 500)
-                        }, timerConfig.boardAndResoultDelay)
-
+                        utils.timers.setTimeout(() => soundManager.playSound('wrongAnswerSound', 1), time - 300)
+                        utils.timers.setTimeout(() => {nextLevelTimeOut = utils.timers.setTimeout(() => restartCallback(), time + 500)}, timerConfig.boardAndResoultDelay)
                     }
                 },
             )
@@ -140,7 +137,7 @@ const initGameButtons = async () => {
 
 const cheackPlayerHealthStatus = async () => {
     console.log("Player Health: ", gameState.playerHealth)
-    TextShape.getMutable(gameState.healthPoints).text = `HP: ${gameState.playerHealth}`
+    TextShape.getMutable(gameState.healthPoints).text = `${gameState.playerHealth}`
     if (gameState.playerHealth <= 0) {
         await incrementUserProgress()
         runGameoverAnimation(WIN_DURATION).then(() => afterGame())
