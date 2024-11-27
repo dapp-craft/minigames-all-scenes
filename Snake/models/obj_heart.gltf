@@ -18,29 +18,27 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_text"
+			"name":"obj_heart"
 		}
 	],
 	"materials":[
 		{
-			"alphaMode":"MASK",
+			"alphaMode":"BLEND",
+			"doubleSided":true,
 			"emissiveFactor":[
 				1,
 				1,
 				1
 			],
-			"emissiveTexture":{
-				"index":0
-			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
 				}
 			},
-			"name":"obj_text02",
+			"name":"obj_heart",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":1
+					"index":0
 				},
 				"metallicFactor":0
 			}
@@ -48,7 +46,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.010",
+			"name":"obj_heart",
 			"primitives":[
 				{
 					"attributes":{
@@ -66,78 +64,74 @@
 		{
 			"sampler":0,
 			"source":0
-		},
-		{
-			"sampler":0,
-			"source":0
 		}
 	],
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_text02",
-			"uri":"textures/obj_text02.png"
+			"name":"obj_heart",
+			"uri":"textures/obj_heart.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":93,
+			"count":4,
 			"max":[
-				7.003212928771973,
-				8.540876388549805,
-				6.093242645263672
+				0.2499999850988388,
+				0.25,
+				2.1855694143368964e-08
 			],
 			"min":[
-				-6.999864101409912,
-				0.0057092271745204926,
-				-6.5028076171875
+				-0.2499999850988388,
+				-0.25,
+				-2.1855694143368964e-08
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":93,
+			"count":4,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":93,
+			"count":4,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":243,
+			"count":6,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1116,
+			"byteLength":48,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1116,
-			"byteOffset":1116,
+			"byteLength":48,
+			"byteOffset":48,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":744,
-			"byteOffset":2232,
+			"byteLength":32,
+			"byteOffset":96,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":486,
-			"byteOffset":2976,
+			"byteLength":12,
+			"byteOffset":128,
 			"target":34963
 		}
 	],
@@ -149,8 +143,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":3464,
-			"uri":"obj_text.bin"
+			"byteLength":140,
+			"uri":"obj_heart.bin"
 		}
 	]
 }
