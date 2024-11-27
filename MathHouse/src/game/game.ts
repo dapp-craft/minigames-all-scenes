@@ -117,15 +117,20 @@ const initGameButtons = async () => {
                             await incrementUserProgress()
                             if (progressState.level >= maxLevel) runGameoverAnimation(WIN_DURATION).then(() => afterGame())
                             else {
-                                runWinAnimation(WIN_DURATION)
-                                nextLevelTimeOut = utils.timers.setTimeout(() => startGame(), WIN_DURATION)
+                                utils.timers.setTimeout(() => {
+                                    runWinAnimation(WIN_DURATION)
+                                    nextLevelTimeOut = utils.timers.setTimeout(() => startGame(), WIN_DURATION)
+                                }, timerConfig.boardAndResoultDelay)
                             }
                         }, time)
                     }
                     else {
                         console.log("LOSE")
-                        soundManager.playSound('wrongAnswerSound', soundConfig.volume)
-                        nextLevelTimeOut = utils.timers.setTimeout(() => restartCallback(), time + 500)
+                        utils.timers.setTimeout(() => {
+                            utils.timers.setTimeout(() => soundManager.playSound('wrongAnswerSound', 1), time - 200)
+                            nextLevelTimeOut = utils.timers.setTimeout(() => restartCallback(), time + 500)
+                        }, timerConfig.boardAndResoultDelay)
+
                     }
                 },
             )
@@ -134,7 +139,7 @@ const initGameButtons = async () => {
 }
 
 const cheackPlayerHealthStatus = async () => {
-    console.log("Player Health: ", gameState.playerHealth )
+    console.log("Player Health: ", gameState.playerHealth)
     TextShape.getMutable(gameState.healthPoints).text = `HP: ${gameState.playerHealth}`
     if (gameState.playerHealth <= 0) {
         await incrementUserProgress()

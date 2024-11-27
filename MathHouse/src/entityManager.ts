@@ -132,7 +132,7 @@ export class gameEntityManager {
             Before CatsInterval:           ${this.catsInterval}
             Before catsWaveDelay:          ${this.catsWaveDelay}
           `);
-        this.catsMovingDuration = this.catsMovingDuration * (1 - progressState.level / (maxLevel * timerConfig.catsTimingCoefficient))
+        this.catsMovingDuration = this.catsMovingDuration * (1 - progressState.level / (maxLevel * timerConfig.catsTimingCoefficient) - 0.1)
         this.catsInterval = this.catsInterval * (1 - progressState.level / (maxLevel * timerConfig.catsTimingCoefficient))
         this.catsWaveDelay = this.catsWaveDelay * (1 - progressState.level / (maxLevel * (timerConfig.catsTimingCoefficient * .75)))
         console.log(`

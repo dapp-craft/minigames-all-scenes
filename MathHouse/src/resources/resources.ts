@@ -18,6 +18,7 @@ export const frame: PBGltfContainer = { src: modelsFolder + 'obj_frame.gltf' };
 export const text: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
 export const rules: PBGltfContainer = { src: modelsFolder + 'obj_rules.gltf' };
 export const bench : PBGltfContainer = { src: modelsFolder + 'obj_bench.gltf' };
+export const heart : PBGltfContainer = { src: modelsFolder + 'obj_heart.gltf' };
 
 
 //Results Screen
