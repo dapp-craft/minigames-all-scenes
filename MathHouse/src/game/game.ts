@@ -108,7 +108,7 @@ const initGameButtons = async () => {
                     console.log(entityCounter, playerAnswer)
                     rocketBoard.setLeftCounter(playerAnswer)
                     rocketBoard.setRightCounter(entityCounter)
-                    rocketBoard.showBoard(playerAnswer)
+                    rocketBoard.showBoard(entityCounter)
                     const time = playerAnswer * timerConfig.iconAnimationGap + timerConfig.catIconAnimationTime + timerConfig.initialAnimationTimeGap
                     if (entityCounter == playerAnswer) {
                         console.log("WIN")
