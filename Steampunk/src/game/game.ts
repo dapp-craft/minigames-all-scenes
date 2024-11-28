@@ -84,17 +84,6 @@ export async function countdown(cb: () => void, number: number, stop?: boolean) 
 
 const spawnButton = async () => {
   const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
-  new ui.MenuButton(
-    { ...data.get("button_level_4")!, parent: sceneParentEntity },
-    ui.uiAssets.shapes.RECT_PURPLE,
-    ui.uiAssets.icons.hint,
-    `HINT`,
-    () => {
-      gameLogic.getHint()
-    },
-    false,
-    500
-  )
   for (let i = 1; i <= 3; i++) {
     let button = new ui.MenuButton(
       { ...data.get(`button_level_${i}`), parent: sceneParentEntity },

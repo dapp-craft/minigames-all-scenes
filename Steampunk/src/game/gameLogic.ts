@@ -360,6 +360,8 @@ export class GameLogic {
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n0/0`
+        levelButtons[this.playerLevel - 1].buttonShapeEnabled = ui.uiAssets.shapes.SQUARE_GREEN
+        levelButtons[this.playerLevel - 1].enable()
     }
 
     private updateActiveLevelButtonColor() {
