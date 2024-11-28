@@ -27,6 +27,7 @@ export class GameLogic {
         playerLevel: [],
         playerScore: 0,
     }
+    private gameIsEnded = false
 
     constructor() {
         this.gameIsDone = new Promise((res) => { this.resolveReady = res })
@@ -73,17 +74,19 @@ export class GameLogic {
             this.playerReturnData.playerStartTime = Date.now()
             this.playerReturnData.playerFinishTime = 999999999
         }
+        this.gameIsEnded = false
         // for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
         this.hintsAmount = hintsAmount[this.playerLevel - 1]
         VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
         this.correctSmashCounter = 0
-        TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Hits \n${this.correctSmashCounter}`
+        // TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n${this.correctSmashCounter}`
         this.differencesFound = []
         utils.timers.clearInterval(this.hintTimeOut)
         console.log(this.playerLevel, this.pictureNumber, this.correctSmashCounter, this.differencesFound)
     }
 
     private async playGame() {
+        if (this.gameIsEnded) return
         await this.generateDifference()
         this.resetProgress(false)
         this.startTimer()
@@ -304,7 +307,7 @@ export class GameLogic {
             TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${correctTargetAmount[this.playerLevel - 1]}`
             this.playerReturnData.playerScore = this.playerReturnData.playerScore + steampunkGameConfig.awardMultiplier
         } else this.playerReturnData.playerScore = this.playerReturnData.playerScore - steampunkGameConfig.awardMultiplier
-        TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Hits \n${this.playerReturnData.playerScore}`
+        TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n${this.playerReturnData.playerScore}`
         console.log("Score: ", this.correctSmashCounter, "Return Score: ", this.playerReturnData.playerScore)
     }
 
@@ -348,6 +351,7 @@ export class GameLogic {
     }
 
     public gameEnd() {
+        this.gameIsEnded = true
         disableCamera()
         engine.removeSystem('countdown-system')
         for (let i = 0; i <= steampunkGameConfig.targetEntityAmount; i++) {
@@ -360,6 +364,7 @@ export class GameLogic {
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n0/0`
+        TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n0`
         levelButtons[this.playerLevel - 1].buttonShapeEnabled = ui.uiAssets.shapes.SQUARE_GREEN
         levelButtons[this.playerLevel - 1].enable()
     }

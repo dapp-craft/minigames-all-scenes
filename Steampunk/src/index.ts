@@ -110,7 +110,7 @@ const generateInitialEntity = async () => {
 
     if (Transform.getOrNull(hits) == null || TextShape.getOrNull(hits) == null) {
         Transform.create(hits, { ...data.get('counter_foundObjects'), parent: sceneParentEntity })
-        TextShape.create(hits, { text: 'Hits \n0', fontSize: 2 })
+        TextShape.create(hits, { text: 'Score \n0', fontSize: 2 })
     }
     if (Transform.getOrNull(findCounter) == null || TextShape.getOrNull(findCounter) == null) {
         Transform.create(findCounter, { ...data.get('counter_foundObjects'), position: { ...data.get('counter_foundObjects')!.position, x: data.get('counter_foundObjects')!.position.x - 1.5 }, parent: sceneParentEntity })
