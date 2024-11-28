@@ -6,8 +6,8 @@ import { readGltfLocators } from "../../../common/locators"
 import { runWinAnimation } from '../../../common/effects'
 import { soundManager } from '..'
 import { Color4, Vector3 } from '@dcl/sdk/math'
-import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { countdown, timer } from './game'
+import { queue, sceneParentEntity, ui } from '@dcl-sdk/mini-games/src'
+import { countdown, levelButtons, timer } from './game'
 import { disableCamera } from './cameraEntity'
 
 export class GameLogic {
@@ -92,7 +92,8 @@ export class GameLogic {
         const data = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
-        for(let i = 0; i <= steampunkGameConfig.targetEntityAmount; i++) {
+        this.updateActiveLevelButtonColor()
+        for (let i = 0; i <= steampunkGameConfig.targetEntityAmount; i++) {
             // Transform.getMutable(steampunkGameState.availableEntity[i]).scale = Vector3.Zero()
             VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
             pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
@@ -349,7 +350,7 @@ export class GameLogic {
     public gameEnd() {
         disableCamera()
         engine.removeSystem('countdown-system')
-        for(let i = 0; i <= steampunkGameConfig.targetEntityAmount; i++) {
+        for (let i = 0; i <= steampunkGameConfig.targetEntityAmount; i++) {
             VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
             pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
         }
@@ -359,5 +360,12 @@ export class GameLogic {
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n0/0`
+    }
+
+    private updateActiveLevelButtonColor() {
+        levelButtons.forEach((button, i) => {
+            button.buttonShapeEnabled = this.playerLevel === i + 1 ? ui.uiAssets.shapes.SQUARE_YELLOW : ui.uiAssets.shapes.SQUARE_GREEN
+            if (button.enabled) button.enable()
+        })
     }
 }

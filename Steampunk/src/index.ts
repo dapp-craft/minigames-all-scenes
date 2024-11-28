@@ -46,9 +46,7 @@ export async function main() {
 }
 
 const generateInitialEntity = async () => {
-
     // TODO SYNC
-
     for (let i = 0; i <= steampunkGameConfig.initialEntityAmount; i++) {
         const entity = engine.addEntity()
         steampunkGameState.availableEntity.push(entity)

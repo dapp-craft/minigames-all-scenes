@@ -10,6 +10,7 @@ import { enableCamera } from './cameraEntity'
 
 export let timer: ui.Timer3D
 let startTimeOut: utils.TimerId
+export let levelButtons: ui.MenuButton[] = []
 
 export const initGame = async () => {
   console.log('INIT GAME')
@@ -95,7 +96,7 @@ const spawnButton = async () => {
     500
   )
   for (let i = 1; i <= 3; i++) {
-    new ui.MenuButton(
+    let button = new ui.MenuButton(
       { ...data.get(`button_level_${i}`), parent: sceneParentEntity },
       ui.uiAssets.shapes.SQUARE_GREEN,
       ui.uiAssets.numbers[i],
@@ -106,23 +107,6 @@ const spawnButton = async () => {
       false,
       500
     )
+    levelButtons.push(button)
   }
 }
-
-// async function initCountdownNumbers() {
-// const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
-// timer = new ui.Timer3D(
-//     {
-//         parent: sceneParentEntity,
-//         position: data.get('counter_countdown')?.position,
-//         rotation: Quaternion.fromEulerDegrees(0, 0, 0),
-//         scale: Vector3.create(.5, .5, .5)
-//     },
-//     1,
-//     1,
-//     false,
-//     24353
-// )
-// console.log(timer)
-// timer.hide()
-// }
