@@ -15,7 +15,7 @@ const handlers = {
     toggleSfx: () => {}
 }
 
-const libraryReady = initMiniGame('', TIME_LEVEL_MOVES, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
+const libraryReady = initMiniGame('e5ec213a-628f-4ef7-8f6f-0cb543da0701', TIME_LEVEL_MOVES, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
 
 executeTask(async () => {
     for (const model of STATIC_MODELS) {

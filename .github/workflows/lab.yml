@@ -1,0 +1,33 @@
+name: lab
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Lab/**'
+      - 'common/**'
+      - 'package.json'
+    tags:
+      - 'preview/lab-v*'
+      - 'release/lab-v*'
+
+jobs:
+  testing:
+    if: github.ref_type != 'tag'
+    uses: ./.github/workflows/.deploy_worlds.yml
+    with:
+      directory: Lab
+      worlds: test.v01d.crossverse.eth
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
+
+  staging:
+    if: github.ref_type == 'tag'
+    uses: ./.github/workflows/.deploy_genesis.yml
+    with:
+      directory: Lab
+      coordinates: '["61,-22"]'
+      mainnet: ${{ startsWith(github.ref_name, 'release') }}
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}

@@ -2,8 +2,8 @@
   "ecs7": true,
   "runtimeVersion": "7",
   "display": {
-    "title": "",
-    "description": "",
+    "title": "Chemical Clash",
+    "description": "Minigame 'Chemical Clash'",
     "navmapThumbnail": "images/scene-thumbnail.png",
     "favicon": "favicon_asset"
   },
