@@ -6,6 +6,7 @@ import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { engine } from '@dcl/sdk/ecs'
 import { levelAmount, steampunkGameConfig } from '../gameConfig'
 import { updatePlayerProgress } from './syncData'
+import { enableCamera } from './cameraEntity'
 
 export let timer: ui.Timer3D
 let startTimeOut: utils.TimerId
@@ -21,6 +22,7 @@ export const initGame = async () => {
 export function getReadyToStart() {
   console.log('Get Ready to start!')
   // runCountdown().then(() => startGame())
+  enableCamera()
   startGame();
 }
 

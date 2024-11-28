@@ -13,6 +13,7 @@ import { getReadyToStart, initGame } from './game/game'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { setupEffects } from '../../common/effects'
 import { SoundManager } from './game/soundManager'
+import { init } from './game/cameraEntity'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 //temp
@@ -31,7 +32,7 @@ export let gameLogic = new GameLogic()
 export const soundManager = new SoundManager()
 
 export async function main() {
-    setupEffects(Vector3.create(0, 2.5, -4.3));
+    setupEffects(Vector3.create(0, 2.7, -6));
 
     await libraryReady
 
@@ -40,6 +41,8 @@ export async function main() {
     await generateInitialEntity()
 
     initGame()
+    
+    init()
 }
 
 const generateInitialEntity = async () => {

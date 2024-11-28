@@ -8,6 +8,7 @@ import { soundManager } from '..'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { countdown, timer } from './game'
+import { disableCamera } from './cameraEntity'
 
 export class GameLogic {
     private correctSmashCounter = 0
@@ -346,6 +347,7 @@ export class GameLogic {
     }
 
     public gameEnd() {
+        disableCamera()
         engine.removeSystem('countdown-system')
         for(let i = 0; i <= steampunkGameConfig.targetEntityAmount; i++) {
             VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
