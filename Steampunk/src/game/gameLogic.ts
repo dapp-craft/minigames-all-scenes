@@ -1,7 +1,7 @@
 import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, engine, Entity, GltfContainer, InputAction, Material, MaterialTransparencyMode, MeshCollider, MeshRenderer, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { PlayerReturnData, steampunkGameState } from "../gameState"
-import { correctTargetAmount, hintsAmount, levelAmount, steampunkGameConfig } from "../gameConfig"
+import { correctTargetAmount, hintsAmount, levelAmount, soundConfig, steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
 import { runWinAnimation } from '../../../common/effects'
 import { soundManager } from '..'
@@ -109,11 +109,11 @@ export class GameLogic {
                     if (this.objectDifference.get(i).isCorrect) {
                         this.playMissAnimation(secondBoard ? 'firstBoard' : 'secondBoard');
                         this.changeCounter(false)
-                        return soundManager.playSound('incorrect')
+                        return soundManager.playSound('incorrect', soundConfig.volume)
                     }
                     this.objectDifference.get(i).isCorrect = true
                     this.objectDifference.get(!secondBoard ? i + data.size / 2 : i - data.size / 2).isCorrect = true
-                    soundManager.playSound('correct')
+                    soundManager.playSound('correct', soundConfig.volume)
                     const objectDifferenceData = this.objectDifference.get(i)
                     // TODO ReFACTOR
                     Material.createOrReplace(steampunkGameState.availableEntity[i], {

@@ -1,10 +1,10 @@
 import * as utils from '@dcl-sdk/utils'
-import { engine, executeTask, GltfContainer, InputAction, Material, MeshCollider, MeshRenderer, pointerEventsSystem, TextShape, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
+import { AudioSource, engine, executeTask, GltfContainer, InputAction, Material, MeshCollider, MeshRenderer, pointerEventsSystem, TextShape, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { MOVES, POINTS_TIME, SCORE, TIME, TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
-import { GAME_ID, STEAMPUNK_SYNC_ID, steampunkGameConfig } from './gameConfig'
+import { GAME_ID, soundConfig, STEAMPUNK_SYNC_ID, steampunkGameConfig } from './gameConfig'
 import { steampunkGameState } from './gameState'
 import { syncEntity } from '@dcl/sdk/network'
 import { GameLogic } from './game/gameLogic'
@@ -12,7 +12,7 @@ import { setupStaticModels } from './staticModels/setupStaticModels'
 import { getReadyToStart, initGame } from './game/game'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { setupEffects } from '../../common/effects'
-import { SoundManager } from './game/soundManager'
+import { mainThereme, SoundManager } from './game/soundManager'
 import { init } from './game/cameraEntity'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
@@ -21,8 +21,8 @@ const handlers = {
     start: () => getReadyToStart(),
     exit: () => { gameLogic.gameEnd() },
     restart: () => getReadyToStart(),
-    toggleMusic: () => { },
-    toggleSfx: () => { }
+    toggleMusic: () => playBackgroundMusic(),
+    toggleSfx: () => toggleVolume()
 }
 
 const libraryReady = initMiniGame(GAME_ID, POINTS_TIME, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
@@ -41,7 +41,7 @@ export async function main() {
     await generateInitialEntity()
 
     initGame()
-    
+
     init()
 }
 
@@ -87,7 +87,7 @@ const generateInitialEntity = async () => {
     Transform.create(firstBoard, { ...data.get('obj_screen_1'), parent: steampunkGameState.listOfEntity.get('display') })
     Transform.create(secondBoard, { ...data.get('obj_screen_2'), parent: steampunkGameState.listOfEntity.get('display') })
     Transform.create(hitZone, { position: Vector3.create(0, 0, -6), rotation: Quaternion.create(1, 1, 1, 1), scale: Vector3.create(.5, 0, .5), parent: steampunkGameState.listOfEntity.get('display') })
-    Transform.create(missIndicator, { position: {...Transform.get(hitZone).position, z: Transform.get(hitZone).position.z + .001}, rotation: Quaternion.create(0, 0, 1, 1), scale: Vector3.create(1, 1, 1), parent: steampunkGameState.listOfEntity.get('display') })
+    Transform.create(missIndicator, { position: { ...Transform.get(hitZone).position, z: Transform.get(hitZone).position.z + .001 }, rotation: Quaternion.create(0, 0, 1, 1), scale: Vector3.create(1, 1, 1), parent: steampunkGameState.listOfEntity.get('display') })
 
     MeshRenderer.setPlane(firstBoard)
     MeshRenderer.setPlane(secondBoard)
@@ -115,7 +115,17 @@ const generateInitialEntity = async () => {
         TextShape.create(hits, { text: 'Hits \n0', fontSize: 2 })
     }
     if (Transform.getOrNull(findCounter) == null || TextShape.getOrNull(findCounter) == null) {
-        Transform.create(findCounter, { ...data.get('counter_foundObjects'), position: {...data.get('counter_foundObjects')!.position, x: data.get('counter_foundObjects')!.position.x - 1.5}, parent: sceneParentEntity })
+        Transform.create(findCounter, { ...data.get('counter_foundObjects'), position: { ...data.get('counter_foundObjects')!.position, x: data.get('counter_foundObjects')!.position.x - 1.5 }, parent: sceneParentEntity })
         TextShape.create(findCounter, { text: 'Find \n0/0', fontSize: 2 })
     }
+}
+
+const playBackgroundMusic = () => {
+    if (AudioSource.getMutable(mainThereme).volume != 0) AudioSource.getMutable(mainThereme).volume = 0
+    else AudioSource.getMutable(mainThereme).volume = 0.07
+}
+
+const toggleVolume = () => {
+    if (soundConfig.volume != 0) soundConfig.volume = 0
+    else soundConfig.volume = 0.5
 }

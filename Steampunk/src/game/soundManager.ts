@@ -16,7 +16,7 @@ import { correct, incorrect } from '../resources/resources'
   
   export const mainThereme = engine.addEntity()
   Transform.create(mainThereme, {parent: engine.PlayerEntity})
-  AudioSource.create(mainThereme, {audioClipUrl: `sounds/Toads_theme.mp3`, loop: true, playing: true, volume: 0.07})
+  AudioSource.create(mainThereme, {audioClipUrl: `sounds/Steamp_theme.mp3`, loop: true, playing: true, volume: 0.07})
   
   export class SoundManager {
     private soundsStorage: Entity[] = []

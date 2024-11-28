@@ -20,6 +20,10 @@ export const correctTargetAmount = [
     1, 2, 6, 6, 6, 6, 6
 ]
 
+export const soundConfig = {
+    volume: 0.5
+}
+
 export const STEAMPUNK_SYNC_ID = 3000
 
 export const hintsAmount: Array<number> = [3, 2, 1, 1, 1]
