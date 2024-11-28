@@ -1,0 +1,32 @@
+name: cups
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Cups/**'
+      - 'common/**'
+      - 'package.json'
+    tags:
+      - 'preview/cups-v*'
+      - 'release/cups-v*'
+
+jobs:
+  testing:
+    if: github.ref_type != 'tag'
+    uses: ./.github/workflows/.deploy_worlds.yml
+    with:
+      directory: Cups
+      worlds: test.v01d.crossverse.eth
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
+
+  staging:
+    if: github.ref_type == 'tag'
+    uses: ./.github/workflows/.deploy_genesis.yml
+    with:
+      directory: Cups
+      coordinates: '["61,-22"]'
+      mainnet: ${{ startsWith(github.ref_name, 'release') }}
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
