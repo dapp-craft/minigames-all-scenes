@@ -31,7 +31,7 @@ const staticModels = [
     num01,
     num02,
     pipes,
-    // rules,
+    rules,
     smoker01,
     stone01,
     stone02,
