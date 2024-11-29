@@ -101,7 +101,7 @@ export class GameLogic {
             VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
             pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
         }
-        for (let i = 0; i < data.size; i++) {
+        for (let i = 0; i < (data.size * 2 - 1); i++) {
             pointerEventsSystem.onPointerDown(
                 {
                     entity: steampunkGameState.availableEntity[i],
@@ -109,14 +109,14 @@ export class GameLogic {
                 },
                 () => {
                     console.log(i, correctTargetAmount[this.playerLevel])
-                    const secondBoard = i < data.size / 2 ? false : true
+                    const secondBoard = i > data.size - 1 ? false : true
                     if (this.objectDifference.get(i).isCorrect) {
                         this.playMissAnimation(secondBoard ? 'firstBoard' : 'secondBoard');
                         this.changeCounter(false)
                         return soundManager.playSound('incorrect', soundConfig.volume)
                     }
                     this.objectDifference.get(i).isCorrect = true
-                    this.objectDifference.get(!secondBoard ? i + data.size / 2 : i - data.size / 2).isCorrect = true
+                    this.objectDifference.get(secondBoard ? i + data.size : i - data.size).isCorrect = true
                     soundManager.playSound('correct', soundConfig.volume)
                     const objectDifferenceData = this.objectDifference.get(i)
                     // TODO ReFACTOR
@@ -154,8 +154,8 @@ export class GameLogic {
                                 transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
                             }
                         }
-                    })
-                    Material.createOrReplace(steampunkGameState.availableEntity[!secondBoard ? i + data.size / 2 : i - data.size / 2], {
+                    }) 
+                    Material.createOrReplace(steampunkGameState.availableEntity[secondBoard ? i + data.size : i - data.size], {
                         material: {
                             $case: 'pbr',
                             pbr: {
@@ -206,54 +206,55 @@ export class GameLogic {
                 }
             )
         }
-        for (let i = 0; i < data.size; i++) {
-            VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: true })
-            const secondBoard = i < data.size / 2 ? false : true
-            // let iterator = secondBoard ? i - data.size / 2 : i
-            MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
-            MeshCollider.setPlane(steampunkGameState.availableEntity[i])
-            Transform.createOrReplace(steampunkGameState.availableEntity[i], {
-                ...data.get(`obj_difference_${i + 1}`),
-                parent: steampunkGameState.listOfEntity.get('firstBoard')
-            })
-            this.objectDifference.get(i)
-            // TODO REFACTOR
-            Material.createOrReplace(steampunkGameState.availableEntity[i], {
-                material: {
-                    $case: 'pbr',
-                    pbr: {
-                        texture: {
-                            tex: {
-                                $case: 'texture',
-                                texture: { src: `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
-                            }
-                        },
-                        alphaTexture: {
-                            tex: {
-                                $case: 'texture',
-                                texture: {
-                                    src: 'images/alpha/alpha_screen.png',
-                                    filterMode: TextureFilterMode.TFM_TRILINEAR,
-                                    wrapMode: TextureWrapMode.TWM_REPEAT
+        const placeObjects = (secondBoard: boolean) => {
+            for (let i = secondBoard ? data.size : 0; i < (secondBoard ? data.size * 2 - 1 : data.size - 1); i++) {
+                VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: true })
+                MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
+                MeshCollider.setPlane(steampunkGameState.availableEntity[i])
+                Transform.createOrReplace(steampunkGameState.availableEntity[i], {
+                    ...data.get(`obj_difference_${secondBoard ? i + 1 - data.size : i + 1}`),
+                    parent: steampunkGameState.listOfEntity.get(secondBoard ? "secondBoard" : "firstBoard")
+                })
+                // TODO REFACTOR
+                Material.createOrReplace(steampunkGameState.availableEntity[i], {
+                    material: {
+                        $case: 'pbr',
+                        pbr: {
+                            texture: {
+                                tex: {
+                                    $case: 'texture',
+                                    texture: { src: `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
                                 }
-                            }
-                        },
-                        emissiveColor: Color4.White(),
-                        emissiveIntensity: 0.9,
-                        emissiveTexture: {
-                            tex: {
-                                $case: 'texture',
-                                texture: { src: `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
-                            }
-                        },
-                        roughness: 1.0,
-                        specularIntensity: 0,
-                        metallic: 0,
-                        transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
+                            },
+                            alphaTexture: {
+                                tex: {
+                                    $case: 'texture',
+                                    texture: {
+                                        src: 'images/alpha/alpha_screen.png',
+                                        filterMode: TextureFilterMode.TFM_TRILINEAR,
+                                        wrapMode: TextureWrapMode.TWM_REPEAT
+                                    }
+                                }
+                            },
+                            emissiveColor: Color4.White(),
+                            emissiveIntensity: 0.9,
+                            emissiveTexture: {
+                                tex: {
+                                    $case: 'texture',
+                                    texture: { src: `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
+                                }
+                            },
+                            roughness: 1.0,
+                            specularIntensity: 0,
+                            metallic: 0,
+                            transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
+                        }
                     }
-                }
-            })
+                })
+            }
         }
+        placeObjects(false)
+        placeObjects(true)
     }
 
     private async generateDifference() {
@@ -265,7 +266,7 @@ export class GameLogic {
             const result = [];
             for (let i = 0; i < correctTargetAmount[this.playerLevel - 1]; i++) {
                 let random;
-                do { random = Math.floor(Math.random() * boardLocators.size / 2) + 1 }
+                do { random = Math.floor(Math.random() * boardLocators.size) + 1 }
                 while (result[random] !== undefined)
                 result[random] = random
             }
@@ -282,10 +283,10 @@ export class GameLogic {
         typeCounter.forEach((_, key) => typeCounter.get(key).randomArray = generateUniqueArray())
 
         const typeHandler = (i: number) => {
-            console.log(typeCounter.get(this.objectDifference.get(i).type));
-            console.log(this.objectDifference.get(i).type)
+            // console.log(typeCounter.get(this.objectDifference.get(i).type));
+            // console.log(this.objectDifference.get(i).type)
             this.objectDifference.get(i).imageNumber = typeCounter.get(this.objectDifference.get(i).type).randomArray[typeCounter.get(this.objectDifference.get(i).type).index]
-            // this.objectDifference.get(i + boardLocators.size / 2).imageNumber = typeCounter.get(this.objectDifference.get(i).type).randomArray[typeCounter.get(this.objectDifference.get(i).type).index]
+            this.objectDifference.get(i + boardLocators.size).imageNumber = typeCounter.get(this.objectDifference.get(i).type).randomArray[typeCounter.get(this.objectDifference.get(i).type).index]
             typeCounter.get(this.objectDifference.get(i).type).index++
         }
         for (let i = 0; i <= (boardLocators.size - 1); i++) {
@@ -295,7 +296,7 @@ export class GameLogic {
             if (transform!.scale.x - transform!.scale.y <= -0.05) type = "vertical"
             else if (transform!.scale.x - transform!.scale.y >= 0.05) type = "horizontal"
             this.objectDifference.set(i, { transform, isCorrect, type, imageNumber: 1 })
-            // this.objectDifference.set(i + boardLocators.size / 2, { transform, isCorrect, type, imageNumber: 1 })
+            this.objectDifference.set(i + boardLocators.size, { transform, isCorrect, type, imageNumber: 1 })
             typeHandler(i)
         }
         this.objectDifference.forEach((e, key) => console.log(key, e))
