@@ -5,7 +5,7 @@ import { SnakeHead } from './objects/snakeHead'
 import { SnakeBody } from './objects/snakeBody'
 import { Direction, Drawable, Position, SnakePart } from './objects/type'
 import { BoardRenderer } from './boardRender'
-
+import { playGameOverSound, playHitSound, playPowerUpSound, playStartSound } from './sound'
 export class GameController {
   private _boardSize: { width: number; height: number }
   private _snake: SnakeHead | undefined = undefined
@@ -63,6 +63,8 @@ export class GameController {
     this.onStartCallback()
 
     this.setSnakeDirection(Direction.UP)
+
+    playStartSound()
   }
 
   public finish() {
@@ -80,6 +82,7 @@ export class GameController {
     }
 
     this._inGame = false
+    playGameOverSound()
     this.onFinishCallback()
   }
 
@@ -97,6 +100,7 @@ export class GameController {
     if (this._snake) this._snake.move()
 
     if (this.checkCollision()) {
+      playHitSound()
       this.finish()
       return
     }
@@ -107,6 +111,8 @@ export class GameController {
         this._snake.addTail()
         this._food.terminate()
         this._food = undefined
+
+        playPowerUpSound()
 
         // Update score
         let scoreToAdd = 1
@@ -181,6 +187,7 @@ export class GameController {
         head.position.y < 0 ||
         head.position.y >= this._boardSize.height
       ) {
+        playHitSound()
         this.finish()
       }
     }

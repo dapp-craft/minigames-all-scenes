@@ -20,3 +20,11 @@ export const STATIC_MODELS = [
 export const foodModel: PBGltfContainer = { src: modelsFolder + 'obj_snake02.gltf' }
 export const snakeBodyModel: PBGltfContainer = { src: modelsFolder + 'obj_snake01.gltf' }
 export const cellModel: PBGltfContainer = { src: modelsFolder + 'obj_grid01.gltf' }
+
+// SOUNDS
+export const gameOverSound = soundsFolder + 'Game_Over.mp3' 
+export const hitSound = soundsFolder + 'hit.mp3' 
+export const playSound = soundsFolder + 'play.mp3' 
+export const powerUpSound = soundsFolder + 'powerup.mp3' 
+export const mainThemeSound = soundsFolder + 'Snake_music.mp3' 
+
