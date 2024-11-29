@@ -62,7 +62,7 @@ export class BoardRenderer {
         })
 
         // Choose model based on snake part or head
-        GltfContainer.createOrReplace(entity, snakeBodyModel)
+        if (!GltfContainer.getOrNull(entity)) GltfContainer.createOrReplace(entity, snakeBodyModel)
 
         snakePart = snakePart.next
         // console.log('Snake part rendered', snakePart)
@@ -81,7 +81,8 @@ export class BoardRenderer {
         parent: this._entity,
         scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1)
       })
-      GltfContainer.createOrReplace(entity, foodModel)
+      if (!GltfContainer.getOrNull(entity)) GltfContainer.createOrReplace(entity, foodModel)
+
     }
   }
 
