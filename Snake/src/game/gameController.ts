@@ -53,7 +53,7 @@ export class GameController {
       this._food.terminate()
     }
 
-    this._snake = new SnakeHead({ x: 0, y: 0 })
+    this._snake = new SnakeHead({ x: 10, y: 7 })
     this._snake.addTail()
     this._snake.addTail()
 
