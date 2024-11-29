@@ -209,14 +209,14 @@ export class GameLogic {
         for (let i = 0; i < data.size; i++) {
             VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: true })
             const secondBoard = i < data.size / 2 ? false : true
-            let iterator = secondBoard ? i - data.size / 2 : i
+            // let iterator = secondBoard ? i - data.size / 2 : i
             MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
             MeshCollider.setPlane(steampunkGameState.availableEntity[i])
             Transform.createOrReplace(steampunkGameState.availableEntity[i], {
-                ...data.get(`obj_difference${secondBoard ? '1' : '2'}_${iterator + 1}`),
-                parent: sceneParentEntity
+                ...data.get(`obj_difference_${i + 1}`),
+                parent: steampunkGameState.listOfEntity.get('firstBoard')
             })
-            this.objectDifference.get(iterator)
+            this.objectDifference.get(i)
             // TODO REFACTOR
             Material.createOrReplace(steampunkGameState.availableEntity[i], {
                 material: {
@@ -225,7 +225,7 @@ export class GameLogic {
                         texture: {
                             tex: {
                                 $case: 'texture',
-                                texture: { src: `images/${this.objectDifference.get(iterator).type}${(!this.objectDifference.get(iterator)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(iterator).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
+                                texture: { src: `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
                             }
                         },
                         alphaTexture: {
@@ -243,7 +243,7 @@ export class GameLogic {
                         emissiveTexture: {
                             tex: {
                                 $case: 'texture',
-                                texture: { src: `images/${this.objectDifference.get(iterator).type}${(!this.objectDifference.get(iterator)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(iterator).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
+                                texture: { src: `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
                             }
                         },
                         roughness: 1.0,
@@ -285,17 +285,17 @@ export class GameLogic {
             console.log(typeCounter.get(this.objectDifference.get(i).type));
             console.log(this.objectDifference.get(i).type)
             this.objectDifference.get(i).imageNumber = typeCounter.get(this.objectDifference.get(i).type).randomArray[typeCounter.get(this.objectDifference.get(i).type).index]
-            this.objectDifference.get(i + boardLocators.size / 2).imageNumber = typeCounter.get(this.objectDifference.get(i).type).randomArray[typeCounter.get(this.objectDifference.get(i).type).index]
+            // this.objectDifference.get(i + boardLocators.size / 2).imageNumber = typeCounter.get(this.objectDifference.get(i).type).randomArray[typeCounter.get(this.objectDifference.get(i).type).index]
             typeCounter.get(this.objectDifference.get(i).type).index++
         }
-        for (let i = 0; i <= (boardLocators.size / 2 - 1); i++) {
-            const transform = boardLocators.get(`obj_difference1_${i + 1}`)
+        for (let i = 0; i <= (boardLocators.size - 1); i++) {
+            const transform = boardLocators.get(`obj_difference_${i + 1}`)
             let isCorrect = differenceId[i + 1] == i + 1 ? false : true
             let type = "circle"
             if (transform!.scale.x - transform!.scale.y <= -0.05) type = "vertical"
             else if (transform!.scale.x - transform!.scale.y >= 0.05) type = "horizontal"
             this.objectDifference.set(i, { transform, isCorrect, type, imageNumber: 1 })
-            this.objectDifference.set(i + boardLocators.size / 2, { transform, isCorrect, type, imageNumber: 1 })
+            // this.objectDifference.set(i + boardLocators.size / 2, { transform, isCorrect, type, imageNumber: 1 })
             typeHandler(i)
         }
         this.objectDifference.forEach((e, key) => console.log(key, e))
