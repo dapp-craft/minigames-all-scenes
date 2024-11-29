@@ -28,7 +28,6 @@ export async function startGame() {
 }
 
 export async function onFinish() {
-  // Upload the score to the leaderboard
   deactivateCamera()
   queue.setNextPlayer()
 }

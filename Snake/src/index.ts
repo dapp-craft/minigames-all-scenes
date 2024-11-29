@@ -1,7 +1,7 @@
 import { engine, executeTask, GltfContainer, Transform } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
+import { SCORE } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { finishGameButtonHandler, initGame, startGame } from './game'
@@ -16,8 +16,8 @@ const handlers = {
 }
 
 const libraryReady = initMiniGame(
-  '',
-  TIME_LEVEL_MOVES,
+  '607f24d8-fb0c-4518-9cc4-9529ba924792',
+  [SCORE],
   readGltfLocators(`locators/obj_locators_default.gltf`),
   handlers
 )

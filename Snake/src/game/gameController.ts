@@ -6,6 +6,7 @@ import { SnakeBody } from './objects/snakeBody'
 import { Direction, Drawable, Position, SnakePart } from './objects/type'
 import { BoardRenderer } from './boardRender'
 import { playGameOverSound, playHitSound, playPowerUpSound, playStartSound } from './sound'
+import { updatePlayerProgress } from './syncData'
 export class GameController {
   private _boardSize: { width: number; height: number }
   private _snake: SnakeHead | undefined = undefined
@@ -18,6 +19,9 @@ export class GameController {
 
   private _inGame: boolean = false // Game state
   private score: number = 0
+
+  private _startTime: number = 0
+  
 
   // Is needed to not allow the snake to change direction several times in one frame
   // Otherwise, it is possible to turn the snake 180 degrees in one frame
@@ -59,6 +63,7 @@ export class GameController {
 
     this._inGame = true
     this.score = 0
+    this._startTime = Date.now()
     this.addFood()
     this.onStartCallback()
 
@@ -83,6 +88,7 @@ export class GameController {
 
     this._inGame = false
     playGameOverSound()
+    updatePlayerProgress(this.score, Date.now() - this._startTime)
     this.onFinishCallback()
   }
 
