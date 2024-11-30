@@ -209,7 +209,7 @@ export class GameController {
   }
 
   private modifySpeed() {
-    this.speed = Math.min(Math.floor(this._score / 5), 10)
+    this.speed = Math.min(Math.floor(this._score / 5), SPEED.length - 1)
   }
 
   private checkCollision() {
@@ -228,7 +228,7 @@ export class GameController {
   }
 }
 
-const SPEED = [0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55, 0.55, 0.5, 0.5, 0.45] // Itervals between moves in seconds
+const SPEED = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4] // Itervals between moves in seconds
 
 function generateFoodPosition(boardSize: { width: number; height: number }) {
   return {
