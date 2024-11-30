@@ -19,7 +19,7 @@ export class GameController {
   public onFinishCallback: () => void = () => {}
 
   private _inGame: boolean = false // Game state
-  private score: number = 0
+  private _score: number = 0
 
   private _startTime: number = 0
   
@@ -68,7 +68,7 @@ export class GameController {
     this._snake.addTail()
     this._snake.addTail()
 
-    this.score = 0
+    this._score = 0
     this._startTime = Date.now()
     this.addFood()
     this.onStartCallback()
@@ -93,7 +93,7 @@ export class GameController {
 
     this._inGame = false
     playGameOverSound()
-    updatePlayerProgress(this.score, Date.now() - this._startTime)
+    updatePlayerProgress(this._score, Date.now() - this._startTime)
     this.onFinishCallback()
   }
 
@@ -132,7 +132,7 @@ export class GameController {
           scoreToAdd = +2
         }
 
-        this.score += 4
+        this._score += 4
 
         // Generate new food
         this.addFood()
@@ -188,6 +188,10 @@ export class GameController {
     this._food = new Food(pos)
   }
 
+  public get score() {
+    return this._score
+  }
+
   private checkState() {
     // Check if the snake is out of the board
     if (this._snake) {
@@ -205,7 +209,7 @@ export class GameController {
   }
 
   private modifySpeed() {
-    this.speed = Math.min(Math.floor(this.score / 5), 10)
+    this.speed = Math.min(Math.floor(this._score / 5), 10)
   }
 
   private checkCollision() {
