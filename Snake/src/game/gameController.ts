@@ -132,7 +132,7 @@ export class GameController {
           scoreToAdd = +2
         }
 
-        this._score += 4
+        this._score += 1
 
         // Generate new food
         this.addFood()
