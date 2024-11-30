@@ -7,6 +7,9 @@ import { initMiniGame } from '../../common/library'
 import { finishGameButtonHandler, initGame, startGame } from './game'
 import { STATIC_MODELS } from './resources'
 
+(globalThis as any).DEBUG_NETWORK_MESSAGES = false
+
+
 const handlers = {
   start: startGame,
   exit: finishGameButtonHandler,

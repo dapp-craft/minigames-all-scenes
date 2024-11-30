@@ -7,6 +7,7 @@ import { Direction, Drawable, Position, SnakePart } from './objects/type'
 import { BoardRenderer } from './boardRender'
 import { playGameOverSound, playHitSound, playPowerUpSound, playStartSound } from './sound'
 import { updatePlayerProgress } from './syncData'
+import { runCountdown } from '../../../common/effects'
 export class GameController {
   private _boardSize: { width: number; height: number }
   private _snake: SnakeHead | undefined = undefined
@@ -42,7 +43,12 @@ export class GameController {
     engine.addSystem(this.system)
   }
 
-  public start() {
+  public async start() {
+    this._inGame = true
+    await runCountdown()
+
+    if (!this._inGame) return
+    
     if (this._snake) {
       let snakePart: SnakePart | undefined = this._snake
       if (snakePart) {
@@ -57,18 +63,17 @@ export class GameController {
       this._food.terminate()
     }
 
+
     this._snake = new SnakeHead({ x: 10, y: 7 })
     this._snake.addTail()
     this._snake.addTail()
 
-    this._inGame = true
     this.score = 0
     this._startTime = Date.now()
     this.addFood()
     this.onStartCallback()
 
     this.setSnakeDirection(Direction.UP)
-
     playStartSound()
   }
 

@@ -7,6 +7,7 @@ import { BoardRenderer } from './boardRender'
 import { GameController } from './gameController'
 import { queue } from '@dcl-sdk/mini-games/src'
 import { initCamera, activateCamera, deactivateCamera } from './camera'
+import { setupEffects } from '../../../common/effects'
 
 const inputController = new InputController()
 
@@ -18,12 +19,13 @@ export async function initGame() {
   inputController.gameController = gameController
   gameController.onFinishCallback = onFinish
 
+  setupEffects(Vector3.create(0, 2.5, -6), Vector3.create(0, 1.2, 0))
+
   initCamera()
 }
 
 export async function startGame() {
   activateCamera()
-  // activateCamera()
   gameController.start()
 }
 
