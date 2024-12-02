@@ -95,8 +95,8 @@ export class GameController {
 
     this._inGame = false
     playGameOverSound()
-    updatePlayerProgress(this._score, Date.now() - this._startTime)
     this.onFinishCallback()
+    this.upsertProgress()
   }
 
   private update() {
@@ -146,6 +146,26 @@ export class GameController {
     this.modifySpeed()
   }
 
+  public terminate() {
+    if (!this._inGame) return
+    this._inGame = false
+    this._isInit = false
+    
+    if (this._snake) {
+      let snakePart: SnakePart | undefined = this._snake
+      if (snakePart) {
+        while (snakePart) {
+          snakePart.terminate()
+          snakePart = snakePart.next
+        }
+      }
+    }
+
+    if (this._food) {
+      this._food.terminate()
+    }
+  }
+
   public setSnakeDirection(dir: Direction) {
     if (!this._snake) return
 
@@ -182,6 +202,10 @@ export class GameController {
 
   public get isInit() {
     return this._isInit
+  }
+
+  public get startTime(){
+    return this._startTime
   }
 
   private addFood() {
@@ -232,6 +256,10 @@ export class GameController {
       snakePart = snakePart.next
     }
     return false
+  }
+
+  private upsertProgress() {
+    updatePlayerProgress(this._score, Date.now() - this._startTime)
   }
 }
 

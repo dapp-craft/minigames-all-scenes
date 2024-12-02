@@ -9,6 +9,7 @@ import { queue } from '@dcl-sdk/mini-games/src'
 import { initCamera, activateCamera, deactivateCamera } from './camera'
 import { setupEffects } from '../../../common/effects'
 import { setupGameUI } from './UiObjects'
+import { updatePlayerProgress } from './syncData'
 
 const inputController = new InputController()
 
@@ -38,6 +39,6 @@ export async function onFinish() {
 }
 
 export function finishGameButtonHandler() {
-  gameController.finish()
-  onFinish()
+  gameController.terminate()
+  deactivateCamera()
 }
