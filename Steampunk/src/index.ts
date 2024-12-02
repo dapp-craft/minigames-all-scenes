@@ -68,7 +68,11 @@ const generateInitialEntity = async () => {
     syncEntity(missIndicator, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 6)
     syncEntity(findCounter, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 7)
 
-    for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) syncEntity(steampunkGameState.availableEntity[i], [Transform.componentId, GltfContainer.componentId], STEAMPUNK_SYNC_ID + i)
+    for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
+        MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
+        MeshCollider.setPlane(steampunkGameState.availableEntity[i])
+        syncEntity(steampunkGameState.availableEntity[i], [Transform.componentId, GltfContainer.componentId], STEAMPUNK_SYNC_ID + i)
+    }
 
     steampunkGameState.listOfEntity.set('firstBoard', firstBoard);
     steampunkGameState.listOfEntity.set('secondBoard', secondBoard);

@@ -5,7 +5,7 @@ import { correctTargetAmount, hintsAmount, levelAmount, soundConfig, steampunkGa
 import { readGltfLocators } from "../../../common/locators"
 import { runWinAnimation } from '../../../common/effects'
 import { soundManager } from '..'
-import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
+import { Color4, Plane, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { queue, sceneParentEntity, ui } from '@dcl-sdk/mini-games/src'
 import { countdown, levelButtons, timer } from './game'
 import { disableCamera } from './cameraEntity'
@@ -74,6 +74,15 @@ export class GameLogic {
             this.playerReturnData.playerStartTime = Date.now()
             this.playerReturnData.playerFinishTime = 999999999
         }
+
+        for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
+            VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
+            pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
+            Transform.createOrReplace(steampunkGameState.availableEntity[i], {
+                position: Vector3.Zero(),
+                scale: Vector3.Zero()
+            })
+        }
         this.gameIsEnded = false
         // for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
         this.hintsAmount = hintsAmount[this.playerLevel - 1]
@@ -121,7 +130,7 @@ export class GameLogic {
         //         }
         //     }
         // })
-    
+
         // Material.createOrReplace(steampunkGameState.listOfEntity.get('secondBoard'), {
         //     material: {
         //         $case: 'pbr',
@@ -148,11 +157,6 @@ export class GameLogic {
         //     }
         // })
         this.updateActiveLevelButtonColor()
-        for (let i = 0; i <= steampunkGameConfig.targetEntityAmount; i++) {
-            // Transform.getMutable(steampunkGameState.availableEntity[i]).scale = Vector3.Zero()
-            VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
-            pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
-        }
         for (let i = 0; i < (data.size * 2); i++) {
             pointerEventsSystem.onPointerDown(
                 {
@@ -206,7 +210,7 @@ export class GameLogic {
                                 transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
                             }
                         }
-                    }) 
+                    })
                     Material.createOrReplace(steampunkGameState.availableEntity[secondBoard ? i + data.size : i - data.size], {
                         material: {
                             $case: 'pbr',
@@ -215,16 +219,6 @@ export class GameLogic {
                                     tex: {
                                         $case: 'texture',
                                         texture: { src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
-                                    }
-                                },
-                                alphaTexture: {
-                                    tex: {
-                                        $case: 'texture',
-                                        texture: {
-                                            src: 'images/alpha/alpha_screen.png',
-                                            filterMode: TextureFilterMode.TFM_TRILINEAR,
-                                            wrapMode: TextureWrapMode.TWM_REPEAT
-                                        }
                                     }
                                 },
                                 emissiveColor: Color4.White(),
@@ -259,15 +253,13 @@ export class GameLogic {
             )
         }
         const placeObjects = (secondBoard: boolean) => {
-            for (let i = secondBoard ? data.size : 0; i < (secondBoard ? data.size * 2: data.size); i++) {
+            for (let i = secondBoard ? data.size : 0; i < (secondBoard ? data.size * 2 : data.size); i++) {
                 VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: true })
-                MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
-                MeshCollider.setPlane(steampunkGameState.availableEntity[i])
                 Transform.createOrReplace(steampunkGameState.availableEntity[i], {
-                    ...data.get(`obj_difference_${secondBoard ? i + 1 - data.size : i + 1}`),
-                    rotation: Quaternion.Zero(),
+                    ...data.get(`obj_difference_${secondBoard ? i - data.size + 1 : i + 1}`),
                     parent: steampunkGameState.listOfEntity.get(secondBoard ? "secondBoard" : "firstBoard")
                 })
+                console.log(Transform.get(steampunkGameState.availableEntity[i]));
                 // TODO REFACTOR
                 Material.createOrReplace(steampunkGameState.availableEntity[i], {
                     material: {
@@ -277,16 +269,6 @@ export class GameLogic {
                                 tex: {
                                     $case: 'texture',
                                     texture: { src: `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
-                                }
-                            },
-                            alphaTexture: {
-                                tex: {
-                                    $case: 'texture',
-                                    texture: {
-                                        src: 'images/alpha/alpha_screen.png',
-                                        filterMode: TextureFilterMode.TFM_TRILINEAR,
-                                        wrapMode: TextureWrapMode.TWM_REPEAT
-                                    }
                                 }
                             },
                             emissiveColor: Color4.White(),
@@ -321,7 +303,7 @@ export class GameLogic {
                 let random;
                 do { random = Math.floor(Math.random() * boardLocators.size) + 1 }
                 while (result[random] !== undefined)
-                result[random] = random
+                result[random] = random;
             }
             return result
         }
