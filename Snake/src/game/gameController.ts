@@ -69,7 +69,7 @@ export class GameController {
     this._snake.addTail()
     this._snake.addTail()
 
-    this._score = 0
+    this._score = 3
     this._startTime = Date.now()
     this.addFood()
     this.onStartCallback()
@@ -101,6 +101,7 @@ export class GameController {
 
   private update() {
     if (!this._inGame) return
+    if (!this._isInit) return
 
     // Update snake direction
     if (this._directionToUpdate != undefined) {
@@ -179,6 +180,10 @@ export class GameController {
     return this._inGame
   }
 
+  public get isInit() {
+    return this._isInit
+  }
+
   private addFood() {
     if (!this._snake) {
       throw new Error('Failed to add Food: Snake is not initialized')
@@ -230,7 +235,7 @@ export class GameController {
   }
 }
 
-const SPEED = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4] // Itervals between moves in seconds
+const SPEED = [0.7, 0.6, 0.5, 0.4, 0.3] // Itervals between moves in seconds
 
 function generateFoodPosition(boardSize: { width: number; height: number }) {
   return {

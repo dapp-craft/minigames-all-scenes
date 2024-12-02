@@ -18,7 +18,7 @@ function setupScore() {
   const moveCounter = engine.addEntity()
   Transform.create(moveCounter, UiLocators['counter_score'])
   TextShape.createOrReplace(moveCounter, {
-    text: `Score: ${0}`,
+    text: `Length: ${0}`,
     fontSize: 3,
     textColor: Color4.White(),
     textAlign: TextAlignMode.TAM_MIDDLE_LEFT
