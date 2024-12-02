@@ -47,6 +47,7 @@ export class BoardRenderer {
   public render() {
     // console.log('In game', this._gameController.inGame)
     if (!this._gameController.inGame) return
+    if (!this._gameController.isInit) return  
 
     const boardSize = this._gameController.boardSize
 

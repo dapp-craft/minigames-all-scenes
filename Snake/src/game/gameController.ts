@@ -19,6 +19,7 @@ export class GameController {
   public onFinishCallback: () => void = () => {}
 
   private _inGame: boolean = false // Game state
+  private _isInit: boolean = false
   private _score: number = 0
 
   private _startTime: number = 0
@@ -45,8 +46,8 @@ export class GameController {
 
   public async start() {
     this._inGame = true
+    this._isInit = false
     await runCountdown()
-
     if (!this._inGame) return
     
     if (this._snake) {
@@ -75,6 +76,7 @@ export class GameController {
 
     this.setSnakeDirection(Direction.UP)
     playStartSound()
+    this._isInit = true
   }
 
   public finish() {
