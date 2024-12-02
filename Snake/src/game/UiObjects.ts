@@ -26,7 +26,7 @@ function setupScore() {
   syncEntity(moveCounter, [TextShape.componentId], 5200)
 
   engine.addSystem(() => {
-    const text = `Score: ${gameController.score}`
+    const text = `Length: ${gameController.score}`
     if (TextShape.get(moveCounter).text == text) return
     if (!gameController.inGame) return
     TextShape.createOrReplace(moveCounter, {
