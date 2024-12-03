@@ -49,6 +49,10 @@ export let lookingAt: Cell | undefined = undefined
  */
 export let inputAvailable = false
 
+export function setInputAvailable(value: boolean) {
+  inputAvailable = value
+}
+
 /**
  * Stores the last start
  * Is used to process multiple start requests in a row
@@ -163,7 +167,7 @@ export async function startLevel(level: number) {
   }, 1000)
 }
 
-function finishLevel() {
+export function finishLevel() {
   clearInputBuffer()
 
   gameState.levelFinishTime = Date.now()
@@ -288,7 +292,7 @@ function processMovement(start: Cell, end: Cell) {
   }
 }
 
-function isSolved() {
+export function isSolved() {
   const mainCar = Car.get(MAIN_CAR)
   if (mainCar.position.x == 5) {
     Car.getMutable(MAIN_CAR).position = { x: 9, y: 3 }

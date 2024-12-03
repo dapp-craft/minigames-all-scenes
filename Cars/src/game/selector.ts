@@ -25,6 +25,9 @@ import {
 } from './logic/board'
 import { Car } from './components/definitions'
 import { Quaternion } from '@dcl/sdk/math'
+import { finishLevel, inputAvailable, isSolved, setInputAvailable } from '.'
+import { playWinSound } from './sfx'
+import { runWinAnimation } from '../../../common/effects'
 
 export let forwardArrow: Entity
 export let backwardArrow: Entity
@@ -70,6 +73,12 @@ function moveCar(directionMultiplier: number) {
 
   if (isPositionAvailable(targetCell, carEntity, availabilityMap)) {
     carComponent.position = targetCell
+  }
+
+  if (isSolved()) {
+    setInputAvailable(false)
+    playWinSound()
+    runWinAnimation().then(finishLevel)
   }
 }
 
