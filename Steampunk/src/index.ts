@@ -1,5 +1,5 @@
 import * as utils from '@dcl-sdk/utils'
-import { AudioSource, engine, executeTask, GltfContainer, InputAction, Material, MaterialTransparencyMode, MeshCollider, MeshRenderer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
+import { AudioSource, engine, Entity, executeTask, GltfContainer, InputAction, Material, MaterialTransparencyMode, MeshCollider, MeshRenderer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { MOVES, POINTS_TIME, SCORE, TIME, TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
@@ -121,57 +121,36 @@ const generateInitialEntity = async () => {
         TextShape.create(findCounter, { text: 'Find \n0/0', fontSize: 2 })
     }
 
-    // Material.createOrReplace(firstBoard, {
-    //     material: {
-    //         $case: 'pbr',
-    //         pbr: {
-    //             texture: {
-    //                 tex: {
-    //                     $case: 'texture',
-    //                     texture: { src: `images/scene-thumbnail.png` }
-    //                 }
-    //             },
-    //             emissiveColor: Color4.White(),
-    //             emissiveIntensity: 0.9,
-    //             emissiveTexture: {
-    //                 tex: {
-    //                     $case: 'texture',
-    //                     texture: { src: `images/scene-thumbnail.png` }
-    //                 }
-    //             },
-    //             roughness: 1.0,
-    //             specularIntensity: 0,
-    //             metallic: 0,
-    //             transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
-    //         }
-    //     }
-    // })
+    lightUpEntity(firstBoard, `images/scene-thumbnail.png`)
+    lightUpEntity(secondBoard, `images/scene-thumbnail.png`)
+}
 
-    // Material.createOrReplace(secondBoard, {
-    //     material: {
-    //         $case: 'pbr',
-    //         pbr: {
-    //             texture: {
-    //                 tex: {
-    //                     $case: 'texture',
-    //                     texture: { src: `images/scene-thumbnail.png` }
-    //                 }
-    //             },
-    //             emissiveColor: Color4.White(),
-    //             emissiveIntensity: 0.9,
-    //             emissiveTexture: {
-    //                 tex: {
-    //                     $case: 'texture',
-    //                     texture: { src: `images/scene-thumbnail.png` }
-    //                 }
-    //             },
-    //             roughness: 1.0,
-    //             specularIntensity: 0,
-    //             metallic: 0,
-    //             transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
-    //         }
-    //     }
-    // })
+export const lightUpEntity = (entity: Entity, texture: string) => {
+    Material.createOrReplace(entity, {
+        material: {
+            $case: 'pbr',
+            pbr: {
+                texture: {
+                    tex: {
+                        $case: 'texture',
+                        texture: { src: texture }
+                    }
+                },
+                emissiveColor: Color4.White(),
+                emissiveIntensity: 0.9,
+                emissiveTexture: {
+                    tex: {
+                        $case: 'texture',
+                        texture: { src: texture }
+                    }
+                },
+                roughness: 1.0,
+                specularIntensity: 0,
+                metallic: 0,
+                transparencyMode: MaterialTransparencyMode.MTM_ALPHA_TEST
+            }
+        }
+    })
 }
 
 const playBackgroundMusic = () => {

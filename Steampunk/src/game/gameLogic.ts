@@ -4,7 +4,7 @@ import { PlayerReturnData, steampunkGameState } from "../gameState"
 import { correctTargetAmount, hintsAmount, levelAmount, soundConfig, steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
 import { runWinAnimation } from '../../../common/effects'
-import { soundManager } from '..'
+import { lightUpEntity, soundManager } from '..'
 import { Color4, Plane, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { queue, sceneParentEntity, ui } from '@dcl-sdk/mini-games/src'
 import { countdown, levelButtons, timer } from './game'
@@ -102,9 +102,10 @@ export class GameLogic {
         console.log("Player level: ", this.playerLevel)
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${correctTargetAmount[this.playerLevel - 1]}`
         const data = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
-        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
-        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
+        // Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
+        // Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
         // Material.deleteFrom(steampunkGameState.listOfEntity.get('firstBoard'))
+
         // Material.createOrReplace(steampunkGameState.listOfEntity.get('firstBoard'), {
         //     material: {
         //         $case: 'pbr',
@@ -156,6 +157,8 @@ export class GameLogic {
         //         }
         //     }
         // })
+        lightUpEntity(steampunkGameState.listOfEntity.get('firstBoard'), `images/mapBackground.png`)
+        lightUpEntity(steampunkGameState.listOfEntity.get('secondBoard'), `images/mapBackground.png`)
         this.updateActiveLevelButtonColor()
         for (let i = 0; i < (data.size * 2); i++) {
             pointerEventsSystem.onPointerDown(
@@ -175,67 +178,8 @@ export class GameLogic {
                     this.objectDifference.get(secondBoard ? i + data.size : i - data.size).isCorrect = true
                     soundManager.playSound('correct', soundConfig.volume)
                     const objectDifferenceData = this.objectDifference.get(i)
-                    // TODO ReFACTOR
-                    Material.createOrReplace(steampunkGameState.availableEntity[i], {
-                        material: {
-                            $case: 'pbr',
-                            pbr: {
-                                texture: {
-                                    tex: {
-                                        $case: 'texture',
-                                        texture: { src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
-                                    }
-                                },
-                                alphaTexture: {
-                                    tex: {
-                                        $case: 'texture',
-                                        texture: {
-                                            src: 'images/alpha/alpha_screen.png',
-                                            filterMode: TextureFilterMode.TFM_TRILINEAR,
-                                            wrapMode: TextureWrapMode.TWM_REPEAT
-                                        }
-                                    }
-                                },
-                                emissiveColor: Color4.White(),
-                                emissiveIntensity: 0.9,
-                                emissiveTexture: {
-                                    tex: {
-                                        $case: 'texture',
-                                        texture: { src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
-                                    }
-                                },
-                                roughness: 1.0,
-                                specularIntensity: 0,
-                                metallic: 0,
-                                transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
-                            }
-                        }
-                    })
-                    Material.createOrReplace(steampunkGameState.availableEntity[secondBoard ? i + data.size : i - data.size], {
-                        material: {
-                            $case: 'pbr',
-                            pbr: {
-                                texture: {
-                                    tex: {
-                                        $case: 'texture',
-                                        texture: { src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
-                                    }
-                                },
-                                emissiveColor: Color4.White(),
-                                emissiveIntensity: 0.9,
-                                emissiveTexture: {
-                                    tex: {
-                                        $case: 'texture',
-                                        texture: { src: `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
-                                    }
-                                },
-                                roughness: 1.0,
-                                specularIntensity: 0,
-                                metallic: 0,
-                                transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
-                            }
-                        }
-                    })
+                    lightUpEntity(steampunkGameState.availableEntity[i], `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`)
+                    lightUpEntity(steampunkGameState.availableEntity[secondBoard ? i + data.size : i - data.size], `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`)
                     this.visibleFeedback(true, i)
                     utils.timers.clearInterval(this.hintTimeOut)
                     // VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
@@ -260,32 +204,7 @@ export class GameLogic {
                     parent: steampunkGameState.listOfEntity.get(secondBoard ? "secondBoard" : "firstBoard")
                 })
                 console.log(Transform.get(steampunkGameState.availableEntity[i]));
-                // TODO REFACTOR
-                Material.createOrReplace(steampunkGameState.availableEntity[i], {
-                    material: {
-                        $case: 'pbr',
-                        pbr: {
-                            texture: {
-                                tex: {
-                                    $case: 'texture',
-                                    texture: { src: `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
-                                }
-                            },
-                            emissiveColor: Color4.White(),
-                            emissiveIntensity: 0.9,
-                            emissiveTexture: {
-                                tex: {
-                                    $case: 'texture',
-                                    texture: { src: `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`, filterMode: TextureFilterMode.TFM_TRILINEAR }
-                                }
-                            },
-                            roughness: 1.0,
-                            specularIntensity: 0,
-                            metallic: 0,
-                            transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
-                        }
-                    }
-                })
+                lightUpEntity(steampunkGameState.availableEntity[i], `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`)
             }
         }
         placeObjects(false)
@@ -403,6 +322,8 @@ export class GameLogic {
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n0`
         levelButtons[this.playerLevel - 1].buttonShapeEnabled = ui.uiAssets.shapes.SQUARE_GREEN
         levelButtons[this.playerLevel - 1].enable()
+        lightUpEntity(steampunkGameState.listOfEntity.get('firstBoard'), `images/scene-thumbnail.png`)
+        lightUpEntity(steampunkGameState.listOfEntity.get('secondBoard'), `images/scene-thumbnail.png`)
     }
 
     private updateActiveLevelButtonColor() {
