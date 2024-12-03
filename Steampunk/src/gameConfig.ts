@@ -10,15 +10,18 @@ export const steampunkGameConfig = {
     visibleFeedbackAlpha: 0.5,
     visibleFeedbackSpeed: 0.04,
     gameTime: 30000,
-    maximumTexturePerType: 21
+    maximumTexturePerType: 21,
+    differentsObjectsPercentages: 0.25
 }
 
 // TODO: Change to 3 level system
-export const levelAmount = 5
+export const levelAmount = 14
 
-export const correctTargetAmount = [
-    1, 2, 6, 6, 6, 6, 6
-]
+export const difficultyLevel = new Map([
+    [1, [1, 2]],
+    [2, [3, 4, 5, 6, 7, 8]],
+    [3, [9, 10, 11, 12, 13, 14]]
+])
 
 export const soundConfig = {
     volume: 0.5

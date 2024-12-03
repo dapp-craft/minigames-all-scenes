@@ -1,19 +1,21 @@
 import * as utils from '@dcl-sdk/utils'
-import { ColliderLayer, engine, Entity, GltfContainer, InputAction, Material, MaterialTransparencyMode, MeshCollider, MeshRenderer, PBGltfContainer, pointerEventsSystem, TextShape, TextureFilterMode, TextureWrapMode, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
+import { engine, InputAction, Material, pointerEventsSystem, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { PlayerReturnData, steampunkGameState } from "../gameState"
-import { correctTargetAmount, hintsAmount, levelAmount, soundConfig, steampunkGameConfig } from "../gameConfig"
+import { difficultyLevel, hintsAmount, levelAmount, soundConfig, steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
 import { runWinAnimation } from '../../../common/effects'
 import { lightUpEntity, soundManager } from '..'
-import { Color4, Plane, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { queue, sceneParentEntity, ui } from '@dcl-sdk/mini-games/src'
+import { Color4, Vector3 } from '@dcl/sdk/math'
+import { ui } from '@dcl-sdk/mini-games/src'
 import { countdown, levelButtons, timer } from './game'
 import { disableCamera } from './cameraEntity'
 
 export class GameLogic {
     private correctSmashCounter = 0
-    private playerLevel = 1
+    private playerLevel = 0
+    private playerDifficulty = 1
     private pictureNumber = 1
+    private levelDifferenceAmmount = 0
     private differencesFound: Array<number | undefined> = []
     private hintTimeOut: utils.TimerId = 0
     private hintsAmount: number = hintsAmount[0]
@@ -21,6 +23,11 @@ export class GameLogic {
     private gameIsDone: Promise<void>
     private animationInterval: utils.TimerId = 0
     private objectDifference = new Map()
+    private playerProgress: Map<number, number[]> = new Map([
+        [1, []],
+        [2, []],
+        [3, []],
+    ])
     private playerReturnData: PlayerReturnData = {
         playerStartTime: Date.now(),
         playerFinishTime: 999999999,
@@ -33,9 +40,9 @@ export class GameLogic {
         this.gameIsDone = new Promise((res) => { this.resolveReady = res })
     }
 
-    public async startGame(level: number = 1) {
+    public async startGame(difficulty: number = 1) {
         this.resetProgress()
-        this.playerLevel = level
+        this.playerDifficulty = difficulty
         this.playGame()
         this.gameIsDone = new Promise(r => this.resolveReady = r)
         await this.gameIsDone;
@@ -96,67 +103,13 @@ export class GameLogic {
 
     private async playGame() {
         if (this.gameIsEnded) return
+        this.playerLevelHandler()
         await this.generateDifference()
         this.resetProgress(false)
         this.startTimer()
-        console.log("Player level: ", this.playerLevel)
-        TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${correctTargetAmount[this.playerLevel - 1]}`
+        console.log("Player Difficulty, Level: ", this.playerDifficulty, this.playerLevel)
         const data = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
-        // Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
-        // Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/mapBackground.png` }) })
-        // Material.deleteFrom(steampunkGameState.listOfEntity.get('firstBoard'))
-
-        // Material.createOrReplace(steampunkGameState.listOfEntity.get('firstBoard'), {
-        //     material: {
-        //         $case: 'pbr',
-        //         pbr: {
-        //             texture: {
-        //                 tex: {
-        //                     $case: 'texture',
-        //                     texture: { src: `images/mapBackground.png` }
-        //                 }
-        //             },
-        //             emissiveColor: Color4.White(),
-        //             emissiveIntensity: 0.9,
-        //             emissiveTexture: {
-        //                 tex: {
-        //                     $case: 'texture',
-        //                     texture: { src: `images/mapBackground.png` }
-        //                 }
-        //             },
-        //             roughness: 1.0,
-        //             specularIntensity: 0,
-        //             metallic: 0,
-        //             transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
-        //         }
-        //     }
-        // })
-
-        // Material.createOrReplace(steampunkGameState.listOfEntity.get('secondBoard'), {
-        //     material: {
-        //         $case: 'pbr',
-        //         pbr: {
-        //             texture: {
-        //                 tex: {
-        //                     $case: 'texture',
-        //                     texture: { src: `images/mapBackground.png` }
-        //                 }
-        //             },
-        //             emissiveColor: Color4.White(),
-        //             emissiveIntensity: 0.9,
-        //             emissiveTexture: {
-        //                 tex: {
-        //                     $case: 'texture',
-        //                     texture: { src: `images/mapBackground.png` }
-        //                 }
-        //             },
-        //             roughness: 1.0,
-        //             specularIntensity: 0,
-        //             metallic: 0,
-        //             transparencyMode: MaterialTransparencyMode.MTM_ALPHA_BLEND
-        //         }
-        //     }
-        // })
+        TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${this.levelDifferenceAmmount}`
         lightUpEntity(steampunkGameState.listOfEntity.get('firstBoard'), `images/mapBackground.png`)
         lightUpEntity(steampunkGameState.listOfEntity.get('secondBoard'), `images/mapBackground.png`)
         this.updateActiveLevelButtonColor()
@@ -167,7 +120,7 @@ export class GameLogic {
                     opts: { button: InputAction.IA_POINTER, hoverText: 'Click' },
                 },
                 () => {
-                    console.log(i, correctTargetAmount[this.playerLevel])
+                    console.log(i, this.levelDifferenceAmmount)
                     const secondBoard = i > data.size - 1 ? false : true
                     if (this.objectDifference.get(i).isCorrect) {
                         this.playMissAnimation(secondBoard ? 'firstBoard' : 'secondBoard');
@@ -185,7 +138,8 @@ export class GameLogic {
                     // VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
                     this.differencesFound[i] = i
                     this.changeCounter()
-                    if (this.correctSmashCounter < correctTargetAmount[this.playerLevel - 1]) return
+                    if (this.correctSmashCounter < this.levelDifferenceAmmount) return
+                    this.playerProgress.get(this.playerDifficulty)?.push(this.playerLevel)
                     engine.removeSystem('countdown-system')
                     runWinAnimation(steampunkGameConfig.winAnimationDuration).then(() => {
                         this.playerReturnData.playerLevel[this.playerLevel - 1] = this.playerLevel
@@ -203,7 +157,7 @@ export class GameLogic {
                     ...data.get(`obj_difference_${secondBoard ? i - data.size + 1 : i + 1}`),
                     parent: steampunkGameState.listOfEntity.get(secondBoard ? "secondBoard" : "firstBoard")
                 })
-                console.log(Transform.get(steampunkGameState.availableEntity[i]));
+                // console.log(Transform.get(steampunkGameState.availableEntity[i]));
                 lightUpEntity(steampunkGameState.availableEntity[i], `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`)
             }
         }
@@ -211,14 +165,43 @@ export class GameLogic {
         placeObjects(true)
     }
 
+    private playerLevelHandler() {
+        console.log("Player Level Handler in ACTION")
+        const findRandomDifferentNumber = (arr1: number[], arr2: number[]) => {
+            const differentNumbers1 = arr1.filter(num => !arr2.includes(num));
+            const differentNumbers2 = arr2.filter(num => !arr1.includes(num));
+            const allDifferentNumbers = [...differentNumbers1, ...differentNumbers2];
+            if (allDifferentNumbers.length > 0) {
+                console.log("GENERATION", differentNumbers1, differentNumbers2, allDifferentNumbers,)
+                let test = allDifferentNumbers[Math.floor(Math.random() * allDifferentNumbers.length)]
+                console.log(test)
+                return test
+            }
+            //TODO: IF I FORGET REMIND ME, IMPORTANT!!!
+            return this.playerProgress.get(this.playerDifficulty)!.length;
+        }
+        if (this.playerDifficulty == 0) { this.playerDifficulty = 1 }
+        console.log("YO2: ", this.playerDifficulty)
+        if (difficultyLevel.get(this.playerDifficulty)!.length == this.playerProgress.get(this.playerDifficulty)!.length) {
+            if (this.playerDifficulty == difficultyLevel.size) {
+                this.playerProgress.get(this.playerDifficulty)!.splice(0, this.playerProgress.get(this.playerDifficulty)!.length)
+            } else {
+                this.playerDifficulty++
+            }
+            console.log("YO: ", this.playerDifficulty)
+        }
+        this.playerLevel = findRandomDifferentNumber(difficultyLevel.get(this.playerDifficulty)!, this.playerProgress.get(this.playerDifficulty)!)
+    }
+
     private async generateDifference() {
         console.log("generateDifference in ACTION")
         this.objectDifference.clear()
         // TODO REFACTOR
         const boardLocators = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
+        this.levelDifferenceAmmount = Math.ceil(boardLocators.size * steampunkGameConfig.differentsObjectsPercentages)
         const getRandomNumbers = () => {
             const result = [];
-            for (let i = 0; i < correctTargetAmount[this.playerLevel - 1]; i++) {
+            for (let i = 0; i < this.levelDifferenceAmmount; i++) {
                 let random;
                 do { random = Math.floor(Math.random() * boardLocators.size) + 1 }
                 while (result[random] !== undefined)
@@ -237,8 +220,6 @@ export class GameLogic {
         typeCounter.forEach((_, key) => typeCounter.get(key).randomArray = generateUniqueArray())
 
         const typeHandler = (i: number) => {
-            // console.log(typeCounter.get(this.objectDifference.get(i).type));
-            // console.log(this.objectDifference.get(i).type)
             this.objectDifference.get(i).imageNumber = typeCounter.get(this.objectDifference.get(i).type).randomArray[typeCounter.get(this.objectDifference.get(i).type).index]
             this.objectDifference.get(i + boardLocators.size).imageNumber = typeCounter.get(this.objectDifference.get(i).type).randomArray[typeCounter.get(this.objectDifference.get(i).type).index]
             typeCounter.get(this.objectDifference.get(i).type).index++
@@ -253,13 +234,14 @@ export class GameLogic {
             this.objectDifference.set(i + boardLocators.size, { transform, isCorrect, type, imageNumber: 1 })
             typeHandler(i)
         }
-        this.objectDifference.forEach((e, key) => console.log(key, e))
+        // console.log(boardLocators.size)
+        // this.objectDifference.forEach((e, key) => console.log(key, e))
     }
 
     private changeCounter(correct: boolean = true) {
         if (correct) {
             this.correctSmashCounter++
-            TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${correctTargetAmount[this.playerLevel - 1]}`
+            TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${this.levelDifferenceAmmount}`
             this.playerReturnData.playerScore = this.playerReturnData.playerScore + steampunkGameConfig.awardMultiplier
         } else this.playerReturnData.playerScore = this.playerReturnData.playerScore - steampunkGameConfig.awardMultiplier
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n${this.playerReturnData.playerScore}`
@@ -275,34 +257,11 @@ export class GameLogic {
         })
         const interval = utils.timers.setInterval(() => {
             alpha = alpha - steampunkGameConfig.visibleFeedbackSpeed
-            console.log(alpha)
             Material.setPbrMaterial(steampunkGameState.listOfEntity.get("visibleFeedback"), { albedoColor: isEntityCorrect ? Color4.create(0, 1, 0, alpha) : Color4.create(1, 0, 0, alpha) })
             if (alpha >= 0) return
             VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("visibleFeedback")).visible = false
             utils.timers.clearInterval(interval)
         }, 10)
-    }
-
-    public getHint() {
-        if (this.hintsAmount <= 0) { return console.log("No available hints") }
-        let hintEntityId = undefined
-        for (let i = 0; i < correctTargetAmount[this.playerLevel - 1]; i++) {
-            if (this.differencesFound[i] == undefined) {
-                hintEntityId = i
-                break
-            }
-        }
-        if (hintEntityId == undefined) return
-        this.hintsAmount--
-        let hintShowCounter = 0
-        this.hintTimeOut = utils.timers.setInterval(() => {
-            Transform.getMutable(steampunkGameState.listOfEntity.get("hitZone")).position = Transform.get(steampunkGameState.availableEntity[hintEntityId]).position
-            VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = !VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible
-            hintShowCounter++
-            if (hintShowCounter < steampunkGameConfig.hintShowTimes * 2) return
-            VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
-            utils.timers.clearInterval(this.hintTimeOut)
-        }, steampunkGameConfig.hintDelay)
     }
 
     public gameEnd() {
@@ -320,15 +279,15 @@ export class GameLogic {
         Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n0/0`
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n0`
-        levelButtons[this.playerLevel - 1].buttonShapeEnabled = ui.uiAssets.shapes.SQUARE_GREEN
-        levelButtons[this.playerLevel - 1].enable()
+        levelButtons[this.playerDifficulty - 1].buttonShapeEnabled = ui.uiAssets.shapes.SQUARE_GREEN
+        levelButtons[this.playerDifficulty - 1].enable()
         lightUpEntity(steampunkGameState.listOfEntity.get('firstBoard'), `images/scene-thumbnail.png`)
         lightUpEntity(steampunkGameState.listOfEntity.get('secondBoard'), `images/scene-thumbnail.png`)
     }
 
     private updateActiveLevelButtonColor() {
         levelButtons.forEach((button, i) => {
-            button.buttonShapeEnabled = this.playerLevel === i + 1 ? ui.uiAssets.shapes.SQUARE_YELLOW : ui.uiAssets.shapes.SQUARE_GREEN
+            button.buttonShapeEnabled = this.playerDifficulty === i + 1 ? ui.uiAssets.shapes.SQUARE_YELLOW : ui.uiAssets.shapes.SQUARE_GREEN
             if (button.enabled) button.enable()
         })
     }
