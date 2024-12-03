@@ -9,6 +9,7 @@ import { Color4, Vector3 } from '@dcl/sdk/math'
 import { ui } from '@dcl-sdk/mini-games/src'
 import { countdown, levelButtons, timer } from './game'
 import { disableCamera } from './cameraEntity'
+import { parentEntity } from '@dcl/sdk/network'
 
 export class GameLogic {
     private correctSmashCounter = 0
@@ -161,6 +162,7 @@ export class GameLogic {
                     ...data.get(`obj_difference_${secondBoard ? i - data.size + 1 : i + 1}`),
                     parent: steampunkGameState.listOfEntity.get(secondBoard ? "secondBoard" : "firstBoard")
                 })
+                parentEntity(steampunkGameState.availableEntity[i], steampunkGameState.listOfEntity.get(secondBoard ? "secondBoard" : "firstBoard"))
                 // console.log(Transform.get(steampunkGameState.availableEntity[i]));
                 lightUpEntity(steampunkGameState.availableEntity[i], `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`)
             }
