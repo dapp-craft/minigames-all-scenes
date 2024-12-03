@@ -127,7 +127,7 @@ export class GameLogic {
                 () => {
                     console.log(i, this.levelDifferenceAmmount)
                     const secondBoard = i > data.size - 1 ? false : true
-                    if (this.objectDifference.get(i).isCorrect) {
+                    if (this.objectDifference.get(i).isCorrect && this.objectDifference.get(secondBoard ? i + data.size : i - data.size).isCorrect) {
                         this.playMissAnimation(secondBoard ? 'firstBoard' : 'secondBoard');
                         this.changeCounter(false)
                         return soundManager.playSound('incorrect', soundConfig.volume)
@@ -162,7 +162,7 @@ export class GameLogic {
                     parent: steampunkGameState.listOfEntity.get(secondBoard ? "secondBoard" : "firstBoard")
                 })
                 // console.log(Transform.get(steampunkGameState.availableEntity[i]));
-                lightUpEntity(steampunkGameState.availableEntity[i], `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect && secondBoard) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`)
+                lightUpEntity(steampunkGameState.availableEntity[i], `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`)
             }
         }
         placeObjects(false)
@@ -233,8 +233,10 @@ export class GameLogic {
             let type = "circle"
             if (transform!.scale.x - transform!.scale.y <= -0.05) type = "vertical"
             else if (transform!.scale.x - transform!.scale.y >= 0.05) type = "horizontal"
-            this.objectDifference.set(i, { transform, isCorrect, type, imageNumber: 1 })
-            this.objectDifference.set(i + boardLocators.size, { transform, isCorrect, type, imageNumber: 1 })
+            const test = [true, false]
+            const randomBinary = Math.floor(Math.random() * 2);
+            this.objectDifference.set(i, { transform, isCorrect: isCorrect ? isCorrect : test[randomBinary], type, imageNumber: 1 })
+            this.objectDifference.set(i + boardLocators.size, { transform, isCorrect: isCorrect ? isCorrect : !test[randomBinary], type, imageNumber: 1 })
             typeHandler(i)
         }
         // console.log(boardLocators.size)
