@@ -1,10 +1,8 @@
 import * as utils from '@dcl-sdk/utils'
-import { queue, sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
+import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
 import { gameLogic } from '..'
 import { readGltfLocators } from '../../../common/locators'
-import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { engine } from '@dcl/sdk/ecs'
-import { levelAmount, steampunkGameConfig } from '../gameConfig'
 import { updatePlayerProgress } from './syncData'
 import { enableCamera } from './cameraEntity'
 

@@ -1,7 +1,7 @@
 import * as utils from '@dcl-sdk/utils'
 import { engine, InputAction, Material, pointerEventsSystem, TextShape, Transform, VisibilityComponent } from "@dcl/sdk/ecs"
 import { PlayerReturnData, steampunkGameState } from "../gameState"
-import { difficultyLevel, hintsAmount, levelAmount, soundConfig, steampunkGameConfig } from "../gameConfig"
+import { difficultyLevel, hintsAmount, soundConfig, steampunkGameConfig } from "../gameConfig"
 import { readGltfLocators } from "../../../common/locators"
 import { runWinAnimation } from '../../../common/effects'
 import { lightUpEntity, soundManager } from '..'
@@ -148,8 +148,7 @@ export class GameLogic {
                     engine.removeSystem('countdown-system')
                     runWinAnimation(steampunkGameConfig.winAnimationDuration).then(() => {
                         this.playerReturnData.playerLevel[this.playerLevel - 1] = this.playerLevel
-                        this.playerLevel++
-                        if (this.playerLevel > levelAmount) return this.gameEnd()
+                        this.playerLevel++;
                         this.playGame()
                     })
                 }
@@ -182,7 +181,6 @@ export class GameLogic {
                 console.log(test)
                 return test
             }
-            //TODO: IF I FORGET REMIND ME, IMPORTANT!!!
             return this.playerProgress.get(this.playerDifficulty)!.length;
         }
         if (this.playerDifficulty == 0) { this.playerDifficulty = 1 }
