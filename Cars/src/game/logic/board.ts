@@ -2,7 +2,7 @@ import { Entity } from '@dcl/sdk/ecs'
 import { BOARD_SIZE } from '../../config'
 import { Car } from '../components/definitions'
 import { getInGameCars } from '../objects/car'
-import { CarDirection, Cell } from '../type'
+import { CarDirection, CarType, Cell } from '../type'
 import { getDirectionVector } from './math'
 
 export function createAvailabilityMap() {
@@ -27,6 +27,13 @@ export function markCarCellsAsAvailable(availabilityMap: number[][], car: Entity
   }
 }
 
+export function markCarCellsAsAvailableCarData(availabilityMap: number[][], carData: CarType) {
+  const { x: xd, y: yd } = getDirectionVector(carData.direction)
+  for (let i = 0; i < carData.length; i++) {
+    availabilityMap[carData.position.y + yd * i][carData.position.x + xd * i] = 0
+  }
+}
+
 export function getMovementDelta(start: Cell, end: Cell, car: Entity): { x: number; y: number } {
   const carData = Car.get(car)
   const delta = {
@@ -40,6 +47,18 @@ export function getMovementDelta(start: Cell, end: Cell, car: Entity): { x: numb
 
 export function isPositionAvailable(cell: Cell, car: Entity, availabilityMap: number[][]): boolean {
   const carData = Car.get(car)
+  const { x: xd, y: yd } = getDirectionVector(carData.direction)
+  for (let i = 0; i < carData.length; i++) {
+    const newY = cell.y + yd * i
+    const newX = cell.x + xd * i
+    if (newY < 0 || newY >= BOARD_SIZE || newX < 0 || newX >= BOARD_SIZE || availabilityMap[newY][newX] === 1) {
+      return false
+    }
+  }
+  return true
+}
+
+export function isPositionAvailableCarData(cell: Cell, carData: CarType, availabilityMap: number[][]): boolean {
   const { x: xd, y: yd } = getDirectionVector(carData.direction)
   for (let i = 0; i < carData.length; i++) {
     const newY = cell.y + yd * i

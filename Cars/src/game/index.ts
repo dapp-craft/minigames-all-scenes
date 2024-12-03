@@ -39,7 +39,8 @@ import {
 import { queue, ui } from '@dcl-sdk/mini-games/src'
 import { playMoveCarSound, playStartLevelSound, playWinSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
-import { initArrow } from './arrow'
+import { initSelector, selectedCar } from './selector'
+// import { initArrow } from './arrow'
 
 export let lookingAt: Cell | undefined = undefined
 
@@ -94,13 +95,15 @@ export async function initGame() {
 
   setUpRaycast()
 
-  setUpInputSystem()
+  // setUpInputSystem()
+
+  initSelector()
 
   setUpSynchronizer()
 
   setupGameUI()
 
-  initArrow()
+  // initArrow()
 
   createMainCar(SYNC_ENTITY_ID)
 
@@ -110,9 +113,6 @@ export async function initGame() {
 
   await fetchPlayerProgress()
 
-  engine.addSystem(function () {
-    console.log('Input available:', inputAvailable)
-  })
 }
 
 export function getReadyToStart() {
@@ -332,6 +332,7 @@ export function exitGame() {
   clearInputBuffer()
   cancelCountdown()
   cancelWinAnimation()
+  selectedCar(undefined)
   inGame = false
   lastStart = 0
   inputAvailable = false

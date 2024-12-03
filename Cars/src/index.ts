@@ -9,6 +9,7 @@ import { GAME_ID } from './config'
 import { STATIC_MODELS } from './resources/resources'
 import { setSfxStatus, SFX_ENABLED, soundManager } from './game/sfx'
 import { Color4 } from '@dcl/sdk/math'
+(globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
   start: getReadyToStart,
