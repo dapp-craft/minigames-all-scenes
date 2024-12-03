@@ -14,7 +14,6 @@ export const steampunkGameConfig = {
     differentsObjectsPercentages: 0.25
 }
 
-// TODO: Change to 3 level system
 export const levelAmount = 14
 
 export const difficultyLevel = new Map([

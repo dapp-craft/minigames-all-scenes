@@ -80,6 +80,11 @@ export class GameLogic {
             this.playerReturnData.playerLevel = []
             this.playerReturnData.playerStartTime = Date.now()
             this.playerReturnData.playerFinishTime = 999999999
+            this.playerProgress = new Map([
+                [1, []],
+                [2, []],
+                [3, []],
+            ])
         }
 
         for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
