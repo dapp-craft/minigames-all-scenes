@@ -9,7 +9,7 @@ export async function updatePlayerProgress(data: typeof progressState) {
     console.log('Updating progress', playerProgress)
     await progress.upsertProgress({
         time: data.playerFinishTime - data.playerStartTime,
-        level: data.playerLevel[1],
+        level: data.playerLevel,
         score: data.playerScore
     })
 }

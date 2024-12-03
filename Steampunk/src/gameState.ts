@@ -9,13 +9,13 @@ export const steampunkGameState = {
 export type PlayerReturnData = {
     playerStartTime: number,
     playerFinishTime: number;
-    playerLevel: number[];
+    playerLevel: number;
     playerScore: number;
 };
 
 export const progressState: PlayerReturnData = {
     playerStartTime: 0,
     playerFinishTime: 999999999,
-    playerLevel: [],
+    playerLevel: 0,
     playerScore: 0,
   }

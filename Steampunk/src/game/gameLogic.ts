@@ -31,7 +31,7 @@ export class GameLogic {
     private playerReturnData: PlayerReturnData = {
         playerStartTime: Date.now(),
         playerFinishTime: 999999999,
-        playerLevel: [],
+        playerLevel: 0,
         playerScore: 0,
     }
     private gameIsEnded = false
@@ -77,7 +77,7 @@ export class GameLogic {
             this.pictureNumber = 1
             this.hintsAmount = hintsAmount[0]
             this.playerReturnData.playerScore = 0
-            this.playerReturnData.playerLevel = []
+            this.playerReturnData.playerLevel = 0
             this.playerReturnData.playerStartTime = Date.now()
             this.playerReturnData.playerFinishTime = 999999999
             this.playerProgress = new Map([
@@ -147,7 +147,7 @@ export class GameLogic {
                     this.playerProgress.get(this.playerDifficulty)?.push(this.playerLevel)
                     engine.removeSystem('countdown-system')
                     runWinAnimation(steampunkGameConfig.winAnimationDuration).then(() => {
-                        this.playerReturnData.playerLevel[this.playerLevel - 1] = this.playerLevel
+                        this.playerReturnData.playerLevel++
                         this.playerLevel++;
                         this.playGame()
                     })
