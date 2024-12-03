@@ -59,18 +59,17 @@ const generateInitialEntity = async () => {
     const missIndicator = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 6]
     const findCounter = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 7]
 
-    syncEntity(firstBoard, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 1)
-    syncEntity(secondBoard, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 2)
-    syncEntity(hitZone, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 3)
+    syncEntity(firstBoard, [Transform.componentId, MeshRenderer.componentId, Material.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 1)
+    syncEntity(secondBoard, [Transform.componentId, MeshRenderer.componentId, Material.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 2)
+    syncEntity(hitZone, [Transform.componentId, MeshRenderer.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 3)
     syncEntity(hits, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 4)
-    syncEntity(hitZone, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 5)
-    syncEntity(missIndicator, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 6)
+    syncEntity(hitZone, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 5)
+    syncEntity(missIndicator, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 6)
     syncEntity(findCounter, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 7)
+    syncEntity(visibleFeedback, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 8)
 
     for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
-        MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
-        MeshCollider.setPlane(steampunkGameState.availableEntity[i])
-        syncEntity(steampunkGameState.availableEntity[i], [Transform.componentId, GltfContainer.componentId], STEAMPUNK_SYNC_ID + i)
+        syncEntity(steampunkGameState.availableEntity[i], [Transform.componentId, Material.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + i)
     }
 
     steampunkGameState.listOfEntity.set('firstBoard', firstBoard);
@@ -85,32 +84,39 @@ const generateInitialEntity = async () => {
 
     const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
 
-    Transform.create(firstBoard, { ...data.get('obj_screen_1'), parent: steampunkGameState.listOfEntity.get('display') })
-    Transform.create(secondBoard, { ...data.get('obj_screen_2'), parent: steampunkGameState.listOfEntity.get('display') })
-    Transform.create(hitZone, { position: Vector3.create(0, 0, -6), rotation: Quaternion.create(1, 1, 1, 1), scale: Vector3.create(.5, 0, .5), parent: steampunkGameState.listOfEntity.get('display') })
-    Transform.create(missIndicator, { position: { ...Transform.get(hitZone).position, z: Transform.get(hitZone).position.z + .001 }, rotation: Quaternion.create(0, 0, 1, 1), scale: Vector3.create(1, 1, 1), parent: steampunkGameState.listOfEntity.get('display') })
-
-    MeshRenderer.setPlane(firstBoard)
-    MeshRenderer.setPlane(secondBoard)
-    MeshRenderer.setPlane(missIndicator)
-
-    // MeshCollider.setPlane(firstBoard)
-    // MeshCollider.setPlane(secondBoard)
-
-    MeshRenderer.setCylinder(hitZone)
-    MeshRenderer.setPlane(visibleFeedback)
-
-    Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
-    Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
-
-    VisibilityComponent.createOrReplace(hitZone, { visible: false })
-    VisibilityComponent.createOrReplace(visibleFeedback, { visible: false })
-    VisibilityComponent.createOrReplace(missIndicator, { visible: false })
-
-    Material.setPbrMaterial(hitZone, { albedoColor: Color4.create(1, 0, 0, 0.5) })
-    Material.setPbrMaterial(visibleFeedback, { albedoColor: Color4.create(0, 1, 0, 0.5) })
-    Material.setPbrMaterial(missIndicator, { albedoColor: Color4.create(1, 0, 0, 0.9) })
-
+    for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
+        if (Transform.getOrNull(steampunkGameState.availableEntity[i]) == null) {
+            MeshRenderer.setPlane(steampunkGameState.availableEntity[i])
+            MeshCollider.setPlane(steampunkGameState.availableEntity[i])
+        }
+    }
+    if (Transform.getOrNull(firstBoard) == null) {
+        Transform.create(firstBoard, { ...data.get('obj_screen_1'), parent: steampunkGameState.listOfEntity.get('display') })
+        MeshRenderer.setPlane(firstBoard)
+        Material.setPbrMaterial(firstBoard, { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
+    }
+    if (Transform.getOrNull(secondBoard) == null) {
+        Transform.create(secondBoard, { ...data.get('obj_screen_2'), parent: steampunkGameState.listOfEntity.get('display') })
+        MeshRenderer.setPlane(secondBoard)
+        Material.setPbrMaterial(secondBoard, { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
+    }
+    if (Transform.getOrNull(hitZone) == null) {
+        Transform.create(hitZone, { position: Vector3.create(0, 0, -6), rotation: Quaternion.create(1, 1, 1, 1), scale: Vector3.create(.5, 0, .5), parent: steampunkGameState.listOfEntity.get('display') })
+        MeshRenderer.setCylinder(hitZone)
+        VisibilityComponent.createOrReplace(hitZone, { visible: false })
+        Material.setPbrMaterial(hitZone, { albedoColor: Color4.create(1, 0, 0, 0.5) })
+    }
+    if (Transform.getOrNull(missIndicator) == null) {
+        Transform.create(missIndicator, { position: { ...Transform.get(hitZone).position, z: Transform.get(hitZone).position.z + .001 }, rotation: Quaternion.create(0, 0, 1, 1), scale: Vector3.create(1, 1, 1), parent: steampunkGameState.listOfEntity.get('display') })
+        MeshRenderer.setPlane(missIndicator)
+        VisibilityComponent.createOrReplace(missIndicator, { visible: false })
+        Material.setPbrMaterial(missIndicator, { albedoColor: Color4.create(1, 0, 0, 0.9) })
+    }
+    if (Transform.getOrNull(visibleFeedback) == null) {
+        MeshRenderer.setPlane(visibleFeedback)
+        VisibilityComponent.createOrReplace(visibleFeedback, { visible: false })
+        Material.setPbrMaterial(visibleFeedback, { albedoColor: Color4.create(0, 1, 0, 0.5) })
+    }
     if (Transform.getOrNull(hits) == null || TextShape.getOrNull(hits) == null) {
         Transform.create(hits, { ...data.get('counter_foundObjects'), parent: sceneParentEntity })
         TextShape.create(hits, { text: 'Score \n0', fontSize: 2 })
@@ -119,7 +125,6 @@ const generateInitialEntity = async () => {
         Transform.create(findCounter, { ...data.get('counter_foundObjects'), position: { ...data.get('counter_foundObjects')!.position, x: data.get('counter_foundObjects')!.position.x - 1.5 }, parent: sceneParentEntity })
         TextShape.create(findCounter, { text: 'Find \n0/0', fontSize: 2 })
     }
-
     lightUpEntity(firstBoard, `images/scene-thumbnail.png`)
     lightUpEntity(secondBoard, `images/scene-thumbnail.png`)
 }
