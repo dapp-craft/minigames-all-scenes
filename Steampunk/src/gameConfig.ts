@@ -14,6 +14,8 @@ export const steampunkGameConfig = {
     differentsObjectsPercentages: 0.25
 }
 
+export const timeBeforeStart = 3
+
 export const difficultyLevel = new Map([
     [1, [1, 2]],
     [2, [3, 4, 5, 6, 7, 8]],

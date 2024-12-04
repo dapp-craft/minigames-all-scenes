@@ -7,8 +7,10 @@ import { updatePlayerProgress } from './syncData'
 import { enableCamera } from './cameraEntity'
 import { runCountdown } from '../../../common/effects'
 import { steampunkGameState } from '../gameState'
+import { timeBeforeStart } from '../gameConfig'
+import { parentEntity } from '@dcl/sdk/network'
 
-let startTimeOut: utils.TimerId
+export let startTimeOut: utils.TimerId
 export let levelButtons: ui.MenuButton[] = []
 
 export const initGame = async () => {
@@ -22,7 +24,8 @@ export const initGame = async () => {
 export function getReadyToStart() {
   console.log('Get Ready to start!')
   enableCamera()
-  runCountdown().then(() => startGame())
+  runCountdown(timeBeforeStart)
+  startTimeOut = utils.timers.setTimeout(() => startGame(), timeBeforeStart * 1000 + 200)
 }
 
 async function startGame() {
@@ -33,8 +36,8 @@ async function startGame() {
   console.log(res)
 
   // if (res.playerLevel[levelAmount - 1]) {
-    console.log("Update Player Progress")
-    await updatePlayerProgress(res);
+  console.log("Update Player Progress")
+  await updatePlayerProgress(res);
   // }
   // queue.setNextPlayer()
 }

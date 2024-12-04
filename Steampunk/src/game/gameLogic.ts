@@ -7,7 +7,7 @@ import { runWinAnimation } from '../../../common/effects'
 import { lightUpEntity, soundManager } from '..'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { ui } from '@dcl-sdk/mini-games/src'
-import { countdown, levelButtons } from './game'
+import { countdown, levelButtons, startTimeOut } from './game'
 import { disableCamera } from './cameraEntity'
 import { parentEntity } from '@dcl/sdk/network'
 
@@ -272,6 +272,7 @@ export class GameLogic {
             VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
             pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
         }
+        utils.timers.clearTimeout(startTimeOut)
         this.playerReturnData.playerFinishTime = Date.now()
         // timer.hide();
         TextShape.getMutable(steampunkGameState.listOfEntity.get('timerEntity')).text = ``
