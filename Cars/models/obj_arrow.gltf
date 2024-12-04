@@ -11,7 +11,8 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0
+				0,
+				1
 			]
 		}
 	],
@@ -19,6 +20,10 @@
 		{
 			"mesh":0,
 			"name":"obj_arrow"
+		},
+		{
+			"mesh":1,
+			"name":"obj_arrow_collider"
 		}
 	],
 	"materials":[
@@ -58,6 +63,18 @@
 					},
 					"indices":3,
 					"material":0
+				}
+			]
+		},
+		{
+			"name":"Cube.002",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":4,
+						"NORMAL":5
+					},
+					"indices":6
 				}
 			]
 		}
@@ -113,6 +130,34 @@
 			"componentType":5123,
 			"count":180,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":24,
+			"max":[
+				0.7496229410171509,
+				0.18382157385349274,
+				0.5237069129943848
+			],
+			"min":[
+				-0.6484513878822327,
+				0,
+				-0.5237069129943848
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":24,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5123,
+			"count":36,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -139,6 +184,24 @@
 			"byteLength":360,
 			"byteOffset":3840,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":4200,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":4488,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":72,
+			"byteOffset":4776,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -149,7 +212,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":4200,
+			"byteLength":4848,
 			"uri":"obj_arrow.bin"
 		}
 	]
