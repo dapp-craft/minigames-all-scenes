@@ -7,7 +7,7 @@ import { runWinAnimation } from '../../../common/effects'
 import { lightUpEntity, soundManager } from '..'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { ui } from '@dcl-sdk/mini-games/src'
-import { countdown, levelButtons, timer } from './game'
+import { countdown, levelButtons } from './game'
 import { disableCamera } from './cameraEntity'
 import { parentEntity } from '@dcl/sdk/network'
 
@@ -273,15 +273,15 @@ export class GameLogic {
             pointerEventsSystem.removeOnPointerDown(steampunkGameState.availableEntity[i])
         }
         this.playerReturnData.playerFinishTime = Date.now()
-        timer.hide();
+        // timer.hide();
         TextShape.getMutable(steampunkGameState.listOfEntity.get('timerEntity')).text = ``
         this.resolveReady()
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n0/0`
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n0`
         levelButtons[this.playerDifficulty - 1].buttonShapeEnabled = ui.uiAssets.shapes.SQUARE_GREEN
         levelButtons[this.playerDifficulty - 1].enable()
-        lightUpEntity(steampunkGameState.listOfEntity.get('firstBoard'), `images/scene-thumbnail.png`)
-        lightUpEntity(steampunkGameState.listOfEntity.get('secondBoard'), `images/scene-thumbnail.png`)
+        lightUpEntity(steampunkGameState.listOfEntity.get('firstBoard'), `images/1.png`)
+        lightUpEntity(steampunkGameState.listOfEntity.get('secondBoard'), `images/2.png`)
     }
 
     private updateActiveLevelButtonColor() {

@@ -8,7 +8,6 @@ import { enableCamera } from './cameraEntity'
 import { runCountdown } from '../../../common/effects'
 import { steampunkGameState } from '../gameState'
 
-export let timer: ui.Timer3D
 let startTimeOut: utils.TimerId
 export let levelButtons: ui.MenuButton[] = []
 
@@ -42,18 +41,6 @@ async function startGame() {
 
 async function initCountdownNumbers() {
   const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
-  timer = new ui.Timer3D(
-    {
-      parent: sceneParentEntity,
-      ...data.get('counter_stopwatch'),
-    },
-    1,
-    1,
-    false,
-    24353
-  )
-  console.log(timer)
-  timer.hide();
   TextShape.getMutable(steampunkGameState.listOfEntity.get('timerEntity')).text = ``
 }
 
@@ -70,7 +57,8 @@ export async function countdown(cb: () => void, number: number, stop?: boolean) 
         if (currentValue > 0) {
           // timer.show()
           TextShape.getMutable(steampunkGameState.listOfEntity.get('timerEntity')).text = `${currentValue}`
-          timer.setTimeAnimated(currentValue--)
+          // timer.setTimeAnimated(currentValue--)
+          currentValue--
         } else {
           // timer.hide()
           TextShape.getMutable(steampunkGameState.listOfEntity.get('timerEntity')).text = ``

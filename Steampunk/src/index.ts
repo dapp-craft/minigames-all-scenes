@@ -94,13 +94,11 @@ const generateInitialEntity = async () => {
         Transform.create(firstBoard, { ...data.get('obj_screen_1')})
         parentEntity(firstBoard, steampunkGameState.listOfEntity.get('display'))
         MeshRenderer.setPlane(firstBoard)
-        Material.setPbrMaterial(firstBoard, { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
     }
     if (Transform.getOrNull(secondBoard) == null) {
         Transform.create(secondBoard, { ...data.get('obj_screen_2') })
         parentEntity(secondBoard, steampunkGameState.listOfEntity.get('display'))
         MeshRenderer.setPlane(secondBoard)
-        Material.setPbrMaterial(secondBoard, { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
     }
     if (Transform.getOrNull(hitZone) == null) {
         Transform.create(hitZone, { position: Vector3.create(0, 0, -6), rotation: Quaternion.create(1, 1, 1, 1), scale: Vector3.create(.5, 0, .5)})
@@ -133,8 +131,8 @@ const generateInitialEntity = async () => {
         Transform.create(timerEntity, { ...data.get('counter_stopwatch'), parent: sceneParentEntity })
         TextShape.create(timerEntity, { text: '', fontSize: 2 })
     }
-    lightUpEntity(firstBoard, `images/scene-thumbnail.png`)
-    lightUpEntity(secondBoard, `images/scene-thumbnail.png`)
+    lightUpEntity(firstBoard, `images/1.png`)
+    lightUpEntity(secondBoard, `images/2.png`)
 }
 
 export const lightUpEntity = (entity: Entity, texture: string) => {
