@@ -20,6 +20,10 @@ export const difficultyLevel = new Map([
     [3, [9, 10, 11, 12, 13, 14]]
 ])
 
+export const gameTime = {
+    inactivity: 45
+}
+
 export const soundConfig = {
     volume: 0.5
 }
