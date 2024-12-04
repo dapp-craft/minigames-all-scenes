@@ -18,7 +18,7 @@ import { init } from './game/cameraEntity'
 const handlers = {
     start: () => getReadyToStart(),
     exit: () => gameLogic.gameEnd(),
-    restart: () => gameLogic.playGame(),
+    restart: () => gameLogic.restartGame(),
     toggleMusic: () => playBackgroundMusic(),
     toggleSfx: () => toggleVolume()
 }

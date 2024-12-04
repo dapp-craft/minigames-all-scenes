@@ -50,6 +50,11 @@ export class GameLogic {
         return this.playerReturnData
     }
 
+    public restartGame() {
+        this.resetProgress()
+        this.playGame()
+    }
+
     private startTimer() {
         engine.removeSystem('countdown-system')
         countdown(() => this.playGame(), steampunkGameConfig.gameTime / 1000)
@@ -105,6 +110,7 @@ export class GameLogic {
         this.differencesFound = []
         utils.timers.clearInterval(this.hintTimeOut)
         console.log(this.playerLevel, this.pictureNumber, this.correctSmashCounter, this.differencesFound)
+        this.updateScore()
     }
 
     public async playGame() {
@@ -241,11 +247,15 @@ export class GameLogic {
     private changeCounter(correct: boolean = true) {
         if (correct) {
             this.correctSmashCounter++
-            TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${this.levelDifferenceAmmount}`
             this.playerReturnData.playerScore = this.playerReturnData.playerScore + steampunkGameConfig.awardMultiplier
         } else this.playerReturnData.playerScore = this.playerReturnData.playerScore - steampunkGameConfig.awardMultiplier
-        TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n${this.playerReturnData.playerScore}`
+        this.updateScore()
         console.log("Score: ", this.correctSmashCounter, "Return Score: ", this.playerReturnData.playerScore)
+    }
+
+    private updateScore() {
+        TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${this.levelDifferenceAmmount}`
+        TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n${this.playerReturnData.playerScore}`
     }
 
     private visibleFeedback(isEntityCorrect: boolean, entityId: number) {
