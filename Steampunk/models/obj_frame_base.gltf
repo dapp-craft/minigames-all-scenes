@@ -124,7 +124,7 @@
 	"accessors":[
 		{
 			"componentType":5126,
-			"count":9822,
+			"count":9834,
 			"max":[
 				7.378854751586914,
 				5.138875484466553,
@@ -139,17 +139,17 @@
 		},
 		{
 			"componentType":5126,
-			"count":9822,
+			"count":9834,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":9822,
+			"count":9834,
 			"type":"VEC2"
 		},
 		{
 			"componentType":5123,
-			"count":23664,
+			"count":23712,
 			"type":"SCALAR"
 		},
 		{
@@ -181,13 +181,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":66557,
+			"byteLength":66630,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
 			"byteLength":848,
-			"byteOffset":66560
+			"byteOffset":66632
 		}
 	],
 	"samplers":[
@@ -198,7 +198,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":67408,
+			"byteLength":67480,
 			"uri":"obj_frame_base.bin"
 		}
 	]
