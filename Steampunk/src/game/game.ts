@@ -2,9 +2,11 @@ import * as utils from '@dcl-sdk/utils'
 import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src"
 import { gameLogic } from '..'
 import { readGltfLocators } from '../../../common/locators'
-import { engine } from '@dcl/sdk/ecs'
+import { engine, TextShape } from '@dcl/sdk/ecs'
 import { updatePlayerProgress } from './syncData'
 import { enableCamera } from './cameraEntity'
+import { runCountdown } from '../../../common/effects'
+import { steampunkGameState } from '../gameState'
 
 export let timer: ui.Timer3D
 let startTimeOut: utils.TimerId
@@ -20,9 +22,8 @@ export const initGame = async () => {
 
 export function getReadyToStart() {
   console.log('Get Ready to start!')
-  // runCountdown().then(() => startGame())
   enableCamera()
-  startGame();
+  runCountdown().then(() => startGame())
 }
 
 async function startGame() {
@@ -53,6 +54,7 @@ async function initCountdownNumbers() {
   )
   console.log(timer)
   timer.hide();
+  TextShape.getMutable(steampunkGameState.listOfEntity.get('timerEntity')).text = ``
 }
 
 export async function countdown(cb: () => void, number: number, stop?: boolean) {
@@ -66,10 +68,12 @@ export async function countdown(cb: () => void, number: number, stop?: boolean) 
       if (time >= 1) {
         time = 0
         if (currentValue > 0) {
-          timer.show()
+          // timer.show()
+          TextShape.getMutable(steampunkGameState.listOfEntity.get('timerEntity')).text = `${currentValue}`
           timer.setTimeAnimated(currentValue--)
         } else {
-          timer.hide()
+          // timer.hide()
+          TextShape.getMutable(steampunkGameState.listOfEntity.get('timerEntity')).text = ``
           engine.removeSystem('countdown-system')
           cb && cb()
         }

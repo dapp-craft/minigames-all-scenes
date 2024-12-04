@@ -107,7 +107,7 @@ export class GameLogic {
         console.log(this.playerLevel, this.pictureNumber, this.correctSmashCounter, this.differencesFound)
     }
 
-    private async playGame() {
+    public async playGame() {
         if (this.gameIsEnded) return
         this.playerLevelHandler()
         await this.generateDifference()
@@ -141,7 +141,6 @@ export class GameLogic {
                     lightUpEntity(steampunkGameState.availableEntity[secondBoard ? i + data.size : i - data.size], `images/${objectDifferenceData.type}/${objectDifferenceData.imageNumber}.png`)
                     this.visibleFeedback(true, i)
                     utils.timers.clearInterval(this.hintTimeOut)
-                    // VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
                     this.differencesFound[i] = i
                     this.changeCounter()
                     if (this.correctSmashCounter < this.levelDifferenceAmmount) return
@@ -163,7 +162,6 @@ export class GameLogic {
                     parent: steampunkGameState.listOfEntity.get(secondBoard ? "secondBoard" : "firstBoard")
                 })
                 parentEntity(steampunkGameState.availableEntity[i], steampunkGameState.listOfEntity.get(secondBoard ? "secondBoard" : "firstBoard"))
-                // console.log(Transform.get(steampunkGameState.availableEntity[i]));
                 lightUpEntity(steampunkGameState.availableEntity[i], `images/${this.objectDifference.get(i).type}${(!this.objectDifference.get(i)?.isCorrect) ? '_alt' : ''}/${this.objectDifference.get(i).imageNumber}.png`)
             }
         }
@@ -186,14 +184,9 @@ export class GameLogic {
             return this.playerProgress.get(this.playerDifficulty)!.length;
         }
         if (this.playerDifficulty == 0) { this.playerDifficulty = 1 }
-        console.log("YO2: ", this.playerDifficulty)
         if (difficultyLevel.get(this.playerDifficulty)!.length == this.playerProgress.get(this.playerDifficulty)!.length) {
-            if (this.playerDifficulty == difficultyLevel.size) {
-                this.playerProgress.get(this.playerDifficulty)!.splice(0, this.playerProgress.get(this.playerDifficulty)!.length)
-            } else {
-                this.playerDifficulty++
-            }
-            console.log("YO: ", this.playerDifficulty)
+            if (this.playerDifficulty == difficultyLevel.size) this.playerProgress.get(this.playerDifficulty)!.splice(0, this.playerProgress.get(this.playerDifficulty)!.length)
+            else this.playerDifficulty++
         }
         this.playerLevel = findRandomDifferentNumber(difficultyLevel.get(this.playerDifficulty)!, this.playerProgress.get(this.playerDifficulty)!)
     }
@@ -281,9 +274,8 @@ export class GameLogic {
         }
         this.playerReturnData.playerFinishTime = Date.now()
         timer.hide();
+        TextShape.getMutable(steampunkGameState.listOfEntity.get('timerEntity')).text = ``
         this.resolveReady()
-        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('firstBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
-        Material.setPbrMaterial(steampunkGameState.listOfEntity.get('secondBoard'), { texture: Material.Texture.Common({ src: `images/scene-thumbnail.png` }) })
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n0/0`
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n0`
         levelButtons[this.playerDifficulty - 1].buttonShapeEnabled = ui.uiAssets.shapes.SQUARE_GREEN

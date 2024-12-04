@@ -15,11 +15,10 @@ import { mainThereme, SoundManager } from './game/soundManager'
 import { init } from './game/cameraEntity'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
-//temp
 const handlers = {
     start: () => getReadyToStart(),
-    exit: () => { gameLogic.gameEnd() },
-    restart: () => getReadyToStart(),
+    exit: () => gameLogic.gameEnd(),
+    restart: () => gameLogic.playGame(),
     toggleMusic: () => playBackgroundMusic(),
     toggleSfx: () => toggleVolume()
 }
@@ -57,6 +56,7 @@ const generateInitialEntity = async () => {
     const visibleFeedback = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 5]
     const missIndicator = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 6]
     const findCounter = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 7]
+    const timerEntity = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 9]
 
     syncEntity(steampunkGameState.listOfEntity.get('display'), [Transform.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 10)
     syncEntity(firstBoard, [Transform.componentId, MeshRenderer.componentId, Material.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 1)
@@ -67,6 +67,7 @@ const generateInitialEntity = async () => {
     syncEntity(missIndicator, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 6)
     syncEntity(findCounter, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 7)
     syncEntity(visibleFeedback, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 8)
+    syncEntity(timerEntity, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 9)
 
     for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
         syncEntity(steampunkGameState.availableEntity[i], [Transform.componentId, Material.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + i)
@@ -79,8 +80,7 @@ const generateInitialEntity = async () => {
     steampunkGameState.listOfEntity.set('visibleFeedback', visibleFeedback);
     steampunkGameState.listOfEntity.set('missIndicator', missIndicator);
     steampunkGameState.listOfEntity.set('findCounter', findCounter);
-
-    console.log(Transform.get(steampunkGameState.listOfEntity.get('display')))
+    steampunkGameState.listOfEntity.set('timerEntity', timerEntity);
 
     const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
 
@@ -128,6 +128,10 @@ const generateInitialEntity = async () => {
     if (Transform.getOrNull(findCounter) == null || TextShape.getOrNull(findCounter) == null) {
         Transform.create(findCounter, { ...data.get('counter_score'), parent: sceneParentEntity })
         TextShape.create(findCounter, { text: 'Find \n0/0', fontSize: 2 })
+    }
+    if (Transform.getOrNull(timerEntity) == null || TextShape.getOrNull(timerEntity) == null) {
+        Transform.create(timerEntity, { ...data.get('counter_stopwatch'), parent: sceneParentEntity })
+        TextShape.create(timerEntity, { text: '', fontSize: 2 })
     }
     lightUpEntity(firstBoard, `images/scene-thumbnail.png`)
     lightUpEntity(secondBoard, `images/scene-thumbnail.png`)
