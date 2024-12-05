@@ -22,7 +22,8 @@
     "Cars",
     "Toads",
     "Snake",
-    "Steampunk"
+    "Steampunk",
+    "West"
   ],
   "dependencies": {
     "@dcl-sdk/mini-games": "github:Maironire/sdk-mini-games",
