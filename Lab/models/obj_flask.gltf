@@ -20,37 +20,15 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_flask",
-			"rotation":[
-				0,
-				-0.7071068286895752,
-				0,
-				0.7071068286895752
-			],
-			"translation":[
-				0,
-				1.5738656520843506,
-				0
-			]
-		},
-		{
-			"name":"obj_flask_collider",
-			"rotation":[
-				0,
-				-0.7071068286895752,
-				0,
-				0.7071068286895752
-			]
+			"name":"obj_flask"
 		},
 		{
 			"mesh":1,
-			"name":"obj_flask_alpha",
-			"rotation":[
-				0,
-				-0.7071068286895752,
-				0,
-				0.7071068286895752
-			]
+			"name":"obj_flask_alpha"
+		},
+		{
+			"mesh":2,
+			"name":"obj_flask_collider"
 		}
 	],
 	"materials":[
@@ -129,6 +107,18 @@
 					"material":1
 				}
 			]
+		},
+		{
+			"name":"Mesh.002",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":8,
+						"NORMAL":9
+					},
+					"indices":10
+				}
+			]
 		}
 	],
 	"textures":[
@@ -167,13 +157,13 @@
 			"componentType":5126,
 			"count":434,
 			"max":[
-				0.3475185036659241,
-				0,
-				0.33161604404449463
+				0.33161604404449463,
+				1.5738656520843506,
+				0.34751880168914795
 			],
 			"min":[
-				-0.33161622285842896,
-				-1.5738656520843506,
+				-0.3316159248352051,
+				0,
 				-0.3316159248352051
 			],
 			"type":"VEC3"
@@ -201,14 +191,14 @@
 			"componentType":5126,
 			"count":68,
 			"max":[
-				0.33161354064941406,
+				0.33161601424217224,
 				1.1042758226394653,
-				0.3316159248352051
+				0.33161354064941406
 			],
 			"min":[
-				-0.3316183090209961,
+				-0.3316159248352051,
 				0.28694596886634827,
-				-0.33161601424217224
+				-0.3316183090209961
 			],
 			"type":"VEC3"
 		},
@@ -228,6 +218,34 @@
 			"bufferView":7,
 			"componentType":5123,
 			"count":192,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":8,
+			"componentType":5126,
+			"count":24,
+			"max":[
+				0.33161604404449463,
+				1.5738656520843506,
+				0.34751880168914795
+			],
+			"min":[
+				-0.33161595463752747,
+				0,
+				-0.33161595463752747
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":9,
+			"componentType":5126,
+			"count":24,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":10,
+			"componentType":5123,
+			"count":36,
 			"type":"SCALAR"
 		}
 	],
@@ -279,6 +297,24 @@
 			"byteLength":384,
 			"byteOffset":18800,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":19184,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":19472,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":72,
+			"byteOffset":19760,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -289,7 +325,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":19184,
+			"byteLength":19832,
 			"uri":"obj_flask.bin"
 		}
 	]
