@@ -14,7 +14,6 @@ export let sessionStartedAt: number
 
 let timer: ui.Timer3D
 let playButton: ui.MenuButton
-let startTimeOut: utils.TimerId | undefined
 
 export const initGame = async () => {
   console.log('INIT GAME')
@@ -28,7 +27,6 @@ export function getReadyToStart() {
   console.log('Get Ready to start!')
   playButton.disable()
   soundManager.playSound('enterSounds', soundConfig.volume)
-  startTimeOut && utils.timers.clearTimeout(startTimeOut)
   exitCallback(false)
   CameraModeArea.createOrReplace(engine.PlayerEntity, {
     area: Vector3.create(1, 1, 1),
