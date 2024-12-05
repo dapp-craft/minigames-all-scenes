@@ -17,6 +17,8 @@
     "npm": ">=6.0.0"
   },
   "prettier": {
+    "tabWidth": 4,
+    "arrowParens": "avoid",
     "semi": false,
     "singleQuote": true,
     "printWidth": 120,
