@@ -17,13 +17,13 @@ export async function setupGameUI() {
   syncEntity(speedEntity, [TextShape.componentId], 5201)
   
   await Promise.all([setLevelUiPositions()])
-  
+
   setupScore(moveCounter)
   setupSpeed(speedEntity)
 }
 
 function setupScore(moveCounter: Entity) {
-  Transform.create(moveCounter, UiLocators['counter_length'])
+  if (!Transform.has(moveCounter)) Transform.create(moveCounter, UiLocators['counter_length'])
   if (!TextShape.has(moveCounter)) {
     TextShape.createOrReplace(moveCounter, {
       text: `Length: ${0}`,
@@ -47,7 +47,7 @@ function setupScore(moveCounter: Entity) {
 }
 
 function setupSpeed(speedEntity: Entity) {
-  Transform.create(speedEntity, UiLocators['counter_speed'])
+  if (!Transform.has(speedEntity)) Transform.create(speedEntity, UiLocators['counter_speed'])
   if (!TextShape.has(speedEntity)) {
     TextShape.createOrReplace(speedEntity, {
       text: `Speed: ${0}`,
