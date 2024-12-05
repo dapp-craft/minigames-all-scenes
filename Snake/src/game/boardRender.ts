@@ -39,9 +39,7 @@ export class BoardRenderer {
     this._gameController = gameController
 
     engine.addSystem(this.update)
-    this.setPosition().then(() => {
-      this.renderCells()
-    })
+    this.setPosition()
   }
 
   public render() {
@@ -110,19 +108,19 @@ export class BoardRenderer {
     this.yk = 1 / transform.scale.y
   }
 
-  private renderCells() {
-    const boardSize = this._gameController.boardSize
-    for (let i = 0; i < boardSize.height; i++) {
-      for (let k = 0; k < boardSize.width; k++) {
-        const entity = engine.addEntity()
-        Transform.create(entity, {
-          position: Vector3.add(this._relativePosition({ x: k, y: i }), Vector3.create(0, 0, 0.001)),
-          scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1),
-          parent: this._entity
-        })
-        GltfContainer.create(entity, cellModel)
-        this.cells.push(entity)
-      }
-    }
-  }
+  // private renderCells() {
+  //   const boardSize = this._gameController.boardSize
+  //   for (let i = 0; i < boardSize.height; i++) {
+  //     for (let k = 0; k < boardSize.width; k++) {
+  //       const entity = engine.addEntity()
+  //       Transform.create(entity, {
+  //         position: Vector3.add(this._relativePosition({ x: k, y: i }), Vector3.create(0, 0, 0.001)),
+  //         scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1),
+  //         parent: this._entity
+  //       })
+  //       GltfContainer.create(entity, cellModel)
+  //       this.cells.push(entity)
+  //     }
+  //   }
+  // }
 }
