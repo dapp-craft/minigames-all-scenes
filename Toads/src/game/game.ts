@@ -14,7 +14,7 @@ export let sessionStartedAt: number
 
 let timer: ui.Timer3D
 let playButton: ui.MenuButton
-let startTimeOut: utils.TimerId
+let startTimeOut: utils.TimerId | undefined
 
 export const initGame = async () => {
   console.log('INIT GAME')
