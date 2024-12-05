@@ -30,10 +30,10 @@ export class GameController {
   private _directionToUpdate: Direction | undefined = undefined
 
   private timer: number = 0
-  private speed: number = 0
+  private _speed: number = 0
   private system = (dt: number) => {
     this.timer += dt
-    if (this.timer >= SPEED[this.speed]) {
+    if (this.timer >= SPEED[this._speed]) {
       this.timer = 0
       this.update()
     }
@@ -130,7 +130,7 @@ export class GameController {
 
         // Update score
         let scoreToAdd = 1
-        if (this.speed == SPEED.length - 1) {
+        if (this._speed == SPEED.length - 1) {
           // MAX speed
           scoreToAdd = +2
         }
@@ -200,6 +200,10 @@ export class GameController {
     return this._inGame
   }
 
+  public get speed(){
+    return this._speed
+  }
+
   public get isInit() {
     return this._isInit
   }
@@ -240,7 +244,7 @@ export class GameController {
   }
 
   private modifySpeed() {
-    this.speed = Math.min(Math.floor(this._score / 5), SPEED.length - 1)
+    this._speed = Math.min(Math.floor(this._score / 5), SPEED.length - 1)
   }
 
   private checkCollision() {
