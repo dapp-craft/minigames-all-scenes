@@ -267,7 +267,7 @@ export class GameController {
   }
 }
 
-const SPEED = [0.6, 0.5, 0.4, 0.3] // Itervals between moves in seconds
+const SPEED = [0.6, 0.5, 0.4, 0.35, 0.3, 0.25, 0.20, 0.15, 0.10, 0.05] // Itervals between moves in seconds
 
 function generateFoodPosition(boardSize: { width: number; height: number }) {
   return {
