@@ -1,7 +1,7 @@
 {
   "name": "minigame-west",
   "version": "1.0.0",
-  "description": "",
+  "description": "Minigame 'Wild-West'",
   "scripts": {
     "start": "sdk-commands start",
     "deploy": "sdk-commands deploy",
