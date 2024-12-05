@@ -1,0 +1,33 @@
+name: west
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'West/**'
+      - 'common/**'
+      - 'package.json'
+    tags:
+      - 'preview/west-v*'
+      - 'release/west-v*'
+
+jobs:
+  testing:
+    if: github.ref_type != 'tag'
+    uses: ./.github/workflows/.deploy_worlds.yml
+    with:
+      directory: West
+      worlds: demo.test.v01d.crossverse.eth
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
+
+  staging:
+    if: github.ref_type == 'tag'
+    uses: ./.github/workflows/.deploy_genesis.yml
+    with:
+      directory: West
+      coordinates: '["0,0"]'
+      mainnet: ${{ startsWith(github.ref_name, 'release') }}
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
