@@ -4,6 +4,7 @@ import { Position } from './objects/type'
 import { Entity, GltfContainer, Material, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
 import { readGltfLocators } from '../../../common/locators'
 import { snakeBodyModel, foodModel, cellModel } from '../resources'
+import { syncEntity, parentEntity } from '@dcl/sdk/network'
 
 let CELL_SIZE = 1
 
@@ -31,6 +32,7 @@ export class BoardRenderer {
 
   constructor(gameController: GameController) {
     this._entity = engine.addEntity()
+    syncEntity(this._entity, [Transform.componentId], 5500)
     Transform.create(this._entity, {
       position: Vector3.create(0, 0, 0),
       rotation: Quaternion.fromEulerDegrees(0, 180, 0),
@@ -56,9 +58,10 @@ export class BoardRenderer {
         const entity = snakePart.entity
         Transform.createOrReplace(entity, {
           position: this._relativePosition(snakePart.position),
-          scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1),
-          parent: this._entity
+          scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1)
         })
+        parentEntity(entity, this._entity)
+        
 
         // Choose model based on snake part or head
         if (!GltfContainer.getOrNull(entity)) GltfContainer.createOrReplace(entity, snakeBodyModel)
@@ -72,14 +75,12 @@ export class BoardRenderer {
     const food = this._gameController.food
     if (food) {
       const entity = food.entity
-      Material.setPbrMaterial(entity, {
-        albedoColor: Color4.Red()
-      })
       Transform.createOrReplace(entity, {
         position: this._relativePosition(food.position),
-        parent: this._entity,
         scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1)
       })
+      parentEntity(entity, this._entity)
+
       if (!GltfContainer.getOrNull(entity)) GltfContainer.createOrReplace(entity, foodModel)
 
     }
@@ -103,7 +104,7 @@ export class BoardRenderer {
 
     // Center offset
     transform.position = Vector3.add(transform.position, Vector3.create(8, 0, 8))
-    Transform.createOrReplace(this._entity, transform)
+    if (~Transform.has(this._entity)) Transform.createOrReplace(this._entity, transform)
     this.xk = 1 / transform.scale.x
     this.yk = 1 / transform.scale.y
   }

@@ -15,12 +15,13 @@ const inputController = new InputController()
 
 export const gameController = new GameController(20, 15)
 
-const renderController = new BoardRenderer(gameController)
 
 export async function initGame() {
   inputController.gameController = gameController
   gameController.onFinishCallback = onFinish
-
+  
+  const renderController = new BoardRenderer(gameController)
+  
   setupEffects(Vector3.create(0, 2.5, -6), Vector3.create(0, 1.2, 0))
 
   setupGameUI()
