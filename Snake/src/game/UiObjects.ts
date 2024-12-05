@@ -9,14 +9,16 @@ import { gameController } from './index'
 export const levelButtons: ui.MenuButton[] = []
 
 export async function setupGameUI() {
-  await Promise.all([setLevelUiPositions()])
-
+  
   const moveCounter = engine.addEntity()
   syncEntity(moveCounter, [TextShape.componentId], 5200)
-  setupScore(moveCounter)
-
+  
   const speedEntity = engine.addEntity()
   syncEntity(speedEntity, [TextShape.componentId], 5201)
+  
+  await Promise.all([setLevelUiPositions()])
+  
+  setupScore(moveCounter)
   setupSpeed(speedEntity)
 }
 
