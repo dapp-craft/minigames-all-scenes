@@ -6,6 +6,7 @@ import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { finishGameButtonHandler, initGame, startGame } from './game'
 import { STATIC_MODELS } from './resources'
+import '../../common/cleaner'
 
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
