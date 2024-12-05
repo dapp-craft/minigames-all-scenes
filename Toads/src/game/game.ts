@@ -28,7 +28,7 @@ export function getReadyToStart() {
   console.log('Get Ready to start!')
   playButton.disable()
   soundManager.playSound('enterSounds', soundConfig.volume)
-  utils.timers.clearTimeout(startTimeOut)
+  startTimeOut != undefined && utils.timers.clearTimeout(startTimeOut)
   exitCallback(false)
   CameraModeArea.createOrReplace(engine.PlayerEntity, {
     area: Vector3.create(1, 1, 1),
