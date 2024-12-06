@@ -104,7 +104,7 @@ export class BoardRenderer {
 
     // Center offset
     transform.position = Vector3.add(transform.position, Vector3.create(8, 0, 8))
-    if (!Transform.has(this._entity)) Transform.createOrReplace(this._entity, transform)
+    Transform.createOrReplace(this._entity, transform)
     this.xk = 1 / transform.scale.x
     this.yk = 1 / transform.scale.y
   }
