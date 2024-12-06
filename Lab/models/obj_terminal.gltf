@@ -11,14 +11,19 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0
+				0,
+				1
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_terminal.002"
+			"name":"obj_terminal"
+		},
+		{
+			"mesh":1,
+			"name":"obj_terminal_collider"
 		}
 	],
 	"materials":[
@@ -90,6 +95,19 @@
 					},
 					"indices":7,
 					"material":1
+				}
+			]
+		},
+		{
+			"name":"Mesh.013",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":8,
+						"NORMAL":9,
+						"TEXCOORD_0":10
+					},
+					"indices":11
 				}
 			]
 		}
@@ -192,6 +210,40 @@
 			"componentType":5123,
 			"count":1200,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":8,
+			"componentType":5126,
+			"count":132,
+			"max":[
+				0.7292715311050415,
+				1.7020294666290283,
+				2.5297207832336426
+			],
+			"min":[
+				-0.7292715311050415,
+				0.15000009536743164,
+				1.5007045269012451
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":9,
+			"componentType":5126,
+			"count":132,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":10,
+			"componentType":5126,
+			"count":132,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":11,
+			"componentType":5123,
+			"count":264,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -242,6 +294,30 @@
 			"byteLength":2400,
 			"byteOffset":26868,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":1584,
+			"byteOffset":29268,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1584,
+			"byteOffset":30852,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1056,
+			"byteOffset":32436,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":528,
+			"byteOffset":33492,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -252,7 +328,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":29268,
+			"byteLength":34020,
 			"uri":"obj_terminal.bin"
 		}
 	]
