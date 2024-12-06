@@ -33,7 +33,7 @@ export class BoardRenderer {
   constructor(gameController: GameController) {
     this._entity = engine.addEntity()
     syncEntity(this._entity, [Transform.componentId], 5500)
-    Transform.create(this._entity, {
+    if(!Transform.has(this._entity)) Transform.createOrReplace(this._entity, {
       position: Vector3.create(0, 0, 0),
       rotation: Quaternion.fromEulerDegrees(0, 180, 0),
       scale: Vector3.create(1, 1, 1)
@@ -104,7 +104,7 @@ export class BoardRenderer {
 
     // Center offset
     transform.position = Vector3.add(transform.position, Vector3.create(8, 0, 8))
-    if (~Transform.has(this._entity)) Transform.createOrReplace(this._entity, transform)
+    if (!Transform.has(this._entity)) Transform.createOrReplace(this._entity, transform)
     this.xk = 1 / transform.scale.x
     this.yk = 1 / transform.scale.y
   }
