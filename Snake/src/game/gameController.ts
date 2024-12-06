@@ -8,6 +8,7 @@ import { BoardRenderer } from './boardRender'
 import { playGameOverSound, playHitSound, playPowerUpSound, playStartSound } from './sound'
 import { updatePlayerProgress } from './syncData'
 import { runCountdown } from '../../../common/effects'
+import { log } from './utils'
 export class GameController {
   private _boardSize: { width: number; height: number }
   private _snake: SnakeHead | undefined = undefined
@@ -45,11 +46,15 @@ export class GameController {
   }
 
   public async start() {
+    log('Start', this.start)
     this._inGame = true
     this._isInit = false
+    log('Start countdown', this.start)
     await runCountdown()
+    log('Finish countdown', this.start)
     if (!this._inGame) return
     
+    log('Snake termination', this.start)
     if (this._snake) {
       let snakePart: SnakePart | undefined = this._snake
       if (snakePart) {
@@ -60,27 +65,33 @@ export class GameController {
       }
     }
 
+    log('Food termination', this.start)
     if (this._food) {
       this._food.terminate()
     }
 
-
+    log('Snake initialization', this.start)
     this._snake = new SnakeHead({ x: 10, y: 7 })
     this._snake.addTail()
     this._snake.addTail()
 
+    
     this._score = 3
     this._startTime = Date.now()
+
+    log('Food initialization', this.start)
     this.addFood()
     this.onStartCallback()
 
     this.setSnakeDirection(Direction.UP)
     playStartSound()
     this._isInit = true
+    log('Finish game start', this.start)
   }
 
   public finish() {
-    console.log('Game Over')
+    log('Start', this.finish)
+    log('Snake termination', this.finish)
     let snakePart: SnakePart | undefined = this._snake
     if (snakePart) {
       while (snakePart) {
@@ -89,14 +100,17 @@ export class GameController {
       }
     }
 
+    log('Food termination', this.finish)
     if (this._food) {
       this._food.terminate()
     }
 
+    log('Game over', this.finish)
     this._inGame = false
     playGameOverSound()
     this.onFinishCallback()
     this.upsertProgress()
+    log('Finish', this.finish)
   }
 
   private update() {

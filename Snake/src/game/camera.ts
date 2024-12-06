@@ -9,6 +9,7 @@ import {
   InputModifier
 } from '@dcl/sdk/ecs'
 import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
+import { log } from './utils'
 
 export let cameraEntity: Entity
 
@@ -33,21 +34,31 @@ function SpawnVirtualCamera(transformProps: Partial<TransformType>): Entity {
 }
 
 export function activateCamera() {
+  log('Start', activateCamera)
+  log('ToggleCharacterInput', activateCamera)
   ToggleCharacterInput(false)
 
+  log('MainCamera', activateCamera)
   const mainCamera = MainCamera.getMutableOrNull(engine.CameraEntity)
+  log('MainCanera Entity: ' + mainCamera, activateCamera)
   if (!mainCamera) return
 
   mainCamera.virtualCameraEntity = cameraEntity
+  log('Finish', activateCamera)
 }
 
 export function deactivateCamera() {
+  log('Start', deactivateCamera)
+  log('ToggleCharacterInput', deactivateCamera)
   ToggleCharacterInput(true)
 
+  log('MainCamera', activateCamera)
   const mainCamera = MainCamera.getMutableOrNull(engine.CameraEntity)
+  log('MainCanera Entity: ' + mainCamera, activateCamera)
   if (!mainCamera) return
 
   mainCamera.virtualCameraEntity = undefined
+  log('Finish', activateCamera)
 }
 
 function ToggleCharacterInput(enabled: boolean) {
