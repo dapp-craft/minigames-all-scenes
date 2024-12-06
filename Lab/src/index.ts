@@ -7,7 +7,7 @@ import { initMiniGame } from '../../common/library'
 import { STATIC_MODELS } from './resources'
 import { Vector3 } from '@dcl/sdk/math'
 import { setupEffects } from '../../common/effects'
-import { playLevel, positions } from './game'
+import { playLevel, flaskTransforms } from './game'
 
 let interruptPlay: Function
 
@@ -40,7 +40,7 @@ export async function main() {
     setupEffects(Vector3.create(0, 2.5, -5))
     const locators = await readGltfLocators(`locators/obj_locators_unique.gltf`)
     for (const [name, value] of locators) {
-        if (name.match(/obj_flask_/)) positions.push(value.position)
+        if (name.match(/obj_flask_/)) flaskTransforms.push({...value, parent: sceneParentEntity})
     }
     await libraryReady
 }

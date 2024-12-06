@@ -1,5 +1,4 @@
-import { sceneParentEntity } from "@dcl-sdk/mini-games/src"
-import { EasingFunction, engine, Entity, GltfContainer, InputAction, Material, MeshCollider, MeshRenderer, pointerEventsSystem, Transform, Tween, tweenSystem } from "@dcl/sdk/ecs"
+import { EasingFunction, engine, Entity, GltfContainer, InputAction, Material, MeshRenderer, pointerEventsSystem, Transform, TransformType, Tween, tweenSystem } from "@dcl/sdk/ecs"
 import { Color3, Vector3 } from "@dcl/sdk/math"
 import { readGltfLocators } from "../../../common/locators"
 import { FLASK_MODEL } from "../resources"
@@ -88,9 +87,9 @@ export class Flask {
     private entity = engine.addEntity()
     private layers: Layer[] = []
 
-    constructor(position: Vector3) {
+    constructor(transform: TransformType) {
         GltfContainer.create(this.entity, FLASK_MODEL)
-        Transform.create(this.entity, { position, parent: sceneParentEntity })
+        Transform.create(this.entity, transform)
         pointerEventsSystem.onPointerDown(
             {
                 entity: this.entity,
