@@ -100,7 +100,7 @@ export class Flask {
         this.ready = flaskMappingReady.then(data => this._capacity = Array.from(data.keys()).filter(k => k.match(/obj_layer_[^0]/)).length)
     }
     public async destroy() {
-        for (const _ of this.layers) await this.drain()
+        while (this.layers.length > 0) await this.drain()
         engine.removeEntity(this.entity)
     }
     public async applyConfig(data: Array<Color3>) {
