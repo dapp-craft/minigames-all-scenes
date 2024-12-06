@@ -68,7 +68,13 @@ export async function main() {
     //     if (hash == JSON.stringify(state)) return
     //     hash = JSON.stringify(state)
         console.log("NEW STATE:", state)
-        if (playing) return
+        if (playing) {
+            if (flasks.length) {
+                flasks.forEach(f => f.destroy())
+                flasks = []
+            }
+            return
+        }
         if (flasks.length != state.length) {
             flasks.forEach(f => f.destroy())
             flasks = state.map((f, idx) => new Flask(flaskTransforms[idx]))
