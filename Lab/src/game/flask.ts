@@ -130,6 +130,7 @@ export class Flask {
         await this.ready
         this.state = State.active
         this.resolveActivated(this)
+        Transform.getMutable(this.entity).position.y += 0.1
         this.promiseDeactivated = new Promise(r => this.resolveDeactivated = r)
     }
     public get activated() { return this.promiseActivated }
@@ -138,6 +139,7 @@ export class Flask {
         await this.ready
         this.state = State.inactive
         this.resolveDeactivated(this)
+        Transform.getMutable(this.entity).position.y -= 0.1
         this.promiseActivated = new Promise(r => this.resolveActivated = r)
     }
     public get deactivated() { return this.promiseDeactivated }
