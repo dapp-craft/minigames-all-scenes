@@ -103,7 +103,7 @@ export class Flask {
         while (this.layers.length > 0) await this.drain()
         engine.removeEntity(this.entity)
     }
-    public async applyConfig(data: Array<Color3>) {
+    public async applyConfig(data: ReadonlyArray<Color3>) {
         let state: Array<[Color3, number]> = data
             .reduce(
                 ([[c, v] = [, 0], ...acc ], val) => c && !Color3.equals(c, val)
@@ -115,14 +115,18 @@ export class Flask {
         let idx = 0
         for (const [color, volume] of state) {
             let layer: Layer | undefined = this.layers[idx]
-            if (layer && (!Color3.equals(layer.color, color) || layer.volume != volume)) {
+            if (layer && !Color3.equals(layer.color, color)) {
                 for (const _ of this.layers.slice(idx)) await this.drain()
                 layer = undefined
             }
-            if (!layer) await this.pour(color, volume)
+            if (!layer || layer.volume != volume) await this.pour(color, volume - (layer?.volume ?? 0))
             idx++
         }
+        if (this.layers[idx]) for (const _ of this.layers.slice(idx)) await this.drain()
         return this
+    }
+    public getConfig() {
+        return this.layers.flatMap(l => new Array<Color3>(l.volume).fill(l.color))
     }
 
     public async activate() {

@@ -1,4 +1,4 @@
-import { engine, executeTask, GltfContainer, Transform } from '@dcl/sdk/ecs'
+import { engine, executeTask, GltfContainer, Schemas, Transform } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
@@ -8,17 +8,31 @@ import { STATIC_MODELS } from './resources'
 import { Vector3 } from '@dcl/sdk/math'
 import { setupEffects } from '../../common/effects'
 import { playLevel, flaskTransforms } from './game'
+import { syncEntity } from '@dcl/sdk/network'
+import { Flask } from './game/flask'
 
+(globalThis as any).DEBUG_NETWORK_MESSAGES = false
+
+export const State = engine.defineComponent('Lab::state', {
+    flasks: Schemas.Array(Schemas.Array(
+        Schemas.Color3
+    ))
+})
+  
+
+let playing = false
 let interruptPlay: Function
 
 const handlers = {
     start: async () => {
+        playing = true
         const aborter = new Promise<never>((_, r) => interruptPlay = r)
         await playLevel(1, aborter).catch(_ => {})
         queue.setNextPlayer()
     },
     exit: () => {
         interruptPlay()
+        playing = false
     },
     restart: () => {},
     toggleMusic: () => {},
@@ -36,11 +50,29 @@ executeTask(async () => {
 })
 
 
+export const client = engine.addEntity()
 export async function main() {
+    State.create(client)
+    syncEntity(client, [State.componentId], 45678)
     setupEffects(Vector3.create(0, 2.5, -5))
     const locators = await readGltfLocators(`locators/obj_locators_unique.gltf`)
     for (const [name, value] of locators) {
         if (name.match(/obj_flask_/)) flaskTransforms.push({...value, parent: sceneParentEntity})
     }
     await libraryReady
+    // let hash = ""
+    let flasks: Flask[] = []
+    State.onChange(client, ({flasks: state} = {flasks: []}) => {
+    // engine.addSystem(_ => {
+        // const state = State.get(client).flasks
+    //     if (hash == JSON.stringify(state)) return
+    //     hash = JSON.stringify(state)
+        console.log("NEW STATE:", state)
+        if (playing) return
+        if (flasks.length != state.length) {
+            flasks.forEach(f => f.destroy())
+            flasks = state.map((f, idx) => new Flask(flaskTransforms[idx]))
+        }
+        state.forEach((config, idx) => flasks[idx].applyConfig(config))
+    })
 }
