@@ -14,13 +14,13 @@ class Layer {
     constructor(parent: Entity, color: Color3) {
         this._color = color
         Transform.create(this.root, { parent, scale: Vector3.Zero() })
-        MeshRenderer.setCylinder(this.layer, 0.3, 0.3)
         Material.setBasicMaterial(this.layer, {diffuseColor: { ...color, a: 1}})
         Transform.create(this.layer, { parent: this.root })
     }
     public async fill(from: number, to: number) {
         const bottom = (await flaskMappingReady).get(`obj_layer_${from}`)!.position
-        const top = (await flaskMappingReady).get(`obj_layer_${to}`)!.position
+        const {position: top, scale: {y: radius}} = (await flaskMappingReady).get(`obj_layer_${to}`)!
+        MeshRenderer.setCylinder(this.layer, radius, radius)
         Transform.getMutable(this.root).position = bottom
         Transform.getMutable(this.layer).scale = Vector3.One()
         Transform.getMutable(this.layer).position.y = 0.5
