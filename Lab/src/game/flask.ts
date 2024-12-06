@@ -28,7 +28,7 @@ class Layer {
         Tween.createOrReplace(this.root, {
             mode: Tween.Mode.Scale({
                 start: this._volume ? Transform.get(this.root).scale : Vector3.create(1, 0, 1),
-                end: Vector3.create(1, top.y - bottom.y, 1),
+                end: Vector3.create(1, top.y - bottom.y - 0.001, 1),
             }),
             duration: 300 * (to - from - this._volume),
             easingFunction: EasingFunction.EF_LINEAR
@@ -39,7 +39,7 @@ class Layer {
             const tweenCompleted = tweenSystem.tweenCompleted(this.root)
             if (tweenCompleted) resolve(this)
         })
-        return new Promise(r => resolve = r)
+        return new Promise<Layer>(r => resolve = r)
     }
     public async deplete() {
         Tween.createOrReplace(this.root, {
@@ -59,7 +59,11 @@ class Layer {
                 Transform.getMutable(this.root).scale = Vector3.Zero()
             }
         })
-        return new Promise(r => resolve = r)
+        return new Promise<Layer>(r => resolve = r)
+    }
+    public destroy() {
+        engine.removeEntity(this.root)
+        engine.removeEntity(this.layer)
     }
     public get volume() {
         return this._volume
@@ -159,6 +163,6 @@ export class Flask {
     }
     public async drain() {
         await this.ready
-        await this.layers.pop()?.deplete()
+        await this.layers.pop()?.deplete().then(l => l.destroy())
     }
 }
