@@ -89,7 +89,7 @@ export class Flask {
 
     constructor(transform: TransformType) {
         GltfContainer.create(this.entity, FLASK_MODEL)
-        Transform.create(this.entity, transform)
+        Transform.create(this.entity, JSON.parse(JSON.stringify(transform)))
         pointerEventsSystem.onPointerDown(
             {
                 entity: this.entity,
