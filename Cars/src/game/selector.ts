@@ -13,7 +13,7 @@ import {
   pointerEventsSystem
 } from '@dcl/sdk/ecs'
 import { Vector3 } from '@dcl/ecs-math'
-import { arrowModel } from '../resources/resources'
+import { arrowActiveModel, arrowInactiveModel } from '../resources/resources'
 import { CarDirection, CarType, Cell } from './type'
 import { getDirectionVector } from './logic/math'
 import {
@@ -43,7 +43,7 @@ export function initSelector() {
 function createArrow(transform: TransformType, hoverText: string, onClick: () => void): Entity {
   const arrow = engine.addEntity()
   Transform.create(arrow, transform)
-  GltfContainer.create(arrow, arrowModel);
+  GltfContainer.create(arrow, arrowActiveModel);
   // MeshRenderer.setBox(arrow)
   // MeshCollider.setBox(arrow)
   VisibilityComponent.create(arrow, { visible: false })
@@ -73,6 +73,8 @@ function moveCar(directionMultiplier: number) {
 
   if (isPositionAvailable(targetCell, carEntity, availabilityMap)) {
     carComponent.position = targetCell
+    gameState.moves++
+    updateArrowModels()
   }
 
   if (isSolved()) {
@@ -80,6 +82,7 @@ function moveCar(directionMultiplier: number) {
     playWinSound()
     runWinAnimation().then(finishLevel)
   }
+
 }
 
 export function selectedCar(entity: Entity | undefined) {
@@ -102,4 +105,44 @@ export function selectedCar(entity: Entity | undefined) {
     Transform.getMutable(backwardArrow).parent = entity
     Transform.getMutable(forwardArrow).position.z = (carComponent.length - 1) * -1
   }
+
+  updateArrowModels()
+}
+
+
+function updateArrowModels(){
+  if (!carComponent || !carEntity) return
+  console.log("updateArrowModels")
+  
+  const mv = getDirectionVector(carComponent.direction)
+  const targetCellForward: Cell = {
+    x: carComponent.position.x + mv.x * 1,
+    y: carComponent.position.y + mv.y * 1
+  }
+  const availabilityMap = createAvailabilityMap()
+  markCarCellsAsAvailable(availabilityMap, carEntity)
+
+  console.log("Forward position available", isPositionAvailable(targetCellForward, carEntity, availabilityMap))
+  if (isPositionAvailable(targetCellForward, carEntity, availabilityMap)) {
+    GltfContainer.createOrReplace(forwardArrow, arrowActiveModel)
+  } else {
+    GltfContainer.createOrReplace(forwardArrow, arrowInactiveModel)
+  }
+
+  const targetCellBackward: Cell = {
+    x: carComponent.position.x + mv.x * -1,
+    y: carComponent.position.y + mv.y * -1
+  }
+  
+  console.log("Backward position available", isPositionAvailable(targetCellBackward, carEntity, availabilityMap))
+  if (isPositionAvailable(targetCellBackward, carEntity, availabilityMap)) {
+    GltfContainer.createOrReplace(backwardArrow, arrowActiveModel)
+  } else {
+    GltfContainer.createOrReplace(backwardArrow, arrowInactiveModel)
+  }
+
+  console.log("Corrent models")
+  console.log(GltfContainer.get(forwardArrow).src)
+  console.log(GltfContainer.get(backwardArrow).src)
+    
 }

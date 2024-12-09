@@ -22,7 +22,8 @@ export const STATIC_MODELS = [
   { src: modelsFolder + 'obj_gamezone.gltf' }
 ]
 
-export const arrowModel: PBGltfContainer = { src: modelsFolder + 'obj_arrow.gltf', visibleMeshesCollisionMask: ColliderLayer.CL_POINTER }
+export const arrowActiveModel: PBGltfContainer = { src: modelsFolder + 'obj_arrow01.gltf', visibleMeshesCollisionMask: ColliderLayer.CL_POINTER }
+export const arrowInactiveModel: PBGltfContainer = { src: modelsFolder + 'obj_arrow02.gltf', visibleMeshesCollisionMask: ColliderLayer.CL_POINTER }
 
 export const boardTexture = imagesFolder + 'grid_6x6.png'
 

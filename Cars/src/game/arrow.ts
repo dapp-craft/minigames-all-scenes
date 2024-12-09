@@ -11,7 +11,7 @@ import {
 } from '@dcl/sdk/ecs'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { BOARD } from './objects/board'
-import { arrowModel } from '../resources/resources'
+// import { arrowModel } from '../resources/resources'
 import { BOARD_PHYSICAL_SIZE, BOARD_SIZE, CELL_SIZE_PHYSICAL } from '../config'
 import { getCarAt, inputAvailable, inputBuffer, lookingAt } from '.'
 import { cellRelativePosition, directionToQuaterion } from './logic/math'
@@ -40,7 +40,7 @@ export function initArrow() {
     parent: arrowPosEntity
   })
 
-  GltfContainer.create(arrowAnimEntity, arrowModel)
+  // GltfContainer.create(arrowAnimEntity, arrowModel)
   VisibilityComponent.create(arrowAnimEntity, { visible: true })
 
   Tween.create(arrowAnimEntity, {
