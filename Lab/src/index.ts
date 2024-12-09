@@ -23,9 +23,12 @@ export const State = engine.defineComponent('Lab::state', {
 let playing = false
 let interruptPlay: Function
 
+let flasks: Flask[] = []
 const handlers = {
     start: async () => {
         playing = true
+        flasks.map(f => f.destroy())
+        flasks = []
         const aborter = new Promise<never>((_, r) => interruptPlay = r)
         await playLevel(1, aborter).catch(_ => {})
         queue.setNextPlayer()
@@ -61,24 +64,16 @@ export async function main() {
     }
     await libraryReady
     // let hash = ""
-    let flasks: Flask[] = []
     let locked = false
     State.onChange(client, async ({flasks: state} = {flasks: []}) => {
     // engine.addSystem(_ => {
         // const state = State.get(client).flasks
     //     if (hash == JSON.stringify(state)) return
     //     hash = JSON.stringify(state)
+        console.log("NEW STATE:", state)
+        if (playing) return
         if (locked) {console.log("LOCKED"); return}
         locked = true
-        console.log("NEW STATE:", state)
-        if (playing) {
-            if (flasks.length) {
-                await Promise.all(flasks.map(f => f.destroy()))
-                flasks = []
-            }
-            locked = false
-            return
-        }
         if (flasks.length != state.length) {
             await Promise.all(flasks.map(f => f.destroy()))
             flasks = state.map((f, idx) => new Flask(flaskTransforms[idx]))
