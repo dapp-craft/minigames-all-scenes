@@ -42,7 +42,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_arrow02",
+			"name":"obj_arrow01",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -92,8 +92,8 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_arrow02",
-			"uri":"textures/obj_arrow02.png"
+			"name":"obj_arrow01",
+			"uri":"textures/obj_arrow01.png"
 		}
 	],
 	"accessors":[
