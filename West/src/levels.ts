@@ -1,3 +1,14 @@
-export const levels = new Map([
-    [1, {speed: 0, floor: 1, amount: 2}]
+type LevelData = {
+    speed: number;
+    floor: number;
+    targetAmount: number;
+    appearanceTime: number;
+    stayTime: number;
+    role: Boolean[]
+}
+
+type LevelsMap = Map<number, LevelData>;
+
+export const levels: LevelsMap = new Map([
+    [1, { speed: 1000, floor: 1, targetAmount: 2, appearanceTime: 500, stayTime: 5000, role: [true, false] }]
 ])

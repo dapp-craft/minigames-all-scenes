@@ -14,7 +14,7 @@ import { GameLogic } from './game/gameLogic'
 
 const handlers = {
     start: () => { gameLogic.startGame()},
-    exit: () => { },
+    exit: () => gameLogic.stopGame(),
     restart: () => gameLogic.startGame(),
     toggleMusic: () => { },
     toggleSfx: () => { }
