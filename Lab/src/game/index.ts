@@ -16,7 +16,7 @@ export async function playLevel(level: keyof typeof LEVELS, abort: Promise<never
         while (!flasks.every(f => !f.topLayer || f.layersCount == 1 && f.fillLevel == f.capacity)) {
             let first = await Promise.race([...flasks.map(f => f.activated), abort])
             if (!first.topLayer) {
-                first.deactivate()
+                await first.deactivate()
                 continue
             }
             let second = await Promise.race([...flasks.map(f => f == first ? f.deactivated : f.activated), abort])
@@ -26,8 +26,8 @@ export async function playLevel(level: keyof typeof LEVELS, abort: Promise<never
                 await Promise.all([first.drain(), second.pour(color, volume)])
                 State.getMutable(client).flasks = flasks.map(f => f.getConfig())
             }
-            first.deactivate()
-            second.deactivate()
+            await first.deactivate()
+            await second.deactivate()
         }
         await Promise.race([runWinAnimation(), abort])
     } finally {
