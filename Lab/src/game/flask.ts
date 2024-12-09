@@ -17,7 +17,8 @@ class Layer {
         Material.setBasicMaterial(this.layer, {diffuseColor: { ...color, a: 1}})
         Transform.create(this.layer, { parent: this.root })
     }
-    public async fill(from: number, to: number) {
+    // TODO: merge grow and shrink
+    public async grow(from: number, to: number) {
         const bottom = (await flaskMappingReady).get(`obj_layer_${from}`)!.position
         const {position: top, scale: {y: radius}} = (await flaskMappingReady).get(`obj_layer_${to}`)!
         MeshRenderer.setCylinder(this.layer, radius, radius)
@@ -40,22 +41,22 @@ class Layer {
         })
         return new Promise<Layer>(r => resolve = r)
     }
-    public async deplete() {
+    public async shrink(volume: number = this._volume) {
         Tween.createOrReplace(this.root, {
             mode: Tween.Mode.Scale({
                 start: Transform.get(this.root).scale,
-                end: Vector3.create(1, 0, 1),
+                end: Vector3.create(1, Transform.get(this.root).scale.y * (this._volume - volume) / this._volume, 1),
             }),
-            duration: 300 * this._volume,
+            duration: 300 * volume,
             easingFunction: EasingFunction.EF_LINEAR
         })
-        this._volume = 0
+        this._volume -= volume
         let resolve: Function
         engine.addSystem(() => {
             const tweenCompleted = tweenSystem.tweenCompleted(this.root)
             if (tweenCompleted) {
                 resolve(this)
-                Transform.getMutable(this.root).scale = Vector3.Zero()
+                if (this._volume == 0) Transform.getMutable(this.root).scale = Vector3.Zero()
             }
         })
         return new Promise<Layer>(r => resolve = r)
@@ -173,15 +174,16 @@ export class Flask {
         const tmp = this.state
         this.state = State.busy
         if (!this.topLayer || !Color3.equals(color, this.topLayer.color)) this.layers.push(new Layer(this.entity, color))
-        await this.topLayer!.fill(this.fillLevel - this.topLayer!.volume, this.fillLevel + volume)
+        await this.topLayer!.grow(this.fillLevel - this.topLayer!.volume, this.fillLevel + volume)
         this.state = tmp
     }
-    public async drain() {
+    public async drain(volume?: number) {
         if (this.state == State.busy) throw `Drain failed: flask is busy`
+        if (volume == 0) throw `Drain failed: zero volume`
         await this.ready
         const tmp = this.state
         this.state = State.busy
-        await this.layers.pop()?.deplete().then(l => l.destroy())
+        await this.layers.pop()?.shrink(volume).then(l => l.volume == 0 ? l.destroy() : this.layers.push(l))
         this.state = tmp
     }
 }

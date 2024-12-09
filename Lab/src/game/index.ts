@@ -21,9 +21,10 @@ export async function playLevel(level: keyof typeof LEVELS, abort: Promise<never
             }
             let second = await Promise.race([...flasks.map(f => f == first ? f.deactivated : f.activated), abort])
             if (first == second) continue
-            const {color, volume} = first.topLayer
-            if (!second.topLayer || Color3.equals(second.topLayer.color, color) && second.fillLevel + volume <= second.capacity) {
-                await Promise.all([first.drain(), second.pour(color, volume)])
+            let {color, volume} = first.topLayer
+            if (!second.topLayer || Color3.equals(second.topLayer.color, color) && second.fillLevel < second.capacity) {
+                volume = Math.min(second.capacity - second.fillLevel, volume)
+                await Promise.all([first.drain(volume), second.pour(color, volume)])
                 State.getMutable(client).flasks = flasks.map(f => f.getConfig())
             }
             await first.deactivate()
