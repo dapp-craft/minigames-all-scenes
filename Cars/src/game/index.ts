@@ -40,6 +40,7 @@ import { queue, ui } from '@dcl-sdk/mini-games/src'
 import { playMoveCarSound, playStartLevelSound, playWinSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
 import { initSelector, selectedCar } from './selector'
+import { activateCamera, deactivateCamera, initCamera } from './camera'
 // import { initArrow } from './arrow'
 
 export let lookingAt: Cell | undefined = undefined
@@ -93,7 +94,7 @@ export const inputBuffer: {
 }
 
 export async function initGame() {
-  setupEffects(Vector3.create(0, 2.5, -6))
+  setupEffects(Vector3.create(0, 2.5, -4))
 
   createBoard()
 
@@ -108,6 +109,8 @@ export async function initGame() {
   setupGameUI()
 
   // initArrow()
+
+  initCamera()
 
   createMainCar(SYNC_ENTITY_ID)
 
@@ -130,6 +133,8 @@ export function getReadyToStart() {
   for (let i = 0; i < levetToStart; i++) {
     levelButtons[i].enable()
   }
+
+  activateCamera()
 
   startLevel(levetToStart)
 }
@@ -337,6 +342,7 @@ export function exitGame() {
   cancelCountdown()
   cancelWinAnimation()
   selectedCar(undefined)
+  deactivateCamera()
   inGame = false
   lastStart = 0
   inputAvailable = false
