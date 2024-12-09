@@ -25,7 +25,7 @@ import {
 } from './logic/board'
 import { Car } from './components/definitions'
 import { Quaternion } from '@dcl/sdk/math'
-import { finishLevel, inputAvailable, isSolved, setInputAvailable } from '.'
+import { finishLevel, gameState, inputAvailable, isSolved, setInputAvailable } from '.'
 import { playWinSound } from './sfx'
 import { runWinAnimation } from '../../../common/effects'
 
