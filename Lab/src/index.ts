@@ -62,23 +62,28 @@ export async function main() {
     await libraryReady
     // let hash = ""
     let flasks: Flask[] = []
-    State.onChange(client, ({flasks: state} = {flasks: []}) => {
+    let locked = false
+    State.onChange(client, async ({flasks: state} = {flasks: []}) => {
     // engine.addSystem(_ => {
         // const state = State.get(client).flasks
     //     if (hash == JSON.stringify(state)) return
     //     hash = JSON.stringify(state)
+        if (locked) {console.log("LOCKED"); return}
+        locked = true
         console.log("NEW STATE:", state)
         if (playing) {
             if (flasks.length) {
-                flasks.forEach(f => f.destroy())
+                await Promise.all(flasks.map(f => f.destroy()))
                 flasks = []
             }
+            locked = false
             return
         }
         if (flasks.length != state.length) {
-            flasks.forEach(f => f.destroy())
+            await Promise.all(flasks.map(f => f.destroy()))
             flasks = state.map((f, idx) => new Flask(flaskTransforms[idx]))
         }
-        state.forEach((config, idx) => flasks[idx].applyConfig(config))
+        await Promise.all(state.map((config, idx) => flasks[idx].applyConfig(config)))
+        locked = false
     })
 }
