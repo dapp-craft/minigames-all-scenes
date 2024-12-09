@@ -19,11 +19,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_arrow"
+			"name":"obj_arrow01"
 		},
 		{
 			"mesh":1,
-			"name":"obj_arrow_collider"
+			"name":"obj_arrow01_collider"
 		}
 	],
 	"materials":[
@@ -42,7 +42,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_arrow",
+			"name":"obj_arrow02",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -92,8 +92,8 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_arrow",
-			"uri":"textures/obj_arrow.png"
+			"name":"obj_arrow02",
+			"uri":"textures/obj_arrow02.png"
 		}
 	],
 	"accessors":[
@@ -213,7 +213,7 @@
 	"buffers":[
 		{
 			"byteLength":4848,
-			"uri":"obj_arrow.bin"
+			"uri":"obj_arrow01.bin"
 		}
 	]
 }
