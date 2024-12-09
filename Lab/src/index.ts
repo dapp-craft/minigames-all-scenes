@@ -30,7 +30,7 @@ const handlers = {
         flasks.map(f => f.destroy())
         flasks = []
         const aborter = new Promise<never>((_, r) => interruptPlay = r)
-        await playLevel(1, aborter).catch(_ => {})
+        await playLevel(1, aborter).catch(e => typeof e == 'string' ? console.error(e): null)
         queue.setNextPlayer()
     },
     exit: () => {

@@ -73,11 +73,11 @@ class Layer {
 }
 
 enum State {
-    active, inactive
+    active, inactive, busy
 }
 
 export class Flask {
-    private ready
+    private ready: Promise<any>
     private resolveActivated!: Function
     private promiseActivated = new Promise<Flask>(r => this.resolveActivated = r)
     private resolveDeactivated!: Function
@@ -95,7 +95,7 @@ export class Flask {
                 entity: this.entity,
                 opts: { button: InputAction.IA_POINTER, hoverText: 'Interact' },
             },
-            () => void [this.deactivate, this.activate][this.state].call(this)
+            () => void [this.deactivate, this.activate][this.state]?.call(this)
         )
         this.ready = flaskMappingReady.then(data => this._capacity = Array.from(data.keys()).filter(k => k.match(/obj_layer_[^0]/)).length)
     }
@@ -130,20 +130,26 @@ export class Flask {
     }
 
     public async activate() {
+        if (this.state != State.inactive) throw `Activate failed: flask is ${State[this.state]}`
+        this.state = State.busy
         await this.ready
-        this.state = State.active
+        console.log("ACT")
         this.resolveActivated(this)
         Transform.getMutable(this.entity).position.y += 0.1
         this.promiseDeactivated = new Promise(r => this.resolveDeactivated = r)
+        this.state = State.active
     }
     public get activated() { return this.promiseActivated }
 
     public async deactivate() {
+        if (this.state != State.active) throw `Deactivate failed: flask is ${State[this.state]}`
+        this.state = State.busy
         await this.ready
-        this.state = State.inactive
+        console.log("DEACT")
         this.resolveDeactivated(this)
         Transform.getMutable(this.entity).position.y -= 0.1
         this.promiseActivated = new Promise(r => this.resolveActivated = r)
+        this.state = State.inactive
     }
     public get deactivated() { return this.promiseDeactivated }
 
@@ -161,13 +167,21 @@ export class Flask {
     }
 
     public async pour(color: Color3, volume: number) {
+        if (this.state == State.busy) throw `Pour failed: flask is busy`
         await this.ready
-        if (this.fillLevel + volume > this.capacity) throw Error
+        if (this.fillLevel + volume > this.capacity) throw `Pour failed: level ${this.fillLevel} and volume ${volume} is over capacity`
+        const tmp = this.state
+        this.state = State.busy
         if (!this.topLayer || !Color3.equals(color, this.topLayer.color)) this.layers.push(new Layer(this.entity, color))
         await this.topLayer!.fill(this.fillLevel - this.topLayer!.volume, this.fillLevel + volume)
+        this.state = tmp
     }
     public async drain() {
+        if (this.state == State.busy) throw `Drain failed: flask is busy`
         await this.ready
+        const tmp = this.state
+        this.state = State.busy
         await this.layers.pop()?.deplete().then(l => l.destroy())
+        this.state = tmp
     }
 }
