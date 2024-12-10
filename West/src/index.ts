@@ -1,4 +1,4 @@
-import { engine, executeTask, GltfContainer, MeshCollider, MeshRenderer, Transform } from '@dcl/sdk/ecs'
+import { engine, executeTask, GltfContainer, MeshCollider, MeshRenderer, TextShape, Transform } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
@@ -13,7 +13,7 @@ import { GameLogic } from './game/gameLogic'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
-    start: () => { gameLogic.startGame()},
+    start: () => { gameLogic.startGame() },
     exit: () => gameLogic.stopGame(),
     restart: () => gameLogic.startGame(),
     toggleMusic: () => { },
@@ -54,8 +54,18 @@ const generateInitialEntity = async () => {
         if (Transform.getOrNull(westGameState.availableEntity[i]) == null) {
             MeshRenderer.setPlane(westGameState.availableEntity[i])
             MeshCollider.setPlane(westGameState.availableEntity[i])
-            Transform.create(westGameState.availableEntity[i], {position: Vector3.create(1, 1, 2), rotation: Quaternion.Zero()})
+            Transform.create(westGameState.availableEntity[i], { position: Vector3.create(1, 1, 2), rotation: Quaternion.Zero() })
         }
     }
 
+    const playerHP = westGameState.availableEntity[westGameConfig.targetEntityAmount]
+    const score = westGameState.availableEntity[westGameConfig.targetEntityAmount + 1]
+
+    westGameState.listOfEntity.set('playerHP', playerHP)
+    westGameState.listOfEntity.set('score', score)
+
+    TextShape.create(playerHP, { text: `HP \n${westGameConfig.playerMaxHP}`, fontSize: 2 })
+    Transform.create(playerHP, { position: Vector3.create(0, 2, -6), scale: Vector3.One(), parent: sceneParentEntity })
+    TextShape.create(score, { text: `Score \n0`, fontSize: 2 });
+    Transform.create(score, { position: Vector3.create(2, 2, -6), scale: Vector3.One(), parent: sceneParentEntity })
 }
