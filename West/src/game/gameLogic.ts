@@ -14,7 +14,7 @@ export class GameLogic {
     private playerScore = 0
 
     public startGame() {
-        this.resetData()
+        // this.spawnRandomizer('row', 5)
         this.playGame()
     }
 
@@ -24,9 +24,10 @@ export class GameLogic {
         const levelData = levels.get(this.playerLevel)
         const remainingArray = [...levelData!.role];
         this.endRoundTimeout = utils.timers.setTimeout(() => this.finishRound(), levelData!.stayTime + levelData!.appearanceTime * 2 + 100)
+        const targetPositionArray = this.spawnRandomizer(levelData!.generationType, levelData!.targetAmount)
         for (let i = 0; i < levelData!.targetAmount; i++) {
             Tween.deleteFrom(westGameState.availableEntity[i])
-            Transform.createOrReplace(westGameState.availableEntity[i], tempLocators.get(`obj_locator_${Math.floor(Math.random() * 5) + 1}`))
+            Transform.createOrReplace(westGameState.availableEntity[i], tempLocators.get(`obj_locator_${targetPositionArray![i]}`))
             this.spawnEntity(westGameState.availableEntity[i])
             const randomIndex = Math.floor(Math.random() * remainingArray.length);
             const chosenRole = remainingArray[randomIndex]
@@ -49,6 +50,49 @@ export class GameLogic {
                     !this.isEnemyLeft() && this.stopRound()
                 }
             )
+        }
+    }
+
+    // TO DO: REFACTOR
+    private spawnRandomizer(spawnType: string, entityAmount: number) {
+        console.log("spawnRandomizer TYPE: ", spawnType)
+
+        const generator = (firstRow: boolean, gap: number, entityAmountInRow: number = entityAmount) => {
+            const start = entityAmountInRow < 3 ? Math.floor(Math.random() * 5) + 1 : 1
+            let sequence = [start]
+            let increasing = true
+            for (let i = 1; i < entityAmountInRow; i++) {
+                let prev = sequence[i - 1]
+                let next
+                if (increasing) {
+                    next = prev + gap;
+                    if (next > 5) {
+                        increasing = false
+                        next = start - gap
+                    }
+                } else next = prev - gap
+                sequence.push(next)
+            }
+            if (!firstRow) sequence = sequence.map(element => element + 5);
+            console.log(sequence)
+            return sequence
+        }
+
+        if (spawnType == 'row') {
+            return generator(true, 1)
+        } else if (spawnType == 'gapRow') {
+            return generator(true, 2)
+        } else if (spawnType == 'twoLevels') {
+            const firstLevel = Math.floor(Math.random() * 2) == 0 ? true : false
+            let entityAmountInRow
+            const odd = entityAmount % 2 === 0 ? false : true
+            if (odd) entityAmountInRow = Math.ceil(entityAmount / 2)
+            else entityAmountInRow = entityAmount / 2
+            const firstArray = generator(firstLevel, 2, odd ? entityAmountInRow - 1 : entityAmountInRow)
+            const secondArray = generator(!firstLevel, 2, entityAmountInRow)
+            const response = firstArray.concat(secondArray)
+            console.log('Concat: ', response)
+            return response
         }
     }
 
@@ -135,5 +179,6 @@ export class GameLogic {
 
     public stopGame() {
         this.stopRound(true)
+        this.resetData()
     }
 }
