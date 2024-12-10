@@ -15,42 +15,23 @@ class Layer {
         this._color = color
         Transform.create(this.root, { parent, scale: Vector3.Zero() })
         Material.setBasicMaterial(this.layer, {diffuseColor: { ...color, a: 1}})
-        Transform.create(this.layer, { parent: this.root })
+        Transform.create(this.layer, { scale: Vector3.One(), position: Vector3.create(0, 0.5, 0), parent: this.root })
     }
-    // TODO: merge grow and shrink
-    public async grow(from: number, to: number) {
+    public async set(from: number, to: number) {
+        console.log(`Layer::set with volume ${this._volume} to [${from}:${to}]`)
         const bottom = (await flaskMappingReady).get(`obj_layer_${from}`)!.position
         const {position: top, scale: {y: radius}} = (await flaskMappingReady).get(`obj_layer_${to}`)!
         MeshRenderer.setCylinder(this.layer, radius, radius)
         Transform.getMutable(this.root).position = bottom
-        Transform.getMutable(this.layer).scale = Vector3.One()
-        Transform.getMutable(this.layer).position.y = 0.5
         Tween.createOrReplace(this.root, {
             mode: Tween.Mode.Scale({
                 start: this._volume ? Transform.get(this.root).scale : Vector3.create(1, 0, 1),
                 end: Vector3.create(1, top.y - bottom.y - 0.001, 1),
             }),
-            duration: 300 * (to - from - this._volume),
+            duration: 300 * Math.abs(to - from - this._volume),
             easingFunction: EasingFunction.EF_LINEAR
         })
         this._volume = to - from
-        let resolve: Function
-        engine.addSystem(() => {
-            const tweenCompleted = tweenSystem.tweenCompleted(this.root)
-            if (tweenCompleted) resolve(this)
-        })
-        return new Promise<Layer>(r => resolve = r)
-    }
-    public async shrink(volume: number = this._volume) {
-        Tween.createOrReplace(this.root, {
-            mode: Tween.Mode.Scale({
-                start: Transform.get(this.root).scale,
-                end: Vector3.create(1, Transform.get(this.root).scale.y * (this._volume - volume) / this._volume, 1),
-            }),
-            duration: 300 * volume,
-            easingFunction: EasingFunction.EF_LINEAR
-        })
-        this._volume -= volume
         let resolve: Function
         engine.addSystem(() => {
             const tweenCompleted = tweenSystem.tweenCompleted(this.root)
@@ -62,6 +43,7 @@ class Layer {
         return new Promise<Layer>(r => resolve = r)
     }
     public destroy() {
+        console.log("Layer::destroy")
         engine.removeEntity(this.root)
         engine.removeEntity(this.layer)
     }
@@ -101,6 +83,7 @@ export class Flask {
         this.ready = flaskMappingReady.then(data => this._capacity = Array.from(data.keys()).filter(k => k.match(/obj_layer_[^0]/)).length)
     }
     public async destroy() {
+        console.log("Flask::destroy")
         while (this.layers.length > 0) await this.drain()
         engine.removeEntity(this.entity)
     }
@@ -134,7 +117,7 @@ export class Flask {
         if (this.state != State.inactive) throw `Activate failed: flask is ${State[this.state]}`
         this.state = State.busy
         await this.ready
-        console.log("ACT")
+        console.log("Flask::activate")
         this.resolveActivated(this)
         Transform.getMutable(this.entity).position.y += 0.1
         this.promiseDeactivated = new Promise(r => this.resolveDeactivated = r)
@@ -146,7 +129,7 @@ export class Flask {
         if (this.state != State.active) throw `Deactivate failed: flask is ${State[this.state]}`
         this.state = State.busy
         await this.ready
-        console.log("DEACT")
+        console.log("Flask::deactivate")
         this.resolveDeactivated(this)
         Transform.getMutable(this.entity).position.y -= 0.1
         this.promiseActivated = new Promise(r => this.resolveActivated = r)
@@ -174,16 +157,17 @@ export class Flask {
         const tmp = this.state
         this.state = State.busy
         if (!this.topLayer || !Color3.equals(color, this.topLayer.color)) this.layers.push(new Layer(this.entity, color))
-        await this.topLayer!.grow(this.fillLevel - this.topLayer!.volume, this.fillLevel + volume)
+        await this.topLayer!.set(this.fillLevel - this.topLayer!.volume, this.fillLevel + volume)
         this.state = tmp
     }
-    public async drain(volume?: number) {
+    public async drain(volume = this.topLayer?.volume) {
         if (this.state == State.busy) throw `Drain failed: flask is busy`
-        if (volume == 0) throw `Drain failed: zero volume`
+        if (!volume || volume > this.topLayer!.volume) throw `Drain failed: invalid amount ${volume} for layer volume ${this.topLayer?.volume}`
         await this.ready
         const tmp = this.state
         this.state = State.busy
-        await this.layers.pop()?.shrink(volume).then(l => l.volume == 0 ? l.destroy() : this.layers.push(l))
+        await this.topLayer!.set(this.fillLevel - this.topLayer!.volume, this.fillLevel - volume)
+        if (this.topLayer!.volume == 0) this.layers.pop()!.destroy()
         this.state = tmp
     }
 }
