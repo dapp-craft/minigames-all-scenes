@@ -34,8 +34,12 @@ const handlers = {
         queue.setNextPlayer()
     },
     exit: () => {
-        interruptPlay()
-        playing = false
+        try {
+            interruptPlay()
+            playing = false
+        } catch (e) {
+            console.error(e)
+        }
     },
     restart: () => {},
     toggleMusic: () => {},
