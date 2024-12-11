@@ -29,7 +29,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -55,7 +54,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -81,7 +79,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -107,7 +104,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -133,7 +129,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -161,7 +156,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.008",
+			"name":"obj_wall",
 			"primitives":[
 				{
 					"attributes":{
@@ -211,16 +206,15 @@
 			]
 		},
 		{
-			"name":"Mesh.017",
+			"name":"obj_wall_collider",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":20,
 						"NORMAL":21,
-						"TEXCOORD_0":22,
-						"TEXCOORD_1":23
+						"TEXCOORD_0":22
 					},
-					"indices":24
+					"indices":23
 				}
 			]
 		}
@@ -468,7 +462,7 @@
 		{
 			"bufferView":20,
 			"componentType":5126,
-			"count":1120,
+			"count":1078,
 			"max":[
 				7.899037837982178,
 				7.25441837310791,
@@ -484,23 +478,17 @@
 		{
 			"bufferView":21,
 			"componentType":5126,
-			"count":1120,
+			"count":1078,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":22,
 			"componentType":5126,
-			"count":1120,
+			"count":1078,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":23,
-			"componentType":5126,
-			"count":1120,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":24,
 			"componentType":5123,
 			"count":1794,
 			"type":"SCALAR"
@@ -629,32 +617,26 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":13440,
+			"byteLength":12936,
 			"byteOffset":127128,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":13440,
-			"byteOffset":140568,
+			"byteLength":12936,
+			"byteOffset":140064,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8960,
-			"byteOffset":154008,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":8960,
-			"byteOffset":162968,
+			"byteLength":8624,
+			"byteOffset":153000,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":3588,
-			"byteOffset":171928,
+			"byteOffset":161624,
 			"target":34963
 		}
 	],
@@ -666,7 +648,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":175516,
+			"byteLength":165212,
 			"uri":"obj_wall.bin"
 		}
 	]

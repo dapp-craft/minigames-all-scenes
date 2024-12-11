@@ -29,7 +29,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -55,7 +54,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -81,7 +79,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -109,7 +106,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.010",
+			"name":"obj_fence",
 			"primitives":[
 				{
 					"attributes":{
@@ -141,7 +138,7 @@
 			]
 		},
 		{
-			"name":"Mesh.038",
+			"name":"obj_fence_collider",
 			"primitives":[
 				{
 					"attributes":{

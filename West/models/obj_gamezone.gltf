@@ -20,7 +20,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.020",
+			"name":"obj_gamezone_collider",
 			"primitives":[
 				{
 					"attributes":{
