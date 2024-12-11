@@ -33,7 +33,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -81,7 +80,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.008",
+			"name":"obj_flask",
 			"primitives":[
 				{
 					"attributes":{
@@ -95,7 +94,7 @@
 			]
 		},
 		{
-			"name":"Mesh.027",
+			"name":"obj_flask_alpha",
 			"primitives":[
 				{
 					"attributes":{
@@ -109,7 +108,7 @@
 			]
 		},
 		{
-			"name":"Mesh.002",
+			"name":"obj_flask_collider",
 			"primitives":[
 				{
 					"attributes":{

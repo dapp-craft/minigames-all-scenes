@@ -28,7 +28,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -51,7 +50,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -76,7 +74,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.012",
+			"name":"obj_terminal",
 			"primitives":[
 				{
 					"attributes":{
@@ -99,7 +97,7 @@
 			]
 		},
 		{
-			"name":"Mesh.013",
+			"name":"obj_terminal_collider",
 			"primitives":[
 				{
 					"attributes":{

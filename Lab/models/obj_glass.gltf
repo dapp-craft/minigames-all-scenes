@@ -47,7 +47,6 @@
 		},
 		{
 			"alphaMode":"BLEND",
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -94,7 +93,6 @@
 		},
 		{
 			"alphaMode":"BLEND",
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -119,7 +117,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.010",
+			"name":"obj_glass",
 			"primitives":[
 				{
 					"attributes":{
@@ -220,7 +218,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":123,
+			"count":122,
 			"max":[
 				4.7785773277282715,
 				7.642796993255615,
@@ -236,13 +234,13 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":123,
+			"count":122,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":123,
+			"count":122,
 			"type":"VEC2"
 		},
 		{
@@ -357,98 +355,98 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1476,
+			"byteLength":1464,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1476,
-			"byteOffset":1476,
+			"byteLength":1464,
+			"byteOffset":1464,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":984,
-			"byteOffset":2952,
+			"byteLength":976,
+			"byteOffset":2928,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1344,
-			"byteOffset":3936,
+			"byteOffset":3904,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":9408,
-			"byteOffset":5280,
+			"byteOffset":5248,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":9408,
-			"byteOffset":14688,
+			"byteOffset":14656,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":6272,
-			"byteOffset":24096,
+			"byteOffset":24064,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":5568,
-			"byteOffset":30368,
+			"byteOffset":30336,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":9984,
-			"byteOffset":35936,
+			"byteOffset":35904,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":9984,
-			"byteOffset":45920,
+			"byteOffset":45888,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":6656,
-			"byteOffset":55904,
+			"byteOffset":55872,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":4368,
-			"byteOffset":62560,
+			"byteOffset":62528,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":14664,
-			"byteOffset":66928,
+			"byteOffset":66896,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":14664,
-			"byteOffset":81592,
+			"byteOffset":81560,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":9776,
-			"byteOffset":96256,
+			"byteOffset":96224,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":10368,
-			"byteOffset":106032,
+			"byteOffset":106000,
 			"target":34963
 		}
 	],
@@ -460,7 +458,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":116400,
+			"byteLength":116368,
 			"uri":"obj_glass.bin"
 		}
 	]

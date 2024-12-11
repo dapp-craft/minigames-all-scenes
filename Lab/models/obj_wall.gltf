@@ -51,7 +51,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -74,7 +73,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -97,7 +95,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -120,7 +117,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -166,7 +162,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -189,7 +184,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -212,7 +206,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -235,7 +228,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -260,7 +252,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.011",
+			"name":"obj_wall",
 			"primitives":[
 				{
 					"attributes":{
@@ -355,7 +347,7 @@
 			]
 		},
 		{
-			"name":"Mesh",
+			"name":"obj_wall_collider",
 			"primitives":[
 				{
 					"attributes":{

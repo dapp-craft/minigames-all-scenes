@@ -72,6 +72,7 @@
 			}
 		},
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -94,6 +95,7 @@
 			}
 		},
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -118,7 +120,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.005",
+			"name":"obj_station",
 			"primitives":[
 				{
 					"attributes":{
@@ -159,7 +161,7 @@
 			]
 		},
 		{
-			"name":"Mesh.006",
+			"name":"obj_station_collider",
 			"primitives":[
 				{
 					"attributes":{
