@@ -82,7 +82,7 @@ export const LEVELS = {
             orange: [1, 0.5, 0]      // RGB для оранжевого
         },
         flasks: [
-            ['blue', 'yellow', 'lightblue'],              // первая пробирка
+            ['lightblue', 'yellow', 'yellow', 'lightblue'],              // первая пробирка
             ['blue', 'orange', 'orange', 'blue'],         // вторая пробирка
             ['blue', 'yellow', 'orange', 'lightblue'],    // третья пробирка
             ['orange', 'yellow', 'blue', 'lightblue'],    // четвертая пробирка
