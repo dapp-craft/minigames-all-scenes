@@ -13,9 +13,8 @@ export class GameLogic {
     private targetData = new Map()
     private playerScore = 0
 
-    public startGame() {
-        // this.stopGame()
-        this.resetData()
+    public async startGame() {
+        await this.stopGame()
         this.playGame()
     }
 
@@ -57,37 +56,24 @@ export class GameLogic {
     // TO DO: REFACTOR
     private spawnRandomizer(spawnType: string, entityAmount: number) {
         console.log("spawnRandomizer TYPE: ", spawnType);
-
         const generator = ({ firstRow, gap = 1, entityAmountInRow = entityAmount }: { firstRow: boolean, gap?: number | "random", entityAmountInRow?: number }) => {
-            if (gap === "random") {
-                gap = (Math.random() < 0.5 || entityAmountInRow >= 3) ? 2 : 3
-            }
-
+            if (gap === "random") gap = (Math.random() < 0.5 || entityAmountInRow >= 3) ? 2 : 3
             const start = entityAmountInRow < 3 ? Math.floor(Math.random() * 5) + 1 : 1
             const sequence: number[] = [start]
             let increasing = true
-
             for (let i = 1; i < entityAmountInRow; i++) {
                 const prev = sequence[i - 1]
                 let next
-
                 if (increasing) {
                     next = prev + gap
                     if (next > 5) {
                         increasing = false
                         next = start - gap
                     }
-                } else {
-                    next = prev - gap
-                }
-
+                } else next = prev - gap
                 sequence.push(next)
             }
-
-            if (!firstRow) {
-                sequence.forEach((_, i) => sequence[i] += 5)
-            }
-
+            if (!firstRow) sequence.forEach((_, i) => sequence[i] += 5)
             console.log(sequence)
             return sequence
         }
@@ -95,32 +81,26 @@ export class GameLogic {
         switch (spawnType) {
             case 'row':
                 return generator({ firstRow: true })
-
             case 'gapRow':
                 return generator({ firstRow: true, gap: 'random' })
-
             case 'twoLevels': {
                 const firstLevel = Math.random() < 0.5
                 const odd = entityAmount % 2 !== 0
                 const entityAmountInRow = Math.ceil(entityAmount / 2)
-
                 const firstArray = generator({
                     firstRow: firstLevel,
                     gap: 'random',
                     entityAmountInRow: odd ? entityAmountInRow - 1 : entityAmountInRow
                 })
-
                 const secondArray = generator({
                     firstRow: !firstLevel,
                     gap: 'random',
                     entityAmountInRow
                 })
-
                 const response = [...firstArray, ...secondArray]
                 console.log('Concat: ', response)
                 return response
             }
-
             default:
                 throw new Error(`Unknown spawnType: ${spawnType}`)
         }
@@ -159,8 +139,8 @@ export class GameLogic {
         let enemyLeftCounter = 0
         this.targetData.forEach(data => { if (data.enemy && !data.dead) enemyLeftCounter++ })
         const enemyLeft = enemyLeftCounter == 0
-        if (enemyLeft) {
-            this.setPlayerLevel()
+        const isLevelsLeft = this.setPlayerLevel()
+        if (enemyLeft && this.playerHP > 0 && isLevelsLeft) {
             await this.stopRound()
             this.playGame()
         }
@@ -170,7 +150,7 @@ export class GameLogic {
         this.playerHP = this.playerHP - 10
         console.log("Hit PLAYER ", this.playerHP)
         this.updateCounters()
-        this.playerHP <= 0 && this.stopGame()
+        if (this.playerHP <= 0) this.stopGame()
     }
 
     private updateCounters() {
@@ -207,7 +187,7 @@ export class GameLogic {
                 resolveReady()
             }, !noAnimation ? levels.get(this.playerLevel)!.appearanceTime + 100 : 1)
         }
-        if (noAnimation) return
+        // if (noAnimation) return
         await RoundIsStopped;
     }
 
@@ -215,10 +195,12 @@ export class GameLogic {
         // TEMP
         if (this.playerLevel >= levels.size) {
             this.stopGame()
-            return console.log("GAME OVER!")
+            console.log("GAME OVER!")
+            return false
         }
         this.playerLevel++
         console.log("Player Level: ", this.playerLevel)
+        return true
     }
 
     private resetData() {
@@ -230,8 +212,8 @@ export class GameLogic {
         this.targetData.clear()
     }
 
-    public stopGame() {
-        this.stopRound(true)
+    public async stopGame() {
+        await this.stopRound()
         this.resetData()
     }
 }

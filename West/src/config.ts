@@ -5,7 +5,7 @@ export const westGameConfig = {
     targetEntityAmount: 9,
     horizontalLeftLimit: 0,
     horizontalRightLimit: 8,
-    playerMaxHP: 100
+    playerMaxHP: 30
 }
 
 export const tempLocators = new Map([
