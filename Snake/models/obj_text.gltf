@@ -48,7 +48,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.010",
+			"name":"obj_text",
 			"primitives":[
 				{
 					"attributes":{

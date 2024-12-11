@@ -48,7 +48,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.001",
+			"name":"obj_snake02",
 			"primitives":[
 				{
 					"attributes":{

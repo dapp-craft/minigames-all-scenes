@@ -52,7 +52,7 @@
 	],
 	"meshes":[
 		{
-			"name":"obj_railings.005",
+			"name":"obj_railings_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -65,7 +65,7 @@
 			]
 		},
 		{
-			"name":"obj_railings.001",
+			"name":"obj_railings",
 			"primitives":[
 				{
 					"attributes":{

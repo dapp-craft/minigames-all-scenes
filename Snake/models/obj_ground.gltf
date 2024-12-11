@@ -47,7 +47,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.055",
+			"name":"obj_ground",
 			"primitives":[
 				{
 					"attributes":{
