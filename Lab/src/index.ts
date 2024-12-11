@@ -10,6 +10,7 @@ import { setupEffects } from '../../common/effects'
 import { GameLevel, flaskTransforms } from './game'
 import { syncEntity } from '@dcl/sdk/network'
 import { Flask } from './game/flask'
+import { LEVELS } from './settings/levels'
 
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
@@ -22,6 +23,7 @@ export const State = engine.defineComponent('Lab::state', {
 
 let playing = false
 let interruptPlay: Function
+let currentLevel = 1 as keyof typeof LEVELS
 
 let flasks: Flask[] = []
 const handlers = {
@@ -29,15 +31,19 @@ const handlers = {
         playing = true
         flasks.map(f => f.destroy())
         flasks = []
-        const level = new GameLevel(
-            1, 
-            new Promise((_, r) => interruptPlay = r),
-            level => State.getMutable(client).flasks = level.flasks.map(f => f.getConfig())
-        )
-        await level
-            .play()
-            .catch(e => !['number', 'undefined'].includes(typeof e) ? console.error(e): null)
-            .finally(() => level.stop())
+
+        let next: number | null
+        let level
+        do next = await (level = new GameLevel(
+                currentLevel, 
+                new Promise((_, r) => interruptPlay = r),
+                level => State.getMutable(client).flasks = level.flasks.map(f => f.getConfig())
+            ))
+                .play()
+                .then(() => currentLevel + 1 in LEVELS ? ++currentLevel : null)
+                .catch(jump => jump ? currentLevel = jump : null)
+                .finally(level.stop.bind(level))
+        while (next)
         queue.setNextPlayer()
     },
     exit: () => {
@@ -48,7 +54,9 @@ const handlers = {
             console.error(e)
         }
     },
-    restart: () => {},
+    restart: () => {
+        interruptPlay(currentLevel)
+    },
     toggleMusic: () => {},
     toggleSfx: () => {}
 }

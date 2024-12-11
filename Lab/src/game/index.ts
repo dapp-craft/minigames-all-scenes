@@ -12,7 +12,7 @@ export class GameLevel {
     constructor(readonly level: keyof typeof LEVELS, private abort: Promise<never>, private onStateChange: (arg: GameLevel) => void) {
         const {colors, flasks: configs} = LEVELS[level]
         this.ready = Promise
-            .all(configs.map((f, idx) => new Flask(flaskTransforms[idx]).applyConfig(f.map(c => Color3.fromArray(colors[c])))))
+            .all(configs.map((f, idx) => new Flask(flaskTransforms[idx]).applyConfig(f.map(c => Color3.fromArray((colors as any)[c])))))
             .then(flasks => this._flasks = flasks)
             .then(() => this.onStateChange(this))
     }
