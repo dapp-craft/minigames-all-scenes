@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -32,7 +32,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -55,6 +54,7 @@
 			}
 		},
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
 				1,
 				0.3419147729873657,
@@ -79,7 +79,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.005",
+			"name":"obj_lamp01_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -124,7 +124,7 @@
 			]
 		},
 		{
-			"name":"Mesh.002",
+			"name":"obj_lamp01_base_collider",
 			"primitives":[
 				{
 					"attributes":{

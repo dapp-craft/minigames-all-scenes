@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -24,54 +24,20 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_num02_glass",
-			"rotation":[
-				0,
-				0.4147928059101105,
-				0,
-				0.9099158644676208
-			],
-			"translation":[
-				-4.093779563903809,
-				0,
-				-3.576314926147461
-			]
+			"name":"obj_num02_glass"
 		},
 		{
 			"mesh":1,
-			"name":"obj_num02_base",
-			"rotation":[
-				0,
-				0.4147928059101105,
-				0,
-				0.9099158644676208
-			],
-			"translation":[
-				-4.093779563903809,
-				0,
-				-3.576314926147461
-			]
+			"name":"obj_num02_base"
 		},
 		{
 			"mesh":2,
-			"name":"obj_num02_base_collider",
-			"rotation":[
-				0,
-				0.4147928059101105,
-				0,
-				0.9099158644676208
-			],
-			"translation":[
-				-4.093779563903809,
-				0,
-				-3.576314926147461
-			]
+			"name":"obj_num02_base_collider"
 		}
 	],
 	"materials":[
 		{
 			"alphaMode":"BLEND",
-			"doubleSided":true,
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
@@ -89,7 +55,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -114,7 +79,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.048",
+			"name":"obj_num02_glass",
 			"primitives":[
 				{
 					"attributes":{
@@ -139,7 +104,7 @@
 			]
 		},
 		{
-			"name":"Mesh.049",
+			"name":"obj_num02_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -164,7 +129,7 @@
 			]
 		},
 		{
-			"name":"Mesh.050",
+			"name":"obj_num02_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -210,14 +175,14 @@
 			"componentType":5126,
 			"count":161,
 			"max":[
-				0.1568799614906311,
+				-3.9423365592956543,
 				0.7134968638420105,
-				0.1557946652173996
+				-3.4204111099243164
 			],
 			"min":[
-				-0.15611518919467926,
+				-4.249485969543457,
 				0.07353425025939941,
-				-0.15445329248905182
+				-3.7296767234802246
 			],
 			"type":"VEC3"
 		},
@@ -240,14 +205,14 @@
 			"componentType":5126,
 			"count":406,
 			"max":[
-				0.1687818318605423,
+				-3.930976629257202,
 				0.6263789534568787,
-				0.16316960752010345
+				-3.4116477966308594
 			],
 			"min":[
-				-0.16934527456760406,
+				-4.255169868469238,
 				-0.0041465358808636665,
-				-0.1598963439464569
+				-3.7374813556671143
 			],
 			"type":"VEC3"
 		},
@@ -270,14 +235,14 @@
 			"componentType":5126,
 			"count":30,
 			"max":[
-				0.18022005259990692,
+				-3.9050025939941406,
 				0.6958586573600769,
-				0.1533043384552002
+				-3.39168643951416
 			],
 			"min":[
-				-0.18022002279758453,
+				-4.2561869621276855,
 				-4.515184315323495e-08,
-				-0.18949474394321442
+				-3.7507619857788086
 			],
 			"type":"VEC3"
 		},
@@ -300,18 +265,18 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1591,
+			"byteLength":1588,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":3732,
-			"byteOffset":1592
+			"byteLength":3747,
+			"byteOffset":1588
 		},
 		{
 			"buffer":0,
-			"byteLength":391,
-			"byteOffset":5324
+			"byteLength":394,
+			"byteOffset":5336
 		}
 	],
 	"samplers":[
@@ -322,7 +287,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":5716,
+			"byteLength":5732,
 			"uri":"obj_num02_base.bin"
 		}
 	]

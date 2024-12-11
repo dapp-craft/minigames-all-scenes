@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,23 +23,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_tree02_base",
-			"rotation":[
-				0.7071068286895752,
-				0,
-				0,
-				0.7071068286895752
-			],
-			"scale":[
-				0.009999999776482582,
-				0.009999999776482582,
-				0.009999999776482582
-			],
-			"translation":[
-				5.424739837646484,
-				0,
-				-4.921420097351074
-			]
+			"name":"obj_tree02_base"
 		},
 		{
 			"mesh":1,
@@ -48,7 +32,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -73,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.006",
+			"name":"obj_tree02_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -98,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.019",
+			"name":"obj_tree02_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -144,14 +127,14 @@
 			"componentType":5126,
 			"count":4842,
 			"max":[
-				243.41644287109375,
-				199.7958984375,
-				0.41966184973716736
+				7.858903884887695,
+				4.112183570861816,
+				-2.923461437225342
 			],
 			"min":[
-				-260.3251953125,
-				-176.345458984375,
-				-411.2183532714844
+				2.8214879035949707,
+				-0.004196626599878073,
+				-6.684874534606934
 			],
 			"type":"VEC3"
 		},
@@ -204,13 +187,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":39786,
+			"byteLength":39794,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
 			"byteLength":4468,
-			"byteOffset":39788
+			"byteOffset":39796
 		}
 	],
 	"samplers":[
@@ -221,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":44256,
+			"byteLength":44264,
 			"uri":"obj_tree02_base.bin"
 		}
 	]

@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,21 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_gear07_base",
-			"translation":[
-				2.296840190887451,
-				0,
-				0.46612346172332764
-			]
+			"name":"obj_gear07_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_gear07_base_collider",
-			"translation":[
-				2.296840190887451,
-				0,
-				0.46612346172332764
-			]
+			"name":"obj_gear07_base_collider"
 		}
 	],
 	"materials":[
@@ -66,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.080",
+			"name":"obj_gear07_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -91,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.081",
+			"name":"obj_gear07_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -137,14 +127,14 @@
 			"componentType":5126,
 			"count":478,
 			"max":[
-				0.15603500604629517,
+				2.4528751373291016,
 				0.14122965931892395,
-				0.1681400090456009
+				0.6342634558677673
 			],
 			"min":[
-				-0.15606343746185303,
+				2.1407766342163086,
 				-4.820513277081773e-05,
-				-0.16813622415065765
+				0.2979872226715088
 			],
 			"type":"VEC3"
 		},
@@ -165,27 +155,27 @@
 		},
 		{
 			"componentType":5126,
-			"count":60,
+			"count":62,
 			"max":[
-				0.19587917625904083,
+				2.4927194118499756,
 				0.14057870209217072,
-				0.1696363389492035
+				0.6357598304748535
 			],
 			"min":[
-				-0.19587914645671844,
+				2.1009609699249268,
 				-3.5796947486232966e-05,
-				-0.16963638365268707
+				0.29648709297180176
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":60,
+			"count":62,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":60,
+			"count":62,
 			"type":"VEC2"
 		},
 		{
@@ -202,7 +192,7 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":696,
+			"byteLength":716,
 			"byteOffset":4164
 		}
 	],
@@ -214,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":4860,
+			"byteLength":4880,
 			"uri":"obj_gear07_base.bin"
 		}
 	]

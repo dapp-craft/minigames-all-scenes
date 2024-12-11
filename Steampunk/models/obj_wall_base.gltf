@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,36 +23,15 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_wall_base",
-			"scale":[
-				1,
-				1,
-				0.778540313243866
-			],
-			"translation":[
-				0,
-				0,
-				-7.232393264770508
-			]
+			"name":"obj_wall_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_wall_base_collider",
-			"scale":[
-				1,
-				1,
-				0.778540313243866
-			],
-			"translation":[
-				0,
-				0,
-				-7.232393264770508
-			]
+			"name":"obj_wall_base_collider"
 		}
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -77,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.005",
+			"name":"obj_wall_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -102,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Cylinder.006",
+			"name":"obj_wall_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -146,27 +125,27 @@
 	"accessors":[
 		{
 			"componentType":5126,
-			"count":1880,
+			"count":1892,
 			"max":[
 				7.734232425689697,
 				9.66054916381836,
-				19.28030014038086
+				7.778098106384277
 			],
 			"min":[
 				-7.734232425689697,
-				-1.7468769328843337e-06,
-				-0.4962807297706604
+				6.777305543437251e-07,
+				-7.618767738342285
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":1880,
+			"count":1892,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":1880,
+			"count":1892,
 			"type":"VEC2"
 		},
 		{
@@ -176,27 +155,27 @@
 		},
 		{
 			"componentType":5126,
-			"count":483,
+			"count":479,
 			"max":[
 				7.728168964385986,
 				9.66054916381836,
-				19.27846908569336
+				7.77667236328125
 			],
 			"min":[
 				-7.72816801071167,
-				-1.7468769328843337e-06,
-				-0.48167139291763306
+				6.805020120737026e-07,
+				-7.607394218444824
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":483,
+			"count":479,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":483,
+			"count":479,
 			"type":"VEC2"
 		},
 		{
@@ -208,13 +187,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":15079,
+			"byteLength":15242,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":4531,
-			"byteOffset":15080
+			"byteLength":4441,
+			"byteOffset":15244
 		}
 	],
 	"samplers":[
@@ -225,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":19612,
+			"byteLength":19688,
 			"uri":"obj_wall_base.bin"
 		}
 	]

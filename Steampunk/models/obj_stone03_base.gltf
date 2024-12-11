@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,33 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_stone03_base",
-			"rotation":[
-				0,
-				0.35114017128944397,
-				0,
-				0.9363229274749756
-			],
-			"translation":[
-				4.424794673919678,
-				0,
-				-5.552948474884033
-			]
+			"name":"obj_stone03_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_stone03_base_collider",
-			"rotation":[
-				0,
-				0.35114017128944397,
-				0,
-				0.9363229274749756
-			],
-			"translation":[
-				4.424794673919678,
-				0,
-				-5.552948474884033
-			]
+			"name":"obj_stone03_base_collider"
 		}
 	],
 	"materials":[
@@ -78,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.103",
+			"name":"obj_stone03_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -103,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.104",
+			"name":"obj_stone03_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -149,14 +127,14 @@
 			"componentType":5126,
 			"count":377,
 			"max":[
-				0.5191647410392761,
+				5.019751071929932,
 				1.052291989326477,
-				0.4859771728515625
+				-4.965418815612793
 			],
 			"min":[
-				-0.5191648602485657,
+				3.9365930557250977,
 				-0.0003829562047030777,
-				-0.48597708344459534
+				-6.110994338989258
 			],
 			"type":"VEC3"
 		},
@@ -179,14 +157,14 @@
 			"componentType":5126,
 			"count":24,
 			"max":[
-				0.47284963726997375,
+				5.091967582702637,
 				1.025456190109253,
-				0.47284963726997375
+				-4.885775566101074
 			],
 			"min":[
-				-0.47284963726997375,
+				3.7576215267181396,
 				-1.1258914867084968e-07,
-				-0.47284987568855286
+				-6.220121383666992
 			],
 			"type":"VEC3"
 		},
@@ -209,13 +187,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":3836,
+			"byteLength":3830,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":362,
-			"byteOffset":3836
+			"byteLength":365,
+			"byteOffset":3832
 		}
 	],
 	"samplers":[

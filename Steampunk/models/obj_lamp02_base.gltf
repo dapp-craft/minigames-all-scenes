@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,33 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_lamp02_base",
-			"rotation":[
-				0,
-				-0.5219432711601257,
-				0,
-				0.8529802560806274
-			],
-			"translation":[
-				3.1564347743988037,
-				0,
-				-6.1050310134887695
-			]
+			"name":"obj_lamp02_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_lamp02_base_collider",
-			"rotation":[
-				0,
-				-0.5219432711601257,
-				0,
-				0.8529802560806274
-			],
-			"translation":[
-				3.1564347743988037,
-				0,
-				-6.1050310134887695
-			]
+			"name":"obj_lamp02_base_collider"
 		}
 	],
 	"materials":[
@@ -78,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.033",
+			"name":"obj_lamp02_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -103,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.035",
+			"name":"obj_lamp02_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -149,14 +127,14 @@
 			"componentType":5126,
 			"count":1243,
 			"max":[
-				0.20190520584583282,
+				3.359142780303955,
 				1.1197998523712158,
-				0.3879583477973938
+				-5.8509931564331055
 			],
 			"min":[
-				-0.20134016871452332,
+				2.788065195083618,
 				-0.0006866804324090481,
-				-0.20169509947299957
+				-6.3075642585754395
 			],
 			"type":"VEC3"
 		},
@@ -177,27 +155,27 @@
 		},
 		{
 			"componentType":5126,
-			"count":48,
+			"count":52,
 			"max":[
-				0.2053402215242386,
+				3.4327332973480225,
 				1.1161439418792725,
-				0.3962741792201996
+				-5.828732490539551
 			],
 			"min":[
-				-0.2053402215242386,
+				2.7629661560058594,
 				-0.0015894820680841804,
-				-0.2053402215242386
+				-6.381329536437988
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":48,
+			"count":52,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":48,
+			"count":52,
 			"type":"VEC2"
 		},
 		{
@@ -209,13 +187,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":10134,
+			"byteLength":10128,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":515,
-			"byteOffset":10136
+			"byteLength":539,
+			"byteOffset":10128
 		}
 	],
 	"samplers":[
@@ -226,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":10652,
+			"byteLength":10668,
 			"uri":"obj_lamp02_base.bin"
 		}
 	]

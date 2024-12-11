@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,33 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_well01_base",
-			"rotation":[
-				0,
-				0.5883639454841614,
-				0,
-				0.8085962533950806
-			],
-			"translation":[
-				-6.0111002922058105,
-				0,
-				-3.647111415863037
-			]
+			"name":"obj_well01_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_well01_base_collider",
-			"rotation":[
-				0,
-				0.5883639454841614,
-				0,
-				0.8085962533950806
-			],
-			"translation":[
-				-6.0111002922058105,
-				0,
-				-3.647111415863037
-			]
+			"name":"obj_well01_base_collider"
 		}
 	],
 	"materials":[
@@ -78,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.107",
+			"name":"obj_well01_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -103,14 +81,13 @@
 			]
 		},
 		{
-			"name":"Mesh.108",
+			"name":"obj_well01_base_collider",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":4,
 						"NORMAL":5,
-						"TEXCOORD_0":6,
-						"TEXCOORD_1":7
+						"TEXCOORD_0":6
 					},
 					"extensions":{
 						"KHR_draco_mesh_compression":{
@@ -118,12 +95,11 @@
 							"attributes":{
 								"POSITION":0,
 								"NORMAL":1,
-								"TEXCOORD_0":2,
-								"TEXCOORD_1":3
+								"TEXCOORD_0":2
 							}
 						}
 					},
-					"indices":8,
+					"indices":7,
 					"mode":4
 				}
 			]
@@ -151,14 +127,14 @@
 			"componentType":5126,
 			"count":2327,
 			"max":[
-				0.8065415620803833,
+				-5.401963233947754,
 				1.5144765377044678,
-				0.6157203912734985
+				-3.096358299255371
 			],
 			"min":[
-				-0.4975283741950989,
+				-6.567500114440918,
 				-0.0015573299024254084,
-				-0.6095003485679626
+				-4.419770240783691
 			],
 			"type":"VEC3"
 		},
@@ -181,14 +157,14 @@
 			"componentType":5126,
 			"count":145,
 			"max":[
-				0.8080486059188843,
+				-5.402926921844482,
 				1.5186933279037476,
-				0.613935112953186
+				-3.0569162368774414
 			],
 			"min":[
-				-0.579992949962616,
+				-6.593034267425537,
 				-2.3448930619451858e-07,
-				-0.6115978956222534
+				-4.421936988830566
 			],
 			"type":"VEC3"
 		},
@@ -196,11 +172,6 @@
 			"componentType":5126,
 			"count":145,
 			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":145,
-			"type":"VEC2"
 		},
 		{
 			"componentType":5126,
@@ -216,13 +187,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":20192,
+			"byteLength":20148,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":1417,
-			"byteOffset":20192
+			"byteLength":1257,
+			"byteOffset":20148
 		}
 	],
 	"samplers":[
@@ -233,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":21612,
+			"byteLength":21408,
 			"uri":"obj_well01_base.bin"
 		}
 	]

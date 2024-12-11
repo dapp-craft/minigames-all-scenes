@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,33 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_gear01_base",
-			"rotation":[
-				0,
-				-0.38877174258232117,
-				0,
-				0.9213341474533081
-			],
-			"translation":[
-				4.911184310913086,
-				0,
-				-2.6210999488830566
-			]
+			"name":"obj_gear01_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_gear01_base_collider",
-			"rotation":[
-				0,
-				-0.38877174258232117,
-				0,
-				0.9213341474533081
-			],
-			"translation":[
-				4.911184310913086,
-				0,
-				-2.6210999488830566
-			]
+			"name":"obj_gear01_base_collider"
 		}
 	],
 	"materials":[
@@ -78,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.068",
+			"name":"obj_gear01_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -103,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.069",
+			"name":"obj_gear01_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -149,14 +127,14 @@
 			"componentType":5126,
 			"count":190,
 			"max":[
-				0.16249267756938934,
+				5.071242809295654,
 				0.10849721729755402,
-				0.16454344987869263
+				-2.4622275829315186
 			],
 			"min":[
-				-0.15048782527446747,
+				4.745556354522705,
 				-0.000792596023529768,
-				-0.1645437628030777
+				-2.786555290222168
 			],
 			"type":"VEC3"
 		},
@@ -179,14 +157,14 @@
 			"componentType":5126,
 			"count":36,
 			"max":[
-				0.16341859102249146,
+				5.0917582511901855,
 				0.10466737300157547,
-				0.1865958422422409
+				-2.4411370754241943
 			],
 			"min":[
-				-0.16341859102249146,
+				4.730610370635986,
 				-4.448596158113105e-08,
-				-0.18659581243991852
+				-2.801062822341919
 			],
 			"type":"VEC3"
 		},
@@ -209,12 +187,12 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1880,
+			"byteLength":1878,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":489,
+			"byteLength":487,
 			"byteOffset":1880
 		}
 	],
@@ -226,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":2372,
+			"byteLength":2368,
 			"uri":"obj_gear01_base.bin"
 		}
 	]

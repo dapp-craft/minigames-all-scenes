@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,33 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_chest01_base",
-			"rotation":[
-				0,
-				0.9006129503250122,
-				0,
-				0.4346220791339874
-			],
-			"translation":[
-				-3.939756393432617,
-				0,
-				0.20428362488746643
-			]
+			"name":"obj_chest01_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_chest01_base_collider",
-			"rotation":[
-				0,
-				0.9006129503250122,
-				0,
-				0.4346220791339874
-			],
-			"translation":[
-				-3.939756393432617,
-				0,
-				0.20428362488746643
-			]
+			"name":"obj_chest01_base_collider"
 		}
 	],
 	"materials":[
@@ -78,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.027",
+			"name":"obj_chest01_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -103,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.028",
+			"name":"obj_chest01_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -149,14 +127,14 @@
 			"componentType":5126,
 			"count":1003,
 			"max":[
-				0.5780534744262695,
+				-3.3867928981781006,
 				1.0060160160064697,
-				0.5692453384399414
+				0.7665731906890869
 			],
 			"min":[
-				-0.5076981782913208,
+				-4.492317199707031,
 				-1.0904653890975169e-07,
-				-0.5532203316688538
+				-0.3184731900691986
 			],
 			"type":"VEC3"
 		},
@@ -179,14 +157,14 @@
 			"componentType":5126,
 			"count":50,
 			"max":[
-				0.6089028120040894,
+				-3.300116777420044,
 				1.003954291343689,
-				0.5179634690284729
+				0.8040651082992554
 			],
 			"min":[
-				-0.6089028120040894,
+				-4.473503589630127,
 				-1.3706876700325665e-07,
-				-0.6402384042739868
+				-0.41260209679603577
 			],
 			"type":"VEC3"
 		},
@@ -209,13 +187,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":9478,
+			"byteLength":9482,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":614,
-			"byteOffset":9480
+			"byteLength":615,
+			"byteOffset":9484
 		}
 	],
 	"samplers":[
@@ -226,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":10096,
+			"byteLength":10100,
 			"uri":"obj_chest01_base.bin"
 		}
 	]

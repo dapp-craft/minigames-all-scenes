@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,33 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_bush01_base",
-			"rotation":[
-				0,
-				-0.3105550706386566,
-				0,
-				0.9505554437637329
-			],
-			"translation":[
-				1.4591689109802246,
-				0,
-				0.21887493133544922
-			]
+			"name":"obj_bush01_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_bush01_base_collider",
-			"rotation":[
-				0,
-				-0.3105550706386566,
-				0,
-				0.9505554437637329
-			],
-			"translation":[
-				1.4591689109802246,
-				0,
-				0.21887493133544922
-			]
+			"name":"obj_bush01_base_collider"
 		}
 	],
 	"materials":[
@@ -78,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.010",
+			"name":"obj_bush01_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -103,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.013",
+			"name":"obj_bush01_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -149,14 +127,14 @@
 			"componentType":5126,
 			"count":452,
 			"max":[
-				0.49330243468284607,
+				1.9227863550186157,
 				0.7122113704681396,
-				0.5200172662734985
+				0.7127399444580078
 			],
 			"min":[
-				-0.485483318567276,
+				0.9637724161148071,
 				-0.025799617171287537,
-				-0.5077270865440369
+				-0.2773464322090149
 			],
 			"type":"VEC3"
 		},
@@ -177,27 +155,27 @@
 		},
 		{
 			"componentType":5126,
-			"count":40,
+			"count":42,
 			"max":[
-				0.468390554189682,
+				2.1137497425079346,
 				0.686236560344696,
-				0.46839046478271484
+				0.8734556436538696
 			],
 			"min":[
-				-0.468390554189682,
+				0.8045881986618042,
 				-1.0765788260869158e-07,
-				-0.46839067339897156
+				-0.43570590019226074
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":40,
+			"count":42,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":40,
+			"count":42,
 			"type":"VEC2"
 		},
 		{
@@ -209,13 +187,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":4550,
+			"byteLength":4554,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":510,
-			"byteOffset":4552
+			"byteLength":535,
+			"byteOffset":4556
 		}
 	],
 	"samplers":[
@@ -226,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":5064,
+			"byteLength":5092,
 			"uri":"obj_bush01_base.bin"
 		}
 	]

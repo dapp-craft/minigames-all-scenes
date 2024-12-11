@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,21 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_gear02_base",
-			"translation":[
-				-2.458970308303833,
-				0,
-				-6.005561828613281
-			]
+			"name":"obj_gear02_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_gear02_base_collider",
-			"translation":[
-				-2.458970308303833,
-				0,
-				-6.005561828613281
-			]
+			"name":"obj_gear02_base_collider"
 		}
 	],
 	"materials":[
@@ -66,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.070",
+			"name":"obj_gear02_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -91,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.071",
+			"name":"obj_gear02_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -137,14 +127,14 @@
 			"componentType":5126,
 			"count":180,
 			"max":[
-				0.1937507539987564,
+				-2.2652194499969482,
 				0.18457011878490448,
-				0.21104766428470612
+				-5.794514179229736
 			],
 			"min":[
-				-0.2076856940984726,
+				-2.666656017303467,
 				0.0016828587977215648,
-				-0.2110476791858673
+				-6.216609477996826
 			],
 			"type":"VEC3"
 		},
@@ -167,14 +157,14 @@
 			"componentType":5126,
 			"count":36,
 			"max":[
-				0.22236432135105133,
+				-2.2366058826446533,
 				0.18317368626594543,
-				0.23177947103977203
+				-5.773782253265381
 			],
 			"min":[
-				-0.22236432135105133,
+				-2.6813347339630127,
 				-5.5198800197331366e-08,
-				-0.23177951574325562
+				-6.237341403961182
 			],
 			"type":"VEC3"
 		},

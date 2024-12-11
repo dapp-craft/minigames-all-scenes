@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,33 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_bucket01_base",
-			"rotation":[
-				0,
-				-0.7877572178840637,
-				0,
-				0.6159858703613281
-			],
-			"translation":[
-				6.593506813049316,
-				0,
-				-1.558962345123291
-			]
+			"name":"obj_bucket01_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_bucket01_base_collider",
-			"rotation":[
-				0,
-				-0.7877572178840637,
-				0,
-				0.6159858703613281
-			],
-			"translation":[
-				6.593506813049316,
-				0,
-				-1.558962345123291
-			]
+			"name":"obj_bucket01_base_collider"
 		}
 	],
 	"materials":[
@@ -78,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.022",
+			"name":"obj_bucket01_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -103,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.009",
+			"name":"obj_bucket01_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -149,14 +127,14 @@
 			"componentType":5126,
 			"count":390,
 			"max":[
-				0.22945502400398254,
+				6.822567462921143,
 				0.6692686080932617,
-				0.24384360015392303
+				-1.326714277267456
 			],
 			"min":[
-				-0.2328222393989563,
+				6.357057094573975,
 				-0.0024945673067122698,
-				-0.23656727373600006
+				-1.802182912826538
 			],
 			"type":"VEC3"
 		},
@@ -177,27 +155,27 @@
 		},
 		{
 			"componentType":5126,
-			"count":68,
+			"count":66,
 			"max":[
-				0.22162789106369019,
+				6.841869831085205,
 				0.6662487387657166,
-				0.25591376423835754
+				-1.3130203485488892
 			],
 			"min":[
-				-0.22162789106369019,
+				6.345143795013428,
 				-4.078988524724991e-08,
-				-0.25591394305229187
+				-1.8049043416976929
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":68,
+			"count":66,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":68,
+			"count":66,
 			"type":"VEC2"
 		},
 		{
@@ -209,13 +187,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":4135,
+			"byteLength":4129,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":762,
-			"byteOffset":4136
+			"byteLength":747,
+			"byteOffset":4132
 		}
 	],
 	"samplers":[
@@ -226,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":4900,
+			"byteLength":4880,
 			"uri":"obj_bucket01_base.bin"
 		}
 	]

@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -22,22 +22,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_rules",
-			"scale":[
-				1.10435152053833,
-				1.10435152053833,
-				1.10435152053833
-			],
-			"translation":[
-				-7.269590854644775,
-				1.4679367542266846,
-				4.156310081481934
-			]
+			"name":"obj_rules"
 		}
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -62,7 +51,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane",
+			"name":"obj_rules",
 			"primitives":[
 				{
 					"attributes":{
@@ -109,14 +98,14 @@
 			"componentType":5126,
 			"count":8,
 			"max":[
-				0,
-				1.1224606037139893,
-				1.1224607229232788
+				-7.269590854644775,
+				2.7075278759002686,
+				5.395901203155518
 			],
 			"min":[
-				0,
-				-1.1224606037139893,
-				-1.1224607229232788
+				-7.269590854644775,
+				0.22834563255310059,
+				2.9167189598083496
 			],
 			"type":"VEC3"
 		},

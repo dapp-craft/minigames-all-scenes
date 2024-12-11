@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -29,7 +29,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -76,7 +75,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -120,7 +118,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.005",
+			"name":"obj_floor_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -228,7 +226,7 @@
 		},
 		{
 			"componentType":5126,
-			"count":57,
+			"count":45,
 			"max":[
 				8,
 				0,
@@ -243,12 +241,12 @@
 		},
 		{
 			"componentType":5126,
-			"count":57,
+			"count":45,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":57,
+			"count":45,
 			"type":"VEC2"
 		},
 		{
@@ -265,7 +263,7 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":590,
+			"byteLength":506,
 			"byteOffset":184
 		}
 	],
@@ -277,7 +275,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":776,
+			"byteLength":692,
 			"uri":"obj_floor_base.bin"
 		}
 	]

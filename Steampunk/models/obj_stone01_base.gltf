@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,33 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_stone01_base",
-			"rotation":[
-				0,
-				0.7708350419998169,
-				0,
-				0.6370347738265991
-			],
-			"translation":[
-				-6.062982082366943,
-				0,
-				-2.24369740486145
-			]
+			"name":"obj_stone01_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_stone01_base_collider",
-			"rotation":[
-				0,
-				0.7708350419998169,
-				0,
-				0.6370347738265991
-			],
-			"translation":[
-				-6.062982082366943,
-				0,
-				-2.24369740486145
-			]
+			"name":"obj_stone01_base_collider"
 		}
 	],
 	"materials":[
@@ -78,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.099",
+			"name":"obj_stone01_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -103,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.100",
+			"name":"obj_stone01_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -149,14 +127,14 @@
 			"componentType":5126,
 			"count":668,
 			"max":[
-				0.49343809485435486,
+				-5.544435977935791,
 				2.2624258995056152,
-				0.49988582730293274
+				-1.7430124282836914
 			],
 			"min":[
-				-0.49814313650131226,
+				-6.655228614807129,
 				-0.0016409738454967737,
-				-0.5694499611854553
+				-2.7771878242492676
 			],
 			"type":"VEC3"
 		},
@@ -177,27 +155,27 @@
 		},
 		{
 			"componentType":5126,
-			"count":56,
+			"count":58,
 			"max":[
-				0.49400031566619873,
+				-5.484768867492676,
 				2.2517855167388916,
-				0.4940003454685211
+				-1.6654844284057617
 			],
 			"min":[
-				-0.49400031566619873,
+				-6.641195297241211,
 				-1.1776225505855109e-07,
-				-0.4940003454685211
+				-2.8219103813171387
 			],
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":56,
+			"count":58,
 			"type":"VEC3"
 		},
 		{
 			"componentType":5126,
-			"count":56,
+			"count":58,
 			"type":"VEC2"
 		},
 		{
@@ -209,12 +187,12 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":6376,
+			"byteLength":6374,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":579,
+			"byteLength":595,
 			"byteOffset":6376
 		}
 	],
@@ -226,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":6956,
+			"byteLength":6972,
 			"uri":"obj_stone01_base.bin"
 		}
 	]

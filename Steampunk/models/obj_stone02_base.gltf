@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -23,33 +23,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_stone02_base",
-			"rotation":[
-				0,
-				0.2703249752521515,
-				0,
-				0.9627691507339478
-			],
-			"translation":[
-				-2.821058988571167,
-				0,
-				-3.4371533393859863
-			]
+			"name":"obj_stone02_base"
 		},
 		{
 			"mesh":1,
-			"name":"obj_stone02_base_collider",
-			"rotation":[
-				0,
-				0.2703249752521515,
-				0,
-				0.9627691507339478
-			],
-			"translation":[
-				-2.821058988571167,
-				0,
-				-3.4371533393859863
-			]
+			"name":"obj_stone02_base_collider"
 		}
 	],
 	"materials":[
@@ -78,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.101",
+			"name":"obj_stone02_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -103,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.102",
+			"name":"obj_stone02_base_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -149,14 +127,14 @@
 			"componentType":5126,
 			"count":342,
 			"max":[
-				0.5684237480163574,
+				-2.3361358642578125,
 				0.5698401927947998,
-				0.3552858531475067
+				-2.9275574684143066
 			],
 			"min":[
-				-0.5684237480163574,
+				-3.3340330123901367,
 				0,
-				-0.3552858531475067
+				-3.9036691188812256
 			],
 			"type":"VEC3"
 		},
@@ -179,14 +157,14 @@
 			"componentType":5126,
 			"count":42,
 			"max":[
-				0.5579624772071838,
+				-2.149972438812256,
 				0.6670382022857666,
-				0.3739921748638153
+				-2.819453001022339
 			],
 			"min":[
-				-0.5732093453407288,
+				-3.5446724891662598,
 				-1.0727978150271156e-07,
-				-0.4498942196369171
+				-4.1117262840271
 			],
 			"type":"VEC3"
 		},
@@ -209,13 +187,13 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":3399,
+			"byteLength":3416,
 			"byteOffset":0
 		},
 		{
 			"buffer":0,
-			"byteLength":498,
-			"byteOffset":3400
+			"byteLength":512,
+			"byteOffset":3416
 		}
 	],
 	"samplers":[
@@ -226,7 +204,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":3900,
+			"byteLength":3928,
 			"uri":"obj_stone02_base.bin"
 		}
 	]

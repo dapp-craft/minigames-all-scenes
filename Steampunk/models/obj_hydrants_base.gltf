@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
@@ -32,7 +32,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -57,7 +56,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.047",
+			"name":"obj_hydrants_base",
 			"primitives":[
 				{
 					"attributes":{
@@ -82,7 +81,7 @@
 			]
 		},
 		{
-			"name":"Mesh.025",
+			"name":"obj_hydrants_base_collider",
 			"primitives":[
 				{
 					"attributes":{
