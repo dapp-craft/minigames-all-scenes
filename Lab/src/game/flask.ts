@@ -94,7 +94,7 @@ export class Flask {
                     ? [[val, 1], [c, v], ...acc]
                     : [[val, v + 1], ...acc],
                 [] as any[]
-            )
+            ) // This converts [red, red, blue] to [[red, 2], [blue, 1]]
             .reverse()
         let idx = 0
         for (const [color, volume] of state) {

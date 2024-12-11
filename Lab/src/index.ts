@@ -7,7 +7,7 @@ import { initMiniGame } from '../../common/library'
 import { STATIC_MODELS } from './resources'
 import { Vector3 } from '@dcl/sdk/math'
 import { setupEffects } from '../../common/effects'
-import { playLevel, flaskTransforms } from './game'
+import { GameLevel, flaskTransforms } from './game'
 import { syncEntity } from '@dcl/sdk/network'
 import { Flask } from './game/flask'
 
@@ -29,8 +29,15 @@ const handlers = {
         playing = true
         flasks.map(f => f.destroy())
         flasks = []
-        const aborter = new Promise<never>((_, r) => interruptPlay = r)
-        await playLevel(1, aborter).catch(e => !['number', 'undefined'].includes(typeof e) ? console.error(e): null)
+        const level = new GameLevel(
+            1, 
+            new Promise((_, r) => interruptPlay = r),
+            level => State.getMutable(client).flasks = level.flasks.map(f => f.getConfig())
+        )
+        await level
+            .play()
+            .catch(e => !['number', 'undefined'].includes(typeof e) ? console.error(e): null)
+            .finally(() => level.stop())
         queue.setNextPlayer()
     },
     exit: () => {
@@ -67,13 +74,9 @@ export async function main() {
         if (name.match(/obj_flask_/)) flaskTransforms.push({...value, parent: sceneParentEntity})
     }
     await libraryReady
-    // let hash = ""
+    
     let locked = false
     State.onChange(client, async ({flasks: state} = {flasks: []}) => {
-    // engine.addSystem(_ => {
-        // const state = State.get(client).flasks
-    //     if (hash == JSON.stringify(state)) return
-    //     hash = JSON.stringify(state)
         console.log("NEW STATE:", state)
         if (playing) return
         if (locked) {console.log("LOCKED"); return}
