@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -78,7 +74,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.014",
+			"name":"obj_lamp",
 			"primitives":[
 				{
 					"attributes":{
@@ -86,19 +82,8 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				},
 				{
 					"attributes":{
@@ -106,24 +91,13 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":7,
-					"material":1,
-					"mode":4
+					"material":1
 				}
 			]
 		},
 		{
-			"name":"Mesh.002",
+			"name":"obj_lamp_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -131,18 +105,7 @@
 						"NORMAL":9,
 						"TEXCOORD_0":10
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":2,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":11,
-					"mode":4
+					"indices":11
 				}
 			]
 		}
@@ -166,6 +129,7 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":1842,
 			"max":[
@@ -181,21 +145,25 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":1842,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":1842,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":5850,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
 			"count":36,
 			"max":[
@@ -211,23 +179,27 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
 			"count":36,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
 			"count":36,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":7,
 			"componentType":5123,
 			"count":90,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":8,
 			"componentType":5126,
-			"count":684,
+			"count":666,
 			"max":[
 				7.7711358070373535,
 				2.6059069633483887,
@@ -241,16 +213,19 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":9,
 			"componentType":5126,
-			"count":684,
+			"count":666,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":10,
 			"componentType":5126,
-			"count":684,
+			"count":666,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":11,
 			"componentType":5123,
 			"count":2394,
 			"type":"SCALAR"
@@ -259,18 +234,75 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":14400,
-			"byteOffset":0
+			"byteLength":22104,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":504,
-			"byteOffset":14400
+			"byteLength":22104,
+			"byteOffset":22104,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5474,
-			"byteOffset":14904
+			"byteLength":14736,
+			"byteOffset":44208,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":11700,
+			"byteOffset":58944,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":432,
+			"byteOffset":70644,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":432,
+			"byteOffset":71076,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":71508,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":180,
+			"byteOffset":71796,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":7992,
+			"byteOffset":71976,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":7992,
+			"byteOffset":79968,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5328,
+			"byteOffset":87960,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4788,
+			"byteOffset":93288,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -281,7 +313,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":20380,
+			"byteLength":98076,
 			"uri":"obj_lamp.bin"
 		}
 	]

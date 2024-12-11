@@ -1,14 +1,11 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
-		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"scene":0,
 	"scenes":[
@@ -43,6 +40,9 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
 				}
 			},
 			"name":"obj_bench",
@@ -56,29 +56,19 @@
 	],
 	"meshes":[
 		{
-			"name":"Bounding Box Mesh.007",
+			"name":"obj_bench_collider",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":0,
 						"NORMAL":1
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1
-							}
-						}
-					},
-					"indices":2,
-					"mode":4
+					"indices":2
 				}
 			]
 		},
 		{
-			"name":"Cube.041",
+			"name":"obj_bench",
 			"primitives":[
 				{
 					"attributes":{
@@ -86,19 +76,8 @@
 						"NORMAL":4,
 						"TEXCOORD_0":5
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":6,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		}
@@ -122,6 +101,7 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":108,
 			"max":[
@@ -137,18 +117,21 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":108,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5123,
 			"count":180,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":3,
 			"componentType":5126,
-			"count":585,
+			"count":858,
 			"max":[
 				4.267167091369629,
 				1.0082042217254639,
@@ -162,16 +145,19 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
-			"count":585,
+			"count":858,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
-			"count":585,
+			"count":858,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":6,
 			"componentType":5123,
 			"count":1854,
 			"type":"SCALAR"
@@ -180,13 +166,45 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":421,
-			"byteOffset":0
+			"byteLength":1296,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5207,
-			"byteOffset":424
+			"byteLength":1296,
+			"byteOffset":1296,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":360,
+			"byteOffset":2592,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":10296,
+			"byteOffset":2952,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":10296,
+			"byteOffset":13248,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6864,
+			"byteOffset":23544,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3708,
+			"byteOffset":30408,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -197,7 +215,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":5632,
+			"byteLength":34116,
 			"uri":"obj_bench.bin"
 		}
 	]

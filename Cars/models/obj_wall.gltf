@@ -1,14 +1,11 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
-		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"scene":0,
 	"scenes":[
@@ -23,11 +20,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_wall_collider"
+			"name":"obj_wall"
 		},
 		{
 			"mesh":1,
-			"name":"obj_wall"
+			"name":"obj_wall_collider"
 		}
 	],
 	"materials":[
@@ -48,6 +45,9 @@
 						0.0,
 						0.0
 					]
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
 				}
 			},
 			"name":"obj_wall",
@@ -61,7 +61,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Torus.001",
+			"name":"obj_wall",
 			"primitives":[
 				{
 					"attributes":{
@@ -69,23 +69,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Torus.002",
+			"name":"obj_wall_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -93,19 +83,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":7,
-					"material":0,
-					"mode":4
+					"indices":7
 				}
 			]
 		}
@@ -129,36 +107,7 @@
 	],
 	"accessors":[
 		{
-			"componentType":5126,
-			"count":1251,
-			"max":[
-				7.821157455444336,
-				4.81550407409668,
-				5.664395809173584
-			],
-			"min":[
-				-7.821157932281494,
-				-0.0015502721071243286,
-				-7.861547946929932
-			],
-			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":1251,
-			"type":"VEC3"
-		},
-		{
-			"componentType":5126,
-			"count":1251,
-			"type":"VEC2"
-		},
-		{
-			"componentType":5123,
-			"count":3024,
-			"type":"SCALAR"
-		},
-		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":6351,
 			"max":[
@@ -174,31 +123,106 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":6351,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":6351,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":17604,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":1131,
+			"max":[
+				7.821157455444336,
+				4.81550407409668,
+				5.664395809173584
+			],
+			"min":[
+				-7.821157932281494,
+				-0.0015502721071243286,
+				-7.861547946929932
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":1131,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":1131,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":7,
+			"componentType":5123,
+			"count":3024,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":10535,
-			"byteOffset":0
+			"byteLength":76212,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":34150,
-			"byteOffset":10536
+			"byteLength":76212,
+			"byteOffset":76212,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":50808,
+			"byteOffset":152424,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":35208,
+			"byteOffset":203232,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":13572,
+			"byteOffset":238440,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":13572,
+			"byteOffset":252012,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":9048,
+			"byteOffset":265584,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6048,
+			"byteOffset":274632,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -209,7 +233,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":44688,
+			"byteLength":280680,
 			"uri":"obj_wall.bin"
 		}
 	]
