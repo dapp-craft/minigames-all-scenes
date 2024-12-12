@@ -1,4 +1,4 @@
-import { EasingFunction, engine, Entity, GltfContainer, InputAction, Material, MeshRenderer, pointerEventsSystem, Transform, TransformType, Tween, tweenSystem } from "@dcl/sdk/ecs"
+import { EasingFunction, engine, Entity, executeTask, GltfContainer, InputAction, Material, MeshRenderer, pointerEventsSystem, Transform, TransformType, Tween, tweenSystem } from "@dcl/sdk/ecs"
 import { Color3, Vector3 } from "@dcl/sdk/math"
 import { readGltfLocators } from "../../../common/locators"
 import { FLASK_MODEL } from "../resources"
@@ -36,17 +36,18 @@ class Layer {
         })
         this._volume = to - from
         let resolve: Function
-        engine.addSystem(() => {
-            const tweenCompleted = tweenSystem.tweenCompleted(this.root)
-            if (tweenCompleted) {
+        const start = Date.now()
+        const fn = async () => {
+            if (tweenSystem.tweenCompleted(this.root)) {
                 resolve(this)
                 if (this._volume == 0) Transform.getMutable(this.root).scale = Vector3.Zero()
-            }
-        })
-        return Promise.race([
-            new Promise<Layer>(r => resolve = r),
-            new Promise((_,r) => utils.timers.setTimeout(() => r(`BUG!!: tween timeout at entity ${this.root}`), 5000))
-        ])
+            } else if (Date.now() - start > 3 * Tween.get(this.root).duration) {
+                console.error(`BUG!!: layer tween timeout at entity ${this.root}`)
+                resolve(this)
+            } else executeTask(fn)
+        }
+        executeTask(fn)
+        return new Promise<Layer>(r => resolve = r)
     }
     public destroy() {
         console.log("Layer::destroy")
