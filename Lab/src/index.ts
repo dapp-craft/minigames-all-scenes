@@ -29,6 +29,7 @@ const Synchronizer = CreateStateSynchronizer(
             if (this.flasks.length != state.length) {
                 await Promise.all(this.flasks.map(f => f.destroy()))
                 this.flasks = state.map((f, idx) => new Flask(flaskTransforms[idx]))
+                await Promise.all(this.flasks.map(f => f.activate()))
             }
             await Promise.all(state.map((config, idx) => this.flasks[idx].applyConfig(config)))
         },
