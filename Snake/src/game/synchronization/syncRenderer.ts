@@ -44,11 +44,15 @@ export class SyncRenderer {
   public render(state: any) {
     if (this._gameController.inGame) return
     if (state.board === undefined) return
+    if (state.board.length === 0) {
+      this.clean()
+      return
+    }
     console.log('SYNC RENDER', state)
     state = state.board
 
-    for (let x = 0; x < state.length; x++) {
-      for (let y = 0; y < state[y].length; y++) {
+    for (let y = 0; y < state.length; y++) {
+      for (let x = 0; x < state[y].length; x++) {
         const cellIndex = this.posToIndex({ x: x, y: y })
 
         if (state[y][x] === CellEnum.EMPTY) {
@@ -75,7 +79,7 @@ export class SyncRenderer {
 
   public clean() {
     for (let i = 0; i < this.cells.length; i++) {
-      if (this.cells[i]) {
+      if (this.cells[i] != null) {
         this.cells[i]!.terminate()
         this.cells[i] = null
       }

@@ -64,13 +64,7 @@ export class GameController {
     if (!this._inGame) return
 
     if (this._snake) {
-      let snakePart: SnakePart | undefined = this._snake
-      if (snakePart) {
-        while (snakePart) {
-          snakePart.terminate()
-          snakePart = snakePart.next
-        }
-      }
+        this._snake.terminate()
     }
 
     if (this._food) {
@@ -154,7 +148,6 @@ export class GameController {
         this.addFood()
       }
     }
-
     this.checkState()
     this.modifySpeed()
     this.updateSyncState()
@@ -202,9 +195,9 @@ export class GameController {
     if (!this.inGame) return
 
     const board: CellEnum[][] = []
-    for (let i = 0; i < this._boardSize.width; i++) {
+    for (let i = 0; i < this._boardSize.height; i++) {
       board.push([])
-      for (let j = 0; j < this._boardSize.height; j++) {
+      for (let j = 0; j < this._boardSize.width; j++) {
         board[i].push(CellEnum.EMPTY)
       }
     }
