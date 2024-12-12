@@ -37,13 +37,12 @@ class Layer {
         this._volume = to - from
         let resolve: Function
         const start = Date.now()
+        const timeout = 3 * Tween.get(this.root).duration
         const fn = async () => {
-            if (tweenSystem.tweenCompleted(this.root)) {
+            if (tweenSystem.tweenCompleted(this.root) || Date.now() - start > timeout) {
                 resolve(this)
                 if (this._volume == 0) Transform.getMutable(this.root).scale = Vector3.Zero()
-            } else if (Date.now() - start > 3 * Tween.get(this.root).duration) {
-                console.error(`BUG!!: layer tween timeout at entity ${this.root}`)
-                resolve(this)
+                if (Date.now() - start > timeout) console.error(`BUG!!: layer tween timeout at entity ${this.root}`)
             } else executeTask(fn)
         }
         executeTask(fn)
