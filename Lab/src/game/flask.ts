@@ -14,11 +14,11 @@ class Layer {
 
     constructor(parent: Entity, color: Color3) {
         this._color = color
-        if (Transform.has(this.root)) throw `BUG!!: transform anomaly at entity ${this.root}`
-        Transform.create(this.root, { parent, scale: Vector3.Zero() })
+        if (Transform.has(this.root)) console.error(`BUG!!: layer transform anomaly at entity ${this.root}`)
+        Transform.createOrReplace(this.root, { parent, scale: Vector3.Zero() })
         Material.setBasicMaterial(this.layer, {diffuseColor: { ...color, a: 1}})
-        if (Transform.has(this.layer)) throw `BUG!!: transform anomaly at entity ${this.layer}`
-        Transform.create(this.layer, { scale: Vector3.One(), position: Vector3.create(0, 0.5, 0), parent: this.root })
+        if (Transform.has(this.layer)) console.error(`BUG!!: layer transform anomaly at entity ${this.layer}`)
+        Transform.createOrReplace(this.layer, { scale: Vector3.One(), position: Vector3.create(0, 0.5, 0), parent: this.root })
     }
     public async set(from: number, to: number) {
         console.log(`Layer::set with volume ${this._volume} to [${from}:${to}]`)
@@ -78,8 +78,8 @@ export class Flask {
 
     constructor(transform: TransformType) {
         GltfContainer.create(this.entity, FLASK_MODEL)
-        if (Transform.has(this.entity)) throw `BUG!!: transform anomaly at entity ${this.entity}`
-        Transform.create(this.entity, JSON.parse(JSON.stringify(transform)))
+        if (Transform.has(this.entity)) console.error(`BUG!!: flask transform anomaly at entity ${this.entity}`)
+        Transform.createOrReplace(this.entity, JSON.parse(JSON.stringify(transform)))
         pointerEventsSystem.onPointerDown(
             {
                 entity: this.entity,
