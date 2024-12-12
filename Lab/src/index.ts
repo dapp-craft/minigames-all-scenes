@@ -42,7 +42,7 @@ const Synchronizer = CreateStateSynchronizer(
 )
 
 let interruptPlay: Function
-let currentLevel = 1 as keyof typeof LEVELS
+let currentLevel = 0 as keyof typeof LEVELS
 let synchronizer: InstanceType<typeof Synchronizer>
 
 const handlers = {
