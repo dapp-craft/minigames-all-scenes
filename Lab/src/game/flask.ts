@@ -2,6 +2,7 @@ import { EasingFunction, engine, Entity, GltfContainer, InputAction, Material, M
 import { Color3, Vector3 } from "@dcl/sdk/math"
 import { readGltfLocators } from "../../../common/locators"
 import { FLASK_MODEL } from "../resources"
+import * as utils from '@dcl-sdk/utils'
 
 const flaskMappingReady = readGltfLocators(`locators/locators_flask_mapping.gltf`)
 
@@ -13,8 +14,10 @@ class Layer {
 
     constructor(parent: Entity, color: Color3) {
         this._color = color
+        if (Transform.has(this.root)) throw `BUG!!: transform anomaly at entity ${this.root}`
         Transform.create(this.root, { parent, scale: Vector3.Zero() })
         Material.setBasicMaterial(this.layer, {diffuseColor: { ...color, a: 1}})
+        if (Transform.has(this.layer)) throw `BUG!!: transform anomaly at entity ${this.layer}`
         Transform.create(this.layer, { scale: Vector3.One(), position: Vector3.create(0, 0.5, 0), parent: this.root })
     }
     public async set(from: number, to: number) {
@@ -40,7 +43,10 @@ class Layer {
                 if (this._volume == 0) Transform.getMutable(this.root).scale = Vector3.Zero()
             }
         })
-        return new Promise<Layer>(r => resolve = r)
+        return Promise.race([
+            new Promise<Layer>(r => resolve = r),
+            new Promise((_,r) => utils.timers.setTimeout(() => r(`BUG!!: tween timeout at entity ${this.root}`), 5000))
+        ])
     }
     public destroy() {
         console.log("Layer::destroy")
@@ -72,6 +78,7 @@ export class Flask {
 
     constructor(transform: TransformType) {
         GltfContainer.create(this.entity, FLASK_MODEL)
+        if (Transform.has(this.entity)) throw `BUG!!: transform anomaly at entity ${this.entity}`
         Transform.create(this.entity, JSON.parse(JSON.stringify(transform)))
         pointerEventsSystem.onPointerDown(
             {
