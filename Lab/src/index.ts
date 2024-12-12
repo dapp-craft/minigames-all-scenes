@@ -8,53 +8,68 @@ import { STATIC_MODELS } from './resources'
 import { Vector3 } from '@dcl/sdk/math'
 import { setupEffects } from '../../common/effects'
 import { GameLevel, flaskTransforms } from './game'
-import { syncEntity } from '@dcl/sdk/network'
 import { Flask } from './game/flask'
 import { LEVELS } from './settings/levels'
+import { CreateStateSynchronizer } from './stateSync'
 
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
-export const State = engine.defineComponent('Lab::state', {
-    flasks: Schemas.Array(Schemas.Array(
-        Schemas.Color3
-    ))
-})
-  
 
-let playing = false
+const Synchronizer = CreateStateSynchronizer(
+    'Lab',
+    {
+        flasks: Schemas.Array(Schemas.Array(Schemas.Color3))
+    },
+    {
+        launch: async function() {
+            console.log("SyncHandler::launch")
+        },
+        update: async function ({flasks: state} = {flasks: []}) {
+            console.log("SyncHandler::update", state, this.flasks)
+            if (this.flasks.length != state.length) {
+                await Promise.all(this.flasks.map(f => f.destroy()))
+                this.flasks = state.map((f, idx) => new Flask(flaskTransforms[idx]))
+            }
+            await Promise.all(state.map((config, idx) => this.flasks[idx].applyConfig(config)))
+        },
+        flasks: new Array<Flask>,
+        terminate: async function() {
+            console.log("SyncHandler::terminate")
+            await Promise.all(this.flasks.map(f => f.destroy()))
+            this.flasks = []
+        }
+    }
+)
+
 let interruptPlay: Function
 let currentLevel = 1 as keyof typeof LEVELS
+let synchronizer: InstanceType<typeof Synchronizer>
 
-let flasks: Flask[] = []
 const handlers = {
     start: async () => {
-        playing = true
-        flasks.map(f => f.destroy())
-        flasks = []
-
+        console.log("ENTER game loop")
+        synchronizer.stop()
         let next: number | null
         let level
         do next = await (level = new GameLevel(
                 currentLevel, 
                 new Promise((_, r) => interruptPlay = r),
-                level => State.getMutable(client).flasks = level.flasks.map(f => f.getConfig())
+                level => synchronizer.send({flasks: level.flasks.map(f => f.getConfig())})
             ))
-                .play()
-                .then(() => currentLevel + 1 in LEVELS ? ++currentLevel : null)
-                .catch(jump => jump ? currentLevel = jump : null)
-                .finally(level.stop.bind(level))
+            .play()
+            .then(() => currentLevel + 1 in LEVELS ? ++currentLevel : void queue.setNextPlayer())
+            .catch(jump => jump ? currentLevel = jump : null)
+            .finally(level.stop.bind(level))
         while (next)
-        queue.setNextPlayer()
+        console.log("LEAVE game loop")
     },
     exit: () => {
-        try {
-            interruptPlay()
-            playing = false
-        } catch (e) {
-            console.error(e)
-        }
+        console.log("EXIT game")
+        synchronizer.start()
+        interruptPlay()
     },
     restart: () => {
+        console.log("RESTART game")
         interruptPlay(currentLevel)
     },
     toggleMusic: () => {},
@@ -71,29 +86,13 @@ executeTask(async () => {
     }
 })
 
-
-export const client = engine.addEntity()
 export async function main() {
-    State.create(client)
-    syncEntity(client, [State.componentId], 45678)
+    synchronizer = new Synchronizer()
     setupEffects(Vector3.create(0, 2.5, -5))
     const locators = await readGltfLocators(`locators/obj_locators_unique.gltf`)
     for (const [name, value] of locators) {
         if (name.match(/obj_flask_/)) flaskTransforms.push({...value, parent: sceneParentEntity})
     }
     await libraryReady
-    
-    let locked = false
-    State.onChange(client, async ({flasks: state} = {flasks: []}) => {
-        console.log("NEW STATE:", state)
-        if (playing) return
-        if (locked) {console.log("LOCKED"); return}
-        locked = true
-        if (flasks.length != state.length) {
-            await Promise.all(flasks.map(f => f.destroy()))
-            flasks = state.map((f, idx) => new Flask(flaskTransforms[idx]))
-        }
-        await Promise.all(state.map((config, idx) => flasks[idx].applyConfig(config)))
-        locked = false
-    })
+    synchronizer.start()
 }
