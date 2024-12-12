@@ -1,27 +1,27 @@
+import { westLevelsConfig } from "./config";
+
 type LevelData = {
-    targetAmount: number;
-    appearanceTime: number;
     stayTime: number;
-    role: boolean[];
+    role: number[];
     generationType: string
 }
 
 type LevelsMap = Map<number, LevelData>;
 
 export const levels: LevelsMap = new Map([
-    [1, { targetAmount: 2, appearanceTime: 2000, stayTime: 2000, role: [true, false], generationType: 'row' }],
-    [2, { targetAmount: 2, appearanceTime: 2000, stayTime: 2000, role: [true, false], generationType: 'gapRow' }],
-    [3, { targetAmount: 2, appearanceTime: 2000, stayTime: 2000, role: [true, false], generationType: 'twoLevels' }],
-    [4, { targetAmount: 3, appearanceTime: 1900, stayTime: 1900, role: [true, false, false], generationType: 'row' }],
-    [5, { targetAmount: 3, appearanceTime: 1900, stayTime: 1900, role: [true, false, true], generationType: 'row' }],
-    [6, { targetAmount: 3, appearanceTime: 1900, stayTime: 1900, role: [true, false, false], generationType: 'gapRow' }],
-    [7, { targetAmount: 3, appearanceTime: 1800, stayTime: 1800, role: [true, false, true], generationType: 'gapRow' }],
-    [8, { targetAmount: 3, appearanceTime: 1800, stayTime: 1800, role: [true, false, false], generationType: 'twoLevels' }],
-    [9, { targetAmount: 3, appearanceTime: 1800, stayTime: 1800, role: [true, false, true], generationType: 'twoLevels' }],
-    [10, { targetAmount: 4, appearanceTime: 1700, stayTime: 1700, role: [true, false, false, false], generationType: 'twoLevels' }],
-    [11, { targetAmount: 4, appearanceTime: 1700, stayTime: 1700, role: [true, false, true, false], generationType: 'twoLevels' }],
-    [12, { targetAmount: 4, appearanceTime: 1700, stayTime: 1700, role: [true, false, true, true], generationType: 'twoLevels' }],
-    [13, { targetAmount: 5, appearanceTime: 1600, stayTime: 1600, role: [true, false, false, false, false], generationType: 'twoLevels' }],
-    [14, { targetAmount: 5, appearanceTime: 1600, stayTime: 1600, role: [true, false, true, false, false], generationType: 'twoLevels' }],
-    [15, { targetAmount: 5, appearanceTime: 1600, stayTime: 1600, role: [true, false, true, true, false], generationType: 'twoLevels' }],
+    [1, {  stayTime: 2000, role: [1, 1], generationType: 'row' }],
+    [2, {  stayTime: 2000, role: [1, 1], generationType: 'gapRow' }],
+    [3, {  stayTime: 2000, role: [1, 1], generationType: 'twoLevels' }],
+    [4, {  stayTime: 1900, role: [1, 2], generationType: 'row' }],
+    [5, {  stayTime: 1900, role: [2, 1], generationType: 'row' }],
+    [6, {  stayTime: 1900, role: [1, 2], generationType: 'gapRow' }],
+    [7, {  stayTime: 1800, role: [2, 1], generationType: 'gapRow' }],
+    [8, {  stayTime: 1800, role: [1, 2], generationType: 'twoLevels' }],
+    [9, {  stayTime: 1800, role: [2, 1], generationType: 'twoLevels' }],
+    [10, {  stayTime: 1700, role: [1, 3], generationType: 'twoLevels' }],
+    [11, {  stayTime: 1700, role: [2, 2], generationType: 'twoLevels' }],
+    [12, {  stayTime: 1700, role: [3, 1], generationType: 'twoLevels' }],
+    [13, {  stayTime: 1600, role: [1, 4], generationType: 'twoLevels' }],
+    [14, {  stayTime: 1600, role: [2, 3], generationType: 'twoLevels' }],
+    [15, {  stayTime: 1600, role: [3, 2], generationType: 'twoLevels' }],
 ])

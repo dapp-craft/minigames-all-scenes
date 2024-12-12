@@ -8,6 +8,10 @@ export const westGameConfig = {
     playerMaxHP: 30
 }
 
+export const westLevelsConfig = {
+    initialAppearanceTime: 2000,
+}
+
 export const tempLocators = new Map([
     ["obj_locator_1", { position: Vector3.create(4, 1, 2) }],
     ["obj_locator_2", { position: Vector3.create(6, 1, 2) }],
