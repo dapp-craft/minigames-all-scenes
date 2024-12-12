@@ -31,3 +31,9 @@ export interface SnakePart extends Drawable {
   move(): void
   entity: Entity
 }
+
+export enum CellEnum {
+  EMPTY = "EMTPY",
+  SNAKE = "SNAKE",
+  FOOD = "FOOD"
+}

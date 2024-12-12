@@ -1,14 +1,16 @@
-import { MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
-import { Board } from './objects/board'
-import { Food } from './objects/food'
-import { SnakeHead } from './objects/snakeHead'
-import { SnakeBody } from './objects/snakeBody'
-import { Direction, Drawable, Position, SnakePart } from './objects/type'
+import { DeepReadonly, Entity, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
+import { Food } from '../objects/food'
+import { SnakeHead } from '../objects/snakeHead'
+import { SnakeBody } from '../objects/snakeBody'
+import { CellEnum, Direction, Drawable, Position, SnakePart } from '../objects/type'
 import { BoardRenderer } from './boardRender'
-import { playGameOverSound, playHitSound, playPowerUpSound, playStartSound } from './sound'
-import { updatePlayerProgress } from './syncData'
-import { runCountdown } from '../../../common/effects'
-import { log } from './utils'
+import { playGameOverSound, playHitSound, playPowerUpSound, playStartSound } from '../sound'
+import { updatePlayerProgress } from '../syncData'
+import { runCountdown } from '../../../../common/effects'
+import { Board } from '../components'
+import { State } from '../synchronization/state'
+import { SyncRenderer } from '../synchronization/syncRenderer'
+
 export class GameController {
   private _boardSize: { width: number; height: number }
   private _snake: SnakeHead | undefined = undefined
@@ -24,8 +26,9 @@ export class GameController {
   private _score: number = 0
 
   private _startTime: number = 0
-  
 
+  private _state = new State(Board)  
+  private _syncRender: SyncRenderer
   // Is needed to not allow the snake to change direction several times in one frame
   // Otherwise, it is possible to turn the snake 180 degrees in one frame
   private _directionToUpdate: Direction | undefined = undefined
@@ -43,18 +46,23 @@ export class GameController {
   constructor(width: number, height: number) {
     this._boardSize = { width, height }
     engine.addSystem(this.system)
+
+    this._syncRender = new SyncRenderer(this)
+    this._state.subscribe((state) => {
+      if (state != undefined)
+      this._syncRender.render(state)
+    })
   }
 
   public async start() {
-    log('Start', this.start)
     this._inGame = true
     this._isInit = false
-    log('Start countdown', this.start)
-    await runCountdown()
-    log('Finish countdown', this.start)
-    if (!this._inGame) return
     
-    log('Snake termination', this.start)
+    this._syncRender.clean()
+
+    await runCountdown()
+    if (!this._inGame) return
+
     if (this._snake) {
       let snakePart: SnakePart | undefined = this._snake
       if (snakePart) {
@@ -65,12 +73,10 @@ export class GameController {
       }
     }
 
-    log('Food termination', this.start)
     if (this._food) {
       this._food.terminate()
     }
 
-    log('Snake initialization', this.start)
     this._snake = new SnakeHead({ x: 10, y: 7 })
     this._snake.addTail()
     this._snake.addTail()
@@ -79,19 +85,15 @@ export class GameController {
     this._score = 3
     this._startTime = Date.now()
 
-    log('Food initialization', this.start)
     this.addFood()
     this.onStartCallback()
 
     this.setSnakeDirection(Direction.UP)
     playStartSound()
     this._isInit = true
-    log('Finish game start', this.start)
   }
 
   public finish() {
-    log('Start', this.finish)
-    log('Snake termination', this.finish)
     let snakePart: SnakePart | undefined = this._snake
     if (snakePart) {
       while (snakePart) {
@@ -100,17 +102,14 @@ export class GameController {
       }
     }
 
-    log('Food termination', this.finish)
     if (this._food) {
       this._food.terminate()
     }
 
-    log('Game over', this.finish)
     this._inGame = false
     playGameOverSound()
     this.onFinishCallback()
     this.upsertProgress()
-    log('Finish', this.finish)
   }
 
   private update() {
@@ -158,6 +157,7 @@ export class GameController {
 
     this.checkState()
     this.modifySpeed()
+    this.updateSyncState()
   }
 
   public terminate() {
@@ -191,11 +191,40 @@ export class GameController {
     }
 
     if (opposite[dir] == this._snake?.direction) {
-      console.log('Invalid direction')
       return
     }
 
     this._directionToUpdate = dir
+  }
+
+  public updateSyncState():  void {
+
+    if (!this.inGame) return
+
+    const board: CellEnum[][] = []
+    for (let i = 0; i < this._boardSize.width; i++) {
+      board.push([])
+      for (let j = 0; j < this._boardSize.height; j++) {
+        board[i].push(CellEnum.EMPTY)
+      }
+    }
+
+    let snakePart: SnakePart | undefined = this._snake
+    while (snakePart) {
+      board[snakePart.position.y][snakePart.position.x] = CellEnum.SNAKE
+      snakePart = snakePart.next
+    }
+
+    if (this._food) {
+      board[this._food.position.y][this._food.position.x] = CellEnum.FOOD
+    }
+
+    this._state.update({board: board})
+    
+  }
+
+  public subscribeOnStateChange(callback: (state: any) => void) {
+    this._state.subscribe(callback)
   }
 
   public get snake(): SnakePart | undefined {
@@ -225,7 +254,11 @@ export class GameController {
   public get startTime(){
     return this._startTime
   }
-
+  
+  public get score() {
+    return this._score
+  }
+  
   private addFood() {
     if (!this._snake) {
       throw new Error('Failed to add Food: Snake is not initialized')
@@ -235,10 +268,6 @@ export class GameController {
       pos = generateFoodPosition(this._boardSize)
     } while (!validateFoodPosition(pos, this._snake))
     this._food = new Food(pos)
-  }
-
-  public get score() {
-    return this._score
   }
 
   private checkState() {

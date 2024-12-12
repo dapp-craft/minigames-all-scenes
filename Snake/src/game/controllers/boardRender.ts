@@ -1,9 +1,9 @@
 import { Quaternion, Vector3, Color4 } from '@dcl/sdk/math'
 import { GameController } from './gameController'
-import { Position } from './objects/type'
+import { Position } from '../objects/type'
 import { Entity, GltfContainer, Material, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
-import { readGltfLocators } from '../../../common/locators'
-import { snakeBodyModel, foodModel, cellModel } from '../resources'
+import { readGltfLocators } from '../../../../common/locators'
+import { snakeBodyModel, foodModel, cellModel } from '../../resources'
 import { syncEntity, parentEntity } from '@dcl/sdk/network'
 
 let CELL_SIZE = 1
@@ -21,18 +21,12 @@ export class BoardRenderer {
   private cells: Entity[] = []
 
   private update = () => {
-    // if (this.counter >= this.renderInterval) {
-    //   this.render()
-    //   this.counter = 0
-    // } else {
-    //   this.counter++
-    // }
+     
     this.render()
   }
 
   constructor(gameController: GameController) {
     this._entity = engine.addEntity()
-    syncEntity(this._entity, [Transform.componentId], 5500)
     if(!Transform.has(this._entity)) Transform.createOrReplace(this._entity, {
       position: Vector3.create(0, 0, 0),
       rotation: Quaternion.fromEulerDegrees(0, 180, 0),
@@ -58,9 +52,9 @@ export class BoardRenderer {
         const entity = snakePart.entity
         Transform.createOrReplace(entity, {
           position: this._relativePosition(snakePart.position),
-          scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1)
+          scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1),
+          parent: this._entity
         })
-        parentEntity(entity, this._entity)
         
 
         // Choose model based on snake part or head
@@ -77,9 +71,9 @@ export class BoardRenderer {
       const entity = food.entity
       Transform.createOrReplace(entity, {
         position: this._relativePosition(food.position),
-        scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1)
+        scale: Vector3.create(1 / boardSize.width, 1 / boardSize.height, 1),
+        parent: this._entity
       })
-      parentEntity(entity, this._entity)
 
       if (!GltfContainer.getOrNull(entity)) GltfContainer.createOrReplace(entity, foodModel)
 

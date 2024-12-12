@@ -10,8 +10,8 @@ import {
   PointerEventType,
   PointerLock
 } from '@dcl/sdk/ecs'
-import { SnakeHead } from './objects/snakeHead'
-import { Direction } from './objects/type'
+import { SnakeHead } from '../objects/snakeHead'
+import { Direction } from '../objects/type'
 import { GameController } from './gameController'
 
 export class InputController {

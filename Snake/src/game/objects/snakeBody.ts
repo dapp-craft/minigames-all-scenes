@@ -1,4 +1,3 @@
-import { syncEntity } from '@dcl/sdk/network'
 import { Direction, Drawable, MoveDelta, Position, SnakePart } from './type'
 import { engine, executeTask, GltfContainer, MeshRenderer, Transform, Entity } from '@dcl/sdk/ecs'
 
@@ -17,7 +16,6 @@ export class SnakeBody implements SnakePart, Drawable {
     this._position = pos
     this.prev = prev
     this.entity = engine.addEntity()
-    syncEntity(this.entity, [Transform.componentId, MeshRenderer.componentId])
   }
 
   public move() {

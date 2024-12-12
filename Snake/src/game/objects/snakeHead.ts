@@ -2,7 +2,6 @@ import { Entity, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
 import { Direction, Drawable, MoveDelta, Position, SnakePart } from './type'
 import { SnakeBody } from './snakeBody'
 import { Vector3 } from '@dcl/sdk/math'
-import { syncEntity } from '@dcl/sdk/network'
 
 export class SnakeHead implements SnakePart, Drawable {
   public next: SnakePart | undefined = undefined
@@ -20,7 +19,6 @@ export class SnakeHead implements SnakePart, Drawable {
     this._position = pos
 
     this.entity = engine.addEntity()
-    syncEntity(this.entity, [Transform.componentId, MeshRenderer.componentId])
   }
 
   public get position() {
