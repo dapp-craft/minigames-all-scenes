@@ -10,7 +10,6 @@ import { setupEffects } from '../../../common/effects'
 import { setupGameUI } from './UiObjects'
 import { updatePlayerProgress } from './syncData'
 import { log } from './utils'
-
 const inputController = new InputController()
 
 export let gameController: GameController
@@ -32,13 +31,17 @@ export async function initGame() {
 }
 
 export async function startGame() {
+  log('Begin', startGame)
   activateCamera()
   gameController.start()
+  log('Finish', startGame)
 }
 
 export async function onFinish() {
+  log('Begin', onFinish)
   deactivateCamera()
   queue.setNextPlayer()
+  log('Finish', onFinish)
 }
 
 export function finishGameButtonHandler() {

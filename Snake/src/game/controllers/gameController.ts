@@ -10,6 +10,7 @@ import { runCountdown } from '../../../../common/effects'
 import { Board } from '../components'
 import { State } from '../synchronization/state'
 import { SyncRenderer } from '../synchronization/syncRenderer'
+import { log, LogExecutionTime} from '../utils'
 
 export class GameController {
   private _boardSize: { width: number; height: number }
@@ -53,13 +54,14 @@ export class GameController {
       this._syncRender.render(state)
     })
   }
-
+  
+  @LogExecutionTime
   public async start() {
     this._inGame = true
     this._isInit = false
     
     this._syncRender.clean()
-
+    
     await runCountdown()
     if (!this._inGame) return
 
@@ -87,6 +89,7 @@ export class GameController {
     this._isInit = true
   }
 
+  @LogExecutionTime
   public finish() {
     let snakePart: SnakePart | undefined = this._snake
     if (snakePart) {
@@ -153,6 +156,7 @@ export class GameController {
     this.updateSyncState()
   }
 
+  @LogExecutionTime
   public terminate() {
     if (!this._inGame) return
     this._inGame = false
@@ -190,6 +194,7 @@ export class GameController {
     this._directionToUpdate = dir
   }
 
+  @LogExecutionTime
   public updateSyncState():  void {
 
     if (!this.inGame) return
@@ -298,6 +303,7 @@ export class GameController {
     return false
   }
 
+  @LogExecutionTime
   private upsertProgress() {
     updatePlayerProgress(this._score, Date.now() - this._startTime)
   }
