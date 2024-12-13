@@ -4,7 +4,7 @@ export class FlowController<T> {
 
     readonly interrupted = new Promise<never>((_, r) => this.reject = r)
     public goto(arg: T) {
-        this.data.value = this.data.value === undefined ? arg : null
+        this.data.value = this.data.value !== null ? arg : null
         this.reject(this.data)
     }
     public break() {
