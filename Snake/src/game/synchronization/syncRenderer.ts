@@ -80,7 +80,7 @@ export class SyncRenderer {
   public clean() {
     for (let i = 0; i < this.cells.length; i++) {
       if (this.cells[i] != null) {
-        this.cells[i]!.terminate()
+        this.cells[i]?.terminate()
         this.cells[i] = null
       }
     }
