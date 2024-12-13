@@ -11,6 +11,7 @@ import { GameLevel, flaskTransforms } from './game'
 import { Flask } from './game/flask'
 import { LEVELS } from './settings/levels'
 import { CreateStateSynchronizer } from './stateSync'
+import { FlowController } from './utils'
 
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
@@ -42,7 +43,7 @@ const Synchronizer = CreateStateSynchronizer(
     }
 )
 
-let interruptPlay: Function
+let flow: FlowController<number>
 let currentLevel = 0 as keyof typeof LEVELS
 let synchronizer: InstanceType<typeof Synchronizer>
 
@@ -54,24 +55,24 @@ const handlers = {
         let level
         do next = await (level = new GameLevel(
                 currentLevel = next, 
-                new Promise((_, r) => interruptPlay = r),
+                flow = new FlowController(),
                 level => synchronizer.send({flasks: level.flasks.map(f => f.getConfig())})
             ))
             .play()
             .finally(level.stop.bind(level))
             .then(() => currentLevel + 1 in LEVELS ? currentLevel + 1 : void queue.setNextPlayer())
-            .catch(jump => jump ?? undefined)
+            .catch(({value}) => value ?? undefined)
         while (next !== undefined)
         console.log("LEAVE game loop")
     },
     exit: () => {
         console.log("EXIT game")
         synchronizer.start()
-        interruptPlay()
+        flow.break()
     },
     restart: () => {
         console.log("RESTART game")
-        interruptPlay(currentLevel)
+        flow.goto(currentLevel)
     },
     toggleMusic: () => {},
     toggleSfx: () => {}
