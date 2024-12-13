@@ -41,7 +41,6 @@ export async function main() {
     await libraryReady
     setupStaticModels();
     await generateInitialEntity()
-    // gameLogic.startGame()
 }
 
 const generateInitialEntity = async () => {
@@ -58,6 +57,8 @@ const generateInitialEntity = async () => {
         }
     }
 
+    const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+
     const playerHP = westGameState.availableEntity[westGameConfig.targetEntityAmount]
     const score = westGameState.availableEntity[westGameConfig.targetEntityAmount + 1]
 
@@ -65,7 +66,7 @@ const generateInitialEntity = async () => {
     westGameState.listOfEntity.set('score', score)
 
     TextShape.create(playerHP, { text: `HP \n${westGameConfig.playerMaxHP}`, fontSize: 2 })
-    Transform.create(playerHP, { position: Vector3.create(0, 2, -6), scale: Vector3.One(), parent: sceneParentEntity })
+    Transform.create(playerHP, { ...data.get('counter_lives'), parent: sceneParentEntity })
     TextShape.create(score, { text: `Score \n0`, fontSize: 2 });
-    Transform.create(score, { position: Vector3.create(2, 2, -6), scale: Vector3.One(), parent: sceneParentEntity })
+    Transform.create(score, { ...data.get('counter_score'), parent: sceneParentEntity })
 }
