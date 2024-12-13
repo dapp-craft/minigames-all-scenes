@@ -45,8 +45,9 @@ export class GameLevel {
     public async stop() {
         cancelCountdown()
         cancelWinAnimation()
-        await Promise.all(this._flasks.splice(0).map(f => f.destroy()))
+        const destruction = Promise.all(this._flasks.splice(0).map(f => f.destroy()))
         this.onStateChange(this)
+        await destruction
         await Promise.race([this.flow.interrupted, Promise.resolve()])
     }
 }
