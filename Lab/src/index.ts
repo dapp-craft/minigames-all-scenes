@@ -50,18 +50,18 @@ const handlers = {
     start: async () => {
         console.log("ENTER game loop")
         synchronizer.stop()
-        let next: number | null
+        let next = currentLevel
         let level
         do next = await (level = new GameLevel(
-                currentLevel, 
+                currentLevel = next, 
                 new Promise((_, r) => interruptPlay = r),
                 level => synchronizer.send({flasks: level.flasks.map(f => f.getConfig())})
             ))
             .play()
             .finally(level.stop.bind(level))
-            .then(() => currentLevel + 1 in LEVELS ? ++currentLevel : void queue.setNextPlayer())
-            .catch(jump => jump ? currentLevel = jump : null)
-        while (next)
+            .then(() => currentLevel + 1 in LEVELS ? currentLevel + 1 : void queue.setNextPlayer())
+            .catch(jump => jump ?? undefined)
+        while (next !== undefined)
         console.log("LEAVE game loop")
     },
     exit: () => {
