@@ -58,9 +58,9 @@ const handlers = {
                 level => synchronizer.send({flasks: level.flasks.map(f => f.getConfig())})
             ))
             .play()
+            .finally(level.stop.bind(level))
             .then(() => currentLevel + 1 in LEVELS ? ++currentLevel : void queue.setNextPlayer())
             .catch(jump => jump ? currentLevel = jump : null)
-            .finally(level.stop.bind(level))
         while (next)
         console.log("LEAVE game loop")
     },

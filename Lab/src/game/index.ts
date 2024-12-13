@@ -46,5 +46,6 @@ export class GameLevel {
         cancelWinAnimation()
         await Promise.all(this._flasks.splice(0).map(f => f.destroy()))
         this.onStateChange(this)
+        await Promise.race([this.abort, Promise.resolve()])
     }
 }
