@@ -154,6 +154,7 @@ export async function startLevel(level: number) {
   })
 
   playStartLevelSound()
+  selectedCar(undefined)
 
   clearInputBuffer()
 
