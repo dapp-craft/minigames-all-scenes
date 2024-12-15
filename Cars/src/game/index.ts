@@ -41,6 +41,7 @@ import { playMoveCarSound, playStartLevelSound, playWinSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
 import { initSelector, selectedCar } from './selector'
 import { activateCamera, deactivateCamera, initCamera } from './camera'
+import { initKeyboardInput } from './keyboardInput'
 // import { initArrow } from './arrow'
 
 export let lookingAt: Cell | undefined = undefined
@@ -65,7 +66,7 @@ let lastStart = 0
  */
 let moveMade = false
 
-let inGame = false
+export let inGame = false
 
 export const gameState: {
   playerAddress: string
@@ -107,6 +108,8 @@ export async function initGame() {
   setUpSynchronizer()
 
   setupGameUI()
+
+  initKeyboardInput()
 
   // initArrow()
 
@@ -165,7 +168,6 @@ export async function startLevel(level: number) {
   gameState.level = level
   gameState.moves = 0
   loadLevel(level)
-
   utils.timers.setTimeout(() => {
     if (start != lastStart) return
     inputAvailable = true

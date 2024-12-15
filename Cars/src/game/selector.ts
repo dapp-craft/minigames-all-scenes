@@ -32,18 +32,34 @@ import { runWinAnimation } from '../../../common/effects'
 export let forwardArrow: Entity
 export let backwardArrow: Entity
 
-let carComponent: CarType | undefined = undefined
-let carEntity: Entity | undefined = undefined
+export let carComponent: CarType | undefined = undefined
+export let carEntity: Entity | undefined = undefined
 
 export function initSelector() {
-  forwardArrow = createArrow({position: Vector3.create(0, 1, -1), scale: Vector3.create(0.5, 0.5, 0.5), rotation: Quaternion.fromEulerDegrees(0, -90, 0)}, 'Move forward', () => moveCar(1))
-  backwardArrow = createArrow({position: Vector3.create(0, 1, ), scale: Vector3.create(0.5, 0.5, 0.5), rotation: Quaternion.fromEulerDegrees(0, 90, 0)}, 'Move backward', () => moveCar(-1))
+  forwardArrow = createArrow(
+    {
+      position: Vector3.create(0, 1, -1),
+      scale: Vector3.create(0.5, 0.5, 0.5),
+      rotation: Quaternion.fromEulerDegrees(0, -90, 0)
+    },
+    'Move forward',
+    () => moveCar(1)
+  )
+  backwardArrow = createArrow(
+    {
+      position: Vector3.create(0, 1),
+      scale: Vector3.create(0.5, 0.5, 0.5),
+      rotation: Quaternion.fromEulerDegrees(0, 90, 0)
+    },
+    'Move backward',
+    () => moveCar(-1)
+  )
 }
 
 function createArrow(transform: TransformType, hoverText: string, onClick: () => void): Entity {
   const arrow = engine.addEntity()
   Transform.create(arrow, transform)
-  GltfContainer.create(arrow, arrowActiveModel);
+  GltfContainer.create(arrow, arrowActiveModel)
   // MeshRenderer.setBox(arrow)
   // MeshCollider.setBox(arrow)
   VisibilityComponent.create(arrow, { visible: false })
@@ -60,7 +76,7 @@ function createArrow(transform: TransformType, hoverText: string, onClick: () =>
   return arrow
 }
 
-function moveCar(directionMultiplier: number) {
+export function moveCar(directionMultiplier: number) {
   if (!carComponent || !carEntity) return
 
   const mv = getDirectionVector(carComponent.direction)
@@ -82,7 +98,6 @@ function moveCar(directionMultiplier: number) {
     playWinSound()
     runWinAnimation().then(finishLevel)
   }
-
 }
 
 export function selectedCar(entity: Entity | undefined) {
@@ -109,11 +124,10 @@ export function selectedCar(entity: Entity | undefined) {
   updateArrowModels()
 }
 
-
-function updateArrowModels(){
+export function updateArrowModels() {
   if (!carComponent || !carEntity) return
-  console.log("updateArrowModels")
-  
+  console.log('updateArrowModels')
+
   const mv = getDirectionVector(carComponent.direction)
   const targetCellForward: Cell = {
     x: carComponent.position.x + mv.x * 1,
@@ -122,7 +136,7 @@ function updateArrowModels(){
   const availabilityMap = createAvailabilityMap()
   markCarCellsAsAvailable(availabilityMap, carEntity)
 
-  console.log("Forward position available", isPositionAvailable(targetCellForward, carEntity, availabilityMap))
+  console.log('Forward position available', isPositionAvailable(targetCellForward, carEntity, availabilityMap))
   if (isPositionAvailable(targetCellForward, carEntity, availabilityMap)) {
     GltfContainer.createOrReplace(forwardArrow, arrowActiveModel)
   } else {
@@ -133,16 +147,15 @@ function updateArrowModels(){
     x: carComponent.position.x + mv.x * -1,
     y: carComponent.position.y + mv.y * -1
   }
-  
-  console.log("Backward position available", isPositionAvailable(targetCellBackward, carEntity, availabilityMap))
+
+  console.log('Backward position available', isPositionAvailable(targetCellBackward, carEntity, availabilityMap))
   if (isPositionAvailable(targetCellBackward, carEntity, availabilityMap)) {
     GltfContainer.createOrReplace(backwardArrow, arrowActiveModel)
   } else {
     GltfContainer.createOrReplace(backwardArrow, arrowInactiveModel)
   }
 
-  console.log("Corrent models")
+  console.log('Corrent models')
   console.log(GltfContainer.get(forwardArrow).src)
   console.log(GltfContainer.get(backwardArrow).src)
-    
 }
