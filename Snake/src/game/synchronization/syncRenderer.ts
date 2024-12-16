@@ -58,7 +58,7 @@ export class SyncRenderer {
         if (state[y][x] === CellEnum.EMPTY) {
           // Remove cell if it exists
           if (this.cells[cellIndex]) {
-            this.cells[cellIndex]!.terminate()
+            this.cells[cellIndex]?.terminate()
             this.cells[cellIndex] = null
           }
           continue
