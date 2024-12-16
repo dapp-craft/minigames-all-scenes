@@ -1,7 +1,6 @@
 import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/mini-games/src'
 import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
 import { getPlayer } from '@dcl/sdk/players'
-import { rotateVectorAroundCenter } from '@dcl-sdk/mini-games/src/utilities'
 import { engine, Transform, TransformType, TextShape, PBTextShape, Entity, TextAlignMode, executeTask, NetworkEntity, RealmInfo } from '@dcl/sdk/ecs'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { isStateSyncronized, syncEntity } from '@dcl/sdk/network'
@@ -52,6 +51,9 @@ const DEFAULT_SETTINGS = {
     },
     debug: {
         disableZoneGuard: false
+    },
+    scene: {
+        rotation: <0|90|180|270> 0
     }
 }
 
@@ -67,7 +69,7 @@ export async function initMiniGame(
     settings: { [P in keyof typeof DEFAULT_SETTINGS]?: Partial<(typeof DEFAULT_SETTINGS)[P]> } = {}
 ) {
     for (let [key, value] of Entries(DEFAULT_SETTINGS)) settings[key] = { ...value, ...settings[key] }
-    let { timeouts, debug, scoreboard, labels } = settings as typeof DEFAULT_SETTINGS
+    let { timeouts, debug, scoreboard, labels, scene } = settings as typeof DEFAULT_SETTINGS
     const { realmInfo: { realmName } = {} } = await getRealm({})
     const environment = realmName && !realmName.match(/^LocalPreview$|.*eth$/) ? 'prd' : 'dev'
     const platform = eval('UnityOpsApi') === undefined ? 'web' : 'desktop'
@@ -81,9 +83,10 @@ export async function initMiniGame(
         environment,
         gameId: id,
         gameTimeoutMs: timeouts.session * 1000,
-        inactiveTimeoutMs: timeouts.inactivity * 1000
+        inactiveTimeoutMs: timeouts.inactivity * 1000,
+        sceneRotation: scene.rotation
     })
-    const positions = validatePositionData(await locators) // TODO: account for rotation with rotateVectorAroundCenter
+    const positions = validatePositionData(await locators)
     let sessionTimeLeft: number | undefined
     let isActive = false
     function onActivePlayerChange(player: PlayerType | null) {
@@ -226,16 +229,16 @@ function gameAreaChecker(topLeft: Vector3, bottomRight: Vector3, exitSpawn: Vect
 
         const playerTransform = Transform.get(engine.PlayerEntity)
 
-        const center = Transform.get(sceneParentEntity).position
+        const {position: center, rotation} = Transform.get(sceneParentEntity)
         const sceneRotation = Transform.get(sceneParentEntity).rotation
-        const areaPt1 = Vector3.add(topLeft, center)
-        const areaPt2 = Vector3.add(bottomRight, center)
+        const areaPt1 = Vector3.add(Vector3.rotate(topLeft, rotation), center)
+        const areaPt2 = Vector3.add(Vector3.rotate(bottomRight, rotation), center)
 
         // If the player is inside the game-area but its not the active player.
         if (utilities.isVectorInsideArea(playerTransform.position, areaPt1, areaPt2)) {
             if (!queue.isActive()) {
                 void movePlayerTo({
-                    newRelativePosition: Vector3.add(exitSpawn, center)
+                    newRelativePosition: Vector3.add(Vector3.rotate(exitSpawn, rotation), center)
                 })
             }
         } else if (queue.isActive() && Date.now() - getQueue()[0]!.player.startPlayingAt > 500) {
