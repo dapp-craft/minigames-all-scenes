@@ -128,7 +128,10 @@ export async function initMiniGame(
             console.log('ACTIVE PLAYER:', activePlayer)
             onActivePlayerChange(activePlayer)
         }
-        if (timeouts.forceLimit && sessionTimeLeft === 0) queue.setNextPlayer()
+        if (timeouts.forceLimit && sessionTimeLeft === 0) {
+            queue.setNextPlayer()
+            console.log("PASS TURN: timeout enforced")
+        }
         updateLabels()
         forceSyncSelf()
     })
@@ -191,7 +194,7 @@ export async function initMiniGame(
         ui.uiAssets.shapes.RECT_GREEN,
         ui.uiAssets.icons.playText,
         'PLAY GAME',
-        () => queue.addPlayer()
+        queue.addPlayer
     )
 
     new ui.MenuButton(
@@ -207,6 +210,10 @@ export async function initMiniGame(
         ui.uiAssets.shapes.RECT_RED,
         ui.uiAssets.icons.exitText,
         'EXIT GAME',
+        () => {
+            queue.setNextPlayer()
+            console.log("PASS TURN: exit pressed")
+        }
     )
 
     new ui.MenuButton(
@@ -246,7 +253,6 @@ function gameAreaChecker(topLeft: Vector3, bottomRight: Vector3, exitSpawn: Vect
         const playerTransform = Transform.get(engine.PlayerEntity)
 
         const {position: center, rotation} = Transform.get(sceneParentEntity)
-        const sceneRotation = Transform.get(sceneParentEntity).rotation
         const areaPt1 = Vector3.add(Vector3.rotate(topLeft, rotation), center)
         const areaPt2 = Vector3.add(Vector3.rotate(bottomRight, rotation), center)
 
@@ -256,9 +262,11 @@ function gameAreaChecker(topLeft: Vector3, bottomRight: Vector3, exitSpawn: Vect
                 void movePlayerTo({
                     newRelativePosition: Vector3.add(Vector3.rotate(exitSpawn, rotation), center)
                 })
+                console.log("KICKED SELF from game zone")
             }
         } else if (queue.isActive() && Date.now() - getQueue()[0]!.player.startPlayingAt > 500) {
             queue.setNextPlayer()
+            console.log("PASS TURN: left game zone")
         }
     }
 }
