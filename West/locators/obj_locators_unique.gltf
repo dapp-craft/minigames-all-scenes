@@ -80,7 +80,7 @@
 			]
 		},
 		{
-			"name":"obj_window_3",
+			"name":"obj_window_5",
 			"translation":[
 				-3.8206284046173096,
 				4.282760143280029,
@@ -88,7 +88,7 @@
 			]
 		},
 		{
-			"name":"obj_window_4",
+			"name":"obj_window_6",
 			"translation":[
 				-1.9216784238815308,
 				4.282760143280029,
@@ -96,7 +96,7 @@
 			]
 		},
 		{
-			"name":"obj_window_5",
+			"name":"obj_window_7",
 			"translation":[
 				0.00016981216322164983,
 				4.282760143280029,
@@ -104,7 +104,7 @@
 			]
 		},
 		{
-			"name":"obj_window_6",
+			"name":"obj_window_8",
 			"translation":[
 				1.9216785430908203,
 				4.282760143280029,
@@ -112,7 +112,7 @@
 			]
 		},
 		{
-			"name":"obj_window_7",
+			"name":"obj_window_9",
 			"translation":[
 				3.8206288814544678,
 				4.282760143280029,
@@ -120,7 +120,7 @@
 			]
 		},
 		{
-			"name":"obj_window_8",
+			"name":"obj_window_4",
 			"translation":[
 				3.9568517208099365,
 				1.8837369680404663,
@@ -128,7 +128,7 @@
 			]
 		},
 		{
-			"name":"obj_window_9",
+			"name":"obj_window_3",
 			"translation":[
 				2.211231231689453,
 				1.8837372064590454,
