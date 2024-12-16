@@ -1,11 +1,10 @@
 import * as utils from '@dcl-sdk/utils'
-import { EasingFunction, engine, Entity, InputAction, Material, pointerEventsSystem, TextShape, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
+import { EasingFunction, engine, Entity, InputAction, Material, MaterialTransparencyMode, pointerEventsSystem, TextShape, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
 import { westGameConfig, westLevelsConfig } from "../config";
 import { westGameState } from "../state";
 import { Color4, Quaternion, Vector3 } from "@dcl/sdk/math";
 import { levels } from '../levels';
 import { readGltfLocators } from '../../../common/locators';
-import { sceneParentEntity } from '@dcl-sdk/mini-games/src';
 
 export class GameLogic {
     private endRoundTimeout = 0
@@ -17,9 +16,6 @@ export class GameLogic {
     private data: any
 
     public async startGame() {
-        // for (let i = 0; i <= 20; i++) {
-        //     this.infinityLevelGenerator()
-        // }
         await this.stopGame()
         this.data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
         this.playGame()
@@ -38,7 +34,7 @@ export class GameLogic {
         }
         for (let i = 0; i < levelData!.role.reduce((a, b) => a + b, 0); i++) {
             Tween.deleteFrom(westGameState.availableEntity[i])
-            VisibilityComponent.createOrReplace(westGameState.availableEntity[i], {visible: true})
+            VisibilityComponent.createOrReplace(westGameState.availableEntity[i], { visible: true })
             this.setTexture(westGameState.availableEntity[i], roles[i])
             this.targetData.set(i, { entity: westGameState.availableEntity[i], enemy: roles[i], dead: false })
             pointerEventsSystem.onPointerDown(
@@ -128,8 +124,33 @@ export class GameLogic {
     }
 
     private setTexture(entity: Entity, bandit: boolean) {
-        Material.setPbrMaterial(entity, {
-            albedoColor: bandit ? Color4.Red() : Color4.Blue(),
+        const randomTextureIndex = Math.floor(Math.random() * 14) + 1
+        const texture = `images/${bandit ? `bandit` : `citizen`}/${randomTextureIndex}.png`
+        console.log(texture)
+        Material.createOrReplace(entity, {
+            material: {
+                $case: 'pbr',
+                pbr: {
+                    texture: {
+                        tex: {
+                            $case: 'texture',
+                            texture: { src: texture }
+                        }
+                    },
+                    emissiveColor: Color4.White(),
+                    emissiveIntensity: 0.8,
+                    emissiveTexture: {
+                        tex: {
+                            $case: 'texture',
+                            texture: { src: texture }
+                        }
+                    },
+                    roughness: 1.0,
+                    specularIntensity: 0,
+                    metallic: 0,
+                    transparencyMode: MaterialTransparencyMode.MTM_ALPHA_TEST
+                }
+            }
         })
     }
 
@@ -226,7 +247,7 @@ export class GameLogic {
             this.stopRoundTimers[i] = utils.timers.setTimeout(() => {
                 VisibilityComponent.createOrReplace(westGameState.availableEntity[i]).visible = false
                 timerCouter++
-            }, !noAnimation ? this.calculateTime().stopRound : 1)
+            }, !noAnimation ? this.calculateTime().hitEntityTweenDuration + 100 : 1)
         }
         await RoundIsStopped;
     }
