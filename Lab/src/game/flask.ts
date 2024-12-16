@@ -21,7 +21,7 @@ class Layer {
         Transform.createOrReplace(this.layer, { scale: Vector3.One(), position: Vector3.create(0, 0.5, 0), parent: this.root })
     }
     public async set(from: number, to: number) {
-        console.log(`Layer::set with volume ${this._volume} to [${from}:${to}]`)
+        console.log(`Layer::set@${this.root} with volume ${this._volume} to [${from}:${to}]`)
         const bottom = (await flaskMappingReady).get(`obj_layer_${from}`)!.position
         const {position: top, scale: {y: radius}} = (await flaskMappingReady).get(`obj_layer_${to}`)!
         MeshRenderer.setCylinder(this.layer, radius, radius)
@@ -49,7 +49,7 @@ class Layer {
         return new Promise<Layer>(r => resolve = r)
     }
     public destroy() {
-        console.log("Layer::destroy")
+        console.log(`Layer::destroy@${this.root}`)
         engine.removeEntity(this.root)
         engine.removeEntity(this.layer)
     }
