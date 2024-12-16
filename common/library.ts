@@ -206,15 +206,14 @@ export async function initMiniGame(
         { ...positions.get(NODE_NAME.BUTTON_EXIT)!, parent: sceneParentEntity },
         ui.uiAssets.shapes.RECT_RED,
         ui.uiAssets.icons.exitText,
-        'Exit from game area',
-        () => queue.setNextPlayer()
+        'EXIT GAME',
     )
 
     new ui.MenuButton(
         { ...positions.get(NODE_NAME.BUTTON_SFX)!, parent: sceneParentEntity },
         ui.uiAssets.shapes.SQUARE_RED,
         ui.uiAssets.icons.sound,
-        'Sound FX',
+        'TOGGLE SFX',
         callbacks.toggleSfx
     )
 
@@ -222,7 +221,7 @@ export async function initMiniGame(
         { ...positions.get(NODE_NAME.BUTTON_MUSIC)!, parent: sceneParentEntity },
         ui.uiAssets.shapes.SQUARE_RED,
         ui.uiAssets.icons.music,
-        'Play/Stop Music',
+        'TOGGLE MUSIC',
         callbacks.toggleMusic
     )
 }
