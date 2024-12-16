@@ -85,7 +85,9 @@ export class SnakeHead implements SnakePart, Drawable {
     engine.removeEntity(this.entity)
     let next = this.next
     while (next) {
+      console.log('Before terminate 10')
       next.terminate()
+      console.log('After terminate 10')
       next = next.next
     }
   }

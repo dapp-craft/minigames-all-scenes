@@ -66,11 +66,16 @@ export class GameController {
     if (!this._inGame) return
 
     if (this._snake) {
+        console.log('Before terminate 2')
         this._snake.terminate()
+        console.log('After terminate 2')
+        
     }
 
     if (this._food) {
+      console.log('Before terminate 3')
       this._food.terminate()
+      console.log('After terminate 3')
     }
 
     this._snake = new SnakeHead({ x: 10, y: 7 })
@@ -94,13 +99,17 @@ export class GameController {
     let snakePart: SnakePart | undefined = this._snake
     if (snakePart) {
       while (snakePart) {
+        console.log('Before terminate 4')
         snakePart.terminate()
+        console.log('After terminate 4')
         snakePart = snakePart.next
       }
     }
 
     if (this._food) {
+      console.log('Before terminate 5')
       this._food.terminate()
+      console.log('After terminate 5')
     }
 
     this._inGame = false
@@ -133,7 +142,9 @@ export class GameController {
     if (this._snake && this._food) {
       if (this._snake.position.x === this._food.position.x && this._snake.position.y === this._food.position.y) {
         this._snake.addTail()
+        console.log('Before terminate 6')
         this._food.terminate()
+        console.log('After terminate 6')
         this._food = undefined
 
         playPowerUpSound()
@@ -166,14 +177,18 @@ export class GameController {
       let snakePart: SnakePart | undefined = this._snake
       if (snakePart) {
         while (snakePart) {
+          console.log('Before terminate 7')
           snakePart.terminate()
+          console.log('After terminate 7')
           snakePart = snakePart.next
         }
       }
     }
 
     if (this._food) {
+      console.log('Before terminate 8')
       this._food.terminate()
+      console.log('After terminate 8')
     }
   }
 

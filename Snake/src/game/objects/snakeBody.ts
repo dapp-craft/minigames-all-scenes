@@ -25,6 +25,8 @@ export class SnakeBody implements SnakePart, Drawable {
 
   public terminate() {
     console.log('Snake body terminated')
+    console.log('Before terminate 9')
     engine.removeEntity(this.entity)
+    console.log('After terminate 9')
   }
 }

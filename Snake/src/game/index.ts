@@ -45,6 +45,8 @@ export async function onFinish() {
 }
 
 export function finishGameButtonHandler() {
+  console.log('Before terminate 1')
   gameController.terminate()
+  console.log('After terminate 1')
   deactivateCamera()
 }

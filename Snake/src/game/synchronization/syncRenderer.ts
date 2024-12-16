@@ -58,7 +58,9 @@ export class SyncRenderer {
         if (state[y][x] === CellEnum.EMPTY) {
           // Remove cell if it exists
           if (this.cells[cellIndex]) {
+            console.log('Before terminate 10')
             this.cells[cellIndex]?.terminate()
+            console.log('After terminate 10')
             this.cells[cellIndex] = null
           }
           continue
@@ -80,7 +82,9 @@ export class SyncRenderer {
   public clean() {
     for (let i = 0; i < this.cells.length; i++) {
       if (this.cells[i] != null) {
+        console.log('Before terminate 11')
         this.cells[i]?.terminate()
+        console.log('After terminate 11')
         this.cells[i] = null
       }
     }
