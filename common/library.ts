@@ -1,7 +1,7 @@
 import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/mini-games/src'
 import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
 import { getPlayer } from '@dcl/sdk/players'
-import { engine, Transform, TransformType, TextShape, PBTextShape, Entity, TextAlignMode, executeTask, NetworkEntity, RealmInfo } from '@dcl/sdk/ecs'
+import { engine, Transform, TransformType, TextShape, PBTextShape, Entity, TextAlignMode, executeTask, NetworkEntity, RealmInfo, MainCamera, VirtualCamera } from '@dcl/sdk/ecs'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { isStateSyncronized, syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
@@ -15,6 +15,7 @@ enum NODE_NAME {
     AREA_BOTTOMRIGHT = 'area_bottomRight',
     AREA_EXITSPAWN = 'area_exitSpawn',
     AREA_PLAYSPAWN = 'area_playSpawn',
+    OBJ_CAMERA = 'obj_camera',
     DISPLAY_SCOREBOARD = 'display_scoreboard',
     DISPLAY_QUEUE = 'display_queue',
     LABEL_NICKNAME = 'label_nickname',
@@ -25,6 +26,8 @@ enum NODE_NAME {
     BUTTON_SFX = 'button_sfx',
     BUTTON_MUSIC = 'button_music'
 }
+const optionalNodes = new Set([NODE_NAME.COUNTER_TIMER, NODE_NAME.OBJ_CAMERA])
+
 export interface MiniGameCallbacks {
     start: () => void
     exit: () => void
@@ -53,7 +56,8 @@ const DEFAULT_SETTINGS = {
         disableZoneGuard: false
     },
     scene: {
-        rotation: <0|90|180|270> 0
+        rotation: <0|90|180|270> 0,
+        lockCamera: <boolean|undefined> undefined // If not defined, determined by obj_camera locator presence
     }
 }
 
@@ -86,6 +90,7 @@ export async function initMiniGame(
         inactiveTimeoutMs: timeouts.inactivity * 1000,
         sceneRotation: scene.rotation
     })
+    if (scene.lockCamera) optionalNodes.delete(NODE_NAME.OBJ_CAMERA)
     const positions = validatePositionData(await locators)
     let sessionTimeLeft: number | undefined
     let isActive = false
@@ -97,6 +102,7 @@ export async function initMiniGame(
             movePlayerTo({
                 newRelativePosition: Vector3.add(positions.get(NODE_NAME.AREA_PLAYSPAWN)!.position, center)
             })
+            if (scene.lockCamera) MainCamera.getOrCreateMutable(engine.CameraEntity).virtualCameraEntity = cameraEntity
             let elapsed = 0
             engine.addSystem(dt => sessionTimeLeft = Math.max(0, timeouts.session - (elapsed += dt)), undefined, 'countdown')
             callbacks.start()
@@ -104,6 +110,7 @@ export async function initMiniGame(
             isActive = false
             engine.removeSystem('countdown')
             sessionTimeLeft = undefined
+            if (scene.lockCamera) MainCamera.getOrCreateMutable(engine.CameraEntity).virtualCameraEntity = undefined
             callbacks.exit()
         }
     }
@@ -155,6 +162,14 @@ export async function initMiniGame(
         syncEntity(counterTimer, [TextShape.componentId])
         NetworkEntity.createOrReplace(counterTimer, {networkId: 0, entityId: 66666666 as Entity})
     })
+
+    let cameraEntity: Entity | undefined
+    scene.lockCamera ??= positions.has(NODE_NAME.OBJ_CAMERA)
+    if (scene.lockCamera) {
+        cameraEntity = engine.addEntity()
+        Transform.create(cameraEntity, {...positions.get(NODE_NAME.OBJ_CAMERA), parent: sceneParentEntity})
+        VirtualCamera.create(cameraEntity, { defaultTransition: { transitionMode: VirtualCamera.Transition.Time(1) } })
+    }
 
     new ui.ScoreBoard(
         { ...positions.get(NODE_NAME.DISPLAY_SCOREBOARD)!, scale: Vector3.One(), parent: sceneParentEntity },
@@ -212,7 +227,7 @@ export async function initMiniGame(
 
 function validatePositionData(positionData: Map<String, TransformType>) {
     for (const nodeName of Object.values(NODE_NAME)) {
-        if (!positionData.has(nodeName) && nodeName != NODE_NAME.COUNTER_TIMER) {
+        if (!positionData.has(nodeName) && !optionalNodes.has(nodeName)) {
             throw new Error(`Node '${nodeName}' not found`)
         }
     }
