@@ -16,8 +16,12 @@ export class GameLogic {
     private data: any
 
     public async startGame() {
-        await this.stopGame()
         this.data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+        this.playGame()
+    }
+
+    public async restartGame() {
+        await this.stopGame()
         this.playGame()
     }
 
@@ -58,7 +62,6 @@ export class GameLogic {
 
     // TO DO: REFACTOR
     private spawnRandomizer(spawnType: string, entityAmount: number) {
-        // console.log("spawnRandomizer TYPE: ", spawnType);
         const generator = ({ firstRow, gap = 1, entityAmountInRow = entityAmount }: { firstRow: boolean, gap?: number | "random", entityAmountInRow?: number }) => {
             let randomGap = false
             if (typeof (gap) === "string") {
@@ -92,7 +95,6 @@ export class GameLogic {
                 sequence.push(next)
             }
             if (!firstRow) sequence.forEach((_, i) => sequence[i] += 4)
-            // console.log(firstRow, ...sequence)
             return sequence
         }
         switch (spawnType) {
@@ -264,11 +266,12 @@ export class GameLogic {
     }
 
     private calculateTime() {
+        let playerLevelMultiplier = this.playerLevel >= levels.size ? 18 : this.playerLevel
         return {
-            endRoundTimeout: westLevelsConfig.initialAppearanceTime - 100 * (this.playerLevel / 3) + westLevelsConfig.initialAppearanceTime / this.playerLevel * 2 + 700,
-            spawnEntityTweenDuration: westLevelsConfig.initialAppearanceTime / this.playerLevel + 200,
+            endRoundTimeout: westLevelsConfig.initialAppearanceTime - 100 * (playerLevelMultiplier / 3) + westLevelsConfig.initialAppearanceTime / playerLevelMultiplier * 2 + 700,
+            spawnEntityTweenDuration: westLevelsConfig.initialAppearanceTime / playerLevelMultiplier + 200,
             hitEntityTweenDuration: westLevelsConfig.initialAppearanceTime / this.playerLevel,
-            stopRound: westLevelsConfig.initialAppearanceTime / this.playerLevel + 100
+            stopRound: westLevelsConfig.initialAppearanceTime / playerLevelMultiplier + 100
         }
     }
 

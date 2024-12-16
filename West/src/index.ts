@@ -7,7 +7,7 @@ import { initMiniGame } from '../../common/library'
 import { setupEffects } from '../../common/effects'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { setupStaticModels } from './staticModels/setupStaticModels'
-import { tempLocators, westGameConfig } from './config'
+import { westGameConfig } from './config'
 import { westGameState } from './state'
 import { GameLogic } from './game/gameLogic'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
@@ -15,7 +15,7 @@ import { GameLogic } from './game/gameLogic'
 const handlers = {
     start: () => { gameLogic.startGame() },
     exit: () => gameLogic.stopGame(),
-    restart: () => gameLogic.startGame(),
+    restart: () => gameLogic.restartGame(),
     toggleMusic: () => { },
     toggleSfx: () => { }
 }
