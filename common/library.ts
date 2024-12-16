@@ -43,7 +43,8 @@ const DEFAULT_SETTINGS = {
     },
     timeouts: {
         session: 10 * 60,
-        inactivity: 15
+        inactivity: 15,
+        forceLimit: false
     },
     scoreboard: {
         sortDirection: <'asc' | 'desc'>'desc',
@@ -127,6 +128,7 @@ export async function initMiniGame(
             console.log('ACTIVE PLAYER:', activePlayer)
             onActivePlayerChange(activePlayer)
         }
+        if (timeouts.forceLimit && sessionTimeLeft === 0) queue.setNextPlayer()
         updateLabels()
         forceSyncSelf()
     })
