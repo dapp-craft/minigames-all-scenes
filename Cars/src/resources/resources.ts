@@ -19,7 +19,8 @@ export const STATIC_MODELS = [
   { src: modelsFolder + 'obj_terminal.gltf' },
   { src: modelsFolder + 'obj_trash.gltf' },
   { src: modelsFolder + 'obj_wall.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS },
-  { src: modelsFolder + 'obj_gamezone.gltf' }
+  { src: modelsFolder + 'obj_gamezone.gltf' },
+  { src: modelsFolder + 'obj_flags.gltf' },
 ]
 
 export const arrowActiveModel: PBGltfContainer = { src: modelsFolder + 'obj_arrow01.gltf', visibleMeshesCollisionMask: ColliderLayer.CL_POINTER }
