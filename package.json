@@ -27,8 +27,8 @@
   ],
   "dependencies": {
     "@dcl-sdk/mini-games": "github:Maironire/sdk-mini-games",
-    "@dcl/js-runtime": "7.6.3",
-    "@dcl/sdk": "7.6.3"
+    "@dcl/js-runtime": "7.6.7",
+    "@dcl/sdk": "7.6.7"
   },
   "prettier": {
     "semi": false,

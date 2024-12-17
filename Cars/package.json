@@ -20,6 +20,6 @@
     "trailingComma": "none"
   },
   "devDependencies": {
-    "@dcl/js-runtime": "7.6.3"
+    "@dcl/js-runtime": "7.6.7"
   }
 }
