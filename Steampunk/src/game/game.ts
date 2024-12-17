@@ -4,11 +4,9 @@ import { gameLogic } from '..'
 import { readGltfLocators } from '../../../common/locators'
 import { engine, TextShape } from '@dcl/sdk/ecs'
 import { updatePlayerProgress } from './syncData'
-import { enableCamera } from './cameraEntity'
 import { runCountdown } from '../../../common/effects'
 import { steampunkGameState } from '../gameState'
 import { timeBeforeStart } from '../gameConfig'
-import { parentEntity } from '@dcl/sdk/network'
 
 export let startTimeOut: utils.TimerId
 export let levelButtons: ui.MenuButton[] = []
@@ -23,7 +21,6 @@ export const initGame = async () => {
 
 export function getReadyToStart() {
   console.log('Get Ready to start!')
-  enableCamera()
   runCountdown(timeBeforeStart)
   startTimeOut = utils.timers.setTimeout(() => startGame(), timeBeforeStart * 1000 + 200)
 }
