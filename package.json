@@ -26,7 +26,7 @@
     "West"
   ],
   "dependencies": {
-    "@dcl-sdk/mini-games": "github:Maironire/sdk-mini-games",
+    "@dcl-sdk/mini-games": "1.0.3",
     "@dcl/js-runtime": "7.6.7",
     "@dcl/sdk": "7.6.7"
   },
