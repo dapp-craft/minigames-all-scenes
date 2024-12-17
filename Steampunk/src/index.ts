@@ -12,7 +12,6 @@ import { getReadyToStart, initGame } from './game/game'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { setupEffects } from '../../common/effects'
 import { mainThereme, SoundManager } from './game/soundManager'
-import { init } from './game/cameraEntity'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
@@ -23,7 +22,7 @@ const handlers = {
     toggleSfx: () => toggleVolume()
 }
 
-const libraryReady = initMiniGame(GAME_ID, POINTS_TIME, readGltfLocators(`locators/obj_locators_default.gltf`), handlers, { timeouts: gameTime })
+const libraryReady = initMiniGame(GAME_ID, POINTS_TIME, readGltfLocators(`locators/obj_locators_default.gltf`), handlers, { timeouts: { inactivity: gameTime.inactivity, forceLimit: true } })
 
 export let gameLogic = new GameLogic()
 
@@ -40,7 +39,7 @@ export async function main() {
 
     initGame()
 
-    init()
+    // init()
 }
 
 const generateInitialEntity = async () => {
