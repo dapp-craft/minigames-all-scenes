@@ -15,7 +15,6 @@ import { initMiniGame } from '../../common/library'
 import { mainThereme } from './SoundManager'
 import { SCORE } from '@dcl-sdk/mini-games/src/ui'
 import { setupEffects } from '../../common/effects'
-import { init } from './game/cameraEntity'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
@@ -46,7 +45,7 @@ export async function main() {
 
   initGame()
 
-  init()
+  // init()
 
   rocketBoard = new board();
 }
