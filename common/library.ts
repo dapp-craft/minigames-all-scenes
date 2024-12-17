@@ -1,7 +1,7 @@
 import { initLibrary, sceneParentEntity, ui, queue, utilities } from '@dcl-sdk/mini-games/src'
 import { getQueue, PlayerType } from '@dcl-sdk/mini-games/src/queue'
 import { getPlayer } from '@dcl/sdk/players'
-import { engine, Transform, TransformType, TextShape, PBTextShape, Entity, TextAlignMode, executeTask, NetworkEntity, RealmInfo, MainCamera, VirtualCamera } from '@dcl/sdk/ecs'
+import { engine, Transform, TransformType, TextShape, PBTextShape, Entity, TextAlignMode, executeTask, NetworkEntity, RealmInfo, MainCamera, VirtualCamera, InputModifier } from '@dcl/sdk/ecs'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { isStateSyncronized, syncEntity } from '@dcl/sdk/network'
 import players from '@dcl/sdk/players'
@@ -58,7 +58,8 @@ const DEFAULT_SETTINGS = {
     },
     scene: {
         rotation: <0|90|180|270> 0,
-        lockCamera: <boolean|undefined> undefined // If not defined, determined by obj_camera locator presence
+        lockCamera: <boolean|undefined> undefined, // If not defined, determined by obj_camera locator presence
+        lockPlayer: <boolean|undefined> undefined // If not defined, determined by obj_camera locator presence
     }
 }
 
@@ -93,6 +94,9 @@ export async function initMiniGame(
     })
     if (scene.lockCamera) optionalNodes.delete(NODE_NAME.OBJ_CAMERA)
     const positions = validatePositionData(await locators)
+    scene.lockCamera ??= positions.has(NODE_NAME.OBJ_CAMERA)
+    scene.lockPlayer ??= positions.has(NODE_NAME.OBJ_CAMERA)
+
     let sessionTimeLeft: number | undefined
     let isActive = false
     function onActivePlayerChange(player: PlayerType | null) {
@@ -104,6 +108,10 @@ export async function initMiniGame(
                 newRelativePosition: Vector3.add(positions.get(NODE_NAME.AREA_PLAYSPAWN)!.position, center)
             })
             if (scene.lockCamera) MainCamera.getOrCreateMutable(engine.CameraEntity).virtualCameraEntity = cameraEntity
+            if (scene.lockPlayer) InputModifier.getOrCreateMutable(engine.PlayerEntity).mode = {
+                $case: 'standard',
+                standard: { disableAll: true }
+            }
             let elapsed = 0
             engine.addSystem(dt => sessionTimeLeft = Math.max(0, timeouts.session - (elapsed += dt)), undefined, 'countdown')
             callbacks.start()
@@ -112,6 +120,10 @@ export async function initMiniGame(
             engine.removeSystem('countdown')
             sessionTimeLeft = undefined
             if (scene.lockCamera) MainCamera.getOrCreateMutable(engine.CameraEntity).virtualCameraEntity = undefined
+            if (scene.lockPlayer) InputModifier.getOrCreateMutable(engine.PlayerEntity).mode = {
+                $case: 'standard',
+                standard: { disableAll: false }
+            }
             callbacks.exit()
         }
     }
@@ -169,7 +181,6 @@ export async function initMiniGame(
     })
 
     let cameraEntity: Entity | undefined
-    scene.lockCamera ??= positions.has(NODE_NAME.OBJ_CAMERA)
     if (scene.lockCamera) {
         cameraEntity = engine.addEntity()
         Transform.create(cameraEntity, {...positions.get(NODE_NAME.OBJ_CAMERA), parent: sceneParentEntity})
