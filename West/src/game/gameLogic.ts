@@ -1,10 +1,11 @@
 import * as utils from '@dcl-sdk/utils'
-import { EasingFunction, engine, Entity, InputAction, Material, MaterialTransparencyMode, pointerEventsSystem, TextShape, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
+import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, InputAction, Material, MaterialTransparencyMode, MeshCollider, MeshRenderer, pointerEventsSystem, TextShape, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
 import { westGameConfig, westLevelsConfig } from "../config";
 import { westGameState } from "../state";
 import { Color4, Quaternion, Vector3 } from "@dcl/sdk/math";
 import { levels } from '../levels';
 import { readGltfLocators } from '../../../common/locators';
+import { sceneParentEntity } from '@dcl-sdk/mini-games/src';
 
 export class GameLogic {
     private endRoundTimeout = 0
@@ -22,6 +23,7 @@ export class GameLogic {
 
     public async restartGame() {
         await this.stopGame()
+        this.resetData()
         this.playGame()
     }
 
@@ -32,13 +34,12 @@ export class GameLogic {
         const roles = [...Array(levelData!.role[0]).fill(1), ...Array(levelData!.role[1]).fill(0)];
         roles.sort(() => Math.random() - 0.5);
         this.spawnEntity()
-        // console.log("ROLE: ", roles)
         for (let i = 0; i < westGameConfig.targetEntityAmount; i++) {
             Tween.deleteFrom(westGameState.availableEntity[i])
         }
         for (let i = 0; i < levelData!.role.reduce((a, b) => a + b, 0); i++) {
+            console.log(MeshCollider.get(westGameState.availableEntity[i]))
             Tween.deleteFrom(westGameState.availableEntity[i])
-            VisibilityComponent.createOrReplace(westGameState.availableEntity[i], { visible: true })
             this.setTexture(westGameState.availableEntity[i], roles[i])
             this.targetData.set(i, { entity: westGameState.availableEntity[i], enemy: roles[i], dead: false })
             pointerEventsSystem.onPointerDown(
@@ -126,7 +127,7 @@ export class GameLogic {
     }
 
     private setTexture(entity: Entity, bandit: boolean) {
-        const randomTextureIndex = Math.floor(Math.random() * 14) + 1
+        const randomTextureIndex = Math.floor(Math.random() * 13) + 1
         const texture = `images/${bandit ? `bandit` : `citizen`}/${randomTextureIndex}.png`
         console.log(texture)
         Material.createOrReplace(entity, {
@@ -163,8 +164,9 @@ export class GameLogic {
         const targetPositionArray = this.spawnRandomizer(levelData!.generationType, levelTargetsAmount)
         for (let iterator = 0; iterator < levelTargetsAmount; iterator++) {
             const entity = westGameState.availableEntity[iterator]
-            Transform.getMutable(entity).position = this.data.get(`obj_window_${targetPositionArray[iterator]}`)!.position
-            // console.log(data.get(`obj_window_${targetPositionArray[iterator]}`))
+            MeshCollider.getMutable(entity).collisionMask = ColliderLayer.CL_POINTER
+            VisibilityComponent.getMutable(entity).visible = true
+            Transform.createOrReplace(entity, {...this.data.get(`obj_window_${targetPositionArray[iterator]}`), parent: sceneParentEntity})
             Tween.deleteFrom(entity)
             utils.timers.setTimeout(() => Tween.createOrReplace(entity, {
                 mode: Tween.Mode.Rotate({
@@ -239,11 +241,14 @@ export class GameLogic {
                 engine.removeSystem('roundEndSystem')
             }
         }, 1, 'roundEndSystem')
+        // TO DO REFACTOR
         for (let i = levelTargetAmount; i < westGameConfig.targetEntityAmount; i++) {
             VisibilityComponent.createOrReplace(westGameState.availableEntity[i]).visible = false
             pointerEventsSystem.removeOnPointerDown(westGameState.availableEntity[i])
+            MeshCollider.getMutable(westGameState.availableEntity[i]).collisionMask = ColliderLayer.CL_PHYSICS
         }
         for (let i = 0; i < levelTargetAmount; i++) {
+            MeshCollider.getMutable(westGameState.availableEntity[i]).collisionMask = ColliderLayer.CL_PHYSICS
             pointerEventsSystem.removeOnPointerDown(westGameState.availableEntity[i])
             this.hitEntity(westGameState.availableEntity[i])
             this.stopRoundTimers[i] = utils.timers.setTimeout(() => {
@@ -270,7 +275,7 @@ export class GameLogic {
         return {
             endRoundTimeout: westLevelsConfig.initialAppearanceTime - 100 * (playerLevelMultiplier / 3) + westLevelsConfig.initialAppearanceTime / playerLevelMultiplier * 2 + 700,
             spawnEntityTweenDuration: westLevelsConfig.initialAppearanceTime / playerLevelMultiplier + 200,
-            hitEntityTweenDuration: westLevelsConfig.initialAppearanceTime / this.playerLevel,
+            hitEntityTweenDuration: 200,
             stopRound: westLevelsConfig.initialAppearanceTime / playerLevelMultiplier + 100
         }
     }
