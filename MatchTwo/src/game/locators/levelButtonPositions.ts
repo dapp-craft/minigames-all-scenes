@@ -2,6 +2,7 @@ import { TransformType } from '@dcl/sdk/ecs'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { readGltfLocators } from '../../../../common/locators'
 import { sceneCenter } from '../../globals'
+import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 
 const locatorsNames = ['button_level_1', 'button_level_2', 'button_level_3', 'button_level_4', 'button_level_5']
 
@@ -18,7 +19,7 @@ export async function setLevelButtonPositions() {
     .sort()
     .filter((key) => locatorsNames.includes(key as string))
   levelButtonPositions.levelButtons = sortdetLevelButtonsKeys.map((key) => levelButtons.get(key)) as TransformType[]
-  levelButtonPositions.levelButtons.forEach((levelButton) => {
-    levelButton.position = Vector3.add(levelButton.position, sceneCenter)
-  })
+  levelButtonPositions.levelButtons.forEach(element => {
+    element.parent = sceneParentEntity
+  });
 }
