@@ -7,6 +7,7 @@ import { initMiniGame } from '../../common/library'
 import { finishGameButtonHandler, initGame, startGame } from './game'
 import { STATIC_MODELS } from './resources'
 import '../../common/cleaner'
+import { setSfxStatus, SFX_ENABLED, soundManager } from './game/sound'
 
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
@@ -15,9 +16,10 @@ const handlers = {
   start: startGame,
   exit: finishGameButtonHandler,
   restart: startGame,
-  toggleMusic: () => {},
-  toggleSfx: () => {}
+  toggleMusic: () => {soundManager.setThemeStatus(!soundManager.getThemeStatus())},
+  toggleSfx: () => setSfxStatus(!SFX_ENABLED)
 }
+
 
 const libraryReady = initMiniGame(
   '607f24d8-fb0c-4518-9cc4-9529ba924792',
