@@ -60,7 +60,7 @@ function setupSpeed(speedEntity: Entity) {
   }
 
   engine.addSystem(() => {
-    const text = `Speed: ${gameController.speed}`
+    const text = `Speed: ${gameController.speed + 1}`
     if (TextShape.get(speedEntity).text == text) return
     if (!gameController.inGame) return
     TextShape.createOrReplace(speedEntity, {
