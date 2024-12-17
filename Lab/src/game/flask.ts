@@ -16,7 +16,7 @@ class Layer {
         this._color = color
         if (Transform.has(this.root)) console.error(`BUG!!: layer transform anomaly at entity ${this.root}`)
         Transform.createOrReplace(this.root, { parent, scale: Vector3.Zero() })
-        Material.setBasicMaterial(this.layer, {diffuseColor: { ...color, a: 1}})
+        Material.setPbrMaterial(this.layer, {albedoColor: { ...color, a: 0.9}})
         if (Transform.has(this.layer)) console.error(`BUG!!: layer transform anomaly at entity ${this.layer}`)
         Transform.createOrReplace(this.layer, { scale: Vector3.One(), position: Vector3.create(0, 0.5, 0), parent: this.root })
     }
@@ -61,6 +61,51 @@ class Layer {
     }
 }
 
+class Pipe {
+    private root = engine.addEntity()
+    private pipe = engine.addEntity()
+    readonly ready
+    constructor(parent: Entity) {
+        if (Transform.has(this.root)) console.error(`BUG!!: pipe transform anomaly at entity ${this.root}`)
+        Transform.createOrReplace(this.root, { parent, scale: Vector3.Zero() })
+        Material.setPbrMaterial(this.pipe, {
+            albedoColor: { ...Color3.fromHexString('#d3ba18'), a: 1},
+            emissiveColor: Color3.fromHexString('#d3ba18'),
+            emissiveIntensity: 2
+        })
+        if (Transform.has(this.pipe)) console.error(`BUG!!: pipe transform anomaly at entity ${this.pipe}`)
+        Transform.createOrReplace(this.pipe, { scale: Vector3.One(), position: Vector3.create(0, -0.5, 0), parent: this.root })
+        this.ready = flaskMappingReady.then(f => {
+            const {position, scale: {y: radius}} = f.get(`obj_valve`)!
+            MeshRenderer.setCylinder(this.pipe, radius, radius)
+            Transform.getMutable(this.root).position = position
+        })
+    }
+    public async move(to?: number) {
+        const valve = Transform.getMutable(this.root).position
+        const {position: target} = (await flaskMappingReady).get(`obj_layer_${to}`) ?? {position: valve}
+        Tween.createOrReplace(this.root, {
+            mode: Tween.Mode.Scale({
+                start: Transform.get(this.root).scale,
+                end: Vector3.create(1, valve.y - target.y, 1),
+            }),
+            duration: 250,
+            easingFunction: EasingFunction.EF_LINEAR
+        })
+        let resolve: Function
+        const start = Date.now()
+        const timeout = 3 * Tween.get(this.root).duration
+        const fn = async () => {
+            if (tweenSystem.tweenCompleted(this.root) || Date.now() - start > timeout) {
+                resolve(this)
+                if (Date.now() - start > timeout) console.error(`BUG!!: pipe tween timeout at entity ${this.root}`)
+            } else executeTask(fn)
+        }
+        executeTask(fn)
+        return new Promise<Layer>(r => resolve = r)
+    }
+}
+
 enum State {
     active, inactive, busy
 }
@@ -74,6 +119,7 @@ export class Flask {
     private state: State = State.inactive
     private _capacity = 0
     private entity = engine.addEntity()
+    private pipe = new Pipe(this.entity)
     private layers: Layer[] = []
 
     constructor(transform: TransformType) {
@@ -87,7 +133,9 @@ export class Flask {
             },
             () => void [this.deactivate, this.activate][this.state]?.call(this)
         )
-        this.ready = flaskMappingReady.then(data => this._capacity = Array.from(data.keys()).filter(k => k.match(/obj_layer_[^0]/)).length)
+        this.ready = flaskMappingReady
+            .then(data => this._capacity = Array.from(data.keys()).filter(k => k.match(/obj_layer_[^0]/)).length)
+            .then(() => this.pipe.ready)
     }
     public async destroy() {
         console.log("Flask::destroy")
@@ -164,7 +212,9 @@ export class Flask {
         const tmp = this.state
         this.state = State.busy
         if (!this.topLayer || !Color3.equals(color, this.topLayer.color)) this.layers.push(new Layer(this.entity, color))
+        await this.pipe.move(this.fillLevel)
         await this.topLayer!.set(this.fillLevel - this.topLayer!.volume, this.fillLevel + volume)
+        await this.pipe.move()
         this.state = tmp
     }
     public async drain(volume = this.topLayer?.volume) {
@@ -173,8 +223,10 @@ export class Flask {
         await this.ready
         const tmp = this.state
         this.state = State.busy
+        await this.pipe.move(this.fillLevel - volume)
         await this.topLayer!.set(this.fillLevel - this.topLayer!.volume, this.fillLevel - volume)
         if (this.topLayer!.volume == 0) this.layers.pop()!.destroy()
+        await this.pipe.move()
         this.state = tmp
     }
 }

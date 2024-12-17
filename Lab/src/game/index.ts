@@ -13,7 +13,13 @@ export class GameLevel {
     constructor(readonly level: keyof typeof LEVELS, private flow: FlowController<any>, private onStateChange: (arg: GameLevel) => void) {
         const {colors, flasks: configs} = LEVELS[level]
         this.ready = Promise
-            .all(configs.map((f, idx) => new Flask(flaskTransforms[idx]).applyConfig(f.map(c => Color3.fromArray((colors as any)[c])))))
+            .all(configs.map(async (config, idx) => {
+                const flask = new Flask(flaskTransforms[idx])
+                await flask.activate()
+                await flask.applyConfig(config.map(c => Color3.fromArray((colors as any)[c])))
+                await flask.deactivate()
+                return flask
+            }))
             .then(flasks => this._flasks = flasks)
             .then(() => this.onStateChange(this))
     }
@@ -45,7 +51,10 @@ export class GameLevel {
     public async stop() {
         cancelCountdown()
         cancelWinAnimation()
-        const destruction = Promise.all(this._flasks.splice(0).map(f => f.destroy()))
+        const destruction = Promise.all(this._flasks.splice(0).map(async f => {
+            await f.activate()
+            await f.destroy()
+        }))
         this.onStateChange(this)
         await destruction
         await Promise.race([this.flow.interrupted, Promise.resolve()])
