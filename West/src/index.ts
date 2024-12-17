@@ -1,4 +1,4 @@
-import { engine, executeTask, GltfContainer, MeshCollider, MeshRenderer, TextShape, Transform } from '@dcl/sdk/ecs'
+import { engine, executeTask, GltfContainer, MeshCollider, MeshRenderer, TextShape, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
@@ -44,6 +44,8 @@ export async function main() {
 }
 
 const generateInitialEntity = async () => {
+    const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+
     for (let i = 0; i <= westGameConfig.initialEntityAmount; i++) {
         const entity = engine.addEntity()
         westGameState.availableEntity.push(entity)
@@ -53,11 +55,10 @@ const generateInitialEntity = async () => {
         if (Transform.getOrNull(westGameState.availableEntity[i]) == null) {
             MeshRenderer.setPlane(westGameState.availableEntity[i])
             MeshCollider.setPlane(westGameState.availableEntity[i])
+            VisibilityComponent.create(westGameState.availableEntity[i], {visible: false})
             Transform.create(westGameState.availableEntity[i], { position: Vector3.create(0, 1, 1), rotation: Quaternion.Zero(), parent: sceneParentEntity })
         }
     }
-
-    const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
 
     const playerHP = westGameState.availableEntity[westGameConfig.targetEntityAmount]
     const score = westGameState.availableEntity[westGameConfig.targetEntityAmount + 1]
