@@ -27,6 +27,9 @@ const handlers = {
 initMiniGame(GAME_ID, [MOVES, LEVEL, TIME], readGltfLocators(`locators/obj_locators_default.gltf`), handlers, {
   scoreboard: {
     sortDirection: 'asc'
+  },
+  scene: {
+    rotation: 90
   }
 })
 

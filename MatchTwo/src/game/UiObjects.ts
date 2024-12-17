@@ -1,5 +1,5 @@
 import { ui, queue } from '@dcl-sdk/mini-games/src'
-import { sceneParentEntity } from '../globals'
+import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
 import { TILES_LEVEL } from '../config'
 import { exitGame, gameState, startLevel } from './game'
@@ -35,6 +35,7 @@ export function setupGameUI() {
 function setupMoveCouner() {
   const moveCounter = engine.addEntity()
   Transform.create(moveCounter, statusBoardPositions['counter_moves'])
+  Transform.getMutable(moveCounter).parent = sceneParentEntity
 
   engine.addSystem(() => {
     TextShape.createOrReplace(moveCounter, {
@@ -49,6 +50,7 @@ function setupMoveCouner() {
 function seteupStopwatch() {
   const timer = engine.addEntity()
   Transform.create(timer, statusBoardPositions['counter_stopwatch'])
+  Transform.getMutable(timer).parent = sceneParentEntity
   console.log('Timer', statusBoardPositions['counter_stopwatch'])
 
   engine.addSystem(() => {
@@ -81,6 +83,7 @@ function seteupStopwatch() {
 function setupFoundPairs() {
   const foundPairs = engine.addEntity()
   Transform.create(foundPairs, statusBoardPositions['counter_foundPairs'])
+  Transform.getMutable(foundPairs).parent = sceneParentEntity
 
   engine.addSystem(() => {
     if (gameState.levelStartTime == 0) {

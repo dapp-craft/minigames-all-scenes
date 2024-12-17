@@ -21,14 +21,5 @@ export async function setStatusBoardPositions() {
     (statusBoardPositions.counter_stopwatch = statusBoard.get('counter_stopwatch') as TransformType),
     (statusBoardPositions.counter_moves = statusBoard.get('counter_moves') as TransformType)
 
-  statusBoardPositions.counter_foundPairs.position = Vector3.add(
-    statusBoardPositions.counter_foundPairs.position,
-    sceneCenter
-  )
-  statusBoardPositions.counter_stopwatch.position = Vector3.add(
-    statusBoardPositions.counter_stopwatch.position,
-    sceneCenter
-  )
-  statusBoardPositions.counter_moves.position = Vector3.add(statusBoardPositions.counter_moves.position, sceneCenter)
   console.log('Sttatus Board', statusBoardPositions)
 }
