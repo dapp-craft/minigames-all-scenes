@@ -12,6 +12,5 @@ export async function setLevelUiPositions() {
   const locatorsKeys = Array.from(locators.keys()).filter((key) => UiLocatorsNames.includes(key as string))
   const transforms = locatorsKeys.forEach((key) => {
     UiLocators[key as string] = locators.get(key) as TransformType
-    UiLocators[key as string].position = Vector3.add(UiLocators[key as string].position, Vector3.create(8, 0, 8))
   })
 }

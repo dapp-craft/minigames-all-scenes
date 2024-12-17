@@ -1,4 +1,4 @@
-import { ui, queue } from '@dcl-sdk/mini-games/src'
+import { ui, queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
 import * as utils from '@dcl-sdk/utils'
 import { setLevelUiPositions, UiLocators } from './locators/UILocators'
@@ -24,6 +24,7 @@ export async function setupGameUI() {
 
 function setupScore(moveCounter: Entity) {
   if (!Transform.has(moveCounter)) Transform.create(moveCounter, UiLocators['counter_length'])
+  Transform.getMutable(moveCounter).parent = sceneParentEntity
   if (!TextShape.has(moveCounter)) {
     TextShape.createOrReplace(moveCounter, {
       text: `Length: ${0}`,
@@ -48,6 +49,7 @@ function setupScore(moveCounter: Entity) {
 
 function setupSpeed(speedEntity: Entity) {
   if (!Transform.has(speedEntity)) Transform.create(speedEntity, UiLocators['counter_speed'])
+  Transform.getMutable(speedEntity).parent = sceneParentEntity
   if (!TextShape.has(speedEntity)) {
     TextShape.createOrReplace(speedEntity, {
       text: `Speed: ${0}`,

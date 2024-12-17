@@ -14,6 +14,7 @@ import { GameController } from '../controllers/gameController'
 import { syncEntity } from '@dcl/sdk/network'
 import { foodModel, snakeBodyModel } from '../../resources'
 import { CellEnum, Position } from '../objects/type'
+import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 
 export class SyncRenderer {
   private _gameController: GameController
@@ -33,7 +34,8 @@ export class SyncRenderer {
       Transform.createOrReplace(this._entity, {
         position: Vector3.create(0, 0, 0),
         rotation: Quaternion.fromEulerDegrees(0, 180, 0),
-        scale: Vector3.create(1, 1, 1)
+        scale: Vector3.create(1, 1, 1),
+        parent: sceneParentEntity
       })
     this._gameController = gameController
 
@@ -118,8 +120,9 @@ export class SyncRenderer {
     if (!transform) return
 
     // Center offset
-    transform.position = Vector3.add(transform.position, Vector3.create(8, 0, 8))
     Transform.createOrReplace(this._entity, transform)
+    Transform.getMutable(this._entity).parent = sceneParentEntity
+
     this.xk = 1 / transform.scale.x
     this.yk = 1 / transform.scale.y
   }

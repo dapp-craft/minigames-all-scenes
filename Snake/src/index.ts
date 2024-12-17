@@ -25,7 +25,12 @@ const libraryReady = initMiniGame(
   '607f24d8-fb0c-4518-9cc4-9529ba924792',
   [SCORE],
   readGltfLocators(`locators/obj_locators_default.gltf`),
-  handlers
+  handlers,
+  {
+    scene: {
+      rotation: 90
+    }
+  }
 )
 
 const MODELS: string[] = ['models/obj_floor.gltf']
