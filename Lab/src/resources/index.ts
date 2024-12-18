@@ -17,3 +17,4 @@ export const STATIC_MODELS = [
 ]
 
 export const FLASK_MODEL = { src: modelsFolder + 'obj_flask.gltf' }
+export const PIPE_MODEL = { src: modelsFolder + 'obj_pipe.gltf' }

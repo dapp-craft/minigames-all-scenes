@@ -1,7 +1,7 @@
 import { EasingFunction, engine, Entity, executeTask, GltfContainer, InputAction, Material, MeshRenderer, pointerEventsSystem, Transform, TransformType, Tween, tweenSystem } from "@dcl/sdk/ecs"
 import { Color3, Vector3 } from "@dcl/sdk/math"
 import { readGltfLocators } from "../../../common/locators"
-import { FLASK_MODEL } from "../resources"
+import { FLASK_MODEL, PIPE_MODEL } from "../resources"
 import * as utils from '@dcl-sdk/utils'
 
 const flaskMappingReady = readGltfLocators(`locators/locators_flask_mapping.gltf`)
@@ -66,6 +66,7 @@ class Pipe {
     private pipe = engine.addEntity()
     readonly ready
     constructor(parent: Entity) {
+        GltfContainer.create(this.pipe, PIPE_MODEL)
         if (Transform.has(this.root)) console.error(`BUG!!: pipe transform anomaly at entity ${this.root}`)
         Transform.createOrReplace(this.root, { parent, scale: Vector3.Zero() })
         this.setColor()
@@ -104,7 +105,7 @@ class Pipe {
         executeTask(fn)
         return new Promise<Layer>(r => resolve = r)
     }
-    public setColor(color: Color3 = Color3.Yellow()) {
+    public setColor(color: Color3 = Color3.Black()) {
         Material.setPbrMaterial(this.pipe, {
             albedoColor: { ...color, a: 1 },
             emissiveColor: color,
