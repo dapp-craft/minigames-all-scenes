@@ -77,6 +77,10 @@ class Pipe {
             Transform.getMutable(this.root).position = position
         })
     }
+    public destroy() {
+        engine.removeEntity(this.root)
+        engine.removeEntity(this.pipe)
+    }
     public async move(to?: number) {
         const valve = Transform.getMutable(this.root).position
         const {position: target} = (await flaskMappingReady).get(`obj_layer_${to}`) ?? {position: valve}
@@ -143,6 +147,7 @@ export class Flask {
     public async destroy() {
         console.log("Flask::destroy")
         while (this.layers.length > 0) await this.drain()
+        this.pipe.destroy()
         engine.removeEntity(this.entity)
     }
     public async applyConfig(data: ReadonlyArray<Color3>) {
