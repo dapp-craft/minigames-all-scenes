@@ -1,3 +1,4 @@
+import { progress } from "@dcl-sdk/mini-games/src"
 import { engine, TransformType } from "@dcl/sdk/ecs"
 import { Color3 } from "@dcl/sdk/math"
 import { cancelCountdown, cancelWinAnimation, runCountdown, runWinAnimation } from "../../../common/effects"
@@ -57,6 +58,7 @@ export class GameLevel {
             await second.deactivate()
         }
         engine.removeSystem('stopwatch')
+        progress.upsertProgress({level: this.level, time: Math.floor(this.elapsed * 1000), moves: this.moves})
         await Promise.race([runWinAnimation(), this.flow.interrupted])
     }
     public async stop() {
