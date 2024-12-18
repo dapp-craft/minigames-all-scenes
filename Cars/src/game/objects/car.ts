@@ -2,6 +2,7 @@ import {
   ColliderLayer,
   Entity,
   InputAction,
+  MapResult,
   Material,
   MeshCollider,
   MeshRenderer,
@@ -18,10 +19,14 @@ import { Car } from '../components/definitions'
 import { CarDirection, Cell } from '../type'
 import { syncEntity } from '@dcl/sdk/network'
 import { selectedCar } from '../selector'
+import { CarsSpec } from '../components/definitions'
 
 export let MAIN_CAR: Entity
 
-export function createCarEntity(id: number, isMain: boolean){
+// Cars except the main car
+export const CARS: Entity[] = []
+
+export function createCarEntity(id: number, isMain: boolean) {
   const car = engine.addEntity()
   Transform.create(car, {
     position: Vector3.Zero(),
@@ -36,13 +41,12 @@ export function createCarEntity(id: number, isMain: boolean){
     inGame: false,
     isMain: isMain
   })
-  syncEntity(car, [Car.componentId], id)
   pointerEventsSystem.onPointerDown(
     {
       entity: car,
       opts: {
         button: InputAction.IA_POINTER,
-        hoverText: 'Select car',
+        hoverText: 'Select car'
       }
     },
     () => {
@@ -55,7 +59,9 @@ export function createCarEntity(id: number, isMain: boolean){
 }
 
 export function createCar(id: number) {
-  return createCarEntity(id, false);  
+  const car = createCarEntity(id, false)
+  CARS.push(car)
+  return car
 }
 
 export function createMainCar(id: number) {
@@ -91,4 +97,32 @@ export function getAllCarsExceptMain(): Entity[] {
     }
   }
   return ret
+}
+
+export function updateCarsState(state: MapResult<typeof CarsSpec>) {
+  state.cars
+    .filter((car) => car.isMain)
+    .forEach((car, i) => {
+      Car.getMutable(MAIN_CAR).position = car.position
+      Car.getMutable(MAIN_CAR).direction = car.direction
+      Car.getMutable(MAIN_CAR).length = car.length
+      Car.getMutable(MAIN_CAR).inGame = car.inGame
+    })
+  state.cars
+    .filter((car) => !car.isMain)
+    .forEach((car, i) => {
+      Car.getMutable(CARS[i]).position = car.position
+      Car.getMutable(CARS[i]).direction = car.direction
+      Car.getMutable(CARS[i]).length = car.length
+      Car.getMutable(CARS[i]).inGame = car.inGame
+    })
+}
+
+export function getCarsState() {
+  let state: MapResult<typeof CarsSpec> = { cars: [] }
+  CARS.forEach((car) => {
+    state.cars.push(Car.get(car))
+  })
+  state.cars.push(Car.get(MAIN_CAR))
+  return state
 }

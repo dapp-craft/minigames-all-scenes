@@ -21,10 +21,10 @@ import { Quaternion, Vector3, Color4 } from '@dcl/ecs-math'
 import { CarDirection, Cell } from './type'
 import { globalCoordsToLocal, localCoordsToCell, getDirectionVector, cellRelativePosition } from './logic/math'
 import { BOARD_PHYSICAL_SIZE, BOARD_SIZE, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE, SYNC_ENTITY_ID } from '../config'
-import { Car } from './components/definitions'
+import { Car, CarsSpec } from './components/definitions'
 import { setUpSynchronizer } from './synchronizer'
 import { BOARD, createBoard } from './objects/board'
-import { createCar, createMainCar, getAllCars, getAllCarsExceptMain, getInGameCars, MAIN_CAR } from './objects/car'
+import { createCar, createMainCar, getAllCars, getAllCarsExceptMain, getCarsState, getInGameCars, MAIN_CAR, updateCarsState } from './objects/car'
 import { calculateFinalDelta, createAvailabilityMap, getMovementDelta, markCarCellsAsAvailable } from './logic/board'
 import { getLevel, MAX_LEVEL } from './levels'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
@@ -41,6 +41,7 @@ import { playMoveCarSound, playStartLevelSound, playWinSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
 import { initSelector, selectedCar } from './selector'
 import { initKeyboardInput } from './keyboardInput'
+import { CreateStateSynchronizer } from './stateSync'
 // import { initArrow } from './arrow'
 
 export let lookingAt: Cell | undefined = undefined
@@ -53,6 +54,14 @@ export let inputAvailable = false
 export function setInputAvailable(value: boolean) {
   inputAvailable = value
 }
+
+const SyncState_ = CreateStateSynchronizer("carsState", CarsSpec, {
+  update: async (state) => {
+    if (inGame) return
+    updateCarsState(state)
+  }
+})
+export let SyncState: InstanceType<typeof SyncState_>
 
 /**
  * Stores the last start
@@ -118,6 +127,9 @@ export async function initGame() {
     createCar(SYNC_ENTITY_ID + 1 + i)
   }
 
+  SyncState = new SyncState_()
+  SyncState.start()
+
   await fetchPlayerProgress()
 
 }
@@ -156,6 +168,8 @@ export async function startLevel(level: number) {
   getAllCars().forEach((car) => {
     removeCarFromGame(car)
   })
+  SyncState.send(getCarsState())
+
   await runCountdown()
   if (start != lastStart) return
   console.log('Start:', start, lastStart)
@@ -164,6 +178,8 @@ export async function startLevel(level: number) {
   gameState.level = level
   gameState.moves = 0
   loadLevel(level)
+  SyncState.send(getCarsState())
+
   utils.timers.setTimeout(() => {
     if (start != lastStart) return
     inputAvailable = true

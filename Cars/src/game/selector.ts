@@ -3,6 +3,7 @@ import {
   Entity,
   GltfContainer,
   InputAction,
+  MapResult,
   Material,
   MeshCollider,
   MeshRenderer,
@@ -23,11 +24,12 @@ import {
   markCarCellsAsAvailable,
   markCarCellsAsAvailableCarData
 } from './logic/board'
-import { Car } from './components/definitions'
+import { Car, CarsSpec } from './components/definitions'
 import { Quaternion } from '@dcl/sdk/math'
-import { finishLevel, gameState, inputAvailable, isSolved, setInputAvailable } from '.'
+import { SyncState, finishLevel, gameState, inputAvailable, isSolved, setInputAvailable } from '.'
 import { playWinSound } from './sfx'
 import { runWinAnimation } from '../../../common/effects'
+import { CARS, MAIN_CAR, getCarsState } from './objects/car'
 
 export let forwardArrow: Entity
 export let backwardArrow: Entity
@@ -91,6 +93,9 @@ export function moveCar(directionMultiplier: number) {
     carComponent.position = targetCell
     gameState.moves++
     updateArrowModels()
+
+    
+    SyncState.send(getCarsState())
   }
 
   if (isSolved()) {
