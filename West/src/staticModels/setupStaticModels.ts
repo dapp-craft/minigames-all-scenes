@@ -1,5 +1,5 @@
 import { GltfContainer, Transform, engine } from '@dcl/sdk/ecs'
-import { barrel, fence, floor, gameZone, ground, terminal, text, wall } from '../resources/resources'
+import { barrel, curtains, fence, floor, gameZone, ground, terminal, text, wall } from '../resources/resources'
 // import { toadsGameState } from '../state'
 
 const staticModels = [
@@ -10,7 +10,7 @@ const staticModels = [
     wall,
     gameZone,
     terminal,
-    text
+    text,
 ]
 
 export const setupStaticModels = () => {

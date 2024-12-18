@@ -10,6 +10,7 @@ import { setupStaticModels } from './staticModels/setupStaticModels'
 import { westGameConfig } from './config'
 import { westGameState } from './state'
 import { GameLogic } from './game/gameLogic'
+import { curtains } from './resources/resources'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
@@ -65,11 +66,13 @@ const generateInitialEntity = async () => {
 
     for (let i = westGameConfig.targetEntityAmount + 1; i <= westGameConfig.targetEntityAmount + westGameConfig.targetEntityAmount; i++) {
         const entityData = data.get(`obj_window_${i - westGameConfig.targetEntityAmount}`)
-        MeshRenderer.setPlane(westGameState.availableEntity[i])
         Transform.create(westGameState.availableEntity[i], {
             ...entityData, position: {...entityData!.position, z: entityData!.position.z + .2}, parent: sceneParentEntity
         })
+        GltfContainer.create(westGameState.availableEntity[i], {src: 'models/obj_curtains.gltf'})
     }
+
+    westGameState.curtainsScale = data.get(`obj_window_1`)!.scale
 
     westGameState.listOfEntity.set('playerHP', playerHP)
     westGameState.listOfEntity.set('score', score)

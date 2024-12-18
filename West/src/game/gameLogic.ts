@@ -162,7 +162,6 @@ export class GameLogic {
         const levelTargetsAmount = levelData!.role.reduce((a, b) => a + b, 0)
         console.log("levelTargetsAmount: ", levelTargetsAmount, 'Player Level: ', this.playerLevel)
         const targetPositionArray = this.spawnRandomizer(levelData!.generationType, levelTargetsAmount)
-        // for (let i = westGameConfig.targetEntityAmount + 1; i <= levelTargetsAmount + westGameConfig.targetEntityAmount; i++) this.activateWindow(westGameState.availableEntity[i])
         for (let iterator = 0; iterator < levelTargetsAmount; iterator++) {
             let randomPositionNumber = targetPositionArray[iterator]
             this.activateWindow(westGameState.availableEntity[randomPositionNumber + westGameConfig.targetEntityAmount])
@@ -171,29 +170,26 @@ export class GameLogic {
             VisibilityComponent.getMutable(entity).visible = true
             Transform.createOrReplace(entity, { ...this.data.get(`obj_window_${randomPositionNumber}`), parent: sceneParentEntity })
             Tween.deleteFrom(entity)
-            // utils.timers.setTimeout(() => Tween.createOrReplace(entity, {
-            //     mode: Tween.Mode.Rotate({
-            //         start: Quaternion.fromEulerDegrees(-90, 1, 1),
-            //         end: Quaternion.fromEulerDegrees(0, 0, 0)
-            //     }),
-            //     duration: this.calculateTime().spawnEntityTweenDuration,
-            //     easingFunction: EasingFunction.EF_EASEINBACK,
-            // }), 10)
             Transform.getMutable(entity).rotation = Quaternion.fromEulerDegrees(0, 0, 0)
         }
     }
 
     private activateWindow(entity: Entity) {
         Material.setPbrMaterial(entity, { albedoColor: Color4.Green() })
-        utils.timers.setTimeout(() => {
-            Material.setPbrMaterial(entity, { albedoColor: Color4.White() })
-            VisibilityComponent.createOrReplace(entity).visible = false
-        }, westLevelsConfig.windowOpenDuration)
+        utils.timers.setTimeout(() => Tween.createOrReplace(entity, {
+            mode: Tween.Mode.Scale({
+                start: Transform.get(entity).scale,
+                end: {...Transform.get(entity).scale, y: 0}
+            }),
+            duration: this.calculateTime().spawnEntityTweenDuration,
+            easingFunction: EasingFunction.EF_EASEINBACK,
+        }), 10)
     }
 
     private refreshWindows() {
         for (let i = westGameConfig.targetEntityAmount + 1; i <= westGameConfig.targetEntityAmount * 2; i++) {
-            VisibilityComponent.createOrReplace(westGameState.availableEntity[i]).visible = true
+            Tween.deleteFrom(westGameState.availableEntity[i])
+            Transform.getMutable(westGameState.availableEntity[i]).scale = westGameState.curtainsScale
         }
     }
 
