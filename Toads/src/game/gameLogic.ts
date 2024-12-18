@@ -238,7 +238,7 @@ export class GameLogic {
         pointerEventsSystem.onPointerDown(
             {
                 entity: toadsGameState.listOfEntity.get('ground'),
-                opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH' },
+                opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH', showHighlight: false},
             },
             () => this.hitHammer()
         )
@@ -267,7 +267,7 @@ export class GameLogic {
                     pointerEventsSystem.onPointerDown(
                         {
                             entity: entity,
-                            opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH' },
+                            opts: { button: InputAction.IA_POINTER, hoverText: 'SMASH', showHighlight: false},
                         },
                         () => this.hitHammer()
                     )
