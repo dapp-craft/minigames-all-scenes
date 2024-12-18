@@ -34,6 +34,9 @@ export class SoundManager {
     })
 
     this.themeEntity = engine.addEntity()
+    Transform.create(this.themeEntity, {
+      parent: engine.PlayerEntity,
+    })
     AudioSource.create(this.themeEntity, {
       audioClipUrl: mainThemeSound,
       loop: true,
