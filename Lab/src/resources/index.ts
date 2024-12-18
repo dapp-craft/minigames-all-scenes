@@ -14,6 +14,7 @@ export const STATIC_MODELS = [
   { src: modelsFolder + 'obj_text.gltf' },
   { src: modelsFolder + 'obj_wall.gltf' },
   { src: modelsFolder + 'obj_station.gltf' },
+  { src: modelsFolder + 'obj_rules.gltf' },
 ]
 
 export const FLASK_MODEL = { src: modelsFolder + 'obj_flask.gltf' }
