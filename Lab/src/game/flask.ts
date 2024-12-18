@@ -1,5 +1,5 @@
-import { EasingFunction, engine, Entity, executeTask, GltfContainer, InputAction, Material, MeshRenderer, pointerEventsSystem, Transform, TransformType, Tween, tweenSystem } from "@dcl/sdk/ecs"
-import { Color3, Vector3 } from "@dcl/sdk/math"
+import { EasingFunction, engine, Entity, executeTask, GltfContainer, InputAction, Material, MeshRenderer, pointerEventsSystem, Transform, TransformType, Tween, TweenLoop, TweenSequence, tweenSystem } from "@dcl/sdk/ecs"
+import { Color3, Quaternion, Vector3 } from "@dcl/sdk/math"
 import { readGltfLocators } from "../../../common/locators"
 import { FLASK_MODEL, PIPE_MODEL } from "../resources"
 import * as utils from '@dcl-sdk/utils'
@@ -185,6 +185,28 @@ export class Flask {
         this.state = State.sealed
         this.promiseActivated = new Promise(r => this.resolveActivated = r)
         this.promiseDeactivated = new Promise(r => this.resolveDeactivated = r)
+        if (!this.topLayer) return
+        Tween.create(this.entity, {
+            mode: Tween.Mode.Rotate({
+                start: Quaternion.fromEulerDegrees(0, 0, 0),
+                end: Quaternion.fromEulerDegrees(0, 180, 0),
+            }),
+            duration: 700,
+            easingFunction: EasingFunction.EF_LINEAR,
+        })
+        TweenSequence.create(this.entity, {
+            loop: TweenLoop.TL_RESTART,
+            sequence: [
+                {
+                    mode: Tween.Mode.Rotate({
+                        start: Quaternion.fromEulerDegrees(0, 180, 0),
+                        end: Quaternion.fromEulerDegrees(0, 360, 0),
+                    }),
+                    duration: 700,
+                    easingFunction: EasingFunction.EF_LINEAR,
+                },
+            ],
+        })
     }
     public get sealed() {
         return this.state == State.sealed
