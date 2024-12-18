@@ -40,7 +40,10 @@ export class GameLevel {
             let {color, volume} = first.topLayer
             if (!second.topLayer || Color3.equals(second.topLayer.color, color) && second.fillLevel < second.capacity) {
                 volume = Math.min(second.capacity - second.fillLevel, volume)
-                await Promise.all([first.drain(volume), second.pour(color, volume)])
+                await Promise.all([
+                    first.drain(volume).then(() => first.hidePipe()),
+                    second.pour(color, volume).then(() => second.hidePipe())
+                ])
                 this.onStateChange(this)
             }
             await first.deactivate()

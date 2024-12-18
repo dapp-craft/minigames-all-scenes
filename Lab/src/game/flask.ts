@@ -147,6 +147,7 @@ export class Flask {
     public async destroy() {
         console.log("Flask::destroy")
         while (this.layers.length > 0) await this.drain()
+        await this.hidePipe()
         this.pipe.destroy()
         engine.removeEntity(this.entity)
     }
@@ -170,6 +171,7 @@ export class Flask {
             idx++
         }
         if (this.layers[idx]) for (const _ of this.layers.slice(idx)) await this.drain()
+        await this.hidePipe()
         return this
     }
     public getConfig() {
@@ -200,6 +202,14 @@ export class Flask {
     }
     public get deactivated() { return this.promiseDeactivated }
 
+    public async hidePipe() {
+        if (this.state == State.busy) throw `Hide pipe failed: flask is busy`
+        const tmp = this.state
+        this.state = State.busy
+        await this.pipe.move()
+        this.state = tmp
+    }
+
     public get fillLevel() {
         return this.layers.reduce((acc, {volume}) => acc + volume, 0)
     }
@@ -224,7 +234,6 @@ export class Flask {
         this.pipe.setColor(color)
         await this.topLayer!.set(this.fillLevel - this.topLayer!.volume, this.fillLevel + volume)
         this.pipe.setColor()
-        await this.pipe.move()
         this.state = tmp
     }
     public async drain(volume = this.topLayer?.volume) {
@@ -238,7 +247,6 @@ export class Flask {
         await this.topLayer!.set(this.fillLevel - this.topLayer!.volume, this.fillLevel - volume)
         this.pipe.setColor()
         if (this.topLayer!.volume == 0) this.layers.pop()!.destroy()
-        await this.pipe.move()
         this.state = tmp
     }
 }
