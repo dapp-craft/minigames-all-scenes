@@ -55,20 +55,21 @@ const generateInitialEntity = async () => {
         if (Transform.getOrNull(westGameState.availableEntity[i]) == null) {
             MeshRenderer.setPlane(westGameState.availableEntity[i])
             MeshCollider.setPlane(westGameState.availableEntity[i])
-            VisibilityComponent.create(westGameState.availableEntity[i], {visible: false})
+            VisibilityComponent.create(westGameState.availableEntity[i], { visible: false })
             Transform.create(westGameState.availableEntity[i], { position: Vector3.create(0, 1, 1), rotation: Quaternion.Zero(), parent: sceneParentEntity })
         }
     }
 
-    const playerHP = westGameState.availableEntity[westGameConfig.targetEntityAmount]
-    const score = westGameState.availableEntity[westGameConfig.targetEntityAmount + 1]
+    const playerHP = westGameState.availableEntity[westGameConfig.targetEntityAmount * 2 + 1]
+    const score = westGameState.availableEntity[westGameConfig.targetEntityAmount * 2 + 2]
 
-    // for (let i = 1; i <= 9; i++) {
-    //     const entity = engine.addEntity()
-    //     TextShape.create(entity, { text: `${i}`, fontSize: 5 })
-    //     Transform.create(entity, { ...data.get(`obj_window_${i}`), parent: sceneParentEntity })
-
-    // }
+    for (let i = westGameConfig.targetEntityAmount + 1; i <= westGameConfig.targetEntityAmount + westGameConfig.targetEntityAmount; i++) {
+        const entityData = data.get(`obj_window_${i - westGameConfig.targetEntityAmount}`)
+        MeshRenderer.setPlane(westGameState.availableEntity[i])
+        Transform.create(westGameState.availableEntity[i], {
+            ...entityData, position: {...entityData!.position, z: entityData!.position.z + .2}, parent: sceneParentEntity
+        })
+    }
 
     westGameState.listOfEntity.set('playerHP', playerHP)
     westGameState.listOfEntity.set('score', score)

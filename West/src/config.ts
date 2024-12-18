@@ -8,4 +8,5 @@ export const westGameConfig = {
 
 export const westLevelsConfig = {
     initialAppearanceTime: 2000,
+    windowOpenDuration: 500,
 }
