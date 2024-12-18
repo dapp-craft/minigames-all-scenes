@@ -16,7 +16,7 @@ class Layer {
         this._color = color
         if (Transform.has(this.root)) console.error(`BUG!!: layer transform anomaly at entity ${this.root}`)
         Transform.createOrReplace(this.root, { parent, scale: Vector3.Zero() })
-        Material.setPbrMaterial(this.layer, {albedoColor: { ...color, a: 1}})
+        Material.setPbrMaterial(this.layer, {albedoColor: { ...color, a: 1}, emissiveColor: color, emissiveIntensity: 0.4})
         if (Transform.has(this.layer)) console.error(`BUG!!: layer transform anomaly at entity ${this.layer}`)
         Transform.createOrReplace(this.layer, { scale: Vector3.One(), position: Vector3.create(0, 0.5, 0), parent: this.root })
     }
