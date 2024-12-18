@@ -1,17 +1,23 @@
-import { TransformType } from "@dcl/sdk/ecs"
+import { engine, TransformType } from "@dcl/sdk/ecs"
 import { Color3 } from "@dcl/sdk/math"
 import { cancelCountdown, cancelWinAnimation, runCountdown, runWinAnimation } from "../../../common/effects"
 import { LEVELS } from "../settings/levels"
 import { FlowController } from "../utils"
 import { Flask } from "./flask"
+import { Ui3D } from "./ui3D"
 
 export const flaskTransforms: TransformType[] = []
 
 export class GameLevel {
     private _flasks: Flask[] = []
+    private elapsed = 0
+    private moves = 0
     readonly ready
-    constructor(readonly level: keyof typeof LEVELS, private flow: FlowController<any>, private onStateChange: (arg: GameLevel) => void) {
+    constructor(readonly level: keyof typeof LEVELS, private flow: FlowController<any>, private ui3d: Ui3D, private onStateChange: (arg: GameLevel) => void) {
         const {colors, flasks: configs} = LEVELS[level]
+        ui3d.setLevel(level)
+        ui3d.setMoves(0)
+        ui3d.setTime(0)
         this.ready = Promise
             .all(configs.map(async (config, idx) => {
                 const flask = new Flask(flaskTransforms[idx])
@@ -28,6 +34,7 @@ export class GameLevel {
     }
     async play() {
         await Promise.race([Promise.all([this.ready, runCountdown()]), this.flow.interrupted])
+        engine.addSystem(dt => void this.ui3d.setTime(this.elapsed += dt), undefined, 'stopwatch')
         while (!this._flasks.every(f => !f.topLayer || f.layersCount == 1 && f.fillLevel == f.capacity)) {
             let first = await Promise.race([...this._flasks.map(f => f.activated), this.flow.interrupted])
             if (!first.topLayer) {
@@ -43,16 +50,21 @@ export class GameLevel {
                     first.drain(volume).then(() => first.hidePipe()),
                     second.pour(color, volume).then(() => second.hidePipe())
                 ])
+                this.ui3d.setMoves(++this.moves)
                 this.onStateChange(this)
             }
             await first.deactivate()
             await second.deactivate()
         }
+        engine.removeSystem('stopwatch')
         await Promise.race([runWinAnimation(), this.flow.interrupted])
     }
     public async stop() {
         cancelCountdown()
         cancelWinAnimation()
+        this.ui3d.setMoves()
+        this.ui3d.setLevel()
+        this.ui3d.setTime()
         await this.ready
         const destruction = Promise.all(this._flasks.splice(0).map(async f => {
             await f.activate()

@@ -1,6 +1,6 @@
 import { engine, executeTask, GltfContainer, Schemas, Transform } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
-import { queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
+import { progress, queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
@@ -12,6 +12,8 @@ import { Flask } from './game/flask'
 import { LEVELS } from './settings/levels'
 import { CreateStateSynchronizer } from './stateSync'
 import { FlowController } from './utils'
+import { Ui3D } from './game/ui3D'
+import { DIFFICULTY_MAPPING } from './settings/constants'
 
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
@@ -43,6 +45,7 @@ const Synchronizer = CreateStateSynchronizer(
     }
 )
 
+let ui3d: Ui3D
 let flow: FlowController<number>
 let currentLevel = 0 as keyof typeof LEVELS
 let synchronizer: InstanceType<typeof Synchronizer>
@@ -56,6 +59,7 @@ const handlers = {
         do next = await (level = new GameLevel(
                 currentLevel = next, 
                 flow = new FlowController(),
+                ui3d,
                 level => synchronizer.send({flasks: level.flasks.map(f => f.getConfig())})
             ))
             .play()
@@ -91,9 +95,16 @@ executeTask(async () => {
 
 export async function main() {
     synchronizer = new Synchronizer()
+    const locators = readGltfLocators(`locators/obj_locators_unique.gltf`)
+    ui3d = new Ui3D(locators, val => flow.goto(DIFFICULTY_MAPPING[Number(val) as keyof typeof DIFFICULTY_MAPPING]))
+    progress.getProgress('level', progress.SortDirection.DESC, 1).then(([{level} = {level: 0}] = []) => {
+        level = Math.min(level + 1, Object.keys(LEVELS).length)
+        const [difficulty] = Object.entries(DIFFICULTY_MAPPING).reverse().find(([, l]) => level >= l)!
+        for (let i = 1; i <= Number(difficulty); i++) ui3d.unlockLevel(i)
+        currentLevel = DIFFICULTY_MAPPING[Number(difficulty) as keyof typeof DIFFICULTY_MAPPING]
+    })
     setupEffects(Vector3.create(0, 2.5, -5))
-    const locators = await readGltfLocators(`locators/obj_locators_unique.gltf`)
-    for (const [name, value] of locators) {
+    for (const [name, value] of await locators) {
         if (name.match(/obj_flask_/)) flaskTransforms.push({...value, parent: sceneParentEntity})
     }
     await libraryReady
