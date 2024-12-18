@@ -16,7 +16,7 @@ class Layer {
         this._color = color
         if (Transform.has(this.root)) console.error(`BUG!!: layer transform anomaly at entity ${this.root}`)
         Transform.createOrReplace(this.root, { parent, scale: Vector3.Zero() })
-        Material.setPbrMaterial(this.layer, {albedoColor: { ...color, a: 0.9}})
+        Material.setPbrMaterial(this.layer, {albedoColor: { ...color, a: 1}})
         if (Transform.has(this.layer)) console.error(`BUG!!: layer transform anomaly at entity ${this.layer}`)
         Transform.createOrReplace(this.layer, { scale: Vector3.One(), position: Vector3.create(0, 0.5, 0), parent: this.root })
     }
@@ -68,11 +68,7 @@ class Pipe {
     constructor(parent: Entity) {
         if (Transform.has(this.root)) console.error(`BUG!!: pipe transform anomaly at entity ${this.root}`)
         Transform.createOrReplace(this.root, { parent, scale: Vector3.Zero() })
-        Material.setPbrMaterial(this.pipe, {
-            albedoColor: { ...Color3.fromHexString('#d3ba18'), a: 1},
-            emissiveColor: Color3.fromHexString('#d3ba18'),
-            emissiveIntensity: 2
-        })
+        this.setColor()
         if (Transform.has(this.pipe)) console.error(`BUG!!: pipe transform anomaly at entity ${this.pipe}`)
         Transform.createOrReplace(this.pipe, { scale: Vector3.One(), position: Vector3.create(0, -0.5, 0), parent: this.root })
         this.ready = flaskMappingReady.then(f => {
@@ -103,6 +99,13 @@ class Pipe {
         }
         executeTask(fn)
         return new Promise<Layer>(r => resolve = r)
+    }
+    public setColor(color: Color3 = Color3.Yellow()) {
+        Material.setPbrMaterial(this.pipe, {
+            albedoColor: { ...color, a: 1 },
+            emissiveColor: color,
+            emissiveIntensity: 0.4
+        })
     }
 }
 
@@ -213,7 +216,9 @@ export class Flask {
         this.state = State.busy
         if (!this.topLayer || !Color3.equals(color, this.topLayer.color)) this.layers.push(new Layer(this.entity, color))
         await this.pipe.move(this.fillLevel)
+        this.pipe.setColor(color)
         await this.topLayer!.set(this.fillLevel - this.topLayer!.volume, this.fillLevel + volume)
+        this.pipe.setColor()
         await this.pipe.move()
         this.state = tmp
     }
@@ -224,7 +229,9 @@ export class Flask {
         const tmp = this.state
         this.state = State.busy
         await this.pipe.move(this.fillLevel - volume)
+        this.pipe.setColor(this.topLayer!.color)
         await this.topLayer!.set(this.fillLevel - this.topLayer!.volume, this.fillLevel - volume)
+        this.pipe.setColor()
         if (this.topLayer!.volume == 0) this.layers.pop()!.destroy()
         await this.pipe.move()
         this.state = tmp
