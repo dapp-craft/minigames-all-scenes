@@ -74,7 +74,7 @@ class Pipe {
         Transform.createOrReplace(this.pipe, { scale: Vector3.One(), position: Vector3.create(0, -0.5, 0), parent: this.root })
         this.ready = flaskMappingReady.then(f => {
             const {position, scale: {y: radius}} = f.get(`obj_valve`)!
-            MeshRenderer.setCylinder(this.pipe, radius, radius)
+            MeshRenderer.setCylinder(this.pipe, radius*0.8, radius)
             Transform.getMutable(this.root).position = position
         })
     }
@@ -91,7 +91,7 @@ class Pipe {
                 end: Vector3.create(1, valve.y - target.y, 1),
             }),
             duration: 250,
-            easingFunction: EasingFunction.EF_LINEAR
+            easingFunction: EasingFunction.EF_EASEOUTCUBIC
         })
         let resolve: Function
         const start = Date.now()
@@ -105,7 +105,7 @@ class Pipe {
         executeTask(fn)
         return new Promise<Layer>(r => resolve = r)
     }
-    public setColor(color: Color3 = Color3.Black()) {
+    public setColor(color: Color3 = Color3.create(0.3, 0.3, 0.3)) {
         Material.setPbrMaterial(this.pipe, {
             albedoColor: { ...color, a: 1 },
             emissiveColor: color,
