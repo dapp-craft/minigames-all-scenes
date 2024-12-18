@@ -36,7 +36,7 @@ export class GameLevel {
     async play() {
         await Promise.race([Promise.all([this.ready, runCountdown()]), this.flow.interrupted])
         engine.addSystem(dt => void this.ui3d.setTime(this.elapsed += dt), undefined, 'stopwatch')
-        while (!this._flasks.every(f => !f.topLayer || f.layersCount == 1 && f.fillLevel == f.capacity)) {
+        while (!this._flasks.every(f => !f.topLayer || f.sealed)) {
             let first = await Promise.race([...this._flasks.map(f => f.activated), this.flow.interrupted])
             if (!first.topLayer) {
                 await first.deactivate()
@@ -53,10 +53,12 @@ export class GameLevel {
                 ])
                 this.ui3d.setMoves(++this.moves)
                 this.onStateChange(this)
+                if (second.layersCount == 1 && second.fillLevel == second.capacity) second.seal()
             }
             await first.deactivate()
             await second.deactivate()
         }
+        this.flasks.forEach(f => f.seal())
         engine.removeSystem('stopwatch')
         progress.upsertProgress({level: this.level, time: Math.floor(this.elapsed * 1000), moves: this.moves})
         await Promise.race([runWinAnimation(), this.flow.interrupted])

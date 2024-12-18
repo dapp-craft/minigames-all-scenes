@@ -115,7 +115,7 @@ class Pipe {
 }
 
 enum State {
-    active, inactive, busy
+    active, inactive, busy, sealed
 }
 
 export class Flask {
@@ -179,7 +179,19 @@ export class Flask {
         return this.layers.flatMap(l => new Array<Color3>(l.volume).fill(l.color))
     }
 
+    public seal() {
+        if (this.state == State.sealed) return
+        if (this.state == State.busy) throw `Hide pipe failed: flask is busy`
+        this.state = State.sealed
+        this.promiseActivated = new Promise(r => this.resolveActivated = r)
+        this.promiseDeactivated = new Promise(r => this.resolveDeactivated = r)
+    }
+    public get sealed() {
+        return this.state == State.sealed
+    }
+
     public async activate() {
+        if (this.state == State.sealed) return
         if (this.state != State.inactive) throw `Activate failed: flask is ${State[this.state]}`
         this.state = State.busy
         await this.ready
@@ -192,6 +204,7 @@ export class Flask {
     public get activated() { return this.promiseActivated }
 
     public async deactivate() {
+        if (this.state == State.sealed) return
         if (this.state != State.active) throw `Deactivate failed: flask is ${State[this.state]}`
         this.state = State.busy
         await this.ready
