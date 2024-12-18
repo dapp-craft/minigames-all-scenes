@@ -27,8 +27,7 @@ export class GameLevel {
         return this._flasks
     }
     async play() {
-        await this.ready
-        await Promise.race([runCountdown(), this.flow.interrupted])
+        await Promise.race([Promise.all([this.ready, runCountdown()]), this.flow.interrupted])
         while (!this._flasks.every(f => !f.topLayer || f.layersCount == 1 && f.fillLevel == f.capacity)) {
             let first = await Promise.race([...this._flasks.map(f => f.activated), this.flow.interrupted])
             if (!first.topLayer) {
@@ -54,6 +53,7 @@ export class GameLevel {
     public async stop() {
         cancelCountdown()
         cancelWinAnimation()
+        await this.ready
         const destruction = Promise.all(this._flasks.splice(0).map(async f => {
             await f.activate()
             await f.destroy()
