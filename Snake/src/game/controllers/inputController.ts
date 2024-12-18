@@ -43,5 +43,16 @@ export class InputController {
     ) {
       this.gameController.setSnakeDirection(Direction.RIGHT)
     }
+
+    if (
+      inputSystem.isTriggered(InputAction.IA_JUMP, PointerEventType.PET_DOWN)
+    ) {
+      this.gameController.setBoost(true)
+    }
+    if (
+      inputSystem.isTriggered(InputAction.IA_JUMP, PointerEventType.PET_UP)
+    ) {
+      this.gameController.setBoost(false)
+    }
   }
 }

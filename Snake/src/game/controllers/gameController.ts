@@ -36,9 +36,11 @@ export class GameController {
 
   private timer: number = 0
   private _speed: number = 0
+  private _boost: boolean = false
+
   private system = (dt: number) => {
     this.timer += dt
-    if (this.timer >= SPEED[this._speed]) {
+    if (this.timer >= SPEED[this._boost ? SPEED.length - 1 : this._speed]) {
       this.timer = 0
       this.update()
     }
@@ -240,6 +242,10 @@ export class GameController {
     this._state.subscribe(callback)
   }
 
+  public setBoost(active: boolean){
+    this._boost = active
+  }
+
   public get snake(): SnakePart | undefined {
     return this._snake
   }
@@ -300,7 +306,8 @@ export class GameController {
   }
 
   private modifySpeed() {
-    this._speed = Math.min(Math.floor(this._score / 5), SPEED.length - 1)
+    // -2 because the boost speed is current speed + 1
+    this._speed = Math.min(Math.floor(this._score / 5), SPEED.length - 2)
   }
 
   private checkCollision() {
@@ -324,7 +331,7 @@ export class GameController {
   }
 }
 
-const SPEED = [0.6, 0.5, 0.4, 0.35, 0.3, 0.25, 0.20, 0.15, 0.10, 0.05] // Itervals between moves in seconds
+const SPEED = [0.6, 0.5, 0.4, 0.35, 0.3, 0.25, 0.20, 0.15, 0.10, 0.05, 0.04] // Itervals between moves in seconds
 
 function generateFoodPosition(boardSize: { width: number; height: number }) {
   return {
