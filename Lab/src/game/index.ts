@@ -7,14 +7,18 @@ import { FlowController } from "../utils"
 import { Flask } from "./flask"
 import { Ui3D } from "./ui3D"
 
-export const flaskTransforms: TransformType[] = []
-
 export class GameLevel {
     private _flasks: Flask[] = []
     private elapsed = 0
     private moves = 0
     readonly ready
-    constructor(readonly level: keyof typeof LEVELS, private flow: FlowController<any>, private ui3d: Ui3D, private onStateChange: (arg: GameLevel) => void) {
+    constructor(
+        flaskTransforms: TransformType[],
+        readonly level: keyof typeof LEVELS,
+        private flow: FlowController<any>,
+        private ui3d: Ui3D,
+        private onStateChange: (arg: GameLevel) => void
+    ) {
         const {colors, flasks: configs} = LEVELS[level]
         ui3d.setLevel(level)
         ui3d.setMoves(0)

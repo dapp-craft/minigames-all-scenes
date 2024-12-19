@@ -194,19 +194,6 @@ export class Flask {
             duration: 700,
             easingFunction: EasingFunction.EF_LINEAR,
         })
-        TweenSequence.create(this.entity, {
-            loop: TweenLoop.TL_RESTART,
-            sequence: [
-                {
-                    mode: Tween.Mode.Rotate({
-                        start: Quaternion.fromEulerDegrees(0, 180, 0),
-                        end: Quaternion.fromEulerDegrees(0, 360, 0),
-                    }),
-                    duration: 700,
-                    easingFunction: EasingFunction.EF_LINEAR,
-                },
-            ],
-        })
     }
     public get sealed() {
         return this.state == State.sealed
