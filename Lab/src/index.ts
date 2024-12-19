@@ -1,4 +1,4 @@
-import { engine, executeTask, GltfContainer, Schemas, Transform } from '@dcl/sdk/ecs'
+import { engine, executeTask, GltfContainer, Schemas, Transform, TransformType } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { progress, queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
@@ -7,7 +7,7 @@ import { initMiniGame } from '../../common/library'
 import { STATIC_MODELS } from './resources'
 import { Vector3 } from '@dcl/sdk/math'
 import { setupEffects } from '../../common/effects'
-import { GameLevel, flaskTransforms } from './game'
+import { GameLevel } from './game'
 import { Flask } from './game/flask'
 import { LEVELS } from './settings/levels'
 import { CreateStateSynchronizer } from './stateSync'
@@ -49,6 +49,7 @@ let ui3d: Ui3D
 let flow: FlowController<number>
 let currentLevel = 0 as keyof typeof LEVELS
 let synchronizer: InstanceType<typeof Synchronizer>
+let flaskTransforms: TransformType[] = []
 
 const handlers = {
     start: async () => {
@@ -57,6 +58,7 @@ const handlers = {
         let next = currentLevel
         let level
         do next = await (level = new GameLevel(
+                flaskTransforms,
                 currentLevel = next, 
                 flow = new FlowController(),
                 ui3d,
@@ -105,8 +107,10 @@ export async function main() {
     })
     setupEffects(Vector3.create(0, 2.5, -5))
     for (const [name, value] of await locators) {
-        if (name.match(/obj_flask_/)) flaskTransforms.push({...value, parent: sceneParentEntity})
+        const [match, index] = name.match(/obj_flask_(\d+)/) ?? []
+        if (match) flaskTransforms[Number(index)] = {...value, parent: sceneParentEntity}
     }
+    flaskTransforms = flaskTransforms.flat(0)
     await libraryReady
     synchronizer.start()
 }
