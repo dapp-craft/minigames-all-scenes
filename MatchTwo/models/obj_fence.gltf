@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -32,12 +28,11 @@
 	],
 	"materials":[
 		{
-			"alphaMode":"MASK",
 			"doubleSided":true,
 			"emissiveFactor":[
-				0.05000000074505806,
-				0.05000000074505806,
-				0.05000000074505806
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -47,7 +42,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_circus03",
+			"name":"obj_fence",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -58,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.169",
+			"name":"obj_fence",
 			"primitives":[
 				{
 					"attributes":{
@@ -66,24 +61,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Mesh.027",
+			"name":"obj_fence_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -91,18 +75,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":7,
-					"mode":4
+					"indices":7
 				}
 			]
 		}
@@ -120,82 +93,128 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_circus03",
-			"uri":"textures/obj_circus03.png"
+			"name":"obj_fence",
+			"uri":"textures/obj_fence.png"
 		}
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
-			"count":1443,
+			"count":3305,
 			"max":[
-				6.019599914550781,
-				1.359327793121338,
-				7.236343860626221
+				6.162632465362549,
+				1.4190614223480225,
+				7.074686050415039
 			],
 			"min":[
-				-6.091574668884277,
-				0.15000006556510925,
-				0.9951257109642029
+				-6.227169036865234,
+				0.15000197291374207,
+				0.9260942935943604
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
-			"count":1443,
+			"count":3305,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
-			"count":1443,
+			"count":3305,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
-			"count":5148,
+			"count":10404,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
-			"count":552,
+			"count":274,
 			"max":[
-				6.02703857421875,
-				1.359329342842102,
-				7.236343860626221
+				6.543591022491455,
+				1.4190614223480225,
+				7.074634075164795
 			],
 			"min":[
-				-6.091575622558594,
-				0.1451413482427597,
-				0.9971862435340881
+				-6.543591022491455,
+				0.15000197291374207,
+				0.9168965220451355
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
-			"count":552,
+			"count":274,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
-			"count":552,
+			"count":274,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":7,
 			"componentType":5123,
-			"count":954,
+			"count":588,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":6853,
-			"byteOffset":0
+			"byteLength":39660,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2583,
-			"byteOffset":6856
+			"byteLength":39660,
+			"byteOffset":39660,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":26440,
+			"byteOffset":79320,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":20808,
+			"byteOffset":105760,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":3288,
+			"byteOffset":126568,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3288,
+			"byteOffset":129856,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":2192,
+			"byteOffset":133144,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1176,
+			"byteOffset":135336,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -206,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":9440,
+			"byteLength":136512,
 			"uri":"obj_fence.bin"
 		}
 	]

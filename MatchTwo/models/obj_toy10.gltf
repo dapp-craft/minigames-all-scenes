@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -28,9 +24,9 @@
 	"materials":[
 		{
 			"emissiveFactor":[
-				0.15000000596046448,
-				0.15000000596046448,
-				0.15000000596046448
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -40,7 +36,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_toy",
+			"name":"obj_toy10",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -51,7 +47,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.013",
+			"name":"obj_toy10",
 			"primitives":[
 				{
 					"attributes":{
@@ -59,19 +55,8 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		}
@@ -89,37 +74,41 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_toy",
-			"uri":"textures/obj_toy.png"
+			"name":"obj_toy10",
+			"uri":"textures/obj_toy10.png"
 		}
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
-			"count":153,
+			"count":173,
 			"max":[
-				0.1648547351360321,
-				0.2688741087913513,
-				0.019729671999812126
+				0.1733199506998062,
+				0.3062094748020172,
+				0.020683739334344864
 			],
 			"min":[
-				-0.1648547351360321,
-				-0.29950350522994995,
-				-0.019729679450392723
+				-0.17233002185821533,
+				-0.28969961404800415,
+				-0.02068374678492546
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
-			"count":153,
+			"count":173,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
-			"count":153,
+			"count":173,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":552,
 			"type":"SCALAR"
@@ -128,8 +117,27 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1348,
-			"byteOffset":0
+			"byteLength":2076,
+			"byteOffset":0,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":2076,
+			"byteOffset":2076,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1384,
+			"byteOffset":4152,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1104,
+			"byteOffset":5536,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -140,7 +148,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":1348,
+			"byteLength":6640,
 			"uri":"obj_toy10.bin"
 		}
 	]

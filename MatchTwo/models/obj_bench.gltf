@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -32,10 +28,11 @@
 	],
 	"materials":[
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
-				0.05000000074505806,
-				0.05000000074505806,
-				0.05000000074505806
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
 			],
 			"emissiveTexture":{
 				"index":0
@@ -45,7 +42,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_circus05",
+			"name":"obj_bench",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -56,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.171",
+			"name":"obj_bench",
 			"primitives":[
 				{
 					"attributes":{
@@ -64,24 +61,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Mesh.032",
+			"name":"obj_bench_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -89,18 +75,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":7,
-					"mode":4
+					"indices":7
 				}
 			]
 		}
@@ -118,82 +93,128 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_circus05",
-			"uri":"textures/obj_circus05.png"
+			"name":"obj_bench",
+			"uri":"textures/obj_bench.png"
 		}
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
-			"count":668,
+			"count":5162,
 			"max":[
-				5.461647033691406,
-				0.7611053586006165,
-				6.895571231842041
+				6.247561454772949,
+				1.7216421365737915,
+				6.879636764526367
 			],
 			"min":[
-				-5.469192981719971,
-				0.1500001698732376,
-				1.3410556316375732
+				-6.235095977783203,
+				0.15000104904174805,
+				1.3807717561721802
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
-			"count":668,
+			"count":5162,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
-			"count":668,
+			"count":5162,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
-			"count":2148,
+			"count":14172,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
-			"count":160,
+			"count":1372,
 			"max":[
-				5.480454444885254,
-				0.7611067891120911,
-				6.914378643035889
+				6.247561454772949,
+				1.7216418981552124,
+				6.850045680999756
 			],
 			"min":[
-				-5.488000392913818,
-				0.15000079572200775,
-				1.322248101234436
+				-6.235095977783203,
+				0.15000110864639282,
+				1.4104087352752686
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
-			"count":160,
+			"count":1372,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
-			"count":160,
+			"count":1372,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":7,
 			"componentType":5123,
-			"count":288,
+			"count":2988,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":3957,
-			"byteOffset":0
+			"byteLength":61944,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1067,
-			"byteOffset":3960
+			"byteLength":61944,
+			"byteOffset":61944,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":41296,
+			"byteOffset":123888,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":28344,
+			"byteOffset":165184,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":16464,
+			"byteOffset":193528,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":16464,
+			"byteOffset":209992,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":10976,
+			"byteOffset":226456,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5976,
+			"byteOffset":237432,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -204,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":5028,
+			"byteLength":243408,
 			"uri":"obj_bench.bin"
 		}
 	]
