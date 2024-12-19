@@ -49,6 +49,7 @@ export class GameLevel {
             }
             let second = await Promise
                 .race([...this._flasks.map(f => f == first ? f.deactivated : f.activated), this.flow.interrupted])
+                //@ts-ignore linter bug
                 .catch(async e => void await first.deactivate() ?? Promise.reject(e))
             if (first == second) continue
             let {color, volume} = first.topLayer
