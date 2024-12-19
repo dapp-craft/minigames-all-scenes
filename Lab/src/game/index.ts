@@ -47,7 +47,9 @@ export class GameLevel {
                 await first.deactivate()
                 continue
             }
-            let second = await Promise.race([...this._flasks.map(f => f == first ? f.deactivated : f.activated), this.flow.interrupted])
+            let second = await Promise
+                .race([...this._flasks.map(f => f == first ? f.deactivated : f.activated), this.flow.interrupted])
+                .catch(async e => void await first.deactivate() ?? Promise.reject(e))
             if (first == second) continue
             let {color, volume} = first.topLayer
             if (!second.topLayer || Color3.equals(second.topLayer.color, color) && second.fillLevel < second.capacity) {
