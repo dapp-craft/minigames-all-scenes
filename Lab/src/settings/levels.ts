@@ -33,19 +33,6 @@ export const LEVELS = {
     },
     4: {
         colors: {
-            red: [1, 0, 0],
-            green: [0, 1, 0],
-            blue: [0, 0, 1]
-        },
-        flasks: [
-            ['red', 'red', 'green', 'red'],
-            ['red', 'blue', 'green'],
-            ['green', 'blue', 'blue', 'green'],
-            []
-        ] as const
-    },
-    5: {
-        colors: {
             yellow: [1, 1, 0],
             blue: [0, 0, 1],
             lightblue: [0, 1, 1]
@@ -58,7 +45,7 @@ export const LEVELS = {
             []
         ] as const
     },
-    6: {
+    5: {
         colors: {
             purple: [0.5, 0, 0.5],
             teal: [0, 0.5, 0.5],
@@ -72,7 +59,7 @@ export const LEVELS = {
             ['purple', 'purple']
         ] as const
     },
-    7: {
+    6: {
         colors: {
             orange: [1, 0.5, 0],
             blue: [0, 1, 1],
@@ -86,7 +73,7 @@ export const LEVELS = {
             []
         ] as const
     },
-    8: {
+    7: {
         colors: {
             lightblue: [0, 1, 1],
             yellow: [1, 1, 0],
@@ -99,6 +86,19 @@ export const LEVELS = {
             ['blue', 'yellow', 'orange', 'lightblue'],
             ['orange', 'yellow', 'blue', 'lightblue'],
             [],
+            []
+        ] as const
+    },
+    8: {
+        colors: {
+            red: [1, 0, 0],
+            green: [0, 1, 0],
+            blue: [0, 0, 1]
+        },
+        flasks: [
+            ['red', 'red', 'green', 'red'],
+            ['red', 'blue', 'green', 'blue'],
+            ['green', 'blue', 'blue', 'green'],
             []
         ] as const
     },
