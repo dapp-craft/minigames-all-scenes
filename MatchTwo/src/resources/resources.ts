@@ -4,19 +4,21 @@ const modelsFolder = 'models/'
 const imagesFolder = 'images/'
 
 export const staticModels: PBGltfContainer[] = [
-  { src: modelsFolder + 'obj_balloon.gltf' },
   { src: modelsFolder + 'obj_bench.gltf' },
+  { src: modelsFolder + 'obj_door.gltf' },
   { src: modelsFolder + 'obj_fence.gltf' },
   { src: modelsFolder + 'obj_floor.gltf' },
   { src: modelsFolder + 'obj_frame.gltf' },
-  { src: modelsFolder + 'obj_ground.gltf' },
-  { src: modelsFolder + 'obj_terminal.gltf' },
-  { src: modelsFolder + 'obj_wall.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS },
-  { src: modelsFolder + 'obj_tower.gltf' },
   { src: modelsFolder + 'obj_gamezone.gltf' },
-  { src: modelsFolder + 'obj_rules.gltf' },
+  { src: modelsFolder + 'obj_gift.gltf' },
+  { src: modelsFolder + 'obj_ground.gltf' },
   { src: modelsFolder + 'obj_logo.gltf' },
-  { src: modelsFolder + 'obj_text.gltf' }
+  { src: modelsFolder + 'obj_rules.gltf' },
+  { src: modelsFolder + 'obj_snowman.gltf' },
+  { src: modelsFolder + 'obj_terminal.gltf' },
+  { src: modelsFolder + 'obj_text.gltf' },
+  { src: modelsFolder + 'obj_wall.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS },
+  { src: modelsFolder + 'obj_tree.gltf' }
 ]
 
 export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' }
