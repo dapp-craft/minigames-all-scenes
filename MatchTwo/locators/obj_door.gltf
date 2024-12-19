@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"scene":0,
@@ -44,14 +44,6 @@
 		}
 	],
 	"nodes":[
-		{
-			"name":"obj_door.001",
-			"translation":[
-				-3.3547399044036865,
-				4.093780040740967,
-				-6.630426406860352
-			]
-		},
 		{
 			"name":"obj_door.002",
 			"translation":[
@@ -298,6 +290,14 @@
 				2.595083713531494,
 				1.5438754558563232,
 				-6.630425930023193
+			]
+		},
+		{
+			"name":"obj_door.001",
+			"translation":[
+				-3.3547399044036865,
+				4.093780040740967,
+				-6.630426406860352
 			]
 		}
 	]
