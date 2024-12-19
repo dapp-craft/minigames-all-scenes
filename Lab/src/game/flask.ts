@@ -73,7 +73,7 @@ class Pipe {
         if (Transform.has(this.pipe)) console.error(`BUG!!: pipe transform anomaly at entity ${this.pipe}`)
         Transform.createOrReplace(this.pipe, { scale: Vector3.One(), position: Vector3.create(0, -0.5, 0), parent: this.root })
         this.ready = flaskMappingReady.then(f => {
-            const {position, scale: {y: radius}} = f.get(`obj_valve`)!
+            const {position, scale: {y: radius}} = f.get(`obj_pipe`)!
             MeshRenderer.setCylinder(this.pipe, radius*0.8, radius)
             Transform.getMutable(this.root).position = position
         })
@@ -83,12 +83,12 @@ class Pipe {
         engine.removeEntity(this.pipe)
     }
     public async move(to?: number) {
-        const valve = Transform.getMutable(this.root).position
-        const {position: target} = (await flaskMappingReady).get(`obj_layer_${to}`) ?? {position: valve}
+        const position = Transform.getMutable(this.root).position
+        const {position: target} = (await flaskMappingReady).get(`obj_layer_${to}`) ?? {position}
         Tween.createOrReplace(this.root, {
             mode: Tween.Mode.Scale({
                 start: Transform.get(this.root).scale,
-                end: Vector3.create(1, valve.y - target.y, 1),
+                end: Vector3.create(1, position.y - target.y, 1),
             }),
             duration: 250,
             easingFunction: EasingFunction.EF_EASEOUTCUBIC
