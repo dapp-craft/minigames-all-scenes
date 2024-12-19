@@ -66,6 +66,7 @@ export class GameLevel {
     public async stop() {
         cancelCountdown()
         cancelWinAnimation()
+        engine.removeSystem('stopwatch')
         this.ui3d.setMoves()
         this.ui3d.setLevel()
         this.ui3d.setTime()
