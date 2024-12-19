@@ -1,11 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.1.63",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_specular",
-		"KHR_materials_ior"
+		"KHR_materials_specular"
 	],
 	"scene":0,
 	"scenes":[
@@ -20,33 +19,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_Snake01",
-			"rotation":[
-				0.5,
-				0.5,
-				-0.5,
-				0.5000000596046448
-			],
-			"scale":[
-				0.009999999776482582,
-				0.009999999776482582,
-				0.009999999776482582
-			]
+			"name":"obj_snake01"
 		},
 		{
 			"mesh":1,
-			"name":"obj_Snake01_collider",
-			"rotation":[
-				0.5,
-				0.5,
-				-0.5,
-				0.5000000596046448
-			],
-			"scale":[
-				0.009999999776482582,
-				0.009999999776482582,
-				0.009999999776482582
-			]
+			"name":"obj_snake01_collider"
 		}
 	],
 	"materials":[
@@ -63,12 +40,9 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
-				},
-				"KHR_materials_ior":{
-					"ior":1.4500000476837158
 				}
 			},
-			"name":"Material.001",
+			"name":"obj_snake01",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -79,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh",
+			"name":"obj_snake01",
 			"primitives":[
 				{
 					"attributes":{
@@ -93,7 +67,7 @@
 			]
 		},
 		{
-			"name":"Mesh.002",
+			"name":"obj_snake01_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -119,115 +93,115 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"file1",
-			"uri":"textures/file1.png"
+			"name":"obj_snake01",
+			"uri":"textures/obj_snake01.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":345,
+			"count":606,
 			"max":[
-				41.59900665283203,
-				33.784080505371094,
-				68.40969848632812
+				0.3730378746986389,
+				-0.11095452308654785,
+				0.46111923456192017
 			],
 			"min":[
-				-67.84800720214844,
-				-33.784080505371094,
-				0
+				-0.3590986728668213,
+				-1.4155614376068115,
+				-0.36982104182243347
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":345,
+			"count":606,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":345,
+			"count":606,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1614,
+			"count":2616,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":345,
+			"count":606,
 			"max":[
-				41.59900665283203,
-				33.784080505371094,
-				68.40969848632812
+				0.3730378746986389,
+				-0.11095452308654785,
+				0.46111923456192017
 			],
 			"min":[
-				-67.84800720214844,
-				-33.784080505371094,
-				0
+				-0.3590986728668213,
+				-1.4155614376068115,
+				-0.36982104182243347
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":345,
+			"count":606,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":345,
+			"count":606,
 			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":4140,
+			"byteLength":7272,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4140,
-			"byteOffset":4140,
+			"byteLength":7272,
+			"byteOffset":7272,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2760,
-			"byteOffset":8280,
+			"byteLength":4848,
+			"byteOffset":14544,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3228,
-			"byteOffset":11040,
+			"byteLength":5232,
+			"byteOffset":19392,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":4140,
-			"byteOffset":14268,
+			"byteLength":7272,
+			"byteOffset":24624,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4140,
-			"byteOffset":18408,
+			"byteLength":7272,
+			"byteOffset":31896,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2760,
-			"byteOffset":22548,
+			"byteLength":4848,
+			"byteOffset":39168,
 			"target":34962
 		}
 	],
@@ -239,7 +213,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":25308,
+			"byteLength":44016,
 			"uri":"obj_snake01.bin"
 		}
 	]

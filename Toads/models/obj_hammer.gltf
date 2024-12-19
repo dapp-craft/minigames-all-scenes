@@ -18,11 +18,18 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_hammer"
+			"name":"obj_hammer",
+			"rotation":[
+				-0.7071068286895752,
+				-0.7071068286895752,
+				0,
+				5.338509012631221e-08
+			]
 		}
 	],
 	"materials":[
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -36,7 +43,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_frame",
+			"name":"obj_hammer",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -47,7 +54,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.397",
+			"name":"obj_hammer",
 			"primitives":[
 				{
 					"attributes":{
@@ -74,69 +81,69 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_frame",
-			"uri":"textures/obj_frame.png"
+			"name":"obj_hammer",
+			"uri":"textures/obj_hammer.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":122,
+			"count":242,
 			"max":[
-				0.2822946310043335,
-				0.8977329134941101,
-				0.28229308128356934
+				1.8192888498306274,
+				0.3369408845901489,
+				0.0892142578959465
 			],
 			"min":[
-				-1.4813200235366821,
-				-1.2429291018634103e-06,
-				-0.28229430317878723
+				-0.005949467420578003,
+				-0.3369408845901489,
+				-0.1700470745563507
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":122,
+			"count":242,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":122,
+			"count":242,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":384,
+			"count":900,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1464,
+			"byteLength":2904,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1464,
-			"byteOffset":1464,
+			"byteLength":2904,
+			"byteOffset":2904,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":976,
-			"byteOffset":2928,
+			"byteLength":1936,
+			"byteOffset":5808,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":768,
-			"byteOffset":3904,
+			"byteLength":1800,
+			"byteOffset":7744,
 			"target":34963
 		}
 	],
@@ -148,7 +155,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":4672,
+			"byteLength":9544,
 			"uri":"obj_hammer.bin"
 		}
 	]

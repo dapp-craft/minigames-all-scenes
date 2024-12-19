@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -23,15 +19,16 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_grass"
+			"name":"obj_fence"
 		},
 		{
 			"mesh":1,
-			"name":"obj_grass_collider"
+			"name":"obj_fence_collider"
 		}
 	],
 	"materials":[
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -45,7 +42,7 @@
 					"specularFactor":0
 				}
 			},
-			"name":"obj_grass",
+			"name":"obj_fence",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -56,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.399",
+			"name":"obj_fence",
 			"primitives":[
 				{
 					"attributes":{
@@ -64,45 +61,21 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Mesh.021",
+			"name":"obj_fence_collider",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":4,
 						"NORMAL":5,
-						"TEXCOORD_0":6,
-						"TEXCOORD_1":7
+						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2,
-								"TEXCOORD_1":3
-							}
-						}
-					},
-					"indices":8,
-					"mode":4
+					"indices":7
 				}
 			]
 		}
@@ -120,87 +93,128 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"obj_grass",
-			"uri":"textures/obj_grass.png"
+			"name":"obj_fence",
+			"uri":"textures/obj_fence.png"
 		}
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
-			"count":7831,
+			"count":11470,
 			"max":[
-				7.930132865905762,
-				4.591128826141357,
-				7.517632961273193
+				7.585867881774902,
+				7.871672630310059,
+				7.579733848571777
 			],
 			"min":[
-				-7.930132865905762,
-				-0.09402231872081757,
-				-7.749398231506348
+				-7.674807548522949,
+				0.1062844768166542,
+				-7.735874652862549
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
-			"count":7831,
+			"count":11470,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
-			"count":7831,
+			"count":11470,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
-			"count":25734,
+			"count":21846,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
-			"count":1254,
+			"count":36,
 			"max":[
-				7.97222375869751,
-				4.275480270385742,
-				7.517633438110352
+				7.497219562530518,
+				1.4234161376953125,
+				7.5268049240112305
 			],
 			"min":[
-				-7.97222375869751,
-				-0.09402395039796829,
-				-7.788030624389648
+				-7.673430442810059,
+				0.08397196233272552,
+				1.231809377670288
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
-			"count":1254,
+			"count":36,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
-			"count":1254,
+			"count":36,
 			"type":"VEC2"
 		},
 		{
-			"componentType":5126,
-			"count":1254,
-			"type":"VEC2"
-		},
-		{
+			"bufferView":7,
 			"componentType":5123,
-			"count":2190,
+			"count":90,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":60933,
-			"byteOffset":0
+			"byteLength":137640,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9276,
-			"byteOffset":60936
+			"byteLength":137640,
+			"byteOffset":137640,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":91760,
+			"byteOffset":275280,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":43692,
+			"byteOffset":367040,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":432,
+			"byteOffset":410732,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":432,
+			"byteOffset":411164,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":411596,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":180,
+			"byteOffset":411884,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -211,8 +225,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":70212,
-			"uri":"obj_grass.bin"
+			"byteLength":412064,
+			"uri":"obj_fence.bin"
 		}
 	]
 }
