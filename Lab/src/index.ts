@@ -68,7 +68,7 @@ const handlers = {
             .catch(r => r instanceof flow.InterruptType ? Promise.reject(r) : Promise.reject(console.error(r)))
             .finally(level.stop.bind(level))
             .then(() => currentLevel + 1 in LEVELS ? currentLevel + 1 : void queue.setNextPlayer())
-            .catch(r => r instanceof flow.InterruptType ? r.value ?? undefined : Promise.reject(r))
+            .catch(r => r instanceof flow.InterruptType ? r.value ?? undefined : Promise.reject(console.error(r)))
         while (next !== undefined)
         console.log("LEAVE game loop")
     },
