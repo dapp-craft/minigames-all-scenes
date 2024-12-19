@@ -13,7 +13,6 @@ import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { toggleBackgroundMusic } from './SoundManager'
 import { LEVEL, MOVES, TIME } from '@dcl-sdk/mini-games/src/ui/scoreboard/columnData'
-import { disableCamera, enableCamera, init as initCamera } from './game/cameraEntity'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
@@ -51,5 +50,4 @@ export function main() {
 
   setupUI()
 
-  initCamera()
 }
