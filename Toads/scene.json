@@ -2,7 +2,7 @@
   "ecs7": true,
   "runtimeVersion": "7",
   "display": {
-    "title": "Whack-a-frog",
+    "title": "Jingle Smack",
     "description": "Minigame 'Whack-a-frog'",
     "navmapThumbnail": "images/scene-thumbnail.png",
     "favicon": "favicon_asset"
