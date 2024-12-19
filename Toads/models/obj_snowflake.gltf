@@ -6814,7 +6814,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.049",
+			"name":"obj_snowflake",
 			"primitives":[
 				{
 					"attributes":{
