@@ -1,20 +1,20 @@
 import { ColliderLayer, GltfContainer, Transform, engine } from '@dcl/sdk/ecs'
-import { draft, floor, frame, gameZone, grass, ground, logo, rules, terminal, text, wall, whack } from '../resources/resources'
+import { fence, floor, frame, gifts, ground, rules, snow, snowman, terminal, text, wall, whack } from '../resources/resources'
 import { toadsGameState } from '../state'
 
 const staticModels = [
-    draft,
+    fence,
     floor,
     frame,
-    grass,
+    gifts,
     ground,
+    rules,
+    snow,
+    snowman,
+    terminal,
+    text,
     wall,
     whack,
-    gameZone,
-    terminal,
-    rules,
-    logo,
-    text
 ]
 
 export const setupStaticModels = () => {

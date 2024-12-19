@@ -5,16 +5,18 @@ const modelsFolder = 'models/';
 // Static models
 export const draft: PBGltfContainer = { src: modelsFolder + 'obj_draft.gltf' };
 
+export const fence: PBGltfContainer = { src: modelsFolder + 'obj_fence.gltf' };
 export const floor: PBGltfContainer = { src: modelsFolder + 'obj_floor.gltf' };
 export const frame: PBGltfContainer = { src: modelsFolder + 'obj_frame.gltf' };
-export const grass: PBGltfContainer = { src: modelsFolder + 'obj_grass.gltf' };
+export const gifts: PBGltfContainer = { src: modelsFolder + 'obj_gifts.gltf' };
 export const ground: PBGltfContainer = { src: modelsFolder + 'obj_ground.gltf' };
+export const rules: PBGltfContainer = { src: modelsFolder + 'obj_rules.gltf' };
+export const snow: PBGltfContainer = { src: modelsFolder + 'obj_snow.gltf' };
+export const snowman: PBGltfContainer = { src: modelsFolder + 'obj_snowman.gltf' };
+export const terminal: PBGltfContainer = { src: modelsFolder + 'obj_terminal.gltf' };
+export const text: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
 export const wall: PBGltfContainer = { src: modelsFolder + 'obj_wall.gltf' };
 export const whack: PBGltfContainer = { src: modelsFolder + 'obj_whack.gltf' };
-export const terminal: PBGltfContainer = { src: modelsFolder + 'obj_terminal.gltf' };
-export const rules: PBGltfContainer = { src: modelsFolder + 'obj_rules.gltf' };
-export const logo: PBGltfContainer = { src: modelsFolder + 'obj_logo.gltf' };
-export const text: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
 
 export const frog01: PBGltfContainer = { src: modelsFolder + 'obj_frog01.gltf' };
 export const frog02: PBGltfContainer = { src: modelsFolder + 'obj_frog02.gltf' };
