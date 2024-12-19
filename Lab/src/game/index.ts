@@ -19,6 +19,7 @@ export class GameLevel {
         private ui3d: Ui3D,
         private onStateChange: (arg: GameLevel) => void
     ) {
+        console.log(`GameLevel::init ${level}`)
         const {colors, flasks: configs} = LEVELS[level]
         ui3d.setLevel(level)
         ui3d.setMoves(0)
