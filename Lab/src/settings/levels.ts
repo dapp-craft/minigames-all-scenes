@@ -94,8 +94,8 @@ export const LEVELS = {
             orange: [1, 0.5, 0]
         },
         flasks: [
-            ['blue', 'yellow', 'lightblue'],
-            ['blue', 'orange', 'orange', 'blue'],
+            ['blue', 'yellow', 'lightblue', 'lightblue'],
+            ['blue', 'orange', 'orange', 'yellow'],
             ['blue', 'yellow', 'orange', 'lightblue'],
             ['orange', 'yellow', 'blue', 'lightblue'],
             [],
