@@ -31,7 +31,6 @@ import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { defaulToyModel, tileDoorShape, tileShape, toysModels } from '../resources/resources'
 import * as utils from '@dcl-sdk/utils'
 import { init } from '@dcl-sdk/mini-games/src/config'
-import { movePlayerTo } from '~system/RestrictedActions'
 import { setTilesPositions, tilesPositions } from './tilesPositions'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { playCloseTileSound, playLevelCompleteSound, playOpenTileSound, playPairFoundSound } from './sound'
@@ -219,9 +218,6 @@ export function getReadyToStart() {
   sessionState.playerAddress = getPlayer()?.userId ?? 'Underfined'
 
   utils.timers.setTimeout(() => {
-    movePlayerTo({
-      newRelativePosition: { x: 8, y: 1, z: 7 }
-    })
     startLevel(levetToStart as keyof typeof TILES_LEVEL)
   }, 2000)
 }
@@ -348,9 +344,6 @@ export function exitGame() {
   gameState.pairFound = 0
   gameState.moves = 0
 
-  movePlayerTo({
-    newRelativePosition: Vector3.create(8, 1, 14)
-  })
   queue.setNextPlayer()
 }
 
