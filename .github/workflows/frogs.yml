@@ -3,7 +3,7 @@ name: frogs
 on:
   push:
     branches:
-      - main
+      - christmas2024
     paths:
       - 'Toads/**'
       - 'common/**'
@@ -27,7 +27,7 @@ jobs:
     uses: ./.github/workflows/.deploy_genesis.yml
     with:
       directory: Toads
-      coordinates: '["-109,-97"]'
+      coordinates: '["140,-19"]'
       mainnet: ${{ startsWith(github.ref_name, 'release') }}
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}

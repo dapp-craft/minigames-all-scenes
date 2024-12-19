@@ -3,7 +3,7 @@ name: circus
 on:
   push:
     branches:
-      - main
+      - christmas2024
     paths:
       - 'MatchTwo/**'
       - 'common/**'
@@ -27,7 +27,7 @@ jobs:
     uses: ./.github/workflows/.deploy_genesis.yml
     with:
       directory: MatchTwo
-      coordinates: '["50,-88"]'
+      coordinates: '["141,-19"]'
       mainnet: ${{ startsWith(github.ref_name, 'release') }}
     secrets:
       DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
