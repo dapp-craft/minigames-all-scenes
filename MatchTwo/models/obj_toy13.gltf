@@ -83,15 +83,15 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":236,
+			"count":237,
 			"max":[
 				0.2059483677148819,
-				0.29353734850883484,
+				0.23349396884441376,
 				0.22790370881557465
 			],
 			"min":[
 				-0.22929908335208893,
-				-0.18114370107650757,
+				-0.24118708074092865,
 				-0.17987658083438873
 			],
 			"type":"VEC3"
@@ -99,13 +99,13 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":236,
+			"count":237,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":236,
+			"count":237,
 			"type":"VEC2"
 		},
 		{
@@ -118,26 +118,26 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":2832,
+			"byteLength":2844,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2832,
-			"byteOffset":2832,
+			"byteLength":2844,
+			"byteOffset":2844,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1888,
-			"byteOffset":5664,
+			"byteLength":1896,
+			"byteOffset":5688,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":930,
-			"byteOffset":7552,
+			"byteOffset":7584,
 			"target":34963
 		}
 	],
@@ -149,7 +149,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":8484,
+			"byteLength":8516,
 			"uri":"obj_toy13.bin"
 		}
 	]
