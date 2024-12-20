@@ -39,7 +39,7 @@ export class SoundManager {
 
     public playSound(soundName: keyof typeof GAME_SOUNDS, delay: number = 0, volume: number = 0.7) {
         if (!this.soundsStatus) return
-        console.log(`Play sound '${soundName}, delay ${delay}`)
+        console.log(`Play sound '${soundName}', delay ${delay}`)
         let soundEntity = engine.addEntity()
         Transform.create(soundEntity, { parent: engine.PlayerEntity })
         utils.timers.setTimeout(() => AudioSource.create(soundEntity, {
