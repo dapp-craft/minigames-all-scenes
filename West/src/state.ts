@@ -6,3 +6,9 @@ export const westGameState = {
     listOfEntity: new Map(),
     curtainsScale: Vector3.One()
 }
+
+export const progressState = {
+    level: 1,
+    score: 0,
+    time: 0
+  }

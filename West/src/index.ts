@@ -10,11 +10,12 @@ import { WEST_SYNC_ID, westGameConfig } from './config'
 import { westGameState } from './state'
 import { GameLogic } from './game/gameLogic'
 import { syncEntity } from '@dcl/sdk/network'
+import { exitCallback, getReadyToStart, startGame } from './game/game'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
-    start: () => { gameLogic.startGame() },
-    exit: () => gameLogic.stopGame(),
+    start: () => { getReadyToStart() },
+    exit: () => exitCallback(),
     restart: () => gameLogic.restartGame(),
     toggleMusic: () => { },
     toggleSfx: () => { }
@@ -34,7 +35,7 @@ executeTask(async () => {
     }
 })
 
-let gameLogic = new GameLogic()
+export let gameLogic = new GameLogic()
 
 export async function main() {
     setupEffects(Vector3.create(0, 2.7, -6));

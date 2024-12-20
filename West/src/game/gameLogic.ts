@@ -7,6 +7,12 @@ import { levels } from '../levels';
 import { readGltfLocators } from '../../../common/locators';
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src';
 
+interface PlayerData {
+    score: number,
+    level: number,
+    time: number
+}
+
 export class GameLogic {
     private endRoundTimeout = 0
     private playerLevel = 1
@@ -15,10 +21,20 @@ export class GameLogic {
     private playerScore = 0
     private stopRoundTimers: utils.TimerId[] = []
     private data: any
+    private playerData: PlayerData = {score: 0, level: 1, time: Date.now()}
+    private gameIsDone: Promise<void>
+    private resolveReady!: () => void
+
+    constructor() {
+        this.gameIsDone = new Promise((res) => { this.resolveReady = res })
+    }
 
     public async startGame() {
         this.data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
         this.playGame()
+        this.gameIsDone = new Promise(r => this.resolveReady = r)
+        await this.gameIsDone;
+        return this.playerData
     }
 
     public async restartGame() {
@@ -308,7 +324,7 @@ export class GameLogic {
         return { role: [enemyAmount, nonEnemyAmount], generationType: 'twoLevels' }
     }
 
-    private resetData() {
+    public resetData() {
         this.endRoundTimeout = 0
         this.playerLevel = 1
         this.playerHP = westGameConfig.playerMaxHP
@@ -317,8 +333,14 @@ export class GameLogic {
         this.targetData.clear()
     }
 
+    private setPlayerData() {
+        this.playerData = {score: this.playerScore, level: this.playerLevel, time: Date.now() - this.playerData.time}
+    }
+
     public async stopGame() {
         await this.stopRound()
+        this.setPlayerData()
         this.resetData()
+        this.resolveReady()
     }
 }
