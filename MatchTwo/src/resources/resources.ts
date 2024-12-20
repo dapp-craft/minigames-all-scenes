@@ -18,7 +18,8 @@ export const staticModels: PBGltfContainer[] = [
   { src: modelsFolder + 'obj_terminal.gltf' },
   { src: modelsFolder + 'obj_text.gltf' },
   { src: modelsFolder + 'obj_wall.gltf', invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS },
-  { src: modelsFolder + 'obj_tree.gltf' }
+  { src: modelsFolder + 'obj_tree.gltf' },
+  { src: modelsFolder + 'obj_snowflake.gltf' },
 ]
 
 export const tileShape: PBGltfContainer = { src: modelsFolder + 'obj_tile.gltf' }
