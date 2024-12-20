@@ -30,7 +30,10 @@ export async function initGame() {
 export async function startGame() {
   log('Begin', startGame)
   
-  gameController.start()
+  gameController.start().catch(e => {
+    console.error(e)
+    throw e
+  })
   log('Finish', startGame)
 }
 
