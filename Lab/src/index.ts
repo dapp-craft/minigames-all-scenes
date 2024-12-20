@@ -7,7 +7,7 @@ import { initMiniGame } from '../../common/library'
 import { STATIC_MODELS } from './resources'
 import { Vector3 } from '@dcl/sdk/math'
 import { setupEffects } from '../../common/effects'
-import { GameLevel } from './game'
+import { playLevel } from './game'
 import { Flask } from './game/flask'
 import { LEVELS } from './settings/levels'
 import { CreateStateSynchronizer } from './stateSync'
@@ -56,17 +56,13 @@ const handlers = {
         console.log("ENTER game loop")
         synchronizer.stop()
         let next = currentLevel
-        let level
-        do next = await (level = new GameLevel(
+        do next = await playLevel(
                 flaskTransforms,
                 currentLevel = next, 
                 flow = new FlowController(),
                 ui3d,
-                level => synchronizer.send({flasks: level.flasks.map(f => f.getConfig())})
-            ))
-            .play()
-            .catch(r => r instanceof flow.InterruptType ? Promise.reject(r) : Promise.reject(console.error(r)))
-            .finally(level.stop.bind(level))
+                flasks => synchronizer.send({flasks: flasks.map(f => f.getConfig())})
+            )
             .then(() => currentLevel + 1 in LEVELS ? currentLevel + 1 : void queue.setNextPlayer())
             .catch(r => r instanceof flow.InterruptType ? r.value ?? undefined : Promise.reject(console.error(r)))
         while (next !== undefined)

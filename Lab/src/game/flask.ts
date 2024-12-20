@@ -115,7 +115,7 @@ class Pipe {
 }
 
 enum State {
-    active, inactive, busy, sealed
+    active, inactive, sealed, busy, locked
 }
 
 export class Flask {
@@ -179,9 +179,16 @@ export class Flask {
         return this.layers.flatMap(l => new Array<Color3>(l.volume).fill(l.color))
     }
 
+    public async lock(key: Promise<any>) {
+        const tmp = this.state
+        this.state = State.locked
+        await key
+        this.state = tmp
+    }
+
     public seal() {
         if (this.state == State.sealed) return
-        if (this.state == State.busy) throw `Hide pipe failed: flask is busy`
+        if (this.state >= State.busy) throw `Hide pipe failed: flask is ${this.state}`
         this.state = State.sealed
         this.promiseActivated = new Promise(r => this.resolveActivated = r)
         this.promiseDeactivated = new Promise(r => this.resolveDeactivated = r)
@@ -226,7 +233,7 @@ export class Flask {
     public get deactivated() { return this.promiseDeactivated }
 
     public async hidePipe() {
-        if (this.state == State.busy) throw `Hide pipe failed: flask is busy`
+        if (this.state >= State.busy) throw `Hide pipe failed: flask is ${this.state}`
         const tmp = this.state
         this.state = State.busy
         await this.pipe.move()
@@ -247,7 +254,7 @@ export class Flask {
     }
 
     public async pour(color: Color3, volume: number) {
-        if (this.state == State.busy) throw `Pour failed: flask is busy`
+        if (this.state >= State.busy) throw `Pour failed: flask is ${this.state}`
         await this.ready
         if (this.fillLevel + volume > this.capacity) throw `Pour failed: level ${this.fillLevel} and volume ${volume} is over capacity`
         const tmp = this.state
@@ -260,7 +267,7 @@ export class Flask {
         this.state = tmp
     }
     public async drain(volume = this.topLayer?.volume) {
-        if (this.state == State.busy) throw `Drain failed: flask is busy`
+        if (this.state >= State.busy) throw `Drain failed: flask is ${this.state}`
         if (!volume || volume > this.topLayer!.volume) throw `Drain failed: invalid amount ${volume} for layer volume ${this.topLayer?.volume}`
         await this.ready
         const tmp = this.state

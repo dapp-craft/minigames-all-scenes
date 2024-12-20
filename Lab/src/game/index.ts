@@ -7,48 +7,48 @@ import { FlowController } from "../utils"
 import { Flask } from "./flask"
 import { Ui3D } from "./ui3D"
 
-export class GameLevel {
-    private _flasks: Flask[] = []
-    private elapsed = 0
-    private moves = 0
-    readonly ready
-    constructor(
-        flaskTransforms: TransformType[],
-        readonly level: keyof typeof LEVELS,
-        private flow: FlowController<any>,
-        private ui3d: Ui3D,
-        private onStateChange: (arg: GameLevel) => void
-    ) {
-        console.log(`GameLevel::init ${level}`)
-        const {colors, flasks: configs} = LEVELS[level]
-        ui3d.setLevel(level)
-        ui3d.setMoves(0)
-        ui3d.setTime(0)
-        this.ready = Promise
-            .all(configs.map(async (config, idx) => {
-                const flask = new Flask(flaskTransforms[idx])
-                await flask.activate()
-                await flask.applyConfig(config.map(c => Color3.fromArray((colors as any)[c])))
-                await flask.deactivate()
-                return flask
-            }))
-            .then(flasks => this._flasks = flasks)
-            .then(() => this.onStateChange(this))
-    }
-    get flasks() {
-        return this._flasks
-    }
-    async play() {
-        await Promise.race([Promise.all([this.ready, runCountdown()]), this.flow.interrupted])
-        engine.addSystem(dt => void this.ui3d.setTime(this.elapsed += dt), undefined, 'stopwatch')
-        while (!this._flasks.every(f => !f.topLayer || f.sealed)) {
-            let first = await Promise.race([...this._flasks.map(f => f.activated), this.flow.interrupted])
+export async function playLevel(
+    flaskTransforms: TransformType[],
+    level: keyof typeof LEVELS,
+    flow: FlowController<any>,
+    ui3d: Ui3D,
+    onStateChange: (arg: Flask[]) => void
+) {
+    console.log(`Starting level ${level}`)
+    const {colors, flasks: configs} = LEVELS[level]
+    ui3d.setLevel(level)
+    ui3d.setMoves(0)
+    ui3d.setTime(0)
+    let elapsed = 0
+    let moves = 0
+    let flasks!: Flask[]
+    const countdownFinished = runCountdown(3)
+    const flaskUnlocked: Promise<any>[] = []
+    const levelInitialized = Promise
+        .all(configs.map(async (config, idx) => {
+            const flask = new Flask(flaskTransforms[idx])
+            await flask.activate()
+            await flask.applyConfig(config.map(c => Color3.fromArray((colors as any)[c])))
+            await flask.deactivate()
+            flaskUnlocked.push(flask.lock(levelInitialized))
+            return flask
+        }))
+        .then(val => flasks = val)
+        .then(() => onStateChange(flasks))
+        .then(() => countdownFinished)
+    const ready = levelInitialized.then(() => Promise.all(flaskUnlocked))
+
+    try {
+        await Promise.race([ready, flow.interrupted])
+        engine.addSystem(dt => void ui3d.setTime(elapsed += dt), undefined, 'stopwatch')
+        while (!flasks.every(f => !f.topLayer || f.sealed)) {
+            let first = await Promise.race([...flasks.map(f => f.activated), flow.interrupted])
             if (!first.topLayer) {
                 await first.deactivate()
                 continue
             }
             let second = await Promise
-                .race([...this._flasks.map(f => f == first ? f.deactivated : f.activated), this.flow.interrupted])
+                .race([...flasks.map(f => f == first ? f.deactivated : f.activated), flow.interrupted])
                 //@ts-ignore linter bug
                 .catch(async e => void await first.deactivate() ?? Promise.reject(e))
             if (first == second) continue
@@ -59,32 +59,31 @@ export class GameLevel {
                     first.drain(volume).then(() => first.hidePipe()),
                     second.pour(color, volume).then(() => second.hidePipe())
                 ])
-                this.ui3d.setMoves(++this.moves)
-                this.onStateChange(this)
+                ui3d.setMoves(++moves)
+                onStateChange(flasks)
                 if (second.layersCount == 1 && second.fillLevel == second.capacity) second.seal()
             }
             await first.deactivate()
             await second.deactivate()
         }
-        this.flasks.forEach(f => f.seal())
+        flasks.forEach(f => f.seal())
         engine.removeSystem('stopwatch')
-        progress.upsertProgress({level: this.level, time: Math.floor(this.elapsed * 1000), moves: this.moves})
-        await Promise.race([runWinAnimation(), this.flow.interrupted])
-    }
-    public async stop() {
+        progress.upsertProgress({level, time: Math.floor(elapsed * 1000), moves})
+        await Promise.race([runWinAnimation(), flow.interrupted])
+    } finally {
         cancelCountdown()
         cancelWinAnimation()
         engine.removeSystem('stopwatch')
-        this.ui3d.setMoves()
-        this.ui3d.setLevel()
-        this.ui3d.setTime()
-        await this.ready
-        const destruction = Promise.all(this._flasks.splice(0).map(async f => {
+        ui3d.setMoves()
+        ui3d.setLevel()
+        ui3d.setTime()
+        await ready
+        const destruction = Promise.all(flasks.splice(0).map(async f => {
             await f.activate()
             await f.destroy()
         }))
-        this.onStateChange(this)
+        onStateChange(flasks)
         await destruction
-        await Promise.race([this.flow.interrupted, Promise.resolve()])
+        await Promise.race([flow.interrupted, Promise.resolve()])
     }
 }
