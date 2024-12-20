@@ -35,6 +35,7 @@ const Synchronizer = CreateStateSynchronizer(
                 this.flasks = state.map((f, idx) => new Flask(flaskTransforms[idx]))
                 await Promise.all(this.flasks.map(f => f.activate()))
             }
+            soundManager.playSound('pour', 0, 0.35)
             await Promise.all(state.map((config, idx) => this.flasks[idx].applyConfig(config)))
         },
         flasks: new Array<Flask>,

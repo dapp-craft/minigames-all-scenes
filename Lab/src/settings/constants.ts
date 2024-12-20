@@ -6,4 +6,4 @@ export const DIFFICULTY_MAPPING = {
     5: 25
 } as const
 
-export const THEME_VOLUME = 0.3
+export const THEME_VOLUME = 0.2
