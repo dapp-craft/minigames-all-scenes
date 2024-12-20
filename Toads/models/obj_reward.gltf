@@ -105,34 +105,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
-			"emissiveFactor":[
-				1,
-				1,
-				1
-			],
-			"emissiveTexture":{
-				"index":0
-			},
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularFactor":0,
-					"specularColorFactor":[
-						0.0,
-						0.0,
-						0.0
-					]
-				}
-			},
-			"name":"obj_reward",
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":1
-				},
-				"metallicFactor":0
-			}
-		},
-		{
 			"emissiveFactor":[
 				1,
 				0.3419147729873657,
@@ -153,24 +125,45 @@
 				],
 				"metallicFactor":0
 			}
+		},
+		{
+			"emissiveFactor":[
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
+			],
+			"emissiveTexture":{
+				"index":0
+			},
+			"extensions":{
+				"KHR_materials_specular":{
+					"specularFactor":0
+				}
+			},
+			"name":"obj_reward",
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":1
+				},
+				"metallicFactor":0
+			}
 		}
 	],
 	"meshes":[
 		{
-			"name":"obj_wearable.001",
+			"name":"obj_reward_collider",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":0,
 						"NORMAL":1
 					},
-					"indices":2,
-					"material":0
+					"indices":2
 				}
 			]
 		},
 		{
-			"name":"Text",
+			"name":"obj_reward_text",
 			"primitives":[
 				{
 					"attributes":{
@@ -179,12 +172,12 @@
 						"TEXCOORD_0":5
 					},
 					"indices":6,
-					"material":1
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"obj_wearable",
+			"name":"obj_reward",
 			"primitives":[
 				{
 					"attributes":{
@@ -193,7 +186,7 @@
 						"TEXCOORD_0":9
 					},
 					"indices":10,
-					"material":0
+					"material":1
 				}
 			]
 		}
@@ -205,15 +198,10 @@
 		},
 		{
 			"sampler":0,
-			"source":1
+			"source":0
 		}
 	],
 	"images":[
-		{
-			"mimeType":"image/png",
-			"name":"obj_reward_emission",
-			"uri":"textures/obj_reward_emission.png"
-		},
 		{
 			"mimeType":"image/png",
 			"name":"obj_reward",
@@ -227,13 +215,13 @@
 			"count":24,
 			"max":[
 				34.7486572265625,
-				22.235382080078125,
-				0.03755950927734375
+				22.235376358032227,
+				-11.225668907165527
 			],
 			"min":[
 				-33.67066955566406,
-				-17.16858673095703,
-				-60.39216613769531
+				-17.16859245300293,
+				-71.6553955078125
 			],
 			"type":"VEC3"
 		},
@@ -286,35 +274,35 @@
 		{
 			"bufferView":7,
 			"componentType":5126,
-			"count":1501,
+			"count":346,
 			"max":[
-				34.74864196777344,
-				22.235368728637695,
-				0.03755950927734375
+				43.19502639770508,
+				23.613216400146484,
+				-30.134963989257812
 			],
 			"min":[
-				-33.67066955566406,
-				-17.1685791015625,
-				-60.39215850830078
+				-40.434967041015625,
+				-34.32383346557617,
+				-62.88541030883789
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":8,
 			"componentType":5126,
-			"count":1501,
+			"count":346,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":9,
 			"componentType":5126,
-			"count":1501,
+			"count":346,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":10,
 			"componentType":5123,
-			"count":4266,
+			"count":1428,
 			"type":"SCALAR"
 		},
 		{
@@ -387,42 +375,42 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":18012,
+			"byteLength":4152,
 			"byteOffset":12204,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":18012,
-			"byteOffset":30216,
+			"byteLength":4152,
+			"byteOffset":16356,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12008,
-			"byteOffset":48228,
+			"byteLength":2768,
+			"byteOffset":20508,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8532,
-			"byteOffset":60236,
+			"byteLength":2856,
+			"byteOffset":23276,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":720,
-			"byteOffset":68768
+			"byteOffset":26132
 		},
 		{
 			"buffer":0,
 			"byteLength":2160,
-			"byteOffset":69488
+			"byteOffset":26852
 		},
 		{
 			"buffer":0,
 			"byteLength":2880,
-			"byteOffset":71648
+			"byteOffset":29012
 		}
 	],
 	"samplers":[
@@ -433,7 +421,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":74528,
+			"byteLength":31892,
 			"uri":"obj_reward.bin"
 		}
 	]
