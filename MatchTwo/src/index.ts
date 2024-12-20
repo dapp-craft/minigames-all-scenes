@@ -13,7 +13,8 @@ import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { toggleBackgroundMusic } from './SoundManager'
 import { LEVEL, MOVES, TIME } from '@dcl-sdk/mini-games/src/ui/scoreboard/columnData'
-(globalThis as any).DEBUG_NETWORK_MESSAGES = false
+import { Dispenser } from '../../common/dispenser'
+;(globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
   start: () => getReadyToStart(),
@@ -31,6 +32,8 @@ initMiniGame(GAME_ID, [MOVES, LEVEL, TIME], readGltfLocators(`locators/obj_locat
     rotation: 90
   }
 })
+
+export let DISPENSER: Dispenser
 
 // initLibrary(engine, syncEntity, players, {
 //   environment: 'dev',
@@ -50,4 +53,9 @@ export function main() {
 
   setupUI()
 
+  DISPENSER = new Dispenser({
+    notAvailable: 'Not available',
+    beforeClaim: 'Claim your reward!',
+    afterClaim: 'You already claimed your reward!'
+  })
 }
