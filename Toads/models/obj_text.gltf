@@ -26,8 +26,8 @@
 			"alphaMode":"MASK",
 			"emissiveFactor":[
 				1,
-				0.3419147729873657,
-				0.028426136821508408
+				1,
+				1
 			],
 			"extensions":{
 				"KHR_materials_specular":{
@@ -36,12 +36,6 @@
 			},
 			"name":"obj_text02",
 			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					1,
-					0.3419147729873657,
-					0.028426136821508408,
-					1
-				],
 				"baseColorTexture":{
 					"index":0
 				},
