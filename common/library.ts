@@ -100,12 +100,13 @@ export async function initMiniGame(
     let sessionTimeLeft: number | undefined
     let isActive = false
     function onActivePlayerChange(player: PlayerType | null) {
-        const center = Transform.get(sceneParentEntity).position
+        const {position: center, rotation} = Transform.get(sceneParentEntity)
+        const playSpawn = positions.get(NODE_NAME.AREA_PLAYSPAWN)!.position
 
         if (!isActive && player?.address === getPlayer()?.userId) {
             isActive = true
             movePlayerTo({
-                newRelativePosition: Vector3.add(positions.get(NODE_NAME.AREA_PLAYSPAWN)!.position, center)
+                newRelativePosition: Vector3.add(Vector3.rotate(playSpawn, rotation), center)
             })
             if (scene.lockCamera) MainCamera.getOrCreateMutable(engine.CameraEntity).virtualCameraEntity = cameraEntity
             if (scene.lockPlayer) InputModifier.getOrCreateMutable(engine.PlayerEntity).mode = {
