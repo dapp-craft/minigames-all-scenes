@@ -157,7 +157,7 @@
 	],
 	"meshes":[
 		{
-			"name":"obj_wearable.001",
+			"name":"obj_reward_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -170,7 +170,7 @@
 			]
 		},
 		{
-			"name":"Text",
+			"name":"obj_reward_text",
 			"primitives":[
 				{
 					"attributes":{
@@ -184,7 +184,7 @@
 			]
 		},
 		{
-			"name":"obj_wearable",
+			"name":"obj_reward",
 			"primitives":[
 				{
 					"attributes":{

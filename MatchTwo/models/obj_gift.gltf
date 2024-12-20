@@ -101,7 +101,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":7753,
+			"count":8353,
 			"max":[
 				7.484249114990234,
 				1.8836922645568848,
@@ -117,25 +117,25 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":7753,
+			"count":8353,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":7753,
+			"count":8353,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":17844,
+			"count":19173,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":816,
+			"count":888,
 			"max":[
 				7.491817951202393,
 				1.7559382915496826,
@@ -151,69 +151,69 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":816,
+			"count":888,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":816,
+			"count":888,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":7,
 			"componentType":5123,
-			"count":1224,
+			"count":1332,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":93036,
+			"byteLength":100236,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":93036,
-			"byteOffset":93036,
+			"byteLength":100236,
+			"byteOffset":100236,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":62024,
-			"byteOffset":186072,
+			"byteLength":66824,
+			"byteOffset":200472,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":35688,
-			"byteOffset":248096,
+			"byteLength":38346,
+			"byteOffset":267296,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":9792,
-			"byteOffset":283784,
+			"byteLength":10656,
+			"byteOffset":305644,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9792,
-			"byteOffset":293576,
+			"byteLength":10656,
+			"byteOffset":316300,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6528,
-			"byteOffset":303368,
+			"byteLength":7104,
+			"byteOffset":326956,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2448,
-			"byteOffset":309896,
+			"byteLength":2664,
+			"byteOffset":334060,
 			"target":34963
 		}
 	],
@@ -225,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":312344,
+			"byteLength":336724,
 			"uri":"obj_gift.bin"
 		}
 	]

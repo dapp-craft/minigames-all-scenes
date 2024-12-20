@@ -43,6 +43,28 @@
 				},
 				"metallicFactor":0
 			}
+		},
+		{
+			"emissiveFactor":[
+				0.10000000149011612,
+				0.10000000149011612,
+				0.10000000149011612
+			],
+			"emissiveTexture":{
+				"index":2
+			},
+			"extensions":{
+				"KHR_materials_specular":{
+					"specularFactor":0
+				}
+			},
+			"name":"obj_message",
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":3
+				},
+				"metallicFactor":0
+			}
 		}
 	],
 	"meshes":[
@@ -57,6 +79,15 @@
 					},
 					"indices":3,
 					"material":0
+				},
+				{
+					"attributes":{
+						"POSITION":4,
+						"NORMAL":5,
+						"TEXCOORD_0":6
+					},
+					"indices":3,
+					"material":1
 				}
 			]
 		}
@@ -69,6 +100,14 @@
 		{
 			"sampler":0,
 			"source":0
+		},
+		{
+			"sampler":0,
+			"source":1
+		},
+		{
+			"sampler":0,
+			"source":1
 		}
 	],
 	"images":[
@@ -76,6 +115,11 @@
 			"mimeType":"image/png",
 			"name":"obj_rules",
 			"uri":"textures/obj_rules.png"
+		},
+		{
+			"mimeType":"image/png",
+			"name":"obj_message",
+			"uri":"textures/obj_message.png"
 		}
 	],
 	"accessors":[
@@ -112,6 +156,34 @@
 			"componentType":5123,
 			"count":6,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":4,
+			"max":[
+				-3.535557985305786,
+				3.2182257175445557,
+				1.442304015159607
+			],
+			"min":[
+				-5.780479431152344,
+				0.973304033279419,
+				1.442304015159607
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":4,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":4,
+			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
@@ -138,6 +210,24 @@
 			"byteLength":12,
 			"byteOffset":128,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":48,
+			"byteOffset":140,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":48,
+			"byteOffset":188,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":32,
+			"byteOffset":236,
+			"target":34962
 		}
 	],
 	"samplers":[
@@ -148,7 +238,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":140,
+			"byteLength":268,
 			"uri":"obj_rules.bin"
 		}
 	]
