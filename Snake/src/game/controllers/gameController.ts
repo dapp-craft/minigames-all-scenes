@@ -57,7 +57,7 @@ export class GameController {
     })
   }
   
-  @LogExecutionTime
+  // @LogExecutionTime
   public async start() {
     this._inGame = true
     this._isInit = false
