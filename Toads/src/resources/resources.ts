@@ -12,6 +12,7 @@ export const gifts: PBGltfContainer = { src: modelsFolder + 'obj_gifts.gltf' };
 export const ground: PBGltfContainer = { src: modelsFolder + 'obj_ground.gltf' };
 export const rules: PBGltfContainer = { src: modelsFolder + 'obj_rules.gltf' };
 export const snow: PBGltfContainer = { src: modelsFolder + 'obj_snow.gltf' };
+export const snowflake: PBGltfContainer = { src: modelsFolder + 'obj_snowflake.gltf' };
 export const snowman: PBGltfContainer = { src: modelsFolder + 'obj_snowman.gltf' };
 export const terminal: PBGltfContainer = { src: modelsFolder + 'obj_terminal.gltf' };
 export const text: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
