@@ -75,7 +75,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3
+					"indices":7
 				}
 			]
 		}
@@ -135,30 +135,36 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":535,
+			"count":97,
 			"max":[
-				0.36378929018974304,
-				-0.0022346973419189453,
-				0.3721778094768524
+				0.37735816836357117,
+				-0.0051670074462890625,
+				0.373822420835495
 			],
 			"min":[
-				-0.35909873247146606,
-				-1.4155614376068115,
-				-0.3595743775367737
+				-0.37434133887290955,
+				-1.4370523691177368,
+				-0.3779579699039459
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":535,
+			"count":97,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":535,
+			"count":97,
 			"type":"VEC2"
+		},
+		{
+			"bufferView":7,
+			"componentType":5123,
+			"count":384,
+			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -188,21 +194,27 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":6420,
+			"byteLength":1164,
 			"byteOffset":21728,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6420,
-			"byteOffset":28148,
+			"byteLength":1164,
+			"byteOffset":22892,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4280,
-			"byteOffset":34568,
+			"byteLength":776,
+			"byteOffset":24056,
 			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":768,
+			"byteOffset":24832,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -213,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":38848,
+			"byteLength":25600,
 			"uri":"obj_frog03.bin"
 		}
 	]
