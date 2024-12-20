@@ -14,6 +14,7 @@ import { CreateStateSynchronizer } from './stateSync'
 import { FlowController } from './utils'
 import { Ui3D } from './game/ui3D'
 import { DIFFICULTY_MAPPING } from './settings/constants'
+import { SoundManager } from './game/soundManager'
 
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
@@ -49,6 +50,7 @@ let ui3d: Ui3D
 let flow: FlowController<number>
 let currentLevel = 0 as keyof typeof LEVELS
 let synchronizer: InstanceType<typeof Synchronizer>
+let soundManager = new SoundManager()
 let flaskTransforms: TransformType[] = []
 
 const handlers = {
@@ -61,6 +63,7 @@ const handlers = {
                 currentLevel = next, 
                 flow = new FlowController(),
                 ui3d,
+                soundManager,
                 flasks => synchronizer.send({flasks: flasks.map(f => f.getConfig())})
             )
             .then(() => currentLevel + 1 in LEVELS ? currentLevel + 1 : void queue.setNextPlayer())
@@ -77,8 +80,8 @@ const handlers = {
         console.log("RESTART game")
         flow.goto(currentLevel)
     },
-    toggleMusic: () => {},
-    toggleSfx: () => {}
+    toggleMusic: () => { soundManager.toggleTheme(!soundManager.themePlaying) },
+    toggleSfx: () => { soundManager.toggleSounds(!soundManager.soundsEnabled) }
 }
 
 const libraryReady = initMiniGame('e5ec213a-628f-4ef7-8f6f-0cb543da0701', TIME_LEVEL_MOVES, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)

@@ -3,15 +3,18 @@ import { engine, TransformType } from "@dcl/sdk/ecs"
 import { Color3 } from "@dcl/sdk/math"
 import { cancelCountdown, cancelWinAnimation, runCountdown, runWinAnimation } from "../../../common/effects"
 import { LEVELS } from "../settings/levels"
+import { SoundManager } from "./soundManager"
 import { FlowController } from "../utils"
 import { Flask } from "./flask"
 import { Ui3D } from "./ui3D"
+import { randomInt } from "../../../common/utils/random"
 
 export async function playLevel(
     flaskTransforms: TransformType[],
     level: keyof typeof LEVELS,
     flow: FlowController<any>,
     ui3d: Ui3D,
+    soundManager: SoundManager,
     onStateChange: (arg: Flask[]) => void
 ) {
     console.log(`Starting level ${level}`)
@@ -28,6 +31,7 @@ export async function playLevel(
         .all(configs.map(async (config, idx) => {
             const flask = new Flask(flaskTransforms[idx])
             await flask.activate()
+            soundManager.playSound('pour', randomInt(0, config.length * 300))
             await flask.applyConfig(config.map(c => Color3.fromArray((colors as any)[c])))
             await flask.deactivate()
             flaskUnlocked.push(flask.lock(levelInitialized))
@@ -44,9 +48,11 @@ export async function playLevel(
         while (!flasks.every(f => !f.topLayer || f.sealed)) {
             let first = await Promise.race([...flasks.map(f => f.activated), flow.interrupted])
             if (!first.topLayer) {
+                soundManager.playSound('error')
                 await first.deactivate()
                 continue
             }
+            soundManager.playSound('first')
             let second = await Promise
                 .race([...flasks.map(f => f == first ? f.deactivated : f.activated), flow.interrupted])
                 //@ts-ignore linter bug
@@ -55,6 +61,8 @@ export async function playLevel(
             let {color, volume} = first.topLayer
             if (!second.topLayer || Color3.equals(second.topLayer.color, color) && second.fillLevel < second.capacity) {
                 volume = Math.min(second.capacity - second.fillLevel, volume)
+                soundManager.playSound('second')
+                soundManager.playSound('pour', 250)
                 await Promise.all([
                     first.drain(volume).then(() => first.hidePipe()),
                     second.pour(color, volume).then(() => second.hidePipe())
@@ -62,12 +70,13 @@ export async function playLevel(
                 ui3d.setMoves(++moves)
                 onStateChange(flasks)
                 if (second.layersCount == 1 && second.fillLevel == second.capacity) second.seal()
-            }
+            } else soundManager.playSound('error')
             await first.deactivate()
             await second.deactivate()
         }
         flasks.forEach(f => f.seal())
         engine.removeSystem('stopwatch')
+        soundManager.playSound('win', 0, 1)
         progress.upsertProgress({level, time: Math.floor(elapsed * 1000), moves})
         await Promise.race([runWinAnimation(), flow.interrupted])
     } finally {
@@ -80,6 +89,7 @@ export async function playLevel(
         await ready
         const destruction = Promise.all(flasks.splice(0).map(async f => {
             await f.activate()
+            soundManager.playSound('pour', randomInt(0, f.fillLevel * 300))
             await f.destroy()
         }))
         onStateChange(flasks)
