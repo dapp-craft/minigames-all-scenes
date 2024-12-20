@@ -38,8 +38,7 @@ export class GameLogic {
             Tween.deleteFrom(westGameState.availableEntity[i])
         }
         for (let i = 0; i < levelData!.role.reduce((a, b) => a + b, 0); i++) {
-            console.log(MeshCollider.get(westGameState.availableEntity[i]))
-            Tween.deleteFrom(westGameState.availableEntity[i])
+            Tween.deleteFrom(westGameState.availableEntity[i + westGameConfig.targetEntityAmount])
             this.setTexture(westGameState.availableEntity[i], roles[i])
             this.targetData.set(i, { entity: westGameState.availableEntity[i], enemy: roles[i], dead: false })
             pointerEventsSystem.onPointerDown(
@@ -50,9 +49,9 @@ export class GameLogic {
                 () => {
                     this.targetData.get(i).dead = true
                     console.log(westGameState.availableEntity[i], ' is clicked, he was Bandit? ', this.targetData.get(i).enemy)
-                    Tween.deleteFrom(westGameState.availableEntity[i])
+                    Tween.deleteFrom(westGameState.availableEntity[i + westGameConfig.targetEntityAmount])
                     pointerEventsSystem.removeOnPointerDown(westGameState.availableEntity[i])
-                    utils.timers.setTimeout(() => this.hitEntity(westGameState.availableEntity[i]), 10)
+                    utils.timers.setTimeout(() => this.hitEntity(westGameState.availableEntity[i + westGameConfig.targetEntityAmount]), 10)
                     this.targetData.get(i).enemy ? this.playerScore += 10 : this.playerScore -= 10
                     this.updateCounters()
                     this.isEnemyLeft()
@@ -63,6 +62,7 @@ export class GameLogic {
 
     // TO DO: REFACTOR
     private spawnRandomizer(spawnType: string, entityAmount: number) {
+        console.log("GENERATION")
         const generator = ({ firstRow, gap = 1, entityAmountInRow = entityAmount }: { firstRow: boolean, gap?: number | "random", entityAmountInRow?: number }) => {
             let randomGap = false
             if (typeof (gap) === "string") {
@@ -164,13 +164,18 @@ export class GameLogic {
         const targetPositionArray = this.spawnRandomizer(levelData!.generationType, levelTargetsAmount)
         for (let iterator = 0; iterator < levelTargetsAmount; iterator++) {
             let randomPositionNumber = targetPositionArray[iterator]
-            this.activateWindow(westGameState.availableEntity[randomPositionNumber + westGameConfig.targetEntityAmount])
+            const windowData = this.data.get(`obj_window_${randomPositionNumber}`)
+            this.activateWindow(westGameState.availableEntity[randomPositionNumber + westGameConfig.targetEntityAmount * 2 - 1])
             const entity = westGameState.availableEntity[iterator]
             MeshCollider.getMutable(entity).collisionMask = ColliderLayer.CL_POINTER
             VisibilityComponent.getMutable(entity).visible = true
-            Transform.createOrReplace(entity, { ...this.data.get(`obj_window_${randomPositionNumber}`), parent: sceneParentEntity })
-            Tween.deleteFrom(entity)
-            Transform.getMutable(entity).rotation = Quaternion.fromEulerDegrees(0, 0, 0)
+            Transform.createOrReplace(westGameState.availableEntity[iterator + westGameConfig.targetEntityAmount], {
+                ...windowData,
+                position: { ...windowData.position, y: windowData.position.y - windowData.scale.y / 1.8 },
+                parent: sceneParentEntity
+            })
+            Tween.deleteFrom(westGameState.availableEntity[iterator + westGameConfig.targetEntityAmount])
+            Transform.getMutable(westGameState.availableEntity[iterator + westGameConfig.targetEntityAmount]).rotation = Quaternion.fromEulerDegrees(0, 0, 0)
         }
     }
 
@@ -179,7 +184,7 @@ export class GameLogic {
         utils.timers.setTimeout(() => Tween.createOrReplace(entity, {
             mode: Tween.Mode.Scale({
                 start: Transform.get(entity).scale,
-                end: {...Transform.get(entity).scale, y: 0}
+                end: { ...Transform.get(entity).scale, y: 0 }
             }),
             duration: this.calculateTime().spawnEntityTweenDuration,
             easingFunction: EasingFunction.EF_EASEINBACK,
@@ -187,9 +192,9 @@ export class GameLogic {
     }
 
     private refreshWindows() {
-        for (let i = westGameConfig.targetEntityAmount + 1; i <= westGameConfig.targetEntityAmount * 2; i++) {
-            Tween.deleteFrom(westGameState.availableEntity[i])
-            Transform.getMutable(westGameState.availableEntity[i]).scale = westGameState.curtainsScale
+        for (let i = 0; i < westGameConfig.targetEntityAmount; i++) {
+            Tween.deleteFrom(westGameState.availableEntity[i + westGameConfig.targetEntityAmount * 2])
+            Transform.getMutable(westGameState.availableEntity[i + westGameConfig.targetEntityAmount * 2]).scale = westGameState.curtainsScale
         }
     }
 
@@ -265,7 +270,7 @@ export class GameLogic {
         for (let i = 0; i < levelTargetAmount; i++) {
             MeshCollider.getMutable(westGameState.availableEntity[i]).collisionMask = ColliderLayer.CL_PHYSICS
             pointerEventsSystem.removeOnPointerDown(westGameState.availableEntity[i])
-            this.hitEntity(westGameState.availableEntity[i])
+            this.hitEntity(westGameState.availableEntity[i + westGameConfig.targetEntityAmount])
             this.stopRoundTimers[i] = utils.timers.setTimeout(() => {
                 VisibilityComponent.createOrReplace(westGameState.availableEntity[i]).visible = false
                 timerCouter++
