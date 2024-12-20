@@ -1,9 +1,9 @@
 export class FlowController<T> {
-    readonly InterruptType = class {
+    static readonly InterruptType = class<T> {
         value: T|undefined|null = undefined
     }
     private reject!: Function
-    private data = new this.InterruptType()
+    private data = new FlowController.InterruptType<T>()
 
     readonly interrupted = new Promise<never>((_, r) => this.reject = r)
     public goto(arg: T) {
