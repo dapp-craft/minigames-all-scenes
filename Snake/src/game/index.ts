@@ -24,7 +24,10 @@ export async function initGame() {
   
   setupEffects(Vector3.create(0, 2.5, -6), Vector3.create(0, 1.2, 0))
 
-  setupGameUI()
+  setupGameUI().catch(e => {
+    console.error(e)
+    throw e
+  })
 }
 
 export async function startGame() {

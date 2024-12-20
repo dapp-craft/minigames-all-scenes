@@ -59,6 +59,7 @@ export class GameController {
   
   // @LogExecutionTime
   public async start() {
+    console.log("gameController::start")
     this._inGame = true
     this._isInit = false
     
@@ -80,6 +81,7 @@ export class GameController {
       console.log('After terminate 3')
     }
 
+    console.log("gameController::start create snake")
     this._snake = new SnakeHead({ x: 10, y: 7 })
     this._snake.addTail()
     this._snake.addTail()
@@ -94,6 +96,7 @@ export class GameController {
     this.setSnakeDirection(Direction.UP)
     playStartSound()
     this._isInit = true
+    console.log("gameController::start end")
   }
 
   @LogExecutionTime
