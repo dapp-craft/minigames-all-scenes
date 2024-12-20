@@ -5,7 +5,6 @@ const imagesFolder = 'images/'
 
 export const staticModels: PBGltfContainer[] = [
   { src: modelsFolder + 'obj_bench.gltf' },
-  { src: modelsFolder + 'obj_door.gltf' },
   { src: modelsFolder + 'obj_fence.gltf' },
   { src: modelsFolder + 'obj_floor.gltf' },
   { src: modelsFolder + 'obj_frame.gltf' },
