@@ -35,17 +35,6 @@ initMiniGame(GAME_ID, [MOVES, LEVEL, TIME], readGltfLocators(`locators/obj_locat
 
 export let DISPENSER: Dispenser
 
-// initLibrary(engine, syncEntity, players, {
-//   environment: 'dev',
-//   gameId: GAME_ID,
-//   gameTimeoutMs: SESSION_DURATION,
-//   gameArea: {
-//     topLeft: Vector3.create(1, 0, 0),
-//     bottomRight: Vector3.create(15, 5, 9),
-//     exitSpawnPoint: Vector3.create(8, 1, 13)
-//   }
-// })
-
 export function main() {
   setupStaticModels()
 
@@ -54,10 +43,8 @@ export function main() {
   setupUI()
 
   DISPENSER = new Dispenser("5CvD0OZdQpK8Zm8EzDoQTQGNveSvc0jKiVR7IFIlxrU=.BC1H4tn3F/oTtK5KvQtmDGmhVFU2WBvfi15LTeE6ti4=", {
-    notAvailable: 'Not available',
+    notAvailable: 'Complete the 2nd level in order to get the reward!',
     beforeClaim: 'Claim your reward!',
-    afterClaim: 'You already claimed your reward!'
+    afterClaim: 'Revard has been given!'
   })
-
-  DISPENSER.enableClaim()
 }
