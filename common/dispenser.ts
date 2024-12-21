@@ -25,6 +25,7 @@ export class Dispenser {
     private _entity: Entity
 
     private _claimAvailable: boolean = false
+    private _rewardClaimed: boolean = false
 
     private _texts: DispenserTexsts
     private _campaignKey: string
@@ -48,6 +49,11 @@ export class Dispenser {
             () => {
                 if (!this._claimAvailable) {
                     this._exception(this._texts.notAvailable)
+                    return
+                }
+
+                if (this._rewardClaimed) {
+                    this._exception('Reward has already been claimed')
                     return
                 }
 
@@ -105,8 +111,13 @@ export class Dispenser {
         const user = getPlayer()
         const realmInfo = await getRealm({})
 
+        
         if (!user || !realmInfo) {
             return { success: false, message: "Couldn't send a reward" }
+        }
+
+        if (user.isGuest) {
+            return { success: false, message: 'Guests cannot claim rewards' }
         }
 
         const assignRequest = await signedFetch({
@@ -125,6 +136,7 @@ export class Dispenser {
         })
 
         if (JSON.parse(assignRequest.body).ok == true) {
+            this._rewardClaimed = true
             return { success: true, message: 'Reward claimed' }
         }
 
