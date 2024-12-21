@@ -53,9 +53,11 @@ export function main() {
 
   setupUI()
 
-  DISPENSER = new Dispenser({
+  DISPENSER = new Dispenser("5CvD0OZdQpK8Zm8EzDoQTQGNveSvc0jKiVR7IFIlxrU=.BC1H4tn3F/oTtK5KvQtmDGmhVFU2WBvfi15LTeE6ti4=", {
     notAvailable: 'Not available',
     beforeClaim: 'Claim your reward!',
     afterClaim: 'You already claimed your reward!'
   })
+
+  DISPENSER.enableClaim()
 }

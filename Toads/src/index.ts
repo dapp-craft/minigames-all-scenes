@@ -54,11 +54,11 @@ export async function main() {
 
   initGame()
 
-  dispenser = new Dispenser({
-    notAvailable: 'Not available',
-    beforeClaim: 'Claim your reward!',
-    afterClaim: 'You already claimed your reward!'
-  })
+  // dispenser = new Dispenser({
+    // notAvailable: 'Not available',
+    // beforeClaim: 'Claim your reward!',
+    // afterClaim: 'You already claimed your reward!'
+  // })
 }
 
 const generateInitialEntity = async () => {
