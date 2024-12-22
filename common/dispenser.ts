@@ -76,6 +76,7 @@ export class Dispenser {
             onAccept: () => {
                 prompt.hide()
             },
+            acceptLabel: "   OK   ",
             width: 400,
             startHidden: false
         })
@@ -91,6 +92,7 @@ export class Dispenser {
                 this._afterClaimDialogue(result.success, result.message)
             },
             width: 400,
+            acceptLabel: 'Claim',
             startHidden: false
         })
     }
@@ -102,6 +104,7 @@ export class Dispenser {
                 prompt.hide()
             },
             width: 400,
+            acceptLabel: "   OK   ",
             startHidden: false
         })
 
