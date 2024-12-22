@@ -1,7 +1,7 @@
 const SEC_ = 1000
 const MIN_ = 60 * SEC_
 
-export const GAME_ID = 'e05b3729-9504-40e9-8a49-c2145e568d62'
+export const GAME_ID = '2175dc9d-eba9-4154-8e8f-56d94e740fdf'
 export const SESSION_DURATION = 5 * MIN_
 
 export const SYNC_ENTITY_OFFSET = 5000
