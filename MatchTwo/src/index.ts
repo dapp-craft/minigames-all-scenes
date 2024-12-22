@@ -43,8 +43,8 @@ export function main() {
   setupUI()
 
   DISPENSER = new Dispenser("5CvD0OZdQpK8Zm8EzDoQTQGNveSvc0jKiVR7IFIlxrU=.BC1H4tn3F/oTtK5KvQtmDGmhVFU2WBvfi15LTeE6ti4=", {
-    notAvailable: 'Complete the 2nd level in order to get the reward!',
+    notAvailable: 'Complete 2nd level in order to get the reward!',
     beforeClaim: 'Claim your reward!',
-    afterClaim: 'Revard has been given!'
+    afterClaim: 'Reward has been given!'
   })
 }
