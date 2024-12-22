@@ -1,6 +1,6 @@
 import { frog01, frog03, frog04, snake } from "./resources/resources"
 
-export const GAME_ID = "5e68058a-2f02-4c51-9e22-198070bbcdcf"
+export const GAME_ID = "b000bb39-4c9b-40dd-b8f8-f28472c53529"
 
 export const toadsGameConfig = {
     initialEntityAmount: 20,
