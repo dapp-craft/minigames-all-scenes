@@ -68,15 +68,17 @@ let inGame = false
 let gameCounter = 0
 
 export async function initGame() {
+  initTileEntities()
+  initGameDataEntity()
+  setupEffects(Vector3.create(0, 2.5, -6))
+
   await fetchPlayerProgress()
 
   await setLevelButtonPositions()
   await setTilesPositions()
   await setStatusBoardPositions()
 
-  initGameDataEntity()
 
-  setupEffects(Vector3.create(0, 2.5, -6))
 
   setupGameUI()
 
@@ -97,9 +99,11 @@ function initTiles() {
 }
 
 function createTile(tileNumber: number) {
-  const mainTileEntity = engine.addEntity()
-  Transform.create(mainTileEntity, tilesPositions.toys[tileNumber])
-  Tile.create(mainTileEntity, {
+
+  const { mainEntity: mainTileEntity, toyEntity: tileToy, doorEntity: tileDoorEntity } = tiles[tileNumber]
+
+  if(!Transform.has(mainTileEntity)) Transform.create(mainTileEntity, tilesPositions.toys[tileNumber])
+  if(!Tile.has(mainTileEntity)) Tile.create(mainTileEntity, {
     isFlipped: false,
     toyModel: defaulToyModel.src,
     matched: false,
@@ -107,31 +111,13 @@ function createTile(tileNumber: number) {
   })
 
   // Image
-  const tileToy = engine.addEntity()
-  Transform.create(tileToy, tilesPositions.toys[tileNumber])
-  GltfContainer.create(tileToy, toysModels[tileNumber % toysModels.length])
+  if (!Transform.has(tileToy)) Transform.create(tileToy, tilesPositions.toys[tileNumber])
+  if (!GltfContainer.has(tileToy)) GltfContainer.create(tileToy, toysModels[tileNumber % toysModels.length])
 
   // SHape
-  const tileDoorEntity = engine.addEntity()
-  Transform.create(tileDoorEntity, tilesPositions.doors[tileNumber])
-  GltfContainer.create(tileDoorEntity, tileDoorShape)
-  VisibilityComponent.create(tileDoorEntity, { visible: true })
-
-  const tile = {
-    mainEntity: mainTileEntity,
-    toyEntity: tileToy,
-    doorEntity: tileDoorEntity
-  }
-
-  syncEntity(mainTileEntity, [Tile.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 0)
-  syncEntity(tileToy, [GltfContainer.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 1)
-  syncEntity(
-    tileDoorEntity,
-    [Transform.componentId, VisibilityComponent.componentId],
-    SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 2
-  )
-
-  tiles.push(tile)
+  if (!Transform.has(tileDoorEntity)) Transform.create(tileDoorEntity, tilesPositions.doors[tileNumber])
+  if (!GltfContainer.has(tileDoorEntity)) GltfContainer.create(tileDoorEntity, tileDoorShape)
+  if (!VisibilityComponent.has(tileDoorEntity)) VisibilityComponent.create(tileDoorEntity, { visible: true })
 }
 
 async function onTileClick(tile: TileType) {
@@ -394,4 +380,27 @@ function shuffleArray(array: any[]) {
     ;[array[i], array[j]] = [array[j], array[i]]
   }
   return array
+}
+function initTileEntities() {
+  for (let tileNumber = 0; tileNumber < MAX_IMAGES; tileNumber++) {
+    const mainTileEntity = engine.addEntity()
+    const tileToy = engine.addEntity()
+    const tileDoorEntity = engine.addEntity()
+
+    const tile = {
+      mainEntity: mainTileEntity,
+      toyEntity: tileToy,
+      doorEntity: tileDoorEntity
+    }
+
+    syncEntity(mainTileEntity, [Tile.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 0)
+    syncEntity(tileToy, [GltfContainer.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 1)
+    syncEntity(
+      tileDoorEntity,
+      [Transform.componentId, VisibilityComponent.componentId],
+      SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 2
+    )
+
+    tiles.push(tile)
+  }
 }
