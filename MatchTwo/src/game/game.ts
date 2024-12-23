@@ -70,7 +70,7 @@ let gameCounter = 0
 export async function initGame() {
   initTileEntities()
   initGameDataEntity()
-  setupEffects(Vector3.create(0, 2.5, -6))
+  setupEffects(Vector3.create(0, 3.5, -6))
 
   await fetchPlayerProgress()
 
