@@ -4,6 +4,7 @@ import {
     InputAction,
     PointerEventType,
     PointerEventsResult,
+    PointerLock,
     Transform,
     engine,
     pointerEventsSystem
@@ -48,6 +49,11 @@ export class Dispenser {
                 }
             },
             () => {
+
+                if (!PointerLock.get(engine.CameraEntity).isPointerLocked) {
+                    return
+                }
+
                 if (!this._claimAvailable) {
                     this._exception(this._texts.notAvailable)
                     return
