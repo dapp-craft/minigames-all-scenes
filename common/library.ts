@@ -102,7 +102,7 @@ export async function initMiniGame(
     function onActivePlayerChange(player: PlayerType | null) {
         const {position: center, rotation} = Transform.get(sceneParentEntity)
         const playSpawn = positions.get(NODE_NAME.AREA_PLAYSPAWN)!.position
-
+        if (!getPlayer()) return // Ignore event if the player is outside of the scene
         if (!isActive && player?.address === getPlayer()?.userId) {
             isActive = true
             movePlayerTo({
