@@ -87,8 +87,8 @@ export class Dispenser {
         const prompt = ui.createComponent(ui.OkPrompt, {
             text: this._texts.beforeClaim,
             onAccept: async () => {
-                const result = await this._claim()
                 prompt.hide()
+                const result = await this._claim()
                 this._afterClaimDialogue(result.success, result.message)
             },
             width: 400,
