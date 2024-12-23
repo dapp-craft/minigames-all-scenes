@@ -54,11 +54,11 @@ export async function main() {
 
   initGame()
 
-  // dispenser = new Dispenser({
-    // notAvailable: 'Not available',
-    // beforeClaim: 'Claim your reward!',
-    // afterClaim: 'You already claimed your reward!'
-  // })
+  dispenser = new Dispenser("5CvD0OZdQpK8Zm8EzDoQTQGNveSvc0jKiVR7IFIlxrU=.BC1H4tn3F/oTtK5KvQtmDGmhVFU2WBvfi15LTeE6ti4=", {
+    notAvailable: 'Reach 750 score to get the reward!',
+    beforeClaim: 'Claim your reward!',
+    afterClaim: 'Reward has been given!'
+  })
 }
 
 const generateInitialEntity = async () => {

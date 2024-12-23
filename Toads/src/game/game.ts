@@ -1,5 +1,5 @@
 import * as utils from '@dcl-sdk/utils'
-import { gameLogic } from '..'
+import { dispenser, gameLogic } from '..'
 import { progressState, sceneParentEntity } from '../state'
 import { CameraModeArea, CameraType, engine } from '@dcl/sdk/ecs'
 import { updatePlayerProgress } from './syncData'
@@ -61,6 +61,10 @@ async function startGame() {
 
   const res = await gameLogic.startGame();
   console.log(res)
+
+  if (res >= 750) {
+    dispenser.enableClaim()
+  }
 
 
   progressState.moves = res
