@@ -13,6 +13,13 @@ interface PlayerData {
     time: number
 }
 
+interface RoundTimeData {
+    endRoundTimeout: number,
+    spawnEntityTweenDuration: number,
+    hitEntityTweenDuration: number,
+    stopRound: number
+}
+
 export class GameLogic {
     private endRoundTimeout = 0
     private playerLevel = 1
@@ -21,9 +28,15 @@ export class GameLogic {
     private playerScore = 0
     private stopRoundTimers: utils.TimerId[] = []
     private data: any
-    private playerData: PlayerData = {score: 0, level: 1, time: Date.now()}
+    private playerData: PlayerData = { score: 0, level: 1, time: Date.now() }
     private gameIsDone: Promise<void>
     private resolveReady!: () => void
+    private roundTimeData: RoundTimeData = {
+        endRoundTimeout: westLevelsConfig.startTime * 1000,
+        spawnEntityTweenDuration: westLevelsConfig.startTime * 1000,
+        hitEntityTweenDuration: westLevelsConfig.hitEntityTweenDuration * 1000,
+        stopRound: westLevelsConfig.startTime * 1000 + 100
+    }
 
     constructor() {
         this.gameIsDone = new Promise((res) => { this.resolveReady = res })
@@ -45,8 +58,9 @@ export class GameLogic {
 
     private async playGame() {
         this.targetData.clear()
+        this.calculateTime()
         const levelData = levels.get(this.playerLevel)
-        this.endRoundTimeout = utils.timers.setTimeout(() => this.finishRound(), this.calculateTime().endRoundTimeout)
+        this.endRoundTimeout = utils.timers.setTimeout(() => this.finishRound(), this.roundTimeData.endRoundTimeout)
         const roles = [...Array(levelData!.role[0]).fill(1), ...Array(levelData!.role[1]).fill(0)];
         roles.sort(() => Math.random() - 0.5);
         this.spawnEntity()
@@ -64,7 +78,7 @@ export class GameLogic {
                 },
                 () => {
                     this.targetData.get(i).dead = true
-                    console.log(westGameState.availableEntity[i], ' is clicked, he was Bandit? ', this.targetData.get(i).enemy)
+                    // console.log(westGameState.availableEntity[i], ' is clicked, he was Bandit? ', this.targetData.get(i).enemy)
                     Tween.deleteFrom(westGameState.availableEntity[i + westGameConfig.targetEntityAmount])
                     pointerEventsSystem.removeOnPointerDown(westGameState.availableEntity[i])
                     utils.timers.setTimeout(() => this.hitEntity(westGameState.availableEntity[i + westGameConfig.targetEntityAmount]), 10)
@@ -145,7 +159,7 @@ export class GameLogic {
     private setTexture(entity: Entity, bandit: boolean) {
         const randomTextureIndex = Math.floor(Math.random() * 13) + 1
         const texture = `images/${bandit ? `bandit` : `citizen`}/${randomTextureIndex}.png`
-        console.log(texture)
+        // console.log(texture)
         Material.createOrReplace(entity, {
             material: {
                 $case: 'pbr',
@@ -202,7 +216,7 @@ export class GameLogic {
                 start: Transform.get(entity).scale,
                 end: { ...Transform.get(entity).scale, y: 0 }
             }),
-            duration: this.calculateTime().spawnEntityTweenDuration,
+            duration: this.roundTimeData.spawnEntityTweenDuration / 4,
             easingFunction: EasingFunction.EF_EASEINBACK,
         }), 10)
     }
@@ -221,7 +235,7 @@ export class GameLogic {
                 end: Quaternion.fromEulerDegrees(-90, 1, 1),
 
             }),
-            duration: this.calculateTime().hitEntityTweenDuration,
+            duration: this.roundTimeData.hitEntityTweenDuration,
             easingFunction: EasingFunction.EF_EASEINBACK,
         });
     }
@@ -252,9 +266,9 @@ export class GameLogic {
     }
 
     private async finishRound() {
-        console.log("Lose ROUND")
+        // console.log("Lose ROUND")
         this.targetData.forEach(data => {
-            console.log(data)
+            // console.log(data)
             if (!data.dead && data.enemy) this.hitPlayer()
         })
         if (this.playerHP <= 0) return
@@ -290,7 +304,7 @@ export class GameLogic {
             this.stopRoundTimers[i] = utils.timers.setTimeout(() => {
                 VisibilityComponent.createOrReplace(westGameState.availableEntity[i]).visible = false
                 timerCouter++
-            }, !noAnimation ? this.calculateTime().hitEntityTweenDuration + 100 : 1)
+            }, !noAnimation ? this.roundTimeData.hitEntityTweenDuration + 100 : 1)
         }
         await RoundIsStopped;
     }
@@ -298,21 +312,22 @@ export class GameLogic {
     private setPlayerLevel() {
         // TEMP
         this.playerLevel++
-        console.log(levels.get(this.playerLevel)?.role)
+        // console.log(levels.get(this.playerLevel)?.role)
         if (this.playerLevel >= levels.size) {
-            console.log("Infinity level: ", this.playerLevel)
+            // console.log("Infinity level: ", this.playerLevel)
             levels.set(this.playerLevel, this.infinityLevelGenerator())
         }
-        console.log("Player Level: ", this.playerLevel)
+        // console.log("Player Level: ", this.playerLevel)
     }
 
     private calculateTime() {
-        let playerLevelMultiplier = this.playerLevel >= levels.size ? 18 : this.playerLevel
-        return {
-            endRoundTimeout: westLevelsConfig.initialAppearanceTime - 100 * (playerLevelMultiplier / 3) + westLevelsConfig.initialAppearanceTime / playerLevelMultiplier * 2 + 700,
-            spawnEntityTweenDuration: westLevelsConfig.initialAppearanceTime / playerLevelMultiplier + 200,
-            hitEntityTweenDuration: 200,
-            stopRound: westLevelsConfig.initialAppearanceTime / playerLevelMultiplier + 100
+        const delay = Math.max(westLevelsConfig.startTime - Math.floor(this.playerLevel / westLevelsConfig.levelsPerReduction) * 0.1, westLevelsConfig.minTime) * 1000
+        console.log(delay)
+        this.roundTimeData = {
+            endRoundTimeout: delay,
+            spawnEntityTweenDuration: delay,
+            hitEntityTweenDuration: westLevelsConfig.hitEntityTweenDuration * 1000,
+            stopRound: delay + 100
         }
     }
 
@@ -320,7 +335,7 @@ export class GameLogic {
         const randomTargetAmount = Math.floor(Math.random() * 3) + 3
         const enemyAmount = Math.floor(Math.random() * (randomTargetAmount - 1)) + 1
         const nonEnemyAmount = randomTargetAmount - enemyAmount
-        console.log('randomTargetAmount: ', randomTargetAmount, 'randomEnemyAmount: ', enemyAmount, "nonEnemyAmount: ", nonEnemyAmount)
+        // console.log('randomTargetAmount: ', randomTargetAmount, 'randomEnemyAmount: ', enemyAmount, "nonEnemyAmount: ", nonEnemyAmount)
         return { role: [enemyAmount, nonEnemyAmount], generationType: 'twoLevels' }
     }
 
@@ -331,10 +346,16 @@ export class GameLogic {
         this.playerScore = 0
         this.updateCounters()
         this.targetData.clear()
+        this.roundTimeData = {
+            endRoundTimeout: westLevelsConfig.startTime * 1000,
+            spawnEntityTweenDuration: westLevelsConfig.startTime * 1000,
+            hitEntityTweenDuration: westLevelsConfig.hitEntityTweenDuration * 1000,
+            stopRound: westLevelsConfig.startTime * 1000 + 100
+        }
     }
 
     private setPlayerData() {
-        this.playerData = {score: this.playerScore, level: this.playerLevel, time: Date.now() - this.playerData.time}
+        this.playerData = { score: this.playerScore, level: this.playerLevel, time: Date.now() - this.playerData.time }
     }
 
     public async stopGame() {

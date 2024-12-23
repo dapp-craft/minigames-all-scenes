@@ -7,8 +7,11 @@ export const westGameConfig = {
 }
 
 export const westLevelsConfig = {
-    initialAppearanceTime: 2000,
-    windowOpenDuration: 500,
+    levelsPerReduction: 3,
+    minTime: 0.7,
+    startTime: 2,
+    hitEntityTweenDuration: 0.2,
+    windowOpenDuration: 0.5,
 }
 
 export const WEST_SYNC_ID = 5000
