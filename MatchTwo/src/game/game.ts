@@ -78,8 +78,6 @@ export async function initGame() {
   await setTilesPositions()
   await setStatusBoardPositions()
 
-
-
   setupGameUI()
 
   initTiles()
@@ -397,7 +395,7 @@ function initTileEntities() {
     syncEntity(tileToy, [GltfContainer.componentId], SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 1)
     syncEntity(
       tileDoorEntity,
-      [Transform.componentId, VisibilityComponent.componentId],
+      [Tween.componentId, VisibilityComponent.componentId],
       SYNC_ENTITY_OFFSET + 100 + tileNumber * 4 + 2
     )
 
