@@ -29,7 +29,7 @@ initMiniGame(GAME_ID, [MOVES, LEVEL, TIME], readGltfLocators(`locators/obj_locat
     sortDirection: 'asc'
   },
   scene: {
-    rotation: 90
+    rotation: 0
   }
 })
 
