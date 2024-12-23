@@ -47,6 +47,7 @@ let gameDataEntity: Entity
 
 let tiles: TileType[] = []
 export let flippedTileQueue: TileType[] = []
+let inputAvailable = false
 
 export const sessionState = {
   startTime: 0,
@@ -135,6 +136,7 @@ function createTile(tileNumber: number) {
 
 async function onTileClick(tile: TileType) {
   // TODO use board rotation to define start and end rotation
+  if (!inputAvailable) return
   await openTile(tile)
   checkIfMatch()
 }
@@ -223,6 +225,7 @@ export function getReadyToStart() {
 }
 
 export async function startLevel(level: keyof typeof TILES_LEVEL) {
+  inputAvailable = false
   console.log('Start level', level)
 
   levelButtons.forEach((button, i) => {
@@ -238,6 +241,7 @@ export async function startLevel(level: keyof typeof TILES_LEVEL) {
   flippedTileQueue = []
 
   await cb
+  inputAvailable = true
 
   if (gc !== gameCounter || !inGame) return
 
@@ -318,6 +322,8 @@ function disableTile(tile: TileType) {
 
 async function finishLevel() {
   console.log('Level finished')
+
+  inputAvailable = false
 
   gameState.levelFinishTime = Date.now()
   updatePlayerProgress(gameState)
