@@ -43,7 +43,8 @@ export class Dispenser {
                 entity: this._entity,
                 opts: {
                     button: InputAction.IA_POINTER,
-                    hoverText: 'Claim'
+                    hoverText: 'Claim',
+                    showHighlight: false
                 }
             },
             () => {
