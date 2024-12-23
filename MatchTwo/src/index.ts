@@ -43,7 +43,7 @@ export function main() {
   setupUI()
 
   DISPENSER = new Dispenser("5CvD0OZdQpK8Zm8EzDoQTQGNveSvc0jKiVR7IFIlxrU=.BC1H4tn3F/oTtK5KvQtmDGmhVFU2WBvfi15LTeE6ti4=", {
-    notAvailable: 'Complete 2nd level in order to get the reward!',
+    notAvailable: 'Complete 5th level in order to get the reward!',
     beforeClaim: 'Claim your reward!',
     afterClaim: 'Reward has been given!'
   })
