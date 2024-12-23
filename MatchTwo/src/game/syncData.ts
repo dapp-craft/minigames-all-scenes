@@ -13,7 +13,7 @@ export async function fetchPlayerProgress() {
   if (!req?.length) return
   playerProgress = req[0]
 
-  if (playerProgress.level >= 2) {
+  if (playerProgress.level >= 5) {
     DISPENSER.enableClaim()
   }
 
@@ -22,7 +22,7 @@ export async function fetchPlayerProgress() {
 export async function updatePlayerProgress(data: typeof gameState) {
   console.log('Updating progress', playerProgress)
 
-  if (gameState.level >= 2) {
+  if (gameState.level >= 5) {
     DISPENSER.enableClaim()
   }
 
