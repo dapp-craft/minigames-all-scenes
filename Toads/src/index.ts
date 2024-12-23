@@ -54,7 +54,7 @@ export async function main() {
 
   initGame()
 
-  dispenser = new Dispenser("5CvD0OZdQpK8Zm8EzDoQTQGNveSvc0jKiVR7IFIlxrU=.BC1H4tn3F/oTtK5KvQtmDGmhVFU2WBvfi15LTeE6ti4=", {
+  dispenser = new Dispenser("XI64HgelSq6gLK8iurbmOXjKmUoWok4Gh+/+WVJhU6U=.QiTMie26Q4xy4Ez/sH9TgaJIRWNqmbkpt/u80jfnBn0=", {
     notAvailable: 'Reach 350 score to get the reward!',
     beforeClaim: 'Claim your reward!',
     afterClaim: 'Reward has been given!'
