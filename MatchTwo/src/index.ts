@@ -37,10 +37,14 @@ initMiniGame(GAME_ID, [MOVES, LEVEL, TIME], readGltfLocators(`locators/obj_locat
 
 export let DISPENSER: Dispenser
 
-export function main() {
+export async function main() {
   getRealm({}).then(({ realmInfo }) => {
     console.log('Realm Info: ', realmInfo?.baseUrl)
   })
+
+  const realmData = await getRealm({})
+  console.log('Realm Data: ', JSON.stringify(realmData))
+
 
   setupStaticModels()
 
