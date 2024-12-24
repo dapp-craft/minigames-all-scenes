@@ -1,7 +1,9 @@
 import * as utils from '@dcl-sdk/utils'
-import { engine } from "@dcl/sdk/ecs"
 import { gameLogic } from ".."
 import { cancelCountdown, runCountdown } from "../../../common/effects"
+import { westGameConfig } from '../config'
+
+export let startTimeOut = 0
 
 export const initGame = async () => {
     console.log('INIT GAME')
@@ -10,21 +12,21 @@ export const initGame = async () => {
 export function getReadyToStart() {
     console.log('Get Ready to start!')
     // soundManager.playSound('enterSounds', soundConfig.volume)
-    exitCallback(false)
-    runCountdown().then(() => startGame())
+    runCountdown(westGameConfig.timeBeforeStart)
+    startTimeOut = utils.timers.setTimeout(() => startGame(), westGameConfig.timeBeforeStart * 1000 + 200)
 }
 
 export function exitCallback(exit: boolean = true) {
     cancelCountdown()
     utils.timers.setTimeout(() => {
-        // if (exit == true) soundManager.playSound('exitSounds', soundConfig.volume)
+        utils.timers.clearTimeout(startTimeOut)
         gameLogic.stopGame()
-        engine.removeSystem('countdown-system')
     }, 100)
 
 }
 
 export async function startGame() {
+    console.log('game Sarted')
     const res = await gameLogic.startGame();
     console.log(res)
     // await updatePlayerProgress(res);
