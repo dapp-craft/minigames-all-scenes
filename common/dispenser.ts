@@ -121,9 +121,8 @@ export class Dispenser {
         const user = getPlayer()
         const { realmInfo } = await getRealm({})
 
-        console.log("Realm Info: ", realmInfo)
-
-
+        
+        
         
         if (!user || !realmInfo) {
             return { success: false, message: "Couldn't send a reward" }
@@ -133,6 +132,10 @@ export class Dispenser {
             return { success: false, message: 'Guests cannot claim rewards' }
         }
 
+        //@ts-ignore
+        const realmUrl = realmInfo?.baseUrl ?? realmInfo.domain
+        console.log("Realm URL: ", realmUrl)
+        
         const assignRequest = await signedFetch({
             url: 'https://rewards.decentraland.org/api/rewards',
             init: {
