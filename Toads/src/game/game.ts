@@ -62,7 +62,7 @@ async function startGame() {
   const res = await gameLogic.startGame();
   console.log(res)
 
-  if (res >= 350) {
+  if (res >= 300) {
     dispenser.enableClaim()
   }
 
