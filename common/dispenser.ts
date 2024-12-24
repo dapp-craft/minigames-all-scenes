@@ -50,6 +50,9 @@ export class Dispenser {
             },
             () => {
 
+                getRealm({}).then(({ realmInfo }) => {
+                    console.log("Realm Info: ", realmInfo?.baseUrl)
+                })
 
                 if (!this._claimAvailable) {
                     this._exception(this._texts.notAvailable)
