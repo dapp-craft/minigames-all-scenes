@@ -14,6 +14,8 @@ import { initMiniGame } from '../../common/library'
 import { toggleBackgroundMusic } from './SoundManager'
 import { LEVEL, MOVES, TIME } from '@dcl-sdk/mini-games/src/ui/scoreboard/columnData'
 import { Dispenser } from '../../common/dispenser'
+import { getRealm } from '~system/Runtime'
+
 ;(globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
@@ -36,15 +38,22 @@ initMiniGame(GAME_ID, [MOVES, LEVEL, TIME], readGltfLocators(`locators/obj_locat
 export let DISPENSER: Dispenser
 
 export function main() {
+  getRealm({}).then(({ realmInfo }) => {
+    console.log('Realm Info: ', realmInfo?.baseUrl)
+  })
+
   setupStaticModels()
 
   initGame()
 
   setupUI()
 
-  DISPENSER = new Dispenser("+ArAXhfYS02qYwUXEH07WXjKmUoWok4Gh+/+WVJhU6U=.qYWqzrh40+auT/H20oAcUX0wBZSWDKVX2gNntINuU2c=", {
-    notAvailable: 'Complete 5th level in order to get the reward!',
-    beforeClaim: 'Claim your reward!',
-    afterClaim: 'Reward has been given!'
-  })
+  DISPENSER = new Dispenser(
+    '+ArAXhfYS02qYwUXEH07WXjKmUoWok4Gh+/+WVJhU6U=.qYWqzrh40+auT/H20oAcUX0wBZSWDKVX2gNntINuU2c=',
+    {
+      notAvailable: 'Complete 5th level in order to get the reward!',
+      beforeClaim: 'Claim your reward!',
+      afterClaim: 'Reward has been given!'
+    }
+  )
 }
