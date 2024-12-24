@@ -27,6 +27,7 @@ export class Dispenser {
 
     private _claimAvailable: boolean = false
     private _rewardClaimed: boolean = false
+    private _uiActive: boolean = false
 
     private _texts: DispenserTexsts
     private _campaignKey: string
@@ -50,9 +51,9 @@ export class Dispenser {
             },
             () => {
 
-                getRealm({}).then(({ realmInfo }) => {
-                    console.log("Realm Info: ", realmInfo?.baseUrl)
-                })
+                if (this._uiActive) {
+                    return
+                }
 
                 if (!this._claimAvailable) {
                     this._exception(this._texts.notAvailable)
@@ -78,10 +79,15 @@ export class Dispenser {
     }
 
     private _exception(text: string) {
+        this._uiActive = true
         const prompt = ui.createComponent(ui.OkPrompt, {
             text: text,
             onAccept: () => {
                 prompt.hide()
+                this._uiActive = false
+            },
+            onClose: () => {
+                this._uiActive = false
             },
             acceptLabel: "   OK   ",
             width: 400,
@@ -91,12 +97,17 @@ export class Dispenser {
     }
 
     private _claimDialogue() {
+        this._uiActive = true
         const prompt = ui.createComponent(ui.OkPrompt, {
             text: this._texts.beforeClaim,
             onAccept: async () => {
                 prompt.hide()
+                this._uiActive = false
                 const result = await this._claim()
                 this._afterClaimDialogue(result.success, result.message)
+            },
+            onClose: () => {
+                this._uiActive = false
             },
             width: 400,
             acceptLabel: 'Claim',
@@ -105,10 +116,15 @@ export class Dispenser {
     }
 
     private _afterClaimDialogue(status: boolean, message: string) {
+        this._uiActive = true
         const prompt = ui.createComponent(ui.OkPrompt, {
             text: status ? this._texts.afterClaim : message,
             onAccept: () => {
+                this._uiActive = false
                 prompt.hide()
+            },
+            onClose: () => {
+                this._uiActive = false
             },
             width: 400,
             acceptLabel: "   OK   ",
