@@ -1,4 +1,4 @@
-import { engine, executeTask, GltfContainer, MeshCollider, MeshRenderer, TextShape, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
+import { engine, executeTask, GltfContainer, Material, MeshCollider, MeshRenderer, TextShape, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
@@ -57,7 +57,7 @@ const generateInitialEntity = async () => {
     syncEntity(score, [Transform.componentId, TextShape.componentId], WEST_SYNC_ID + westGameConfig.targetEntityAmount * 3 + 2)
 
     for (let i = 0; i <= westGameConfig.targetEntityAmount * 3; i++) {
-        syncEntity(westGameState.availableEntity[i], [Transform.componentId, VisibilityComponent.componentId, MeshRenderer.componentId], WEST_SYNC_ID + i)
+        syncEntity(westGameState.availableEntity[i], [Transform.componentId, VisibilityComponent.componentId, MeshRenderer.componentId, Material.componentId], WEST_SYNC_ID + i)
     }
 
     westGameState.listOfEntity.set('playerHP', playerHP)
