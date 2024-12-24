@@ -50,9 +50,6 @@ export class Dispenser {
             },
             () => {
 
-                if (!PointerLock.get(engine.CameraEntity).isPointerLocked) {
-                    return
-                }
 
                 if (!this._claimAvailable) {
                     this._exception(this._texts.notAvailable)
@@ -119,7 +116,10 @@ export class Dispenser {
 
     private async _claim() {
         const user = getPlayer()
-        const realmInfo = await getRealm({})
+        const { realmInfo } = await getRealm({})
+
+        console.log("Realm Info: ", realmInfo)
+
 
         
         if (!user || !realmInfo) {
@@ -140,7 +140,7 @@ export class Dispenser {
                 body: JSON.stringify({
                     campaign_key: this._campaignKey,
                     beneficiary: user.userId,
-                    catalyst: realmInfo.realmInfo?.baseUrl
+                    catalyst: realmInfo?.baseUrl
                 })
             }
         })
