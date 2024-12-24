@@ -14,1204 +14,454 @@
 	],
 	"nodes":[
 		{
-			"name":"Bone.001",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.002",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.003",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.004",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.005",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.006",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.007",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.008",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.009",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.010",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.011",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.012",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.013",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.001"
 		},
 		{
-			"name":"Bone.014",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.002"
 		},
 		{
-			"name":"Bone.015",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.003"
 		},
 		{
-			"name":"Bone.016",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.004"
 		},
 		{
-			"name":"Bone.017",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.005"
 		},
 		{
-			"name":"Bone.018",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.006"
 		},
 		{
-			"name":"Bone.019",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.007"
 		},
 		{
-			"name":"Bone.020",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.008"
 		},
 		{
-			"name":"Bone.021",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.009"
 		},
 		{
-			"name":"Bone.022",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.010"
 		},
 		{
-			"name":"Bone.023",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.011"
 		},
 		{
-			"name":"Bone.024",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.012"
 		},
 		{
-			"name":"Bone.025",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.013"
 		},
 		{
-			"name":"Bone.026",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.014"
 		},
 		{
-			"name":"Bone.027",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.015"
 		},
 		{
-			"name":"Bone.028",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.016"
 		},
 		{
-			"name":"Bone.029",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.017"
 		},
 		{
-			"name":"Bone.030",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.018"
 		},
 		{
-			"name":"Bone.031",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.019"
 		},
 		{
-			"name":"Bone.032",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.020"
 		},
 		{
-			"name":"Bone.033",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.021"
 		},
 		{
-			"name":"Bone.034",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.022"
 		},
 		{
-			"name":"Bone.035",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.023"
 		},
 		{
-			"name":"Bone.036",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.024"
 		},
 		{
-			"name":"Bone.037",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.025"
 		},
 		{
-			"name":"Bone.038",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.026"
 		},
 		{
-			"name":"Bone.039",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.027"
 		},
 		{
-			"name":"Bone.040",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.028"
 		},
 		{
-			"name":"Bone.041",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.029"
 		},
 		{
-			"name":"Bone.042",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.030"
 		},
 		{
-			"name":"Bone.043",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.031"
 		},
 		{
-			"name":"Bone.044",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.032"
 		},
 		{
-			"name":"Bone.045",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.033"
 		},
 		{
-			"name":"Bone.046",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.034"
 		},
 		{
-			"name":"Bone.047",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.035"
 		},
 		{
-			"name":"Bone.048",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.036"
 		},
 		{
-			"name":"Bone.049",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.037"
 		},
 		{
-			"name":"Bone.050",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.038"
 		},
 		{
-			"name":"Bone.051",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.039"
 		},
 		{
-			"name":"Bone.052",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.040"
 		},
 		{
-			"name":"Bone.053",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.041"
 		},
 		{
-			"name":"Bone.054",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.042"
 		},
 		{
-			"name":"Bone.055",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.043"
 		},
 		{
-			"name":"Bone.056",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.044"
 		},
 		{
-			"name":"Bone.057",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.045"
 		},
 		{
-			"name":"Bone.058",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.046"
 		},
 		{
-			"name":"Bone.059",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.047"
 		},
 		{
-			"name":"Bone.060",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.048"
 		},
 		{
-			"name":"Bone.061",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.049"
 		},
 		{
-			"name":"Bone.062",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.050"
 		},
 		{
-			"name":"Bone.063",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.051"
 		},
 		{
-			"name":"Bone.064",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.052"
 		},
 		{
-			"name":"Bone.065",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.053"
 		},
 		{
-			"name":"Bone.066",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.054"
 		},
 		{
-			"name":"Bone.067",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.055"
 		},
 		{
-			"name":"Bone.068",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.056"
 		},
 		{
-			"name":"Bone.069",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.057"
 		},
 		{
-			"name":"Bone.070",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.058"
 		},
 		{
-			"name":"Bone.071",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.059"
 		},
 		{
-			"name":"Bone.072",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.060"
 		},
 		{
-			"name":"Bone.073",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.061"
 		},
 		{
-			"name":"Bone.074",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.062"
 		},
 		{
-			"name":"Bone.075",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.063"
 		},
 		{
-			"name":"Bone.076",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.064"
 		},
 		{
-			"name":"Bone.077",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.065"
 		},
 		{
-			"name":"Bone.078",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.066"
 		},
 		{
-			"name":"Bone.079",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.067"
 		},
 		{
-			"name":"Bone.080",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.068"
 		},
 		{
-			"name":"Bone.081",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.069"
 		},
 		{
-			"name":"Bone.082",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.070"
 		},
 		{
-			"name":"Bone.083",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.071"
 		},
 		{
-			"name":"Bone.084",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.072"
 		},
 		{
-			"name":"Bone.085",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.073"
 		},
 		{
-			"name":"Bone.086",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.074"
 		},
 		{
-			"name":"Bone.087",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.075"
 		},
 		{
-			"name":"Bone.088",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.076"
 		},
 		{
-			"name":"Bone.089",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.077"
 		},
 		{
-			"name":"Bone.090",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.078"
 		},
 		{
-			"name":"Bone.091",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.079"
 		},
 		{
-			"name":"Bone.092",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.080"
 		},
 		{
-			"name":"Bone.093",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.081"
 		},
 		{
-			"name":"Bone.094",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.082"
 		},
 		{
-			"name":"Bone.095",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.083"
 		},
 		{
-			"name":"Bone.096",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.084"
 		},
 		{
-			"name":"Bone.097",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.085"
 		},
 		{
-			"name":"Bone.098",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.086"
 		},
 		{
-			"name":"Bone.099",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.087"
 		},
 		{
-			"name":"Bone.100",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.088"
 		},
 		{
-			"name":"Bone.101",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.089"
 		},
 		{
-			"name":"Bone.102",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.090"
 		},
 		{
-			"name":"Bone.103",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.091"
 		},
 		{
-			"name":"Bone.104",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.092"
 		},
 		{
-			"name":"Bone.105",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.093"
 		},
 		{
-			"name":"Bone.106",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.094"
 		},
 		{
-			"name":"Bone.107",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.095"
 		},
 		{
-			"name":"Bone.108",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.096"
 		},
 		{
-			"name":"Bone.109",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.097"
 		},
 		{
-			"name":"Bone.110",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.098"
 		},
 		{
-			"name":"Bone.111",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.099"
 		},
 		{
-			"name":"Bone.112",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.100"
 		},
 		{
-			"name":"Bone.113",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.101"
 		},
 		{
-			"name":"Bone.114",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.102"
 		},
 		{
-			"name":"Bone.115",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.103"
 		},
 		{
-			"name":"Bone.116",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.104"
 		},
 		{
-			"name":"Bone.117",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.105"
 		},
 		{
-			"name":"Bone.118",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.106"
 		},
 		{
-			"name":"Bone.119",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.107"
 		},
 		{
-			"name":"Bone.120",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.108"
 		},
 		{
-			"name":"Bone.121",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.109"
 		},
 		{
-			"name":"Bone.122",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.110"
 		},
 		{
-			"name":"Bone.123",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.111"
 		},
 		{
-			"name":"Bone.124",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.112"
 		},
 		{
-			"name":"Bone.125",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.113"
 		},
 		{
-			"name":"Bone.126",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.114"
 		},
 		{
-			"name":"Bone.127",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.115"
 		},
 		{
-			"name":"Bone.128",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.116"
 		},
 		{
-			"name":"Bone.129",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.117"
 		},
 		{
-			"name":"Bone.130",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.118"
 		},
 		{
-			"name":"Bone.131",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.119"
 		},
 		{
-			"name":"Bone.132",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.120"
 		},
 		{
-			"name":"Bone.133",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.121"
 		},
 		{
-			"name":"Bone.134",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.122"
 		},
 		{
-			"name":"Bone.135",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.123"
 		},
 		{
-			"name":"Bone.136",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.124"
 		},
 		{
-			"name":"Bone.137",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.125"
 		},
 		{
-			"name":"Bone.138",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.139",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.140",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.141",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.142",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.143",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.144",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.145",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.146",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.147",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.148",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.149",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
-		},
-		{
-			"name":"Bone.150",
-			"translation":[
-				0,
-				0,
-				2.9802322387695312e-08
-			]
+			"name":"Bone.126"
+		},
+		{
+			"name":"Bone.127"
+		},
+		{
+			"name":"Bone.128"
+		},
+		{
+			"name":"Bone.129"
+		},
+		{
+			"name":"Bone.130"
+		},
+		{
+			"name":"Bone.131"
+		},
+		{
+			"name":"Bone.132"
+		},
+		{
+			"name":"Bone.133"
+		},
+		{
+			"name":"Bone.134"
+		},
+		{
+			"name":"Bone.135"
+		},
+		{
+			"name":"Bone.136"
+		},
+		{
+			"name":"Bone.137"
+		},
+		{
+			"name":"Bone.138"
+		},
+		{
+			"name":"Bone.139"
+		},
+		{
+			"name":"Bone.140"
+		},
+		{
+			"name":"Bone.141"
+		},
+		{
+			"name":"Bone.142"
+		},
+		{
+			"name":"Bone.143"
+		},
+		{
+			"name":"Bone.144"
+		},
+		{
+			"name":"Bone.145"
+		},
+		{
+			"name":"Bone.146"
+		},
+		{
+			"name":"Bone.147"
+		},
+		{
+			"name":"Bone.148"
+		},
+		{
+			"name":"Bone.149"
+		},
+		{
+			"name":"Bone.150"
 		},
 		{
 			"mesh":0,
@@ -1372,17 +622,7 @@
 				148,
 				149
 			],
-			"name":"Armature",
-			"scale":[
-				0.8499999642372131,
-				0.5606078505516052,
-				0.8499999642372131
-			],
-			"translation":[
-				0,
-				10.936441421508789,
-				0.25559186935424805
-			]
+			"name":"Armature"
 		}
 	],
 	"animations":[
@@ -4608,7 +3848,7 @@
 				},
 				{
 					"input":7,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":21
 				},
 				{
@@ -4743,7 +3983,7 @@
 				},
 				{
 					"input":7,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":48
 				},
 				{
@@ -4758,7 +3998,7 @@
 				},
 				{
 					"input":7,
-					"interpolation":"STEP",
+					"interpolation":"LINEAR",
 					"output":51
 				},
 				{
@@ -7007,14 +6247,14 @@
 			"componentType":5126,
 			"count":600,
 			"max":[
-				5.512834072113037,
-				11.663774490356445,
-				5.787081718444824
+				6.375000953674316,
+				0,
+				6.375000953674316
 			],
 			"min":[
-				-5.512834072113037,
-				10.209108352661133,
-				-5.275897979736328
+				-6.375000953674316,
+				0,
+				-6.375000953674316
 			],
 			"type":"VEC3"
 		},
