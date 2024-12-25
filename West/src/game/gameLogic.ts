@@ -78,7 +78,6 @@ export class GameLogic {
                 },
                 () => {
                     this.targetData.get(i).dead = true
-                    // console.log(westGameState.availableEntity[i], ' is clicked, he was Bandit? ', this.targetData.get(i).enemy)
                     Tween.deleteFrom(westGameState.availableEntity[i + westGameConfig.targetEntityAmount])
                     pointerEventsSystem.removeOnPointerDown(westGameState.availableEntity[i])
                     utils.timers.setTimeout(() => this.hitEntity(westGameState.availableEntity[i + westGameConfig.targetEntityAmount]), 10)
@@ -252,10 +251,13 @@ export class GameLogic {
     }
 
     private hitPlayer() {
-        this.playerHP = this.playerHP - 10
+        this.playerHP = this.playerHP - 1
         console.log("Hit PLAYER ", this.playerHP)
         this.updateCounters()
-        if (this.playerHP <= 0) this.stopGame()
+        if (this.playerHP <= 0) {
+            this.playerHP = 0
+            this.stopGame()
+        }
     }
 
     private updateCounters() {

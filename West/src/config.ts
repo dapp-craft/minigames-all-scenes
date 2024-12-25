@@ -3,7 +3,7 @@ export const westGameConfig = {
     targetEntityAmount: 9,
     horizontalLeftLimit: 0,
     horizontalRightLimit: 8,
-    playerMaxHP: 30,
+    playerMaxHP: 3,
     timeBeforeStart: 3
 }
 
