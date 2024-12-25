@@ -64,7 +64,7 @@ const generateInitialEntity = async () => {
     westGameState.listOfEntity.set('score', score)
 
     const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
-    westGameState.curtainsScale = data.get(`obj_window_1`)!.scale;
+    westGameState.curtainsScale = data.get(`obj_curtain_1`)!.scale;
 
     if (Transform.getOrNull(westGameState.availableEntity[0]) == null) {
         for (let i = 0; i < westGameConfig.targetEntityAmount - 1; i++) {
@@ -79,8 +79,8 @@ const generateInitialEntity = async () => {
     }
     if (Transform.getOrNull(westGameState.availableEntity[westGameConfig.targetEntityAmount * 3 + 1]) == null) {
         for (let i = 0; i <= westGameConfig.targetEntityAmount - 1; i++) {
-            const entityData = data.get(`obj_window_${i + 1}`)
-            Transform.create(westGameState.availableEntity[i + westGameConfig.targetEntityAmount * 2], { ...entityData, position: { ...entityData!.position, z: entityData!.position.z + .2 }, parent: sceneParentEntity })
+            const entityData = data.get(`obj_curtain_${i + 1}`)
+            Transform.create(westGameState.availableEntity[i + westGameConfig.targetEntityAmount * 2], { ...entityData, parent: sceneParentEntity })
             GltfContainer.create(westGameState.availableEntity[i + westGameConfig.targetEntityAmount * 2], { src: 'models/obj_curtains.gltf' })
         }
     }
