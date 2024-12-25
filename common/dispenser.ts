@@ -151,6 +151,11 @@ export class Dispenser {
         //@ts-ignore
         const realmUrl = realmInfo?.baseUrl ?? realmInfo.domain
         console.log("Realm URL: ", realmUrl)
+
+        console.log("Request: ", )
+        console.log(`    url:         https://rewards.decentraland.org/api/rewards`)
+        console.log(`    benificiary: ${user.userId}`)
+        console.log(`    catalyst:    ${realmUrl}`)
         
         const assignRequest = await signedFetch({
             url: 'https://rewards.decentraland.org/api/rewards',
@@ -167,15 +172,23 @@ export class Dispenser {
             }
         })
 
+        console.log("Response: ", assignRequest)
+        console.log("Response body: ", assignRequest.body)
+        console.log("Response status: ", assignRequest.status)
+        console.log("Response parsed: ", JSON.parse(assignRequest.body))
+
         if (JSON.parse(assignRequest.body).ok == true) {
             this._rewardClaimed = true
+            console.log("UI status, Reward claimed")
             return { success: true, message: 'Reward claimed' }
         }
 
         if (JSON.parse(assignRequest.body).ok == false) {
+            console.log("UI status, Rewards could not be given")
             return { success: false, message: "Rewards could not be given" }
         }
 
+        console.log("UI status, Error has been occured")
         return { success: false, message: 'Error has been occured' }
     }
 }
