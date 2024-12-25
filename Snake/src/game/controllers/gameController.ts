@@ -11,6 +11,7 @@ import { Board } from '../components'
 import { State } from '../synchronization/state'
 import { SyncRenderer } from '../synchronization/syncRenderer'
 import { log, LogExecutionTime} from '../utils'
+import { SPEED, SPEED_INCREASE_CHECKPOINTS } from '../config'
 
 export class GameController {
   private _boardSize: { width: number; height: number }
@@ -26,7 +27,7 @@ export class GameController {
   private _isInit: boolean = false
   private _score: number = 0
 
-  private _startTime: number = 0
+  private _startTime: number = 0 // Timestamp when the game started
 
   private _state = new State(Board)  
   private _syncRender: SyncRenderer
@@ -39,6 +40,9 @@ export class GameController {
   private _boost: boolean = false
 
   private system = (dt: number) => {
+
+    this.modifySpeed()
+
     this.timer += dt
     if (this.timer >= SPEED[this._boost ? SPEED.length - 1 : this._speed]) {
       this.timer = 0
@@ -309,8 +313,8 @@ export class GameController {
   }
 
   private modifySpeed() {
-    // -2 because the boost speed is current speed + 1
-    this._speed = Math.min(Math.floor(this._score / 5), SPEED.length - 2)
+    const secondsSinceStart = (Date.now() - this._startTime) / 1000
+    this._speed = SPEED_INCREASE_CHECKPOINTS.findIndex((checkpoint) => secondsSinceStart < checkpoint)
   }
 
   private checkCollision() {
@@ -334,7 +338,6 @@ export class GameController {
   }
 }
 
-const SPEED = [0.6, 0.5, 0.4, 0.35, 0.3, 0.25, 0.20, 0.15, 0.10, 0.05, 0.04] // Itervals between moves in seconds
 
 function generateFoodPosition(boardSize: { width: number; height: number }) {
   return {
