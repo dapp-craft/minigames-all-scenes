@@ -57,7 +57,7 @@ const generateInitialEntity = async () => {
     syncEntity(score, [Transform.componentId, TextShape.componentId], WEST_SYNC_ID + westGameConfig.targetEntityAmount * 3 + 2)
 
     for (let i = 0; i <= westGameConfig.targetEntityAmount * 3; i++) {
-        syncEntity(westGameState.availableEntity[i], [Transform.componentId, VisibilityComponent.componentId, MeshRenderer.componentId, Material.componentId], WEST_SYNC_ID + i)
+        syncEntity(westGameState.availableEntity[i], [Transform.componentId, VisibilityComponent.componentId, Material.componentId], WEST_SYNC_ID + i)
     }
 
     westGameState.listOfEntity.set('playerHP', playerHP)
@@ -70,7 +70,7 @@ const generateInitialEntity = async () => {
         for (let i = 0; i < westGameConfig.targetEntityAmount - 1; i++) {
             Transform.create(westGameState.availableEntity[i + westGameConfig.targetEntityAmount], { position: Vector3.create(0, 1, 1), rotation: Quaternion.Zero(), parent: sceneParentEntity })
         }
-        for (let i = 0; i <= westGameConfig.targetEntityAmount - 1; i++) {
+        for (let i = 0; i < westGameConfig.targetEntityAmount; i++) {
             MeshRenderer.setPlane(westGameState.availableEntity[i])
             MeshCollider.setPlane(westGameState.availableEntity[i])
             VisibilityComponent.create(westGameState.availableEntity[i], { visible: false })
@@ -78,7 +78,7 @@ const generateInitialEntity = async () => {
         }
     }
     if (Transform.getOrNull(westGameState.availableEntity[westGameConfig.targetEntityAmount * 3 + 1]) == null) {
-        for (let i = 0; i <= westGameConfig.targetEntityAmount - 1; i++) {
+        for (let i = 0; i < westGameConfig.targetEntityAmount; i++) {
             const entityData = data.get(`obj_curtain_${i + 1}`)
             Transform.create(westGameState.availableEntity[i + westGameConfig.targetEntityAmount * 2], { ...entityData, parent: sceneParentEntity })
             GltfContainer.create(westGameState.availableEntity[i + westGameConfig.targetEntityAmount * 2], { src: 'models/obj_curtains.gltf' })

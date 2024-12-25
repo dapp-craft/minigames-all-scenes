@@ -43,7 +43,6 @@ export class GameLogic {
     }
 
     public async startGame() {
-        this.data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
         this.playGame()
         this.gameIsDone = new Promise(r => this.resolveReady = r)
         await this.gameIsDone;
@@ -56,7 +55,7 @@ export class GameLogic {
         this.playGame()
     }
 
-    private async playGame() {
+    private playGame() {
         this.targetData.clear()
         this.calculateTime()
         const levelData = levels.get(this.playerLevel)
@@ -186,11 +185,12 @@ export class GameLogic {
         })
     }
 
-    private spawnEntity() {
+    private async spawnEntity() {
         const levelData = levels.get(this.playerLevel)
         const levelTargetsAmount = levelData!.role.reduce((a, b) => a + b, 0)
         console.log("levelTargetsAmount: ", levelTargetsAmount, 'Player Level: ', this.playerLevel)
         const targetPositionArray = this.spawnRandomizer(levelData!.generationType, levelTargetsAmount)
+        this.data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
         for (let iterator = 0; iterator < levelTargetsAmount; iterator++) {
             let randomPositionNumber = targetPositionArray[iterator]
             const windowData = this.data.get(`obj_window_${randomPositionNumber}`)
@@ -215,7 +215,7 @@ export class GameLogic {
                 start: Transform.get(entity).scale,
                 end: { ...Transform.get(entity).scale, y: 0 }
             }),
-            duration: this.roundTimeData.spawnEntityTweenDuration / 4,
+            duration: westLevelsConfig.windowOpenDuration * 1000,
             easingFunction: EasingFunction.EF_EASEINBACK,
         }), 10)
     }
@@ -280,9 +280,9 @@ export class GameLogic {
 
     private async stopRound(noAnimation: boolean = false) {
         console.log("Stop ROUND")
+        utils.timers.clearTimeout(this.endRoundTimeout)
         let resolveReady!: () => void
         let RoundIsStopped = new Promise((res: any) => { resolveReady = res })
-        utils.timers.clearTimeout(this.endRoundTimeout)
         this.stopRoundTimers.forEach(el => utils.timers.clearTimeout(el))
         const levelTargetAmount = levels.get(this.playerLevel)!.role.reduce((a, b) => a + b, 0)
         let timerCouter = 0
@@ -327,7 +327,7 @@ export class GameLogic {
         console.log(delay)
         this.roundTimeData = {
             endRoundTimeout: delay,
-            spawnEntityTweenDuration: delay,
+            spawnEntityTweenDuration: delay + westLevelsConfig.windowOpenDuration * 1000,
             hitEntityTweenDuration: westLevelsConfig.hitEntityTweenDuration * 1000,
             stopRound: delay + 100
         }

@@ -12,7 +12,7 @@ export const westLevelsConfig = {
     minTime: 0.7,
     startTime: 2,
     hitEntityTweenDuration: 0.2,
-    windowOpenDuration: 0.5,
+    windowOpenDuration: 1,
 }
 
 export const WEST_SYNC_ID = 5000
