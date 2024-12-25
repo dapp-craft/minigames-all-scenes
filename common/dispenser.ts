@@ -14,7 +14,7 @@ import { getPlayer } from '@dcl/sdk/src/players'
 import { getRealm } from '~system/Runtime'
 import * as utils from '@dcl-sdk/utils'
 import * as ui from 'dcl-ui-toolkit'
-import { signedFetch } from '~system/SignedFetch'
+import { FlatFetchResponse, signedFetch } from '~system/SignedFetch'
 
 type DispenserTexsts = {
     notAvailable: string
@@ -170,6 +170,12 @@ export class Dispenser {
                     catalyst: realmInfo?.baseUrl
                 })
             }
+        }).catch((e) => {
+            console.log("SIGNFETCH ERROR")
+            console.log("Error: ", e)
+            console.log("Error message: ", e.message)
+            console.log("Error stack: ", e.stack)
+            return { body: JSON.stringify({ok: false, status: "IF YOU READ THIS CRY TT"}) } as FlatFetchResponse
         })
 
         console.log("Response: ", assignRequest)
