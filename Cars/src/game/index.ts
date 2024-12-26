@@ -39,7 +39,7 @@ import {
 import { queue, ui } from '@dcl-sdk/mini-games/src'
 import { playMoveCarSound, playStartLevelSound, playWinSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
-import { initSelector, selectedCar } from './selector'
+import { initSelector, selectCar } from './selector'
 import { initKeyboardInput } from './keyboardInput'
 import { CreateStateSynchronizer } from './stateSync'
 // import { initArrow } from './arrow'
@@ -161,7 +161,7 @@ export async function startLevel(level: number) {
   })
 
   playStartLevelSound()
-  selectedCar(undefined)
+  selectCar(undefined)
 
   clearInputBuffer()
 
@@ -355,7 +355,7 @@ export function exitGame() {
   clearInputBuffer()
   cancelCountdown()
   cancelWinAnimation()
-  selectedCar(undefined)
+  selectCar(undefined)
   inGame = false
   lastStart = 0
   inputAvailable = false

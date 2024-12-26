@@ -106,10 +106,14 @@ export function moveCar(directionMultiplier: number) {
   }
 }
 
-export function selectedCar(entity: Entity | undefined) {
+export function selectCar(entity: Entity | undefined) {
   if (!entity) {
+    Transform.getMutable(forwardArrow).scale = Vector3.Zero()
+    Transform.getMutable(backwardArrow).scale = Vector3.Zero()
     VisibilityComponent.getMutable(forwardArrow).visible = false
     VisibilityComponent.getMutable(backwardArrow).visible = false
+    carComponent = undefined
+    carEntity = undefined
     return
   }
 
@@ -117,9 +121,13 @@ export function selectedCar(entity: Entity | undefined) {
   carEntity = entity
 
   if (!carComponent) {
+    Transform.getMutable(forwardArrow).scale = Vector3.Zero()
+    Transform.getMutable(backwardArrow).scale = Vector3.Zero()
     VisibilityComponent.getMutable(forwardArrow).visible = false
     VisibilityComponent.getMutable(backwardArrow).visible = false
   } else {
+    Transform.getMutable(forwardArrow).scale = Vector3.create(0.5, 0.5, 0.5)
+    Transform.getMutable(backwardArrow).scale = Vector3.create(0.5, 0.5, 0.5)
     VisibilityComponent.getMutable(forwardArrow).visible = true
     VisibilityComponent.getMutable(backwardArrow).visible = true
     Transform.getMutable(forwardArrow).parent = entity

@@ -18,7 +18,7 @@ import {
 import * as utils from '@dcl-sdk/utils'
 import { Quaternion, Vector3, Color4 } from '@dcl/ecs-math'
 import { gameState, inGame, inputAvailable } from '.'
-import { carComponent, moveCar, selectedCar } from './selector'
+import { carComponent, moveCar, selectCar } from './selector'
 import { CarDirection } from './type'
 
 export function initKeyboardInput() {

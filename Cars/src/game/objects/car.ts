@@ -18,7 +18,7 @@ import { BOARD } from './board'
 import { Car } from '../components/definitions'
 import { CarDirection, Cell } from '../type'
 import { syncEntity } from '@dcl/sdk/network'
-import { selectedCar } from '../selector'
+import { selectCar } from '../selector'
 import { CarsSpec } from '../components/definitions'
 
 export let MAIN_CAR: Entity
@@ -51,7 +51,7 @@ export function createCarEntity(id: number, isMain: boolean) {
     },
     () => {
       console.log('Car clicked')
-      selectedCar(car)
+      selectCar(car)
     }
   )
 
