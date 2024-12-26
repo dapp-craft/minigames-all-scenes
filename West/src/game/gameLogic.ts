@@ -1,11 +1,12 @@
 import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, InputAction, Material, MaterialTransparencyMode, MeshCollider, MeshRenderer, pointerEventsSystem, TextShape, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
-import { westGameConfig, westLevelsConfig } from "../config";
+import { soundConfig, westGameConfig, westLevelsConfig } from "../config";
 import { westGameState } from "../state";
 import { Color4, Quaternion, Vector3 } from "@dcl/sdk/math";
 import { levels } from '../levels';
 import { readGltfLocators } from '../../../common/locators';
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src';
+import { soundManager } from '../globals';
 
 interface PlayerData {
     score: number,
@@ -27,7 +28,7 @@ export class GameLogic {
     private targetData = new Map()
     private playerScore = 0
     private stopRoundTimers: utils.TimerId[] = []
-    private data: any
+    private targetPositionArray: number[] = []
     private playerData: PlayerData = { score: 0, level: 1, time: Date.now() }
     private gameIsDone: Promise<void>
     private resolveReady!: () => void
@@ -56,6 +57,7 @@ export class GameLogic {
     }
 
     private playGame() {
+        soundManager.playSound('startRound', soundConfig.volume)
         this.targetData.clear()
         this.calculateTime()
         const levelData = levels.get(this.playerLevel)
@@ -79,8 +81,16 @@ export class GameLogic {
                     this.targetData.get(i).dead = true
                     Tween.deleteFrom(westGameState.availableEntity[i + westGameConfig.targetEntityAmount])
                     pointerEventsSystem.removeOnPointerDown(westGameState.availableEntity[i])
-                    utils.timers.setTimeout(() => this.hitEntity(westGameState.availableEntity[i + westGameConfig.targetEntityAmount]), 10)
-                    this.targetData.get(i).enemy ? this.playerScore += 10 : this.playerScore -= 10
+                    utils.timers.setTimeout(() => this.hitEntity(i), 10)
+                    if (this.targetData.get(i).enemy) {
+                        soundManager.playSound('hitEnemy', soundConfig.volume)
+                        this.playerScore += 10
+                    }
+                    else {
+                        soundManager.playSound('hitCiv', soundConfig.volume)
+                        this.playerScore -= 10
+                    }
+
                     this.updateCounters()
                     this.isEnemyLeft()
                 }
@@ -189,11 +199,10 @@ export class GameLogic {
         const levelData = levels.get(this.playerLevel)
         const levelTargetsAmount = levelData!.role.reduce((a, b) => a + b, 0)
         console.log("levelTargetsAmount: ", levelTargetsAmount, 'Player Level: ', this.playerLevel)
-        const targetPositionArray = this.spawnRandomizer(levelData!.generationType, levelTargetsAmount)
-        this.data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+        this.targetPositionArray = this.spawnRandomizer(levelData!.generationType, levelTargetsAmount)
         for (let iterator = 0; iterator < levelTargetsAmount; iterator++) {
-            let randomPositionNumber = targetPositionArray[iterator]
-            const windowData = this.data.get(`obj_window_${randomPositionNumber}`)
+            let randomPositionNumber = this.targetPositionArray[iterator]
+            const windowData = westGameState.locatorData.get(`obj_window_${randomPositionNumber}`)
             this.activateWindow(westGameState.availableEntity[randomPositionNumber + westGameConfig.targetEntityAmount * 2 - 1])
             const entity = westGameState.availableEntity[iterator]
             MeshCollider.getMutable(entity).collisionMask = ColliderLayer.CL_POINTER
@@ -201,6 +210,7 @@ export class GameLogic {
             Transform.createOrReplace(westGameState.availableEntity[iterator + westGameConfig.targetEntityAmount], {
                 ...windowData,
                 position: { ...windowData.position, y: windowData.position.y - windowData.scale.y / 1.8 },
+                rotation: Vector3.Zero(),
                 parent: sceneParentEntity
             })
             Tween.deleteFrom(westGameState.availableEntity[iterator + westGameConfig.targetEntityAmount])
@@ -227,16 +237,18 @@ export class GameLogic {
         }
     }
 
-    private hitEntity(entity: Entity) {
-        Tween.createOrReplace(entity, {
-            mode: Tween.Mode.Rotate({
-                start: Transform.get(entity).rotation,
-                end: Quaternion.fromEulerDegrees(-90, 1, 1),
+    private hitEntity(iterator: number) {
+        // Tween.createOrReplace(entity, {
+        //     mode: Tween.Mode.Rotate({
+        //         start: Transform.get(entity).rotation,
+        //         end: Quaternion.fromEulerDegrees(-90, 1, 1),
 
-            }),
-            duration: this.roundTimeData.hitEntityTweenDuration,
-            easingFunction: EasingFunction.EF_EASEINBACK,
-        });
+        //     }),
+        //     duration: this.roundTimeData.hitEntityTweenDuration,
+        //     easingFunction: EasingFunction.EF_EASEINBACK,
+        // });
+        // this.refrashCertainWindow(this.targetPositionArray[iterator])
+        Transform.getMutable(westGameState.availableEntity[iterator + westGameConfig.targetEntityAmount]).rotation = Quaternion.fromEulerDegrees(-90, 1, 1)
     }
 
     private async isEnemyLeft() {
@@ -254,6 +266,7 @@ export class GameLogic {
         this.playerHP = this.playerHP - 1
         console.log("Hit PLAYER ", this.playerHP)
         this.updateCounters()
+        soundManager.playSound('hitPLayer', soundConfig.volume)
         if (this.playerHP <= 0) {
             this.playerHP = 0
             this.stopGame()
@@ -273,13 +286,14 @@ export class GameLogic {
             // console.log(data)
             if (!data.dead && data.enemy) this.hitPlayer()
         })
-        if (this.playerHP <= 0) return
-        await this.stopRound()
+        if (this.playerHP <= 0) return soundManager.playSound('misfire', soundConfig.volume)
+        await this.stopRound(true)
         this.playGame()
     }
 
-    private async stopRound(noAnimation: boolean = false) {
+    private async stopRound(sound: boolean = false) {
         console.log("Stop ROUND")
+        sound && soundManager.playSound('finishRound', soundConfig.volume)
         utils.timers.clearTimeout(this.endRoundTimeout)
         let resolveReady!: () => void
         let RoundIsStopped = new Promise((res: any) => { resolveReady = res })
@@ -297,16 +311,16 @@ export class GameLogic {
         for (let i = levelTargetAmount; i < westGameConfig.targetEntityAmount; i++) {
             VisibilityComponent.createOrReplace(westGameState.availableEntity[i]).visible = false
             pointerEventsSystem.removeOnPointerDown(westGameState.availableEntity[i])
-            MeshCollider.getMutable(westGameState.availableEntity[i]).collisionMask = ColliderLayer.CL_PHYSICS
+            // MeshCollider.getMutable(westGameState.availableEntity[i]).collisionMask = ColliderLayer.CL_PHYSICS
         }
         for (let i = 0; i < levelTargetAmount; i++) {
             MeshCollider.getMutable(westGameState.availableEntity[i]).collisionMask = ColliderLayer.CL_PHYSICS
             pointerEventsSystem.removeOnPointerDown(westGameState.availableEntity[i])
-            this.hitEntity(westGameState.availableEntity[i + westGameConfig.targetEntityAmount])
+            this.hitEntity(i)
             this.stopRoundTimers[i] = utils.timers.setTimeout(() => {
                 VisibilityComponent.createOrReplace(westGameState.availableEntity[i]).visible = false
                 timerCouter++
-            }, !noAnimation ? this.roundTimeData.hitEntityTweenDuration + 100 : 1)
+            }, this.roundTimeData.hitEntityTweenDuration + 100)
         }
         await RoundIsStopped;
     }
@@ -326,7 +340,7 @@ export class GameLogic {
         const delay = Math.max(westLevelsConfig.startTime - Math.floor(this.playerLevel / westLevelsConfig.levelsPerReduction) * 0.1, westLevelsConfig.minTime) * 1000
         console.log(delay)
         this.roundTimeData = {
-            endRoundTimeout: delay,
+            endRoundTimeout: delay + 2000,
             spawnEntityTweenDuration: delay + westLevelsConfig.windowOpenDuration * 1000,
             hitEntityTweenDuration: westLevelsConfig.hitEntityTweenDuration * 1000,
             stopRound: delay + 100

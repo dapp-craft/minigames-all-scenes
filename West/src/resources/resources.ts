@@ -16,9 +16,11 @@ export const curtains: PBGltfContainer = { src: modelsFolder + 'obj_curtains.glt
 export const gameZone: PBGltfContainer = { src: modelsFolder + 'obj_gamezone.gltf' };
 
 // Game sounds
-export const enterSound = 'sounds/Start_of_the_round.mp3';
-export const exitSound = 'sounds/End_of_round.mp3';
-export const missSound = 'sounds/Miss.mp3';
-export const hitSound = 'sounds/Hit_the_target.mp3';
-export const snakeSound = 'sounds/snake.mp3';
+export const hitCiv = 'sounds/West_Civil_Hit.mp3';
+export const hitEnemy = 'sounds/West_Enemy_hit.mp3';
+export const hitPLayer = 'sounds/West_Get_hit.mp3';
+export const startRound = 'sounds/West_Start_round.mp3';
+export const finishRound = 'sounds/West_End_round.mp3';
+export const misfire = 'sounds/West_Misfire.mp3';
+
 

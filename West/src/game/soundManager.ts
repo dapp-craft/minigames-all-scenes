@@ -4,14 +4,15 @@ import {
     Entity,
     Transform  } from '@dcl/sdk/ecs'
   import * as utils from '@dcl-sdk/utils'
-import { hitSound, enterSound, exitSound, missSound, snakeSound } from '../resources/resources'
-  
+import { hitCiv, hitEnemy, hitPLayer, startRound, finishRound, misfire } from '../resources/resources'
+
   export let SOUNDS: { [key: string]: string } = {
-    "enterSounds": enterSound, 
-    "exitSounds": exitSound,
-    "missSound": missSound,
-    "hitSound": hitSound,
-    "snakeSound": snakeSound
+    "hitCiv": hitCiv, 
+    "hitEnemy": hitEnemy,
+    "hitPLayer": hitPLayer,
+    "startRound": startRound,
+    "finishRound": finishRound,
+    "misfire": misfire
   }
   
   export let THEME = ''
@@ -19,7 +20,7 @@ import { hitSound, enterSound, exitSound, missSound, snakeSound } from '../resou
   
   export const mainThereme = engine.addEntity()
   Transform.create(mainThereme, {parent: engine.PlayerEntity})
-  AudioSource.create(mainThereme, {audioClipUrl: `sounds/Toads_theme.mp3`, loop: true, playing: true, volume: 0.07})
+  AudioSource.create(mainThereme, {audioClipUrl: `sounds/West_Theme.mp3`, loop: true, playing: true, volume: 0.07})
   
   export class SoundManager {
     private soundsStorage: Entity[] = []

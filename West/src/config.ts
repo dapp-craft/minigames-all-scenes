@@ -15,4 +15,8 @@ export const westLevelsConfig = {
     windowOpenDuration: 1,
 }
 
+export const soundConfig = {
+    volume: 0.5
+}
+
 export const WEST_SYNC_ID = 5000
