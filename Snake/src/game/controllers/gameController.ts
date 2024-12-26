@@ -38,13 +38,15 @@ export class GameController {
   private timer: number = 0
   private _speed: number = 0
   private _boost: boolean = false
+  private _boostStartTime: number = 0
 
   private system = (dt: number) => {
 
     this.modifySpeed()
 
     this.timer += dt
-    if (this.timer >= SPEED[this._boost ? SPEED.length - 1 : this._speed]) {
+    
+    if (this.timer >= this.SpeedDelta()) {
       this.timer = 0
       this.update()
     }
@@ -251,6 +253,27 @@ export class GameController {
 
   public setBoost(active: boolean){
     this._boost = active
+    this._boostStartTime = Date.now()
+  }
+
+  public SpeedDelta(): number{
+
+    if (!this._boost) return SPEED[this._speed]
+
+    const dtime = Date.now() - this._boostStartTime
+    const dTimeSec = dtime / 1000
+
+    // "speed" is actually the time between updates
+    const maxUpdateRate = SPEED[SPEED.length - 1]
+    const minUpdateRate = SPEED[this._speed]
+    const speedDelta = minUpdateRate - maxUpdateRate 
+
+
+    const k = Math.min(1 / (100 * dTimeSec + 1), 1)
+    const speed = maxUpdateRate + speedDelta * k
+    
+    console.log("k", k, "speed", speed)
+    return speed
   }
 
   public get snake(): SnakePart | undefined {
