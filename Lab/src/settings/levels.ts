@@ -282,12 +282,12 @@ export const LEVELS = {
     },
     19: {
         colors: {
-            purple: [0.5, 0, 0.5],
-            blue: [0, 1, 1],
-            darkpurple: [0.3, 0, 0.3],
-            brown: [0.6, 0.3, 0],
-            orange: [1, 0.5, 0],
-            pink: [1, 0.4, 0.7]
+            purple: [0.8, 0.1, 0.9],    
+            blue: [0.1, 0.7, 1],       
+            darkpurple: [0.5, 0, 0.8],  
+            brown: [0.7, 0.4, 0.1],     
+            orange: [1, 0.6, 0.1],     
+            pink: [1, 0.2, 0.5]         
         },
         flasks: [
             ['purple', 'blue', 'blue', 'purple'],
@@ -302,12 +302,12 @@ export const LEVELS = {
     },
     20: {
         colors: {
-            purple: [0.5, 0, 0.5],
-            pink: [1, 0.4, 0.7],
-            yellow: [1, 1, 0],
-            teal: [0, 0.5, 0.5],
-            blue: [0, 1, 1],
-            green: [0, 0.5, 0]
+            purple: [0.8, 0.1, 0.9],    
+            pink: [1, 0.2, 0.5],       
+            yellow: [1, 0.9, 0.1],     
+            teal: [0.1, 0.7, 0.7],      
+            blue: [0.2, 0.4, 1],        
+            green: [0.3, 0.8, 0.2]      
         },
         flasks: [
             ['teal', 'yellow', 'pink', 'purple'],
@@ -322,12 +322,12 @@ export const LEVELS = {
     },
     21: {
         colors: {
-            yellow: [1, 1, 0],
-            red: [1, 0, 0],
-            purple: [0.5, 0, 0.5],
-            green: [0, 0.5, 0],
-            orange: [1, 0.5, 0],
-            blue: [0, 0, 1]
+            yellow: [1, 0.9, 0.1],
+            red: [0.9, 0.2, 0.2],
+            purple: [0.8, 0.1, 0.9],
+            green: [0.3, 0.8, 0.2],
+            orange: [1, 0.6, 0.1],
+            blue: [0.2, 0.4, 1]
         },
         flasks: [
             ['yellow', 'yellow', 'red', 'purple'],
@@ -342,12 +342,12 @@ export const LEVELS = {
     },
     22: {
         colors: {
-            ruby: [0.9, 0.1, 0.2],
-            jade: [0.4, 0.7, 0.4],
-            steel: [0.4, 0.4, 0.5],
-            coral: [1, 0.5, 0.4],
-            ocean: [0, 0.4, 0.7],
-            brass: [0.8, 0.6, 0.2]
+            ruby: [1, 0.2, 0.4],
+            jade: [0.2, 0.9, 0.4],
+            steel: [0.7, 0.2, 0.9],
+            coral: [1, 0.4, 0.8],
+            ocean: [0.2, 0.5, 1],
+            brass: [1, 0.8, 0.1]
         },
         flasks: [
             ['ruby', 'jade', 'steel', 'coral'],
@@ -362,12 +362,12 @@ export const LEVELS = {
     },
     23: {
         colors: {
-            wine: [0.6, 0.1, 0.2],
-            moss: [0.4, 0.5, 0.2],
-            azure: [0.1, 0.5, 0.9],
-            pearl: [0.9, 0.9, 0.8],
-            mauve: [0.7, 0.5, 0.7],
-            oxide: [0.5, 0.2, 0.1]
+            wine: [0.9, 0.1, 0.3],
+            moss: [0.3, 0.9, 0.2],
+            azure: [0.2, 0.6, 1],
+            pearl: [1, 0.3, 0.7],
+            mauve: [0.8, 0.2, 0.9],
+            oxide: [1, 0.6, 0.1]
         },
         flasks: [
             ['wine', 'moss', 'azure', 'pearl'],
@@ -382,12 +382,12 @@ export const LEVELS = {
     },
     24: {
         colors: {
-            brick: [0.7, 0.2, 0.1],
-            pine: [0.2, 0.5, 0.3],
-            denim: [0.2, 0.3, 0.6],
-            honey: [0.9, 0.7, 0.2],
-            plum: [0.4, 0.2, 0.4],
-            metal: [0.6, 0.6, 0.7]
+            brick: [1, 0.2, 0.2],
+            pine: [0.2, 0.8, 0.3],
+            denim: [0.2, 0.4, 1],
+            honey: [1, 0.8, 0.1],
+            plum: [0.8, 0.1, 0.9],
+            metal: [0.9, 0.3, 0.6]
         },
         flasks: [
             ['brick', 'pine', 'denim', 'honey'],
@@ -402,12 +402,12 @@ export const LEVELS = {
     },
     25: {
         colors: {
-            garnet: [0.6, 0.1, 0.2],
-            sage: [0.5, 0.6, 0.5],
-            cobalt: [0.2, 0.2, 0.6],
-            amber: [0.9, 0.6, 0.1],
-            orchid: [0.7, 0.4, 0.7],
-            bronze: [0.7, 0.5, 0.2]
+            garnet: [0.9, 0.2, 0.3],
+            sage: [0.3, 0.9, 0.4],
+            cobalt: [0.2, 0.4, 1],
+            amber: [1, 0.7, 0.1],
+            orchid: [0.8, 0.2, 0.9],
+            bronze: [1, 0.5, 0.1]
         },
         flasks: [
             ['garnet', 'sage', 'cobalt', 'amber'],
@@ -422,12 +422,12 @@ export const LEVELS = {
     },
     26: {
         colors: {
-            crimson: [0.8, 0.1, 0.2],
-            forest: [0.1, 0.3, 0.2],
-            marine: [0.1, 0.3, 0.6],
-            sunset: [0.9, 0.5, 0.3],
-            violet: [0.5, 0.3, 0.7],
-            copper: [0.7, 0.4, 0.3]
+            crimson: [1, 0.2, 0.2],
+            forest: [0.2, 0.8, 0.3],
+            marine: [0.2, 0.5, 1],
+            sunset: [1, 0.6, 0.1],
+            violet: [0.8, 0.2, 0.9],
+            copper: [1, 0.4, 0.6]
         },
         flasks: [
             ['crimson', 'forest', 'marine', 'sunset'],
@@ -442,12 +442,12 @@ export const LEVELS = {
     },
     27: {
         colors: {
-            ruby: [0.9, 0.1, 0.2],
-            jade: [0.4, 0.7, 0.4],
-            steel: [0.4, 0.4, 0.5],
-            coral: [1, 0.5, 0.4],
-            ocean: [0, 0.4, 0.7],
-            brass: [0.8, 0.6, 0.2]
+            ruby: [1, 0.2, 0.3],
+            jade: [0.2, 0.9, 0.4],
+            steel: [0.8, 0.2, 0.9],
+            coral: [1, 0.4, 0.8],
+            ocean: [0.2, 0.5, 1],
+            brass: [1, 0.8, 0.1]
         },
         flasks: [
             ['ruby', 'coral', 'steel', 'ocean'],
@@ -462,12 +462,12 @@ export const LEVELS = {
     },
     28: {
         colors: {
-            ruby: [0.9, 0.1, 0.2],
-            jade: [0.4, 0.7, 0.4],
-            steel: [0.4, 0.4, 0.5],
-            coral: [1, 0.5, 0.4],
-            ocean: [0, 0.4, 0.7],
-            brass: [0.8, 0.6, 0.2]
+            ruby: [1, 0.2, 0.3],
+            jade: [0.2, 0.9, 0.4],
+            steel: [0.8, 0.2, 0.9],
+            coral: [1, 0.4, 0.8],
+            ocean: [0.2, 0.5, 1],
+            brass: [1, 0.8, 0.1]
         },
         flasks: [
             ['ruby', 'jade', 'brass', 'coral'],
@@ -482,12 +482,12 @@ export const LEVELS = {
     },
     29: {
         colors: {
-            crimson: [0.8, 0.1, 0.2],
-            emerald: [0.2, 0.8, 0.4],
-            navy: [0.1, 0.2, 0.6],
-            golden: [1, 0.8, 0.2],
-            violet: [0.6, 0.2, 0.8],
-            bronze: [0.8, 0.5, 0.2]
+            crimson: [1, 0.2, 0.2],
+            emerald: [0.2, 0.9, 0.4],
+            navy: [0.2, 0.4, 1],
+            golden: [1, 0.8, 0.1],
+            violet: [0.8, 0.2, 0.9],
+            bronze: [1, 0.6, 0.1]
         },
         flasks: [
             ['crimson', 'navy', 'golden', 'violet'],
@@ -502,12 +502,12 @@ export const LEVELS = {
     },
     30: {
         colors: {
-            coral: [1, 0.3, 0.3],
-            teal: [0.1, 0.7, 0.7],
-            purple: [0.5, 0.1, 0.5],
-            amber: [1, 0.75, 0.1],
-            marine: [0.1, 0.4, 0.8],
-            olive: [0.5, 0.6, 0.2]
+            coral: [1, 0.2, 0.4],
+            teal: [0.2, 0.8, 0.8],
+            purple: [0.8, 0.2, 0.9],
+            amber: [1, 0.8, 0.1],
+            marine: [0.2, 0.5, 1],
+            olive: [0.3, 0.9, 0.2]
         },
         flasks: [
             ['coral', 'marine', 'amber', 'olive'],
