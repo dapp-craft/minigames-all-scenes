@@ -55,13 +55,13 @@ export class Ui3D {
         const [difficulty] = Object.entries(DIFFICULTY_MAPPING).reverse().find(([, l]) => level && level >= l) ?? []
         this.buttons.forEach((button, i) => {
             button.buttonShapeEnabled = Number(difficulty) === i + 1 ? ui.uiAssets.shapes.SQUARE_GREEN : ui.uiAssets.shapes.SQUARE_YELLOW
-            if (button.enabled || Number(difficulty) === i + 1) button.enable()
+            if (button.enabled || Number(difficulty) >= i + 1) button.enable()
         })
         this.setTextOptimized(this.counterLevel, `Level: ${level ?? '-'}`)
     }
-    public async unlockLevel(level: number) {
+    public async lockButtons() {
         await this.ready
-        this.buttons[level - 1]?.enable()
+        this.buttons.forEach(button => button.disable())
     }
     public async setTime(value?: number) {
         await this.ready
