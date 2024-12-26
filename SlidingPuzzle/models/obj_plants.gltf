@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -56,7 +52,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cylinder.041",
+			"name":"obj_plants",
 			"primitives":[
 				{
 					"attributes":{
@@ -64,24 +60,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Cylinder.002",
+			"name":"obj_plants_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -89,18 +74,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":7,
-					"mode":4
+					"indices":7
 				}
 			]
 		}
@@ -124,6 +98,7 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":4816,
 			"max":[
@@ -139,23 +114,27 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":4816,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":4816,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":16536,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
-			"count":728,
+			"count":712,
 			"max":[
 				7.237565994262695,
 				1.7970871925354004,
@@ -169,16 +148,19 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
-			"count":728,
+			"count":712,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
-			"count":728,
+			"count":712,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":7,
 			"componentType":5123,
 			"count":1488,
 			"type":"SCALAR"
@@ -187,13 +169,51 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":31117,
-			"byteOffset":0
+			"byteLength":57792,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4881,
-			"byteOffset":31120
+			"byteLength":57792,
+			"byteOffset":57792,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":38528,
+			"byteOffset":115584,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":33072,
+			"byteOffset":154112,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":8544,
+			"byteOffset":187184,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":8544,
+			"byteOffset":195728,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5696,
+			"byteOffset":204272,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":2976,
+			"byteOffset":209968,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -204,7 +224,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":36004,
+			"byteLength":212944,
 			"uri":"obj_plants.bin"
 		}
 	]

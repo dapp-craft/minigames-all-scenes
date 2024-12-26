@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -23,7 +19,17 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_stairs"
+			"name":"obj_stairs",
+			"scale":[
+				0.9846489429473877,
+				1,
+				1.000579595565796
+			],
+			"translation":[
+				0,
+				0,
+				4.5
+			]
 		},
 		{
 			"mesh":1,
@@ -56,7 +62,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.001",
+			"name":"obj_stairs",
 			"primitives":[
 				{
 					"attributes":{
@@ -64,24 +70,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Plane.004",
+			"name":"obj_stairs_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -89,18 +84,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":7,
-					"mode":4
+					"indices":7
 				}
 			]
 		}
@@ -124,36 +108,41 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":1160,
 			"max":[
-				6.989112854003906,
+				7.098075866699219,
 				0.3082330524921417,
-				7.024202346801758
+				2.522739887237549
 			],
 			"min":[
-				-6.989112854003906,
+				-7.098075866699219,
 				-0.004936377517879009,
-				-5.035549163818359
+				-9.530025482177734
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":1160,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":1160,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":3324,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
 			"count":488,
 			"max":[
@@ -169,16 +158,19 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
 			"count":488,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
 			"count":488,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":7,
 			"componentType":5123,
 			"count":876,
 			"type":"SCALAR"
@@ -187,13 +179,51 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":8343,
-			"byteOffset":0
+			"byteLength":13920,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3546,
-			"byteOffset":8344
+			"byteLength":13920,
+			"byteOffset":13920,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":9280,
+			"byteOffset":27840,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6648,
+			"byteOffset":37120,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":5856,
+			"byteOffset":43768,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5856,
+			"byteOffset":49624,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3904,
+			"byteOffset":55480,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1752,
+			"byteOffset":59384,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -204,7 +234,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":11892,
+			"byteLength":61136,
 			"uri":"obj_stairs.bin"
 		}
 	]
