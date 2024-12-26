@@ -30,6 +30,7 @@ import { SyncState, finishLevel, gameState, inputAvailable, isSolved, setInputAv
 import { playWinSound } from './sfx'
 import { runWinAnimation } from '../../../common/effects'
 import { CARS, MAIN_CAR, getCarsState } from './objects/car'
+import { playMoveCarSound } from './sfx'
 
 export let forwardArrow: Entity
 export let backwardArrow: Entity
@@ -94,7 +95,7 @@ export function moveCar(directionMultiplier: number) {
     gameState.moves++
     updateArrowModels()
 
-    
+    playMoveCarSound()
     SyncState.send(getCarsState())
   }
 
