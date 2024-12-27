@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -32,6 +28,7 @@
 	],
 	"materials":[
 		{
+			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -56,7 +53,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.399",
+			"name":"obj_grass",
 			"primitives":[
 				{
 					"attributes":{
@@ -64,45 +61,21 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Mesh.021",
+			"name":"obj_grass_collider",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":4,
 						"NORMAL":5,
-						"TEXCOORD_0":6,
-						"TEXCOORD_1":7
+						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2,
-								"TEXCOORD_1":3
-							}
-						}
-					},
-					"indices":8,
-					"mode":4
+					"indices":7
 				}
 			]
 		}
@@ -126,6 +99,7 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":7831,
 			"max":[
@@ -141,23 +115,27 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":7831,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":7831,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":25734,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
-			"count":1254,
+			"count":1238,
 			"max":[
 				7.97222375869751,
 				4.275480270385742,
@@ -171,21 +149,19 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
-			"count":1254,
+			"count":1238,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
-			"count":1254,
+			"count":1238,
 			"type":"VEC2"
 		},
 		{
-			"componentType":5126,
-			"count":1254,
-			"type":"VEC2"
-		},
-		{
+			"bufferView":7,
 			"componentType":5123,
 			"count":2190,
 			"type":"SCALAR"
@@ -194,13 +170,51 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":60933,
-			"byteOffset":0
+			"byteLength":93972,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9276,
-			"byteOffset":60936
+			"byteLength":93972,
+			"byteOffset":93972,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":62648,
+			"byteOffset":187944,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":51468,
+			"byteOffset":250592,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":14856,
+			"byteOffset":302060,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":14856,
+			"byteOffset":316916,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":9904,
+			"byteOffset":331772,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4380,
+			"byteOffset":341676,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -211,7 +225,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":70212,
+			"byteLength":346056,
 			"uri":"obj_grass.bin"
 		}
 	]

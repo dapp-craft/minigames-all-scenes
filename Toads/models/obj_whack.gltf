@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -78,7 +74,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.008",
+			"name":"obj_whack",
 			"primitives":[
 				{
 					"attributes":{
@@ -86,19 +82,8 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				},
 				{
 					"attributes":{
@@ -106,24 +91,13 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":7,
-					"material":1,
-					"mode":4
+					"material":1
 				}
 			]
 		},
 		{
-			"name":"Mesh.028",
+			"name":"obj_whack_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -131,18 +105,7 @@
 						"NORMAL":9,
 						"TEXCOORD_0":10
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":2,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":11,
-					"mode":4
+					"indices":11
 				}
 			]
 		}
@@ -179,6 +142,7 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":34,
 			"max":[
@@ -194,21 +158,25 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":34,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":34,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":54,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
 			"count":1768,
 			"max":[
@@ -224,23 +192,27 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
 			"count":1768,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
 			"count":1768,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":7,
 			"componentType":5123,
 			"count":4992,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":8,
 			"componentType":5126,
-			"count":674,
+			"count":644,
 			"max":[
 				3.8304693698883057,
 				0.7396126985549927,
@@ -254,16 +226,19 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":9,
 			"componentType":5126,
-			"count":674,
+			"count":644,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":10,
 			"componentType":5126,
-			"count":674,
+			"count":644,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":11,
 			"componentType":5123,
 			"count":996,
 			"type":"SCALAR"
@@ -272,18 +247,75 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":479,
-			"byteOffset":0
+			"byteLength":408,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":7546,
-			"byteOffset":480
+			"byteLength":408,
+			"byteOffset":408,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2840,
-			"byteOffset":8028
+			"byteLength":272,
+			"byteOffset":816,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":108,
+			"byteOffset":1088,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":21216,
+			"byteOffset":1196,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":21216,
+			"byteOffset":22412,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":14144,
+			"byteOffset":43628,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":9984,
+			"byteOffset":57772,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":7728,
+			"byteOffset":67756,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":7728,
+			"byteOffset":75484,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5152,
+			"byteOffset":83212,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1992,
+			"byteOffset":88364,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -294,7 +326,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":10868,
+			"byteLength":90356,
 			"uri":"obj_whack.bin"
 		}
 	]

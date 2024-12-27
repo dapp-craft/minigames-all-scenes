@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -56,7 +52,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.249",
+			"name":"obj_wall",
 			"primitives":[
 				{
 					"attributes":{
@@ -64,24 +60,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Mesh.013",
+			"name":"obj_wall_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -89,18 +74,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":7,
-					"mode":4
+					"indices":7
 				}
 			]
 		}
@@ -124,6 +98,7 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":1396,
 			"max":[
@@ -139,23 +114,27 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":1396,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":1396,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":4464,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
-			"count":356,
+			"count":350,
 			"max":[
 				7.375781059265137,
 				6.34255838394165,
@@ -169,16 +148,19 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
-			"count":356,
+			"count":350,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
-			"count":356,
+			"count":350,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":7,
 			"componentType":5123,
 			"count":894,
 			"type":"SCALAR"
@@ -187,13 +169,51 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":8367,
-			"byteOffset":0
+			"byteLength":16752,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2685,
-			"byteOffset":8368
+			"byteLength":16752,
+			"byteOffset":16752,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":11168,
+			"byteOffset":33504,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":8928,
+			"byteOffset":44672,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":4200,
+			"byteOffset":53600,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4200,
+			"byteOffset":57800,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":2800,
+			"byteOffset":62000,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1788,
+			"byteOffset":64800,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -204,7 +224,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":11056,
+			"byteLength":66588,
 			"uri":"obj_wall.bin"
 		}
 	]

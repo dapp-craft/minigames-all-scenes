@@ -1,11 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.1.63",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_specular",
-		"KHR_materials_ior"
+		"KHR_materials_specular"
 	],
 	"scene":0,
 	"scenes":[
@@ -20,38 +19,15 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_Snake01",
-			"rotation":[
-				0.5,
-				0.5,
-				-0.5,
-				0.5000000596046448
-			],
-			"scale":[
-				0.009999999776482582,
-				0.009999999776482582,
-				0.009999999776482582
-			]
+			"name":"obj_snake01"
 		},
 		{
 			"mesh":1,
-			"name":"obj_Snake01_collider",
-			"rotation":[
-				0.5,
-				0.5,
-				-0.5,
-				0.5000000596046448
-			],
-			"scale":[
-				0.009999999776482582,
-				0.009999999776482582,
-				0.009999999776482582
-			]
+			"name":"obj_snake01_collider"
 		}
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"emissiveFactor":[
 				0.10000000149011612,
 				0.10000000149011612,
@@ -63,12 +39,9 @@
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
-				},
-				"KHR_materials_ior":{
-					"ior":1.4500000476837158
 				}
 			},
-			"name":"Material.001",
+			"name":"obj_snake01",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -79,7 +52,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh",
+			"name":"obj_snake01",
 			"primitives":[
 				{
 					"attributes":{
@@ -93,7 +66,7 @@
 			]
 		},
 		{
-			"name":"Mesh.002",
+			"name":"obj_snake01_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -101,7 +74,8 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":3
+					"indices":3,
+					"material":0
 				}
 			]
 		}
@@ -119,8 +93,8 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"file1",
-			"uri":"textures/file1.png"
+			"name":"obj_snake01",
+			"uri":"textures/obj_snake01.png"
 		}
 	],
 	"accessors":[
@@ -129,14 +103,14 @@
 			"componentType":5126,
 			"count":345,
 			"max":[
-				41.59900665283203,
-				33.784080505371094,
-				68.40969848632812
+				0.33784085512161255,
+				0,
+				0.41378873586654663
 			],
 			"min":[
-				-67.84800720214844,
-				-33.784080505371094,
-				0
+				-0.3378407955169678,
+				-0.6840970516204834,
+				-0.41599011421203613
 			],
 			"type":"VEC3"
 		},
@@ -163,14 +137,14 @@
 			"componentType":5126,
 			"count":345,
 			"max":[
-				41.59900665283203,
-				33.784080505371094,
-				68.40969848632812
+				0.33784085512161255,
+				0,
+				0.41378873586654663
 			],
 			"min":[
-				-67.84800720214844,
-				-33.784080505371094,
-				0
+				-0.3378407955169678,
+				-0.6840970516204834,
+				-0.41599011421203613
 			],
 			"type":"VEC3"
 		},
