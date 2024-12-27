@@ -68,6 +68,7 @@ export class GameController {
     console.log("gameController::start")
     this._inGame = true
     this._isInit = false
+    this._startTime = Date.now()
     
     this._syncRender.clean()
     
@@ -86,7 +87,7 @@ export class GameController {
       this._food.terminate()
       console.log('After terminate 3')
     }
-
+    
     console.log("gameController::start create snake")
     this._snake = new SnakeHead({ x: 10, y: 7 })
     this._snake.addTail()
@@ -94,7 +95,6 @@ export class GameController {
 
     
     this._score = 3
-    this._startTime = Date.now()
 
     this.addFood()
     this.onStartCallback()
