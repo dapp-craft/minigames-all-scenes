@@ -15,14 +15,14 @@ export let gameController: GameController
 
 export function initGame() {
   gameController = new GameController(20, 15)
-  console.log("gameController", gameController)
+  console.log("gameController created")
 
   inputController.gameController = gameController
 
   gameController.onFinishCallback = onFinish
   
   const renderController = new BoardRenderer(gameController)
-  console.log("renderController", renderController)
+  console.log("renderController created")
   
   setupEffects(Vector3.create(0, 2.5, -6), Vector3.create(0, 1.2, 0))
 
