@@ -26,27 +26,29 @@ class Layer {
         const {position: top, scale: {y: radius}} = (await flaskMappingReady).get(`obj_layer_${to}`)!
         MeshRenderer.setCylinder(this.layer, radius, radius)
         Transform.getMutable(this.root).position = bottom
-        Tween.createOrReplace(this.root, {
-            mode: Tween.Mode.Scale({
-                start: this._volume ? Transform.get(this.root).scale : Vector3.create(1, 0, 1),
-                end: Vector3.create(1, top.y - bottom.y - 0.001, 1),
-            }),
-            duration: 300 * Math.abs(to - from - this._volume),
-            easingFunction: EasingFunction.EF_LINEAR
-        })
+        // Tween.createOrReplace(this.root, {
+        //     mode: Tween.Mode.Scale({
+        //         start: this._volume ? Transform.get(this.root).scale : Vector3.create(1, 0, 1),
+        //         end: Vector3.create(1, top.y - bottom.y - 0.001, 1),
+        //     }),
+        //     duration: 300 * Math.abs(to - from - this._volume),
+        //     easingFunction: EasingFunction.EF_LINEAR
+        // })
+        await new Promise<void>(r => utils.timers.setTimeout(r, 300 * Math.abs(to - from - this._volume)))
+        Transform.getMutable(this.root).scale = Vector3.create(1, top.y - bottom.y - 0.001, 1)
         this._volume = to - from
-        let resolve: Function
-        const start = Date.now()
-        const timeout = 3 * Tween.get(this.root).duration
-        const fn = async () => {
-            if (tweenSystem.tweenCompleted(this.root) || Date.now() - start > timeout) {
-                resolve(this)
-                if (this._volume == 0) Transform.getMutable(this.root).scale = Vector3.Zero()
-                if (Date.now() - start > timeout) console.error(`BUG!!: layer tween timeout at entity ${this.root}`)
-            } else executeTask(fn)
-        }
-        executeTask(fn)
-        return new Promise<Layer>(r => resolve = r)
+        // let resolve: Function
+        // const start = Date.now()
+        // const timeout = 3 * Tween.get(this.root).duration
+        // const fn = async () => {
+        //     if (tweenSystem.tweenCompleted(this.root) || Date.now() - start > timeout) {
+        //         resolve(this)
+        //         if (this._volume == 0) Transform.getMutable(this.root).scale = Vector3.Zero()
+        //         if (Date.now() - start > timeout) console.error(`BUG!!: layer tween timeout at entity ${this.root}`)
+        //     } else executeTask(fn)
+        // }
+        // executeTask(fn)
+        return// new Promise<Layer>(r => resolve = r)
     }
     public destroy() {
         console.log(`Layer::destroy@${this.root}`)
@@ -85,25 +87,27 @@ class Pipe {
     public async move(to?: number) {
         const position = Transform.getMutable(this.root).position
         const {position: target} = (await flaskMappingReady).get(`obj_layer_${to}`) ?? {position}
-        Tween.createOrReplace(this.root, {
-            mode: Tween.Mode.Scale({
-                start: Transform.get(this.root).scale,
-                end: Vector3.create(1, position.y - target.y, 1),
-            }),
-            duration: 250,
-            easingFunction: EasingFunction.EF_EASEOUTCUBIC
-        })
-        let resolve: Function
-        const start = Date.now()
-        const timeout = 3 * Tween.get(this.root).duration
-        const fn = async () => {
-            if (tweenSystem.tweenCompleted(this.root) || Date.now() - start > timeout) {
-                resolve(this)
-                if (Date.now() - start > timeout) console.error(`BUG!!: pipe tween timeout at entity ${this.root}`)
-            } else executeTask(fn)
-        }
-        executeTask(fn)
-        return new Promise<Layer>(r => resolve = r)
+        // Tween.createOrReplace(this.root, {
+        //     mode: Tween.Mode.Scale({
+        //         start: Transform.get(this.root).scale,
+        //         end: Vector3.create(1, position.y - target.y, 1),
+        //     }),
+        //     duration: 250,
+        //     easingFunction: EasingFunction.EF_EASEOUTCUBIC
+        // })
+        await new Promise<void>(r => utils.timers.setTimeout(r, 250))
+        Transform.getMutable(this.root).scale = Vector3.create(1, position.y - target.y, 1)
+        // let resolve: Function
+        // const start = Date.now()
+        // const timeout = 3 * Tween.get(this.root).duration
+        // const fn = async () => {
+        //     if (tweenSystem.tweenCompleted(this.root) || Date.now() - start > timeout) {
+        //         resolve(this)
+        //         if (Date.now() - start > timeout) console.error(`BUG!!: pipe tween timeout at entity ${this.root}`)
+        //     } else executeTask(fn)
+        // }
+        // executeTask(fn)
+        return// new Promise<Layer>(r => resolve = r)
     }
     public setColor(color: Color3 = Color3.create(0.3, 0.3, 0.3)) {
         Material.setPbrMaterial(this.pipe, {
@@ -193,14 +197,18 @@ export class Flask {
         this.promiseActivated = new Promise(r => this.resolveActivated = r)
         this.promiseDeactivated = new Promise(r => this.resolveDeactivated = r)
         if (!this.topLayer) return
-        Tween.create(this.entity, {
-            mode: Tween.Mode.Rotate({
-                start: Quaternion.fromEulerDegrees(0, 0, 0),
-                end: Quaternion.fromEulerDegrees(0, 180, 0),
-            }),
-            duration: 700,
-            easingFunction: EasingFunction.EF_LINEAR,
-        })
+        // Tween.create(this.entity, {
+        //     mode: Tween.Mode.Rotate({
+        //         start: Quaternion.fromEulerDegrees(0, 0, 0),
+        //         end: Quaternion.fromEulerDegrees(0, 180, 0),
+        //     }),
+        //     duration: 700,
+        //     easingFunction: EasingFunction.EF_LINEAR,
+        // })
+        utils.timers.setTimeout(
+            () => Transform.getMutable(this.entity).rotation = Quaternion.fromEulerDegrees(0, 180, 0),
+            700
+        )
     }
     public get sealed() {
         return this.state == State.sealed
