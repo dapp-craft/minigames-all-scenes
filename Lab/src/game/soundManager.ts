@@ -41,7 +41,8 @@ export class SoundManager {
         if (!this.soundsStatus) return
         console.log(`Play sound '${soundName}', delay ${delay}`)
         let soundEntity = engine.addEntity()
-        Transform.create(soundEntity, { parent: engine.PlayerEntity })
+        if (Transform.has(soundEntity)) console.error(`BUG!!: SoundManager transform anomaly at entity ${soundEntity}`)
+        Transform.createOrReplace(soundEntity, { parent: engine.PlayerEntity })
         utils.timers.setTimeout(() => AudioSource.create(soundEntity, {
             audioClipUrl: `${GAME_SOUNDS[soundName as keyof typeof GAME_SOUNDS]}`,
             loop: false,
