@@ -1,6 +1,6 @@
 import * as utils from '@dcl-sdk/utils'
 import { gameLogic } from '..'
-import { progressState, sceneParentEntity } from '../state'
+import { progressState, sceneParentEntity, toadsGameState } from '../state'
 import { CameraModeArea, CameraType, engine } from '@dcl/sdk/ecs'
 import { updatePlayerProgress } from './syncData'
 import { ui } from '@dcl-sdk/mini-games/src'
@@ -17,10 +17,8 @@ let playButton: ui.MenuButton
 
 export const initGame = async () => {
   console.log('INIT GAME')
-
-  await initCountdownNumbers()
-
-  await spawnButton()
+  spawnButton()
+  initCountdownNumbers()
 }
 
 export function getReadyToStart() {
@@ -69,11 +67,10 @@ async function startGame() {
 }
 
 async function initCountdownNumbers() {
-  const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
   timer = new ui.Timer3D(
     {
       parent: sceneParentEntity,
-      position: data.get('counter_countdown')?.position,
+      position: toadsGameState.locatorsData.get('counter_countdown')?.position,
       rotation: Quaternion.fromEulerDegrees(0, 0, 0),
       scale: Vector3.create(.5, .5, .5)
     },
@@ -112,9 +109,8 @@ export async function countdown(cb: () => void, number: number, stop?: boolean) 
 }
 
 const spawnButton = async () => {
-  const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
   playButton = new ui.MenuButton(
-    { ...data.get("button_start")!, parent: sceneParentEntity },
+    { ...toadsGameState.locatorsData.get("button_start")!, parent: sceneParentEntity },
     ui.uiAssets.shapes.SQUARE_GREEN,
     ui.uiAssets.icons.play,
     `PLAY`,
