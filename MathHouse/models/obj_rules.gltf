@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -22,7 +18,17 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_rules"
+			"name":"obj_rules",
+			"scale":[
+				0.783220112323761,
+				0.783220112323761,
+				0.783220112323761
+			],
+			"translation":[
+				-6.885550022125244,
+				1.3883845806121826,
+				4.4624104499816895
+			]
 		}
 	],
 	"materials":[
@@ -51,7 +57,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.007",
+			"name":"obj_rules",
 			"primitives":[
 				{
 					"attributes":{
@@ -59,19 +65,8 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		}
@@ -95,31 +90,35 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":4,
 			"max":[
-				-6.885550022125244,
-				2.2675182819366455,
-				5.341544151306152
+				0,
+				1.1224606037139893,
+				1.1224607229232788
 			],
 			"min":[
-				-6.885550022125244,
-				0.5092508792877197,
-				3.5832767486572266
+				0,
+				-1.1224606037139893,
+				-1.1224607229232788
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":4,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":4,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":6,
 			"type":"SCALAR"
@@ -128,8 +127,27 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":165,
-			"byteOffset":0
+			"byteLength":48,
+			"byteOffset":0,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":48,
+			"byteOffset":48,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":32,
+			"byteOffset":96,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":12,
+			"byteOffset":128,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -140,7 +158,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":168,
+			"byteLength":140,
 			"uri":"obj_rules.bin"
 		}
 	]

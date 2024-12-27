@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -23,23 +19,25 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_panel"
+			"name":"obj_panel",
+			"translation":[
+				0,
+				0,
+				0.23453766107559204
+			]
 		},
 		{
 			"mesh":1,
-			"name":"obj_panel_collider"
+			"name":"obj_panel_collider",
+			"translation":[
+				0,
+				0,
+				-2.3983397483825684
+			]
 		}
 	],
 	"materials":[
 		{
-			"emissiveFactor":[
-				0.10000000149011612,
-				0.10000000149011612,
-				0.10000000149011612
-			],
-			"emissiveTexture":{
-				"index":0
-			},
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularFactor":0
@@ -48,7 +46,7 @@
 			"name":"obj_panel",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":1
+					"index":0
 				},
 				"metallicFactor":0
 			}
@@ -56,7 +54,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.029",
+			"name":"obj_panel",
 			"primitives":[
 				{
 					"attributes":{
@@ -64,50 +62,25 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Bounding Box Mesh.001",
+			"name":"obj_panel_collider",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":4,
 						"NORMAL":5
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1
-							}
-						}
-					},
-					"indices":6,
-					"mode":4
+					"indices":6
 				}
 			]
 		}
 	],
 	"textures":[
-		{
-			"sampler":0,
-			"source":0
-		},
 		{
 			"sampler":0,
 			"source":0
@@ -122,56 +95,63 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":888,
 			"max":[
 				1.342249870300293,
 				1.1397267580032349,
-				-1.8862664699554443
+				-2.1208040714263916
 			],
 			"min":[
 				-1.342249870300293,
 				-1.0281801223754883e-06,
-				-2.9888947010040283
+				-3.2234323024749756
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":888,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":888,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":2502,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
 			"count":24,
 			"max":[
 				1.342249870300293,
 				2.896588087081909,
-				-1.8470256328582764
+				0.551314115524292
 			],
 			"min":[
 				-1.342249870300293,
 				0,
-				-3.0227532386779785
+				-0.6244134902954102
 			],
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
 			"count":24,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5123,
 			"count":36,
 			"type":"SCALAR"
@@ -180,13 +160,45 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":7278,
-			"byteOffset":0
+			"byteLength":10656,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":230,
-			"byteOffset":7280
+			"byteLength":10656,
+			"byteOffset":10656,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":7104,
+			"byteOffset":21312,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5004,
+			"byteOffset":28416,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":33420,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":33708,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":72,
+			"byteOffset":33996,
+			"target":34963
 		}
 	],
 	"samplers":[
@@ -197,7 +209,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":7512,
+			"byteLength":34068,
 			"uri":"obj_panel.bin"
 		}
 	]
