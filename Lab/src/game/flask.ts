@@ -220,7 +220,7 @@ export class Flask {
         if (this.state != State.inactive) throw `Activate failed: flask is ${State[this.state]}`
         this.state = State.busy
         await this.ready
-        console.log("Flask::activate")
+        console.log(`Flask::activate@${this.entity}`)
         this.resolveActivated(this)
         Transform.getMutable(this.entity).position.y += 0.1
         this.promiseDeactivated = new Promise(r => this.resolveDeactivated = r)
@@ -233,7 +233,7 @@ export class Flask {
         if (this.state != State.active) throw `Deactivate failed: flask is ${State[this.state]}`
         this.state = State.busy
         await this.ready
-        console.log("Flask::deactivate")
+        console.log(`Flask::deactivate@${this.entity}`)
         this.resolveDeactivated(this)
         Transform.getMutable(this.entity).position.y -= 0.1
         this.promiseActivated = new Promise(r => this.resolveActivated = r)
