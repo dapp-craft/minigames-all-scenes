@@ -11,12 +11,10 @@ import { timeBeforeStart } from '../gameConfig'
 export let startTimeOut: utils.TimerId
 export let levelButtons: ui.MenuButton[] = []
 
-export const initGame = async () => {
+export const initGame = () => {
   console.log('INIT GAME')
 
   spawnButton()
-
-  await initCountdownNumbers()
 }
 
 export function getReadyToStart() {
@@ -37,11 +35,6 @@ async function startGame() {
   await updatePlayerProgress(res);
   // }
   // queue.setNextPlayer()
-}
-
-async function initCountdownNumbers() {
-  const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
-  TextShape.getMutable(steampunkGameState.listOfEntity.get('timerEntity')).text = ``
 }
 
 export async function countdown(cb: () => void, number: number, stop?: boolean) {
@@ -73,10 +66,9 @@ export async function countdown(cb: () => void, number: number, stop?: boolean) 
 }
 
 const spawnButton = async () => {
-  const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
   for (let i = 1; i <= 3; i++) {
     let button = new ui.MenuButton(
-      { ...data.get(`button_level_${i}`), parent: sceneParentEntity },
+      { ...steampunkGameState.locatorsData.get(`button_level_${i}`), parent: sceneParentEntity },
       ui.uiAssets.shapes.SQUARE_GREEN,
       ui.uiAssets.numbers[i],
       `Level ${i}`,

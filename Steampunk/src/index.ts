@@ -82,7 +82,7 @@ const generateInitialEntity = async () => {
     steampunkGameState.listOfEntity.set('findCounter', findCounter);
     steampunkGameState.listOfEntity.set('timerEntity', timerEntity);
 
-    const data = await readGltfLocators(`locators/obj_locators_unique.gltf`)
+    steampunkGameState.locatorsData = await readGltfLocators(`locators/obj_locators_unique.gltf`)
 
     for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
         if (Transform.getOrNull(steampunkGameState.availableEntity[i]) == null) {
@@ -90,48 +90,48 @@ const generateInitialEntity = async () => {
             MeshCollider.setPlane(steampunkGameState.availableEntity[i])
         }
     }
-    if (Transform.getOrNull(firstBoard) == null) {
-        Transform.create(firstBoard, { ...data.get('obj_screen_1') })
+    if (Transform.getOrNull(firstBoard) == null || MeshRenderer.getOrNull(firstBoard) == null) {
+        Transform.create(firstBoard, { ...steampunkGameState.locatorsData.get('obj_screen_1') })
         parentEntity(firstBoard, steampunkGameState.listOfEntity.get('display'))
         MeshRenderer.setPlane(firstBoard)
     }
-    if (Transform.getOrNull(secondBoard) == null) {
-        Transform.create(secondBoard, { ...data.get('obj_screen_2') })
+    if (Transform.getOrNull(secondBoard) == null || MeshRenderer.getOrNull(secondBoard) == null) {
+        Transform.create(secondBoard, { ...steampunkGameState.locatorsData.get('obj_screen_2') })
         parentEntity(secondBoard, steampunkGameState.listOfEntity.get('display'))
         MeshRenderer.setPlane(secondBoard)
     }
-    if (Transform.getOrNull(hitZone) == null) {
+    if (Transform.getOrNull(hitZone) == null || MeshRenderer.getOrNull(hitZone) == null || VisibilityComponent.getOrNull(hitZone) == null || Material.getOrNull(hitZone) == null) {
         Transform.create(hitZone, { position: Vector3.create(0, 0, -6), rotation: Quaternion.create(1, 1, 1, 1), scale: Vector3.create(.5, 0, .5) })
         parentEntity(hitZone, steampunkGameState.listOfEntity.get('display'))
         MeshRenderer.setCylinder(hitZone)
         VisibilityComponent.createOrReplace(hitZone, { visible: false })
         Material.setPbrMaterial(hitZone, { albedoColor: Color4.create(1, 0, 0, 0.5) })
     }
-    if (Transform.getOrNull(missIndicator) == null) {
+    if (Transform.getOrNull(missIndicator) == null || MeshRenderer.getOrNull(missIndicator) == null || VisibilityComponent.getOrNull(missIndicator) == null || Material.getOrNull(missIndicator) == null) {
         Transform.create(missIndicator, { position: { ...Transform.get(hitZone).position, z: Transform.get(hitZone).position.z + .001 }, rotation: Quaternion.create(0, 0, 1, 1), scale: Vector3.create(1, 1, 1) })
         parentEntity(missIndicator, steampunkGameState.listOfEntity.get('display'))
         MeshRenderer.setPlane(missIndicator)
         VisibilityComponent.createOrReplace(missIndicator, { visible: false })
         Material.setPbrMaterial(missIndicator, { albedoColor: Color4.create(1, 0, 0, 0.9) })
     }
-    if (Transform.getOrNull(visibleFeedback) == null) {
+    if (Transform.getOrNull(visibleFeedback) == null || Material.getOrNull(visibleFeedback) == null || VisibilityComponent.getOrNull(visibleFeedback) == null) {
         MeshRenderer.setPlane(visibleFeedback)
         VisibilityComponent.createOrReplace(visibleFeedback, { visible: false })
         Material.setPbrMaterial(visibleFeedback, { albedoColor: Color4.create(0, 1, 0, 0.5) })
     }
     if (Transform.getOrNull(hits) == null || TextShape.getOrNull(hits) == null) {
-        Transform.create(hits, { ...data.get('counter_foundObjects'), parent: sceneParentEntity })
+        Transform.create(hits, { ...steampunkGameState.locatorsData.get('counter_foundObjects'), parent: sceneParentEntity })
         TextShape.create(hits, { text: 'Score \n0', fontSize: 2 })
     }
     if (Transform.getOrNull(findCounter) == null || TextShape.getOrNull(findCounter) == null) {
-        Transform.create(findCounter, { ...data.get('counter_score'), parent: sceneParentEntity })
+        Transform.create(findCounter, { ...steampunkGameState.locatorsData.get('counter_score'), parent: sceneParentEntity })
         TextShape.create(findCounter, { text: 'Find \n0/0', fontSize: 2 })
     }
     if (Transform.getOrNull(timerEntity) == null || TextShape.getOrNull(timerEntity) == null) {
-        Transform.create(timerEntity, { ...data.get('counter_stopwatch'), parent: sceneParentEntity })
+        Transform.create(timerEntity, { ...steampunkGameState.locatorsData.get('counter_stopwatch'), parent: sceneParentEntity })
         TextShape.create(timerEntity, { text: '', fontSize: 2 })
     }
-    Transform.create(levelText, { ...data.get('label_difficulty_selection'), parent: sceneParentEntity })
+    Transform.create(levelText, { ...steampunkGameState.locatorsData.get('label_difficulty_selection'), parent: sceneParentEntity })
     TextShape.create(levelText, { text: 'Difficult level', fontSize: 2 })
     lightUpEntity(firstBoard, `images/1.png`)
     lightUpEntity(secondBoard, `images/2.png`)

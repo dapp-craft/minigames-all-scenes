@@ -3,7 +3,8 @@ import { Vector3 } from "@dcl/sdk/math";
 
 export const steampunkGameState = {
     availableEntity: new Array<Entity>,
-    listOfEntity: new Map()
+    listOfEntity: new Map(),
+    locatorsData: new Map()
 }
 
 export type PlayerReturnData = {
