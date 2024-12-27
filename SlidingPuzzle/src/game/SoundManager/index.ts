@@ -24,20 +24,28 @@ export class SoundManager {
     console.log('SOUNDS', SOUNDS)
     Object.keys(SOUNDS).forEach((key) => {
       let ent = engine.addEntity()
+      Transform.create(ent, {
+        parent: engine.CameraEntity,
+      })
       AudioSource.create(ent, {
         audioClipUrl: `${SOUNDS[key as keyof typeof SOUNDS]}`,
         loop: false,
-        playing: false
+        playing: false,
+        global: true
       })
       this.soundsStorage.push(ent)
     })
 
     this.themeEntity = engine.addEntity()
+    Transform.create(this.themeEntity, {
+      parent: engine.CameraEntity,
+    })
     AudioSource.create(this.themeEntity, {
       audioClipUrl: mainTheme,
       loop: true,
       playing: this.themeStatus,
-      volume: this.themeVolume
+      volume: this.themeVolume,
+      global: true
     })
   }
 
