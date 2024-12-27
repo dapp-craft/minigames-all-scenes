@@ -338,6 +338,9 @@ export class GameController {
   private modifySpeed() {
     const secondsSinceStart = (Date.now() - this._startTime) / 1000
     this._speed = SPEED_INCREASE_CHECKPOINTS.findIndex((checkpoint) => secondsSinceStart < checkpoint)
+    if (this._speed == -1) {
+      this._speed = SPEED.length - 2
+    }
   }
 
   private checkCollision() {
