@@ -20,7 +20,7 @@ import { hitCiv, hitEnemy, hitPLayer, startRound, finishRound, misfire } from '.
   
   export const mainThereme = engine.addEntity()
   Transform.create(mainThereme, {parent: engine.PlayerEntity})
-  AudioSource.create(mainThereme, {audioClipUrl: `sounds/West_Theme.mp3`, loop: true, playing: true, volume: 0.07})
+  AudioSource.create(mainThereme, {audioClipUrl: `sounds/West_Theme.mp3`, loop: true, playing: true, volume: 0.14})
   
   export class SoundManager {
     private soundsStorage: Entity[] = []

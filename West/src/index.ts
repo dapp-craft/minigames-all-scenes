@@ -1,4 +1,4 @@
-import { engine, executeTask, GltfContainer, Material, MeshCollider, MeshRenderer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
+import { AudioSource, engine, executeTask, GltfContainer, Material, MeshCollider, MeshRenderer, TextShape, Transform, Tween, VisibilityComponent } from '@dcl/sdk/ecs'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
@@ -6,19 +6,20 @@ import { initMiniGame } from '../../common/library'
 import { setupEffects } from '../../common/effects'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { setupStaticModels } from './staticModels/setupStaticModels'
-import { WEST_SYNC_ID, westGameConfig } from './config'
+import { soundConfig, WEST_SYNC_ID, westGameConfig } from './config'
 import { westGameState } from './state'
 import { GameLogic } from './game/gameLogic'
 import { syncEntity } from '@dcl/sdk/network'
 import { exitCallback, getReadyToStart, startGame } from './game/game'
+import { mainThereme } from './game/soundManager'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
     start: () => { getReadyToStart() },
     exit: () => exitCallback(),
     restart: () => gameLogic.restartGame(),
-    toggleMusic: () => { },
-    toggleSfx: () => { }
+    toggleMusic: () => playBackgroundMusic(),
+    toggleSfx: () => toggleVolume()
 }
 
 const libraryReady = initMiniGame('', TIME_LEVEL_MOVES, readGltfLocators(`locators/obj_locators_default.gltf`), handlers)
@@ -98,4 +99,14 @@ const generateInitialEntity = async () => {
         TextShape.create(score, { text: `Score \n0`, fontSize: 2 });
         Transform.create(score, { ...westGameState.locatorData.get('counter_score'), parent: sceneParentEntity })
     }
+}
+
+const playBackgroundMusic = () => {
+    if (AudioSource.getMutable(mainThereme).volume != 0) AudioSource.getMutable(mainThereme).volume = 0
+    else AudioSource.getMutable(mainThereme).volume = 0.07
+}
+
+const toggleVolume = () => {
+    if (soundConfig.volume != 0) soundConfig.volume = 0
+    else soundConfig.volume = 0.5
 }
