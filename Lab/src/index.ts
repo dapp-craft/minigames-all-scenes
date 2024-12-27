@@ -1,4 +1,4 @@
-import { engine, GltfContainer, Schemas, Transform, TransformType } from '@dcl/sdk/ecs'
+import { engine, Entity, GltfContainer, Schemas, Transform, TransformType } from '@dcl/sdk/ecs'
 import { progress, queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
