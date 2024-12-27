@@ -219,7 +219,7 @@ export class GameLogic {
         })
 
         utils.timers.setTimeout(() => {
-            GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
+            // GltfContainer.createOrReplace(entity, { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
             target.available = true
         }, hit ? animationConfig.frogAfterHitHideTime : hitTargetsConfig.get(type)!.frogEscapeTime)
     }
