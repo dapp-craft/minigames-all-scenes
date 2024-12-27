@@ -1,14 +1,10 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.2.57",
+		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_draco_mesh_compression",
 		"KHR_materials_specular"
-	],
-	"extensionsRequired":[
-		"KHR_draco_mesh_compression"
 	],
 	"scene":0,
 	"scenes":[
@@ -58,7 +54,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Mesh.183",
+			"name":"obj_frame",
 			"primitives":[
 				{
 					"attributes":{
@@ -66,24 +62,13 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":0,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
 					"indices":3,
-					"material":0,
-					"mode":4
+					"material":0
 				}
 			]
 		},
 		{
-			"name":"Mesh.184",
+			"name":"obj_frame_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -91,18 +76,7 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"extensions":{
-						"KHR_draco_mesh_compression":{
-							"bufferView":1,
-							"attributes":{
-								"POSITION":0,
-								"NORMAL":1,
-								"TEXCOORD_0":2
-							}
-						}
-					},
-					"indices":3,
-					"mode":4
+					"indices":3
 				}
 			]
 		}
@@ -126,6 +100,7 @@
 	],
 	"accessors":[
 		{
+			"bufferView":0,
 			"componentType":5126,
 			"count":304,
 			"max":[
@@ -141,21 +116,25 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":1,
 			"componentType":5126,
 			"count":304,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":2,
 			"componentType":5126,
 			"count":304,
 			"type":"VEC2"
 		},
 		{
+			"bufferView":3,
 			"componentType":5123,
 			"count":840,
 			"type":"SCALAR"
 		},
 		{
+			"bufferView":4,
 			"componentType":5126,
 			"count":304,
 			"max":[
@@ -171,11 +150,13 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":5,
 			"componentType":5126,
 			"count":304,
 			"type":"VEC3"
 		},
 		{
+			"bufferView":6,
 			"componentType":5126,
 			"count":304,
 			"type":"VEC2"
@@ -184,13 +165,45 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1858,
-			"byteOffset":0
+			"byteLength":3648,
+			"byteOffset":0,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1858,
-			"byteOffset":1860
+			"byteLength":3648,
+			"byteOffset":3648,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":2432,
+			"byteOffset":7296,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1680,
+			"byteOffset":9728,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":3648,
+			"byteOffset":11408,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3648,
+			"byteOffset":15056,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":2432,
+			"byteOffset":18704,
+			"target":34962
 		}
 	],
 	"samplers":[
@@ -201,7 +214,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":3720,
+			"byteLength":21136,
 			"uri":"obj_frame.bin"
 		}
 	]
