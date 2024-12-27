@@ -135,6 +135,7 @@ export class Flask {
     private layers: Layer[] = []
 
     constructor(transform: TransformType) {
+        console.log(`Flask::constructor@${this.entity}`)
         GltfContainer.create(this.entity, FLASK_MODEL)
         if (Transform.has(this.entity)) console.error(`BUG!!: flask transform anomaly at entity ${this.entity}`)
         Transform.createOrReplace(this.entity, JSON.parse(JSON.stringify(transform)))
