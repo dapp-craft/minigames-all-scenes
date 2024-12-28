@@ -122,8 +122,8 @@ export class GameLogic {
         console.log("Player Difficulty, Level: ", this.playerDifficulty, this.playerLevel)
         const data = await readGltfLocators(`locators/locators_level_${this.playerLevel}.gltf`)
         TextShape.getMutable(steampunkGameState.listOfEntity.get('findCounter')).text = `Find \n ${this.correctSmashCounter}/${this.levelDifferenceAmmount}`
-        lightUpEntity(steampunkGameState.listOfEntity.get('firstBoard'), `images/mapBackground.png`)
-        lightUpEntity(steampunkGameState.listOfEntity.get('secondBoard'), `images/mapBackground.png`)
+        lightUpEntity(steampunkGameState.listOfEntity.get('firstBoard'), `images/mapBackground.jpg`)
+        lightUpEntity(steampunkGameState.listOfEntity.get('secondBoard'), `images/mapBackground.jpg`)
         this.updateActiveLevelButtonColor()
         for (let i = 0; i < (data.size * 2); i++) {
             pointerEventsSystem.onPointerDown(
@@ -290,8 +290,8 @@ export class GameLogic {
         TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n0`
         levelButtons[this.playerDifficulty - 1].buttonShapeEnabled = ui.uiAssets.shapes.SQUARE_GREEN
         levelButtons[this.playerDifficulty - 1].enable()
-        lightUpEntity(steampunkGameState.listOfEntity.get('firstBoard'), `images/1.png`)
-        lightUpEntity(steampunkGameState.listOfEntity.get('secondBoard'), `images/2.png`)
+        lightUpEntity(steampunkGameState.listOfEntity.get('firstBoard'), `images/1.jpg`)
+        lightUpEntity(steampunkGameState.listOfEntity.get('secondBoard'), `images/2.jpg`)
     }
 
     private updateActiveLevelButtonColor() {

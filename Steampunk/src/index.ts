@@ -94,10 +94,10 @@ const generateInitialEntity = async () => {
     MeshRenderer.setPlane(firstBoard)
     MeshRenderer.setPlane(secondBoard)
     if (!Material.has(firstBoard)) {
-        lightUpEntity(firstBoard, `images/1.png`)
+        lightUpEntity(firstBoard, `images/1.jpg`)
     }
     if (!Material.has(secondBoard)) {
-        lightUpEntity(secondBoard, `images/2.png`)
+        lightUpEntity(secondBoard, `images/2.jpg`)
     }
     // if (Transform.getOrNull(hitZone) == null || MeshRenderer.getOrNull(hitZone) == null || VisibilityComponent.getOrNull(hitZone) == null || Material.getOrNull(hitZone) == null) {
     //     Transform.create(hitZone, { position: Vector3.create(0, 0, -6), rotation: Quaternion.create(1, 1, 1, 1), scale: Vector3.create(.5, 0, .5) })
