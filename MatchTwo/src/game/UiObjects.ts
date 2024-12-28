@@ -2,11 +2,12 @@ import { ui, queue } from '@dcl-sdk/mini-games/src'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
 import { TILES_LEVEL } from '../config'
-import { exitGame, gameState, startLevel } from './game'
+import { exitGame, gameState, inGame, startLevel } from './game'
 import * as utils from '@dcl-sdk/utils'
 import { SFX_ENABLED, setSfxStatus } from './sound'
 import { levelButtonPositions } from './locators/levelButtonPositions'
-import { TextAlignMode, TextShape, Transform, engine } from '@dcl/sdk/ecs'
+import { parentEntity, syncEntity } from '@dcl/sdk/network'
+import { Entity, TextAlignMode, TextShape, Transform, engine } from '@dcl/sdk/ecs'
 import { statusBoardPositions } from './locators/statusBoardPositions'
 
 export const levelButtons: ui.MenuButton[] = []
@@ -27,17 +28,25 @@ export function setupGameUI() {
     levelButtons.push(button)
   })
 
-  setupMoveCouner()
-  seteupStopwatch()
-  setupFoundPairs()
+  const moveCounterEntity = engine.addEntity()
+  syncEntity(moveCounterEntity, [TextShape.componentId], 7000)
+  setupMoveCouner(moveCounterEntity)
+
+  const stopWatchEntity = engine.addEntity()
+  syncEntity(stopWatchEntity, [TextShape.componentId], 7001)
+  seteupStopwatch(stopWatchEntity)
+
+  const foundPairsEntity = engine.addEntity()
+  syncEntity(foundPairsEntity, [TextShape.componentId], 7002)
+  setupFoundPairs(foundPairsEntity)
 }
 
-function setupMoveCouner() {
-  const moveCounter = engine.addEntity()
+function setupMoveCouner(moveCounter: Entity) {
   Transform.create(moveCounter, statusBoardPositions['counter_moves'])
   Transform.getMutable(moveCounter).parent = sceneParentEntity
 
   engine.addSystem(() => {
+    if (!inGame) return
     TextShape.createOrReplace(moveCounter, {
       text: `Moves: ${gameState.moves}`,
       textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
@@ -47,13 +56,13 @@ function setupMoveCouner() {
   })
 }
 
-function seteupStopwatch() {
-  const timer = engine.addEntity()
+function seteupStopwatch(timer: Entity) {
   Transform.create(timer, statusBoardPositions['counter_stopwatch'])
   Transform.getMutable(timer).parent = sceneParentEntity
   console.log('Timer', statusBoardPositions['counter_stopwatch'])
 
   engine.addSystem(() => {
+    if (!inGame) return
     if (gameState.levelStartTime == 0) {
       TextShape.createOrReplace(timer, {
         text: `Time: --:--`,
@@ -80,12 +89,12 @@ function seteupStopwatch() {
   })
 }
 
-function setupFoundPairs() {
-  const foundPairs = engine.addEntity()
+function setupFoundPairs(foundPairs: Entity) {
   Transform.create(foundPairs, statusBoardPositions['counter_foundPairs'])
-  Transform.getMutable(foundPairs).parent = sceneParentEntity
+  Transform.getMutable(foundPairs).parent = sceneParentEntity  
 
   engine.addSystem(() => {
+    if (!inGame) return
     if (gameState.levelStartTime == 0) {
       TextShape.createOrReplace(foundPairs, {
         text: `Pairs: --/--`,

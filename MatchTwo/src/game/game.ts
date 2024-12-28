@@ -64,7 +64,7 @@ export const gameState = {
   pairFound: 0
 }
 
-let inGame = false
+export let inGame = false
 let gameCounter = 0
 
 export async function initGame() {
