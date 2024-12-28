@@ -152,13 +152,13 @@ export const generateArray = (data: generatedData) => {
   }
   randomLvl.initialEntityAmount = catsInRocket
 
-  console.log(`
-    Random level generated, with: 
-    answer:                   ${currentSum}
-    number of waves:          ${data.length}
-    cats in rocket on start:  ${catsInRocket}
-    waves: ${array}
-  `);
+  // console.log(`
+  //   Random level generated, with: 
+  //   answer:                   ${currentSum}
+  //   number of waves:          ${data.length}
+  //   cats in rocket on start:  ${catsInRocket}
+  //   waves: ${array}
+  // `);
 }
 
 const playBackgroundMusic = () => {
