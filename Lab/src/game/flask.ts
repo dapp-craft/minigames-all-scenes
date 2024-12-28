@@ -165,11 +165,18 @@ export class Flask {
         let idx = 0
         for (const [color, volume] of state) {
             let layer: Layer | undefined = this.layers[idx]
+            if (layer && (!Color3.equals(layer.color, color) || layer.volume != volume)) {
+                for (const _ of this.layers.slice(idx + 1)) await this.drain()
+            }
             if (layer && !Color3.equals(layer.color, color)) {
-                for (const _ of this.layers.slice(idx)) await this.drain()
+                await this.drain()
                 layer = undefined
             }
-            if (!layer || layer.volume != volume) await this.pour(color, volume - (layer?.volume ?? 0))
+            if (!layer || layer.volume != volume) {
+                const delta = volume - (layer?.volume ?? 0)
+                if (delta >= 0) await this.pour(color, delta)
+                else await this.drain(-delta)
+            }
             idx++
         }
         if (this.layers[idx]) for (const _ of this.layers.slice(idx)) await this.drain()
