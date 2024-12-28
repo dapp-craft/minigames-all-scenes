@@ -28,15 +28,11 @@ export const gameLogic = new GameLogic()
 
 export async function main() {
     setupEffects(Vector3.create(0, 2.5, -3));
-    
+    setupStaticModels()
     await generateInitialEntity()
-
+    initGame()
     await libraryReady
 
-    setupStaticModels()
-
-
-    initGame()
 }
 
 const generateInitialEntity = async () => {
@@ -71,34 +67,46 @@ const generateInitialEntity = async () => {
     toadsGameState.toadInitialHeight = toadsGameState.locatorsData.get(`obj_frog_hidden_1`)!.position.y
     toadsGameState.toadFinishHeight = toadsGameState.locatorsData.get(`obj_frog_shown_1`)!.position.y
 
+    console.log('hammerParent: Loading')
     if (Transform.getOrNull(hammerParent) == null) {
         Transform.createOrReplace(hammerParent, { position: Vector3.create(8, 2, 2) })
+        console.log('hammerParent: Give Transform to entity: ', hammerParent)
     }
+    console.log('hammerEntity: Loading')
     if (Transform.getOrNull(hammerEntity) == null || VisibilityComponent.getOrNull(hammerEntity) == null) {
         Transform.createOrReplace(hammerEntity, { parent: hammerParent });
         VisibilityComponent.create(hammerEntity, { visible: false });
+        console.log('hammerEntity: Give Transform, VisibilityComponent to entity: ', hammerEntity)
     }
 
     GltfContainer.createOrReplace(hammerEntity, hammer)
     parentEntity(hammerEntity, hammerParent)
 
+    console.log('hits: Loading')
     if (Transform.getOrNull(hits) == null || TextShape.getOrNull(hits) == null) {
         Transform.create(hits, { ...toadsGameState.locatorsData.get('counter_hits'), parent: sceneParentEntity })
         TextShape.create(hits, { text: 'Hits \n0', fontSize: 2 })
+        console.log('hits: Give Transform, TextShape to entity: ', hits)
     }
+    console.log('miss: Loading')
     if (Transform.getOrNull(miss) == null || TextShape.getOrNull(hits) == null) {
         TextShape.create(miss, { text: 'Misses \n0', fontSize: 2 })
         Transform.create(miss, { ...toadsGameState.locatorsData.get('counter_misses'), parent: sceneParentEntity })
+        console.log('miss: Give Transform, TextShape to entity: ', miss)
     }
+    console.log('counter: Loading')
     if (Transform.getOrNull(counter) == null || TextShape.getOrNull(counter) == null) {
         TextShape.create(counter, { text: 'Score \n0', fontSize: 2 })
         Transform.create(counter, { ...toadsGameState.locatorsData.get('counter_score'), parent: sceneParentEntity })
+        console.log('counter: Give Transform, TextShape to entity: ', counter)
     }
 
+    console.log('frogs: Loading')
     for (let i = 0; i < toadsGameConfig.ToadsAmount; i++) {
         if (Transform.getOrNull(toadsGameState.availableEntity[i]) == null || GltfContainer.getOrNull(toadsGameState.availableEntity[i]) == null) {
             Transform.create(toadsGameState.availableEntity[i], { position: { ...toadsGameState.locatorsData.get(`obj_frog_hidden_${i + 1}`)!.position, y: toadsGameState.toadInitialHeight }, parent: sceneParentEntity })
             GltfContainer.createOrReplace(toadsGameState.availableEntity[i], { src: frog01.src, visibleMeshesCollisionMask: ColliderLayer.CL_CUSTOM5 })
+            console.log('frogs: Give Transform, GltfContainer to entity: ', toadsGameState.availableEntity[i])
         }
     }
 }
