@@ -1,0 +1,33 @@
+name: puzzle
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'SlidingPuzzle/**'
+      - 'common/**'
+      - 'package.json'
+    tags:
+      - 'preview/puzzle-v*'
+      - 'release/puzzle-v*'
+
+jobs:
+  # testing:
+  #   if: github.ref_type != 'tag'
+  #   uses: ./.github/workflows/.deploy_worlds.yml
+  #   with:
+  #     directory: SlidingPuzzle
+  #     worlds: snikes.eth
+  #   secrets:
+  #     DEPLOY_PKEY: ${{ secrets.WORLDS_PKEY }}
+
+  release:
+    if: github.ref_type == 'tag'
+    uses: ./.github/workflows/.deploy_genesis.yml
+    with:
+      directory: SlidingPuzzle
+      coordinates: '["79,-30"]'
+      mainnet: ${{ startsWith(github.ref_name, 'release') }}
+    secrets:
+      DEPLOY_PKEY: ${{ secrets.GENESIS_PKEY }}
