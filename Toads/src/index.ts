@@ -28,12 +28,13 @@ export const gameLogic = new GameLogic()
 
 export async function main() {
     setupEffects(Vector3.create(0, 2.5, -3));
+    
+    await generateInitialEntity()
 
     await libraryReady
 
     setupStaticModels()
 
-    await generateInitialEntity()
 
     initGame()
 }
