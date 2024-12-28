@@ -62,7 +62,8 @@ export class GameLogic {
     private playMissAnimation(board: string) {
         utils.timers.clearInterval(this.animationInterval)
         const entity = steampunkGameState.listOfEntity.get('missIndicator');
-        Transform.createOrReplace(entity, { ...Transform.get(steampunkGameState.listOfEntity.get(board)), position: { ...Transform.get(steampunkGameState.listOfEntity.get(board)).position, z: Transform.get(steampunkGameState.listOfEntity.get(board)).position.z + .03 }, parent: steampunkGameState.listOfEntity.get('display') })
+        Transform.createOrReplace(entity, { ...Transform.get(steampunkGameState.listOfEntity.get(board)), position: { ...Transform.get(steampunkGameState.listOfEntity.get(board)).position, z: Transform.get(steampunkGameState.listOfEntity.get(board)).position.z + .03 }})
+        parentEntity(entity, steampunkGameState.listOfEntity.get('display'))
         VisibilityComponent.getMutable(entity).visible = true
         let alpha = steampunkGameConfig.visibleFeedbackAlpha
         Material.setPbrMaterial(entity, { albedoColor: Color4.create(1, 0, 0, alpha) })
@@ -103,7 +104,7 @@ export class GameLogic {
         this.gameIsEnded = false
         // for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) VisibilityComponent.createOrReplace(steampunkGameState.availableEntity[i], { visible: false })
         this.hintsAmount = hintsAmount[this.playerLevel - 1]
-        VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
+        // VisibilityComponent.getMutable(steampunkGameState.listOfEntity.get("hitZone")).visible = false
         this.correctSmashCounter = 0
         // TextShape.getMutable(steampunkGameState.listOfEntity.get('hits')).text = `Score \n${this.correctSmashCounter}`
         this.differencesFound = []
