@@ -95,7 +95,7 @@ const generateInitialEntity = async () => {
         console.log('hits: Give TextShape to entity: ', hits)
     }
     console.log('miss: Loading')
-    if (!Transform.has(miss) || !TextShape.has(hits)) {
+    if (!Transform.has(miss)) {
         Transform.create(miss, { ...toadsGameState.locatorsData.get('counter_misses'), parent: sceneParentEntity })
         console.log('miss: Give Transform to entity: ', miss)
     }
@@ -104,7 +104,7 @@ const generateInitialEntity = async () => {
         console.log('miss: Give TextShape to entity: ', miss)
     }
     console.log('counter: Loading')
-    if (!Transform.has(counter) || !TextShape.has(counter)) {
+    if (!Transform.has(counter)) {
         Transform.create(counter, { ...toadsGameState.locatorsData.get('counter_score'), parent: sceneParentEntity })
         console.log('counter: Give Transform to entity: ', counter)
     }
