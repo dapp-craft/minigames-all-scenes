@@ -1,6 +1,6 @@
-import { engine, Entity, GltfContainer, Schemas, Transform, TransformType } from '@dcl/sdk/ecs'
+import { engine, GltfContainer, Schemas, Transform, TransformType } from '@dcl/sdk/ecs'
 import { progress, queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
+import { LEVEL, MOVES, TIME } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { STATIC_MODELS } from './resources'
@@ -96,9 +96,12 @@ const gameHandlers = {
 
 const libraryReady = initMiniGame(
     'e5ec213a-628f-4ef7-8f6f-0cb543da0701',
-    TIME_LEVEL_MOVES,
+    [ TIME, MOVES, LEVEL ],
     readGltfLocators(`locators/obj_locators_default.gltf`),
-    gameHandlers
+    gameHandlers,
+    {
+        scoreboard: { sortDirection: 'asc' }
+    }
 )
 
 export async function main() {
