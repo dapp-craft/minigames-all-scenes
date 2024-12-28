@@ -69,6 +69,8 @@ export class GameController {
     this._inGame = true
     this._isInit = false
     this._startTime = Date.now()
+
+    this.setBoost(false)
     
     this._syncRender.clean()
     
@@ -122,7 +124,8 @@ export class GameController {
       this._food.terminate()
       console.log('After terminate 5')
     }
-
+    
+    this.setBoost(false)
     this._inGame = false
     playGameOverSound()
     this.onFinishCallback()
