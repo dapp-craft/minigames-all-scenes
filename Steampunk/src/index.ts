@@ -31,13 +31,13 @@ export const soundManager = new SoundManager()
 export async function main() {
     setupEffects(Vector3.create(0, 2.7, -6));
 
-    await libraryReady
-
     setupStaticModels();
-
+    
     await generateInitialEntity()
-
+    
     initGame()
+    
+    await libraryReady
 }
 
 const generateInitialEntity = async () => {
