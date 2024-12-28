@@ -73,32 +73,44 @@ const generateInitialEntity = async () => {
         console.log('hammerParent: Give Transform to entity: ', hammerParent)
     }
     console.log('hammerEntity: Loading')
-    if (!Transform.has(hammerEntity) || !VisibilityComponent.has(hammerEntity)) {
+    if (!Transform.has(hammerEntity)) {
         Transform.createOrReplace(hammerEntity, { parent: hammerParent });
+        console.log('hammerEntity: Give Transform to entity: ', hammerEntity)
+    }
+    if (!VisibilityComponent.has(hammerEntity)) {
         VisibilityComponent.create(hammerEntity, { visible: false });
-        console.log('hammerEntity: Give Transform, VisibilityComponent to entity: ', hammerEntity)
+        console.log('hammerEntity: Give VisibilityComponent to entity: ', hammerEntity)
     }
 
     GltfContainer.createOrReplace(hammerEntity, hammer)
     parentEntity(hammerEntity, hammerParent)
 
     console.log('hits: Loading')
-    if (!Transform.has(hits) || !TextShape.has(hits)) {
+    if (!Transform.has(hits) ) {
         Transform.create(hits, { ...toadsGameState.locatorsData.get('counter_hits'), parent: sceneParentEntity })
+        console.log('hits: Give Transform to entity: ', hits)
+    }
+    if (!TextShape.has(hits)) {
         TextShape.create(hits, { text: 'Hits \n0', fontSize: 2 })
-        console.log('hits: Give Transform, TextShape to entity: ', hits)
+        console.log('hits: Give TextShape to entity: ', hits)
     }
     console.log('miss: Loading')
     if (!Transform.has(miss) || !TextShape.has(hits)) {
-        TextShape.create(miss, { text: 'Misses \n0', fontSize: 2 })
         Transform.create(miss, { ...toadsGameState.locatorsData.get('counter_misses'), parent: sceneParentEntity })
-        console.log('miss: Give Transform, TextShape to entity: ', miss)
+        console.log('miss: Give Transform to entity: ', miss)
+    }
+    if (!TextShape.has(miss)) {
+        TextShape.create(miss, { text: 'Hits \n0', fontSize: 2 })
+        console.log('miss: Give TextShape to entity: ', miss)
     }
     console.log('counter: Loading')
     if (!Transform.has(counter) || !TextShape.has(counter)) {
-        TextShape.create(counter, { text: 'Score \n0', fontSize: 2 })
         Transform.create(counter, { ...toadsGameState.locatorsData.get('counter_score'), parent: sceneParentEntity })
-        console.log('counter: Give Transform, TextShape to entity: ', counter)
+        console.log('counter: Give Transform to entity: ', counter)
+    }
+    if (!TextShape.has(counter)) {
+        TextShape.create(counter, { text: 'Hits \n0', fontSize: 2 })
+        console.log('counter: Give TextShape to entity: ', counter)
     }
 
     console.log('frogs: Loading')
