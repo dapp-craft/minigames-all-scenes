@@ -38,8 +38,6 @@ export async function main() {
     await generateInitialEntity()
 
     initGame()
-
-    // init()
 }
 
 const generateInitialEntity = async () => {
@@ -58,16 +56,16 @@ const generateInitialEntity = async () => {
     const timerEntity = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 9]
     const levelText = steampunkGameState.availableEntity[steampunkGameConfig.targetEntityAmount + 10]
 
-    syncEntity(steampunkGameState.listOfEntity.get('display'), [Transform.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 10)
     syncEntity(firstBoard, [Transform.componentId, MeshRenderer.componentId, Material.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 1)
     syncEntity(secondBoard, [Transform.componentId, MeshRenderer.componentId, Material.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 2)
-    syncEntity(hitZone, [Transform.componentId, MeshRenderer.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 3)
+    syncEntity(hitZone, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId, Material.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 3)
     syncEntity(hits, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 4)
-    syncEntity(hitZone, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 5)
-    syncEntity(missIndicator, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 6)
+    syncEntity(visibleFeedback, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 5)
+    syncEntity(missIndicator, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId, Material.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 6)
     syncEntity(findCounter, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 7)
-    syncEntity(visibleFeedback, [Transform.componentId, MeshRenderer.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 8)
     syncEntity(timerEntity, [Transform.componentId, TextShape.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 9)
+    syncEntity(levelText, [Transform.componentId, MeshRenderer.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 10)
+    syncEntity(steampunkGameState.listOfEntity.get('display'), [Transform.componentId], STEAMPUNK_SYNC_ID + steampunkGameConfig.targetEntityAmount + 11)
 
     for (let i = 0; i < steampunkGameConfig.targetEntityAmount; i++) {
         syncEntity(steampunkGameState.availableEntity[i], [Transform.componentId, Material.componentId, VisibilityComponent.componentId], STEAMPUNK_SYNC_ID + i)
@@ -131,8 +129,10 @@ const generateInitialEntity = async () => {
         Transform.create(timerEntity, { ...steampunkGameState.locatorsData.get('counter_stopwatch'), parent: sceneParentEntity })
         TextShape.create(timerEntity, { text: '', fontSize: 2 })
     }
-    Transform.create(levelText, { ...steampunkGameState.locatorsData.get('label_difficulty_selection'), parent: sceneParentEntity })
-    TextShape.create(levelText, { text: 'Difficult level', fontSize: 2 })
+    if (Transform.getOrNull(levelText) == null || TextShape.getOrNull(levelText) == null) {
+        Transform.create(levelText, { ...steampunkGameState.locatorsData.get('label_difficulty_selection'), parent: sceneParentEntity })
+        TextShape.create(levelText, { text: 'Difficult level', fontSize: 2 })
+    }
     lightUpEntity(firstBoard, `images/1.png`)
     lightUpEntity(secondBoard, `images/2.png`)
 }
