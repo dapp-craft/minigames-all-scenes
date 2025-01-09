@@ -1,6 +1,6 @@
 import { AudioSource, engine, Entity, GltfContainer, Material, MaterialTransparencyMode, MeshCollider, MeshRenderer, TextShape, Transform, VisibilityComponent } from '@dcl/sdk/ecs'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { POINTS_TIME } from '@dcl-sdk/mini-games/src/ui'
+import { SCORE, TIME } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
 import { GAME_ID, gameTime, soundConfig, STEAMPUNK_SYNC_ID, steampunkGameConfig } from './gameConfig'
@@ -9,7 +9,7 @@ import { parentEntity, syncEntity } from '@dcl/sdk/network'
 import { GameLogic } from './game/gameLogic'
 import { setupStaticModels } from './staticModels/setupStaticModels'
 import { getReadyToStart, initGame } from './game/game'
-import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
+import { Color4, Vector3 } from '@dcl/sdk/math'
 import { setupEffects } from '../../common/effects'
 import { mainThereme, SoundManager } from './game/soundManager'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
@@ -22,7 +22,7 @@ const handlers = {
     toggleSfx: () => toggleVolume()
 }
 
-const libraryReady = initMiniGame(GAME_ID, POINTS_TIME, readGltfLocators(`locators/obj_locators_default.gltf`), handlers, { timeouts: { inactivity: gameTime.inactivity, forceLimit: true } })
+const libraryReady = initMiniGame(GAME_ID, [SCORE, TIME], readGltfLocators(`locators/obj_locators_default.gltf`), handlers, { timeouts: { inactivity: gameTime.inactivity, forceLimit: true } })
 
 export let gameLogic = new GameLogic()
 
