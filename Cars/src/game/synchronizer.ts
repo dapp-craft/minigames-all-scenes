@@ -26,7 +26,7 @@ function updateCar(car: Entity) {
   const oldCarData = CarsLatest[car] as CarType
 
   // Rotation
-  if (!isQuaternionEqual(Transform.get(car).rotation, directionToQuaterion(oldCarData.direction))) {
+  if (!isQuaternionEqual(Transform.get(car).rotation, directionToQuaterion(newCarData.direction))) {
     Transform.getMutable(car).rotation = directionToQuaterion(newCarData.direction)
   }
 
