@@ -1,7 +1,7 @@
 import { Entity } from '@dcl/sdk/ecs'
 import { BOARD_SIZE } from '../../config'
 import { Car } from '../components/definitions'
-import { getInGameCars } from '../objects/car'
+import { getInGameCars, MAIN_CAR } from '../objects/car'
 import { CarDirection, CarType, Cell } from '../type'
 import { getDirectionVector } from './math'
 
@@ -96,4 +96,13 @@ export function calculateFinalDelta(
   }
 
   return finalDelta
+}
+
+export function isSolved() {
+  const mainCar = Car.get(MAIN_CAR)
+  if (mainCar.position.x == 5) {
+    Car.getMutable(MAIN_CAR).position = { x: 9, y: 3 }
+    return true
+  }
+  return false
 }

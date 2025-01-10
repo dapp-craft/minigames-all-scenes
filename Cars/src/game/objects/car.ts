@@ -20,6 +20,7 @@ import { CarDirection, Cell } from '../type'
 import { syncEntity } from '@dcl/sdk/network'
 import { selectCar } from '../selector'
 import { CarsSpec } from '../components/definitions'
+import { getDirectionVector } from '../logic/math'
 
 export let MAIN_CAR: Entity
 
@@ -125,4 +126,26 @@ export function getCarsState() {
   })
   state.cars.push(Car.get(MAIN_CAR))
   return state
+}
+
+export function getCarAt(cell: Cell) {
+  return getInGameCars().find((car) => {
+    const carComponent = Car.get(car)
+    const direction = getDirectionVector(carComponent.direction)
+    const x = carComponent.position.x
+    const y = carComponent.position.y
+    const length = carComponent.length
+    const xD = direction.x
+    const yD = direction.y
+    for (let i = 0; i < length; i++) {
+      if (x + xD * i === cell.x && y + yD * i === cell.y) return true
+    }
+    return false
+  })
+}
+
+export function removeCarFromGame(car: Entity) {
+  Car.getMutable(car).inGame = false
+  Car.getMutable(car).position = { x: -1, y: -1 }
+  Car.getMutable(car).direction = CarDirection.right
 }

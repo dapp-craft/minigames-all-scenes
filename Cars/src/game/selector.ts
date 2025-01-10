@@ -21,12 +21,13 @@ import {
   createAvailabilityMap,
   isPositionAvailable,
   isPositionAvailableCarData,
+  isSolved,
   markCarCellsAsAvailable,
   markCarCellsAsAvailableCarData
 } from './logic/board'
 import { Car, CarsSpec } from './components/definitions'
 import { Quaternion } from '@dcl/sdk/math'
-import { SyncState, finishLevel, gameState, inputAvailable, isSolved, setInputAvailable } from '.'
+import { SyncState, finishLevel, gameState, inputAvailable, setInputAvailable } from '.'
 import { playWinSound } from './sfx'
 import { runWinAnimation } from '../../../common/effects'
 import { CARS, MAIN_CAR, getCarsState } from './objects/car'

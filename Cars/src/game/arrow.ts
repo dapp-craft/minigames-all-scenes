@@ -13,9 +13,10 @@ import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { BOARD } from './objects/board'
 // import { arrowModel } from '../resources/resources'
 import { BOARD_PHYSICAL_SIZE, BOARD_SIZE, CELL_SIZE_PHYSICAL } from '../config'
-import { getCarAt, inputAvailable, inputBuffer, lookingAt } from '.'
+import { inputAvailable, inputBuffer, lookingAt } from '.'
 import { cellRelativePosition, directionToQuaterion } from './logic/math'
 import { Car } from './components/definitions'
+import { getCarAt } from './objects/car'
 
 let arrowPosEntity: Entity
 let arrowAnimEntity: Entity
@@ -114,3 +115,5 @@ function calculateArrowPosition(car: Entity) {
   const scaledOffsetVector = Vector3.scale(offsetVector, 1 / BOARD_SIZE)
   return Vector3.add(carPosition, scaledOffsetVector)
 }
+
+

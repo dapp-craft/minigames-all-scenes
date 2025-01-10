@@ -1,21 +1,4 @@
-import {
-  ColliderLayer,
-  engine,
-  Entity,
-  executeTask,
-  GltfContainer,
-  InputAction,
-  inputSystem,
-  Material,
-  MeshCollider,
-  MeshRenderer,
-  PointerEventType,
-  PointerLock,
-  raycastSystem,
-  Texture,
-  Transform,
-  TransformType
-} from '@dcl/sdk/ecs'
+import { Entity } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { Quaternion, Vector3, Color4 } from '@dcl/ecs-math'
 import { CarDirection, Cell } from './type'
@@ -24,9 +7,20 @@ import { BOARD_PHYSICAL_SIZE, BOARD_SIZE, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE
 import { Car, CarsSpec } from './components/definitions'
 import { setUpSynchronizer } from './synchronizer'
 import { BOARD, createBoard } from './objects/board'
-import { createCar, createMainCar, getAllCars, getAllCarsExceptMain, getCarsState, getInGameCars, MAIN_CAR, updateCarsState } from './objects/car'
+import {
+  createCar,
+  createMainCar,
+  getAllCars,
+  getAllCarsExceptMain,
+  getCarsState,
+  getInGameCars,
+  MAIN_CAR,
+  removeCarFromGame,
+  updateCarsState
+} from './objects/car'
 import { calculateFinalDelta, createAvailabilityMap, getMovementDelta, markCarCellsAsAvailable } from './logic/board'
-import { getLevel, MAX_LEVEL } from './levels'
+import { getLevel } from './levels'
+import { MAX_LEVEL } from '../config'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { getPlayer } from '@dcl/sdk/players'
 import {
@@ -55,7 +49,7 @@ export function setInputAvailable(value: boolean) {
   inputAvailable = value
 }
 
-const SyncState_ = CreateStateSynchronizer("carsState", CarsSpec, {
+const SyncState_ = CreateStateSynchronizer('carsState', CarsSpec, {
   update: async (state) => {
     if (inGame) return
     updateCarsState(state)
@@ -107,10 +101,6 @@ export async function initGame() {
 
   createBoard()
 
-  setUpRaycast()
-
-  // setUpInputSystem()
-
   initSelector()
 
   setUpSynchronizer()
@@ -118,8 +108,6 @@ export async function initGame() {
   setupGameUI()
 
   initKeyboardInput()
-
-  // initArrow()
 
   createMainCar(SYNC_ENTITY_ID)
 
@@ -131,7 +119,6 @@ export async function initGame() {
   SyncState.start()
 
   await fetchPlayerProgress()
-
 }
 
 export function getReadyToStart() {
@@ -202,124 +189,6 @@ export function finishLevel() {
   }
 }
 
-function setUpRaycast() {
-  raycastSystem.registerLocalDirectionRaycast(
-    {
-      entity: engine.CameraEntity,
-      opts: {
-        direction: Vector3.Forward(),
-        continuous: true,
-        collisionMask: ColliderLayer.CL_CUSTOM1
-      }
-    },
-    (hit) => {
-      if (!inputAvailable) return
-      // Update lookingAt
-      if (hit.hits.length === 0) {
-        inputBuffer.currentCell = undefined
-        lookingAt = undefined
-        return
-      }
-      const hitPosition = hit.hits[0].position
-      if (hitPosition == undefined) {
-        inputBuffer.currentCell = undefined
-        lookingAt = undefined
-        return
-      }
-      const relativePosition = globalCoordsToLocal(hitPosition as Vector3)
-      lookingAt = localCoordsToCell(relativePosition)
-
-      // Update selectedCar
-      if (inputBuffer.startCell == undefined) return
-      inputBuffer.currentCell = lookingAt
-      processMovement(inputBuffer.startCell, inputBuffer.currentCell)
-    }
-  )
-}
-
-export function getCarAt(cell: Cell) {
-  return getInGameCars().find((car) => {
-    const carComponent = Car.get(car)
-    const direction = getDirectionVector(carComponent.direction)
-    const x = carComponent.position.x
-    const y = carComponent.position.y
-    const length = carComponent.length
-    const xD = direction.x
-    const yD = direction.y
-    for (let i = 0; i < length; i++) {
-      if (x + xD * i === cell.x && y + yD * i === cell.y) return true
-    }
-    return false
-  })
-}
-
-function setUpInputSystem() {
-  engine.addSystem(function () {
-    if (
-      inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN) &&
-      PointerLock.get(engine.CameraEntity).isPointerLocked
-    ) {
-      if (!inputAvailable) return
-      if (lookingAt) {
-        const car = getCarAt(lookingAt)
-        if (car == undefined) return
-        console.log(car)
-        inputBuffer.selectedCar = car
-        inputBuffer.startCell = lookingAt
-      }
-    }
-
-    if (
-      inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_UP) &&
-      PointerLock.get(engine.CameraEntity).isPointerLocked
-    ) {
-      if (!inputAvailable) return
-      moveMade = false
-      clearInputBuffer()
-    }
-  })
-}
-
-function processMovement(start: Cell, end: Cell) {
-  if (!start || !end || !inputBuffer.selectedCar) return
-  if (start.x === end.x && start.y === end.y) return
-
-  const car = inputBuffer.selectedCar
-  const carData = Car.get(car)
-
-  const availabilityMap = createAvailabilityMap()
-  markCarCellsAsAvailable(availabilityMap, car)
-
-  const movementD = getMovementDelta(start, end, car)
-
-  const finalDelta = calculateFinalDelta(car, movementD, availabilityMap, start)
-
-  if (finalDelta.x != 0 || finalDelta.y != 0) {
-    playMoveCarSound()
-    if (!moveMade) {
-      gameState.moves += 1
-      moveMade = true
-    }
-  }
-  Car.getMutable(car).position = { x: carData.position.x + finalDelta.x, y: carData.position.y + finalDelta.y }
-  inputBuffer.startCell = { x: start.x + finalDelta.x, y: start.y + finalDelta.y }
-
-  if (isSolved()) {
-    inputAvailable = false
-    playWinSound()
-    runWinAnimation().then(finishLevel)
-  }
-}
-
-export function isSolved() {
-  const mainCar = Car.get(MAIN_CAR)
-  if (mainCar.position.x == 5) {
-    Car.getMutable(MAIN_CAR).position = { x: 9, y: 3 }
-    return true
-  }
-  return false
-}
-
 function loadLevel(level: number) {
   const loadedLevel = getLevel(level)
 
@@ -343,12 +212,6 @@ function loadLevel(level: number) {
     Car.getMutable(car).direction = carData.direction
     Car.getMutable(car).length = carData.length
   })
-}
-
-function removeCarFromGame(car: Entity) {
-  Car.getMutable(car).inGame = false
-  Car.getMutable(car).position = { x: -1, y: -1 }
-  Car.getMutable(car).direction = CarDirection.right
 }
 
 export function exitGame() {
