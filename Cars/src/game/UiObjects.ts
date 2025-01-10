@@ -1,6 +1,6 @@
 import { ui, queue } from '@dcl-sdk/mini-games/src'
 import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
-import { MAX_LEVEL } from './levels'
+import { MAX_LEVEL } from '../config'
 import { gameState, startLevel } from './index'
 import * as utils from '@dcl-sdk/utils'
 import { levelButtonPositions, setLevelButtonPositions } from './locators/levelButtonPositions'
