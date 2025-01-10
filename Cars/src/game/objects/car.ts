@@ -23,9 +23,11 @@ import { CarsSpec } from '../components/definitions'
 import { getDirectionVector } from '../logic/math'
 
 export let MAIN_CAR: Entity
+export let SYNC_MAIN_CAR: Entity
 
 // Cars except the main car
 export const CARS: Entity[] = []
+export const SYNC_CARS: Entity[] = []
 
 export function createCarEntity(id: number, isMain: boolean) {
   const car = engine.addEntity()
@@ -61,7 +63,9 @@ export function createCarEntity(id: number, isMain: boolean) {
 
 export function createCar(id: number) {
   const car = createCarEntity(id, false)
+  const sync_car = createCarEntity(id, false)
   CARS.push(car)
+  SYNC_CARS.push(sync_car)
   return car
 }
 
@@ -70,6 +74,7 @@ export function createMainCar(id: number) {
     throw new Error('Main car already exists')
   }
   MAIN_CAR = createCarEntity(id, true)
+  SYNC_MAIN_CAR = createCarEntity(id, true)
 }
 
 export function getInGameCars(): Entity[] {
@@ -104,18 +109,18 @@ export function updateCarsState(state: MapResult<typeof CarsSpec>) {
   state.cars
     .filter((car) => car.isMain)
     .forEach((car, i) => {
-      Car.getMutable(MAIN_CAR).position = car.position
-      Car.getMutable(MAIN_CAR).direction = car.direction
-      Car.getMutable(MAIN_CAR).length = car.length
-      Car.getMutable(MAIN_CAR).inGame = car.inGame
+      Car.getMutable(SYNC_MAIN_CAR).position = car.position
+      Car.getMutable(SYNC_MAIN_CAR).direction = car.direction
+      Car.getMutable(SYNC_MAIN_CAR).length = car.length
+      Car.getMutable(SYNC_MAIN_CAR).inGame = car.inGame
     })
   state.cars
     .filter((car) => !car.isMain)
     .forEach((car, i) => {
-      Car.getMutable(CARS[i]).position = car.position
-      Car.getMutable(CARS[i]).direction = car.direction
-      Car.getMutable(CARS[i]).length = car.length
-      Car.getMutable(CARS[i]).inGame = car.inGame
+      Car.getMutable(SYNC_CARS[i]).position = car.position
+      Car.getMutable(SYNC_CARS[i]).direction = car.direction
+      Car.getMutable(SYNC_CARS[i]).length = car.length
+      Car.getMutable(SYNC_CARS[i]).inGame = car.inGame
     })
 }
 
