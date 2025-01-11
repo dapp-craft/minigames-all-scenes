@@ -1,11 +1,12 @@
 import { ui, queue } from '@dcl-sdk/mini-games/src'
 import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
 import { MAX_LEVEL } from '../config'
-import { gameState, startLevel } from './index'
+import { gameState, inGame, startLevel } from './index'
 import * as utils from '@dcl-sdk/utils'
 import { levelButtonPositions, setLevelButtonPositions } from './locators/levelButtonPositions'
 import { setLevelUiPositions, UiLocators } from './locators/UILocators'
-import { MeshRenderer, TextShape, Transform, engine, TextAlignMode } from '@dcl/sdk/ecs'
+import { MeshRenderer, TextShape, Transform, engine, TextAlignMode, Entity } from '@dcl/sdk/ecs'
+import { syncEntity } from '@dcl/sdk/network'
 const width = 2
 const height = 3
 const scale = 1
@@ -29,16 +30,20 @@ export async function setupGameUI() {
     button.disable()
     levelButtons.push(button)
   }
+  const moveCounterEntity = engine.addEntity()
+  syncEntity(moveCounterEntity, [TextShape.componentId], 9000)
+  setupMoveCouner(moveCounterEntity)
 
-  setupMoveCouner()
-  seteupTimer()
+  const timerEntity = engine.addEntity()
+  syncEntity(timerEntity, [TextShape.componentId], 9001)
+  seteupTimer(timerEntity)
 }
 
-function setupMoveCouner() {
-  const moveCounter = engine.addEntity()
+function setupMoveCouner(moveCounter: Entity) {
   Transform.create(moveCounter, UiLocators['counter_moves'])
 
   engine.addSystem(() => {
+    if (!inGame) return
     TextShape.createOrReplace(moveCounter, {
       text: `Moves: ${gameState.moves}`,
       textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
@@ -48,11 +53,11 @@ function setupMoveCouner() {
   })
 }
 
-function seteupTimer() {
-  const timer = engine.addEntity()
+function seteupTimer(timer: Entity) {
   Transform.create(timer, UiLocators['counter_stopwatch'])
 
   engine.addSystem(() => {
+    if (!inGame) return
     if (gameState.levelStartTime == 0) {
       TextShape.createOrReplace(timer, {
         text: `Time: --:--`,
