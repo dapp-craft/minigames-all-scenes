@@ -20,3 +20,5 @@ export const soundConfig = {
 }
 
 export const WEST_SYNC_ID = 5000
+
+export const WIN_DURATION = 3000

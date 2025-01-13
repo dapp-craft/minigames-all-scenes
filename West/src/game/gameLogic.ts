@@ -1,12 +1,13 @@
 import * as utils from '@dcl-sdk/utils'
 import { ColliderLayer, EasingFunction, engine, Entity, GltfContainer, InputAction, Material, MaterialTransparencyMode, MeshCollider, MeshRenderer, pointerEventsSystem, TextShape, Transform, Tween, VisibilityComponent } from "@dcl/sdk/ecs";
-import { soundConfig, westGameConfig, westLevelsConfig } from "../config";
+import { soundConfig, westGameConfig, westLevelsConfig, WIN_DURATION } from "../config";
 import { westGameState } from "../state";
 import { Color4, Quaternion, Vector3 } from "@dcl/sdk/math";
 import { levels } from '../levels';
 import { readGltfLocators } from '../../../common/locators';
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src';
 import { soundManager } from '../globals';
+import { runGameoverAnimation } from '../../../common/effects';
 
 interface PlayerData {
     score: number,
@@ -270,6 +271,7 @@ export class GameLogic {
         if (this.playerHP <= 0) {
             this.playerHP = 0
             this.stopGame()
+            runGameoverAnimation(WIN_DURATION)
         }
     }
 
