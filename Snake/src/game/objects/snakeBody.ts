@@ -1,5 +1,5 @@
-import { Direction, Drawable, MoveDelta, Position, SnakePart } from './type'
-import { engine, executeTask, GltfContainer, MeshRenderer, Transform, Entity } from '@dcl/sdk/ecs'
+import { Drawable, Position, SnakePart } from './type'
+import { engine, Entity } from '@dcl/sdk/ecs'
 
 export class SnakeBody implements SnakePart, Drawable {
   public next: SnakePart | undefined
