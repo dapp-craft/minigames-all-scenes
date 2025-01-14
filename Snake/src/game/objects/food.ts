@@ -1,5 +1,5 @@
-import { MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
-import { Direction, Drawable, MoveDelta, Position, SnakePart } from './type'
+import { engine } from '@dcl/sdk/ecs'
+import { Drawable, Position } from './type'
 
 export class Food implements Drawable {
   readonly position: Position

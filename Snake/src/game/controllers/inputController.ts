@@ -1,16 +1,4 @@
-import {
-  engine,
-  executeTask,
-  GltfContainer,
-  MeshRenderer,
-  Transform,
-  Entity,
-  inputSystem,
-  InputAction,
-  PointerEventType,
-  PointerLock
-} from '@dcl/sdk/ecs'
-import { SnakeHead } from '../objects/snakeHead'
+import { engine, inputSystem, InputAction, PointerEventType } from '@dcl/sdk/ecs'
 import { Direction } from '../objects/type'
 import { GameController } from './gameController'
 

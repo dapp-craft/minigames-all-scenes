@@ -1,7 +1,6 @@
-import { Entity, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
+import { Entity, engine } from '@dcl/sdk/ecs'
 import { Direction, Drawable, MoveDelta, Position, SnakePart } from './type'
 import { SnakeBody } from './snakeBody'
-import { Vector3 } from '@dcl/sdk/math'
 
 export class SnakeHead implements SnakePart, Drawable {
   public next: SnakePart | undefined = undefined
@@ -49,7 +48,6 @@ export class SnakeHead implements SnakePart, Drawable {
 
   public move() {
     if (!this._tail && this._tailsToAdd == 0) {
-      console.log('Moving head')
       this._moveHead()
       return
     }
@@ -81,13 +79,10 @@ export class SnakeHead implements SnakePart, Drawable {
   }
 
   public terminate() {
-    console.log('Terminating snake')
     engine.removeEntity(this.entity)
     let next = this.next
     while (next) {
-      console.log('Before terminate 10')
       next.terminate()
-      console.log('After terminate 10')
       next = next.next
     }
   }

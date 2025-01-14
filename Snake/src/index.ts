@@ -1,5 +1,4 @@
 import { engine, executeTask, GltfContainer, Transform } from '@dcl/sdk/ecs'
-import * as utils from '@dcl-sdk/utils'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { SCORE } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
@@ -43,9 +42,8 @@ executeTask(async () => {
   }
 })
 
-export function main() {
-  // await libraryReady
-
+export async function main() {
+  await libraryReady
   initGame()
 }
 

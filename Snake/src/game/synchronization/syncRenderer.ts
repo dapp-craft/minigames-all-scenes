@@ -1,17 +1,7 @@
-import {
-  DeepReadonly,
-  Entity,
-  GltfContainer,
-  MeshRenderer,
-  Transform,
-  TransformType,
-  VisibilityComponent,
-  engine
-} from '@dcl/sdk/ecs'
+import { Entity, GltfContainer, Transform, TransformType, VisibilityComponent, engine } from '@dcl/sdk/ecs'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { readGltfLocators } from '../../../../common/locators'
 import { GameController } from '../controllers/gameController'
-import { syncEntity } from '@dcl/sdk/network'
 import { foodModel, snakeBodyModel } from '../../resources'
 import { CellEnum, Position } from '../objects/type'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
@@ -19,12 +9,6 @@ import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 export class SyncRenderer {
   private _gameController: GameController
   private _entity: Entity
-
-  private counter = 0
-  private renderInterval = 1 // 6 frames per render
-
-  private xk = 1
-  private yk = 1
 
   private cells: Array<Cell | null>
 
@@ -40,7 +24,10 @@ export class SyncRenderer {
     this._gameController = gameController
 
     this.setPosition()
-    this.cells = Array.from({ length: this._gameController.boardSize.width * this._gameController.boardSize.height }, () => null)
+    this.cells = Array.from(
+      { length: this._gameController.boardSize.width * this._gameController.boardSize.height },
+      () => null
+    )
   }
 
   public render(state: any) {
@@ -50,7 +37,6 @@ export class SyncRenderer {
       this.clean()
       return
     }
-    console.log('SYNC RENDER', state)
     state = state.board
 
     for (let y = 0; y < state.length; y++) {
@@ -60,15 +46,13 @@ export class SyncRenderer {
         if (state[y][x] === CellEnum.EMPTY) {
           // Remove cell if it exists
           if (this.cells[cellIndex]) {
-            console.log('Before terminate 10')
             this.cells[cellIndex]?.terminate()
-            console.log('After terminate 10')
             this.cells[cellIndex] = null
           }
           continue
         }
 
-        if (!this.cells[cellIndex]){
+        if (!this.cells[cellIndex]) {
           const newCell = new Cell(this.cellTransform({ x: x, y: y }))
           newCell.state = state[y][x]
           this.cells[cellIndex] = newCell
@@ -84,9 +68,7 @@ export class SyncRenderer {
   public clean() {
     for (let i = 0; i < this.cells.length; i++) {
       if (this.cells[i] != null) {
-        console.log('Before terminate 11')
         this.cells[i]?.terminate()
-        console.log('After terminate 11')
         this.cells[i] = null
       }
     }
@@ -122,9 +104,6 @@ export class SyncRenderer {
     // Center offset
     Transform.createOrReplace(this._entity, transform)
     Transform.getMutable(this._entity).parent = sceneParentEntity
-
-    this.xk = 1 / transform.scale.x
-    this.yk = 1 / transform.scale.y
   }
 
   private posToIndex(pos: Position) {

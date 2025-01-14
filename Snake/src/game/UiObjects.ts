@@ -1,21 +1,19 @@
-import { ui, queue, sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
-import * as utils from '@dcl-sdk/utils'
+import { ui, sceneParentEntity } from '@dcl-sdk/mini-games/src'
+import { Color4 } from '@dcl/sdk/math'
 import { setLevelUiPositions, UiLocators } from './locators/UILocators'
-import { Entity, MeshRenderer, TextAlignMode, TextShape, Transform, engine } from '@dcl/sdk/ecs'
+import { Entity, TextAlignMode, TextShape, Transform, engine } from '@dcl/sdk/ecs'
 import { syncEntity } from '@dcl/sdk/network'
 import { gameController } from './index'
 
 export const levelButtons: ui.MenuButton[] = []
 
 export async function setupGameUI() {
-  
   const moveCounter = engine.addEntity()
   syncEntity(moveCounter, [TextShape.componentId], 5200)
-  
+
   const speedEntity = engine.addEntity()
   syncEntity(speedEntity, [TextShape.componentId], 5201)
-  
+
   await Promise.all([setLevelUiPositions()])
 
   setupScore(moveCounter)

@@ -11,7 +11,7 @@ import { Board } from '../components'
 import { State } from '../synchronization/state'
 import { SyncRenderer } from '../synchronization/syncRenderer'
 import { log, LogExecutionTime} from '../utils'
-import { SPEED, SPEED_INCREASE_CHECKPOINTS } from '../config'
+import { UPDATE_INTERVALS, UPDATE_INTERVALS_CHECKPOINTS } from '../config'
 
 export class GameController {
   private _boardSize: { width: number; height: number }
@@ -165,7 +165,7 @@ export class GameController {
 
         // Update score
         let scoreToAdd = 1
-        if (this._speed == SPEED.length - 1) {
+        if (this._speed == UPDATE_INTERVALS.length - 1) {
           // MAX speed
           scoreToAdd = +2
         }
@@ -261,14 +261,14 @@ export class GameController {
 
   public SpeedDelta(): number{
 
-    if (!this._boost) return SPEED[this._speed]
+    if (!this._boost) return UPDATE_INTERVALS[this._speed]
 
     const dtime = Date.now() - this._boostStartTime
     const dTimeSec = dtime / 1000
 
     // "speed" is actually the time between updates
-    const maxUpdateRate = SPEED[SPEED.length - 1]
-    const minUpdateRate = SPEED[this._speed]
+    const maxUpdateRate = UPDATE_INTERVALS[UPDATE_INTERVALS.length - 1]
+    const minUpdateRate = UPDATE_INTERVALS[this._speed]
     const speedDelta = minUpdateRate - maxUpdateRate 
 
 
@@ -340,9 +340,9 @@ export class GameController {
 
   private modifySpeed() {
     const secondsSinceStart = (Date.now() - this._startTime) / 1000
-    this._speed = SPEED_INCREASE_CHECKPOINTS.findIndex((checkpoint) => secondsSinceStart < checkpoint)
+    this._speed = UPDATE_INTERVALS_CHECKPOINTS.findIndex((checkpoint) => secondsSinceStart < checkpoint)
     if (this._speed == -1) {
-      this._speed = SPEED.length - 2
+      this._speed = UPDATE_INTERVALS.length - 2
     }
   }
 

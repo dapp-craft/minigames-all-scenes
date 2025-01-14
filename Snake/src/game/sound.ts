@@ -29,5 +29,5 @@ export function playPlaySound() {
 }
 
 export function playStartSound() {
-    playSound('play')
+  playSound('play')
 }
