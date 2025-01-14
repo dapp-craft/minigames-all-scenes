@@ -23,7 +23,8 @@
     "Toads",
     "Snake",
     "Steampunk",
-    "West"
+    "West",
+    "PatternLock"
   ],
   "dependencies": {
     "@dcl-sdk/mini-games": "1.0.3",

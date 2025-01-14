@@ -26,6 +26,9 @@
     },
     {
       "path": "West"
+    },
+    {
+      "path": "PatternLock"
     }
   ]
 }
