@@ -41,7 +41,7 @@ executeTask(async () => {
 })
 
 export async function main() {
-  // await libraryReady
+  await libraryReady
   initGame()
 }
 
