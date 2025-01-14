@@ -1,4 +1,4 @@
-import { GltfContainer, MeshCollider, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
+import { GltfContainer, Transform, engine } from '@dcl/sdk/ecs'
 import { staticModels } from '../resources/resources'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 

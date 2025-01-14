@@ -1,18 +1,14 @@
-import { ui, queue } from '@dcl-sdk/mini-games/src'
+import { ui } from '@dcl-sdk/mini-games/src'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
+import { Color4 } from '@dcl/sdk/math'
 import { TILES_LEVEL } from '../config'
-import { exitGame, gameState, inGame, startLevel } from './game'
-import * as utils from '@dcl-sdk/utils'
-import { SFX_ENABLED, setSfxStatus } from './sound'
+import { gameState, inGame, startLevel } from './game'
 import { levelButtonPositions } from './locators/levelButtonPositions'
-import { parentEntity, syncEntity } from '@dcl/sdk/network'
+import { syncEntity } from '@dcl/sdk/network'
 import { Entity, TextAlignMode, TextShape, Transform, engine } from '@dcl/sdk/ecs'
 import { statusBoardPositions } from './locators/statusBoardPositions'
 
 export const levelButtons: ui.MenuButton[] = []
-const levelButtonCooldown = 1000
-let lastLevelButtonPress = 0
 export function setupGameUI() {
   Object.keys(TILES_LEVEL).forEach((level, index) => {
     const button = new ui.MenuButton(

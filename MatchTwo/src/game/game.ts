@@ -3,12 +3,7 @@ import {
   Entity,
   GltfContainer,
   InputAction,
-  Material,
-  MaterialTransparencyMode,
-  MeshRenderer,
-  TextureFilterMode,
   Transform,
-  TransformType,
   Tween,
   VisibilityComponent,
   engine,
@@ -22,15 +17,14 @@ import {
   cancelWinAnimation
 } from '../../../common/effects'
 import { GameData, Tile } from './components/idnex'
-import { parentEntity, syncEntity } from '@dcl/sdk/network'
+import { syncEntity } from '@dcl/sdk/network'
 import { FLIP_DURATION, TILES_LEVEL, SYNC_ENTITY_OFFSET, MAX_IMAGES, openAngle } from '../config'
 import { ui, queue } from '@dcl-sdk/mini-games/src'
 import { getPlayer } from '@dcl/sdk/players'
 import { levelButtons, setupGameUI } from './UiObjects'
-import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { defaulToyModel, tileDoorShape, tileShape, toysModels } from '../resources/resources'
+import { Quaternion, Vector3 } from '@dcl/sdk/math'
+import { defaulToyModel, tileDoorShape, toysModels } from '../resources/resources'
 import * as utils from '@dcl-sdk/utils'
-import { init } from '@dcl-sdk/mini-games/src/config'
 import { setTilesPositions, tilesPositions } from './tilesPositions'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { playCloseTileSound, playLevelCompleteSound, playOpenTileSound, playPairFoundSound } from './sound'
@@ -97,16 +91,16 @@ function initTiles() {
 }
 
 function createTile(tileNumber: number) {
-
   const { mainEntity: mainTileEntity, toyEntity: tileToy, doorEntity: tileDoorEntity } = tiles[tileNumber]
 
-  if(!Transform.has(mainTileEntity)) Transform.create(mainTileEntity, tilesPositions.toys[tileNumber])
-  if(!Tile.has(mainTileEntity)) Tile.create(mainTileEntity, {
-    isFlipped: false,
-    toyModel: defaulToyModel.src,
-    matched: false,
-    tileNumber: tileNumber
-  })
+  if (!Transform.has(mainTileEntity)) Transform.create(mainTileEntity, tilesPositions.toys[tileNumber])
+  if (!Tile.has(mainTileEntity))
+    Tile.create(mainTileEntity, {
+      isFlipped: false,
+      toyModel: defaulToyModel.src,
+      matched: false,
+      tileNumber: tileNumber
+    })
 
   // Image
   if (!Transform.has(tileToy)) Transform.create(tileToy, tilesPositions.toys[tileNumber])
@@ -310,7 +304,7 @@ async function finishLevel() {
   inputAvailable = false
 
   gameState.levelFinishTime = Date.now()
-  updatePlayerProgress(gameState)
+  updatePlayerProgress()
 
   playLevelCompleteSound()
   await runWinAnimation()

@@ -2,7 +2,6 @@ import { progress } from '@dcl-sdk/mini-games/src'
 import { IProgress } from '@dcl-sdk/mini-games/src/progress'
 import { gameState } from './game'
 
-
 export let playerProgress: IProgress
 
 export async function fetchPlayerProgress() {
@@ -12,7 +11,7 @@ export async function fetchPlayerProgress() {
   if (req?.length) playerProgress = req[0]
 }
 
-export async function updatePlayerProgress(data: typeof gameState) {
+export async function updatePlayerProgress() {
   console.log('Updating progress', playerProgress)
   progress.upsertProgress({
     level: gameState.level,

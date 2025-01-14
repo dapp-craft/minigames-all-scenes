@@ -1,15 +1,10 @@
 import {
   AudioSource,
-  AudioStream,
   engine,
   Entity,
-  MeshCollider,
-  MeshRenderer,
   Transform,
-  MediaState
 } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
-import { Vector3 } from '@dcl/sdk/math'
 import { closeTileSound1, closeTileSound2, levelCompleteSound, mainThemeSound, openTileSound1, openTileSound2, pairFoundSound } from '../resources/resources'
 
 export let SOUNDS: { [key: string]: string } = {
