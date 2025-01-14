@@ -1,6 +1,5 @@
 export const GAME_ID = '67ad1757-6796-4817-ac29-5bf1987d24f9'
 
-
 // Game
 /**
  * Number of rows and columns of the board

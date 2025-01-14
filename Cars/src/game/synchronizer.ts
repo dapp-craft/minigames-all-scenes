@@ -1,10 +1,9 @@
 import { EasingFunction, Entity, GltfContainer, Transform, Tween, engine } from '@dcl/sdk/ecs'
-import { CarDirection, CarType, Cell } from './type'
+import { CarType } from './type'
 import { Car } from './components/definitions'
 import { cellRelativePosition, directionToQuaterion } from './logic/math'
 import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { carModels, mainCarModel } from '../resources/resources'
-import * as utils from '@dcl-sdk/utils'
 import { CELL_SIZE_RELATIVE } from '../config'
 
 const CarsLatest: Record<Entity, CarType> = {}

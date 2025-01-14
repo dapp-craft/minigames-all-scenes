@@ -1,5 +1,4 @@
 import { engine, executeTask, GltfContainer, Transform } from '@dcl/sdk/ecs'
-import * as utils from '@dcl-sdk/utils'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { LEVEL, MOVES, TIME } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
@@ -46,4 +45,3 @@ export async function main() {
   initGame()
 }
 
-// https://exploration-games.decentraland.zone/api/games/67ad1757-6796-4817-ac29-5bf1987d24f9/leaderboard?sort=time&direction=DESC

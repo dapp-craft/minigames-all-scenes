@@ -1,15 +1,10 @@
 import {
   AudioSource,
-  AudioStream,
   engine,
   Entity,
-  MeshCollider,
-  MeshRenderer,
   Transform,
-  MediaState
 } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
-import { Vector3 } from '@dcl/sdk/math'
 import { mainTheme, moveCarSound, startLevelSound, winSound } from '../resources/resources'
 
 export let SOUNDS: { [key: string]: string } = {
@@ -20,23 +15,12 @@ export let SOUNDS: { [key: string]: string } = {
 
 export const THEME_VOLUME = 0.035
 
-// export const mainThereme = engine.addEntity()
-// Transform.create(mainThereme, {parent: engine.PlayerEntity})
-// AudioSource.create(mainThereme, {audioClipUrl: mainThemeSound, loop: true, playing: true, volume: 0.07})
-
-// export function toggleBackgroundMusic() {
-//   let audioSource = AudioSource.getMutable(mainThereme)
-//   audioSource.playing = !audioSource.playing
-// }
-
 export class SoundManager {
   private soundsStorage: Entity[] = []
   private themeVolume = THEME_VOLUME
   private themeEntity: Entity
   private themeStatus: boolean = true
   constructor() {
-    console.log('SoundManager constructor')
-    console.log('SOUNDS', SOUNDS)
     Object.keys(SOUNDS).forEach((key) => {
       let ent = engine.addEntity()
       AudioSource.create(ent, {
@@ -58,8 +42,6 @@ export class SoundManager {
   }
 
   public playSound(soundName: keyof typeof SOUNDS, volume: number = 0.5) {
-    console.log('Play sound', soundName)
-    console.log('audioClipUrl: ', `${SOUNDS[soundName as keyof typeof SOUNDS]}`)
     let soundEntity = engine.addEntity()
     Transform.create(soundEntity, { parent: engine.PlayerEntity })
     AudioSource.create(soundEntity, {

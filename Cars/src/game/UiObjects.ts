@@ -1,15 +1,11 @@
-import { ui, queue } from '@dcl-sdk/mini-games/src'
-import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
+import { ui } from '@dcl-sdk/mini-games/src'
+import { Color4 } from '@dcl/sdk/math'
 import { MAX_LEVEL } from '../config'
 import { gameState, inGame, startLevel } from './index'
-import * as utils from '@dcl-sdk/utils'
 import { levelButtonPositions, setLevelButtonPositions } from './locators/levelButtonPositions'
 import { setLevelUiPositions, UiLocators } from './locators/UILocators'
-import { MeshRenderer, TextShape, Transform, engine, TextAlignMode, Entity } from '@dcl/sdk/ecs'
+import { TextShape, Transform, engine, TextAlignMode, Entity } from '@dcl/sdk/ecs'
 import { syncEntity } from '@dcl/sdk/network'
-const width = 2
-const height = 3
-const scale = 1
 
 export const levelButtons: ui.MenuButton[] = []
 

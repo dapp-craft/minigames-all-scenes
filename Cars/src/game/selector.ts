@@ -1,12 +1,7 @@
 import {
-  ColliderLayer,
   Entity,
   GltfContainer,
   InputAction,
-  MapResult,
-  Material,
-  MeshCollider,
-  MeshRenderer,
   Transform,
   TransformType,
   VisibilityComponent,
@@ -15,22 +10,15 @@ import {
 } from '@dcl/sdk/ecs'
 import { Vector3 } from '@dcl/ecs-math'
 import { arrowActiveModel, arrowInactiveModel } from '../resources/resources'
-import { CarDirection, CarType, Cell } from './type'
+import { CarType, Cell } from './type'
 import { getDirectionVector } from './logic/math'
-import {
-  createAvailabilityMap,
-  isPositionAvailable,
-  isPositionAvailableCarData,
-  isSolved,
-  markCarCellsAsAvailable,
-  markCarCellsAsAvailableCarData
-} from './logic/board'
-import { Car, CarsSpec } from './components/definitions'
+import { createAvailabilityMap, isPositionAvailable, isSolved, markCarCellsAsAvailable } from './logic/board'
+import { Car } from './components/definitions'
 import { Quaternion } from '@dcl/sdk/math'
-import { SyncState, finishLevel, gameState, inputAvailable, setInputAvailable } from '.'
+import { SyncState, finishLevel, gameState, setInputAvailable } from '.'
 import { playWinSound } from './sfx'
 import { runWinAnimation } from '../../../common/effects'
-import { CARS, MAIN_CAR, getCarsState } from './objects/car'
+import { getCarsState } from './objects/car'
 import { playMoveCarSound } from './sfx'
 
 export let forwardArrow: Entity
@@ -64,8 +52,6 @@ function createArrow(transform: TransformType, hoverText: string, onClick: () =>
   const arrow = engine.addEntity()
   Transform.create(arrow, transform)
   GltfContainer.create(arrow, arrowActiveModel)
-  // MeshRenderer.setBox(arrow)
-  // MeshCollider.setBox(arrow)
   VisibilityComponent.create(arrow, { visible: false })
   pointerEventsSystem.onPointerDown(
     {
@@ -141,7 +127,6 @@ export function selectCar(entity: Entity | undefined) {
 
 export function updateArrowModels() {
   if (!carComponent || !carEntity) return
-  console.log('updateArrowModels')
 
   const mv = getDirectionVector(carComponent.direction)
   const targetCellForward: Cell = {
@@ -151,7 +136,6 @@ export function updateArrowModels() {
   const availabilityMap = createAvailabilityMap()
   markCarCellsAsAvailable(availabilityMap, carEntity)
 
-  console.log('Forward position available', isPositionAvailable(targetCellForward, carEntity, availabilityMap))
   if (isPositionAvailable(targetCellForward, carEntity, availabilityMap)) {
     GltfContainer.createOrReplace(forwardArrow, arrowActiveModel)
   } else {
@@ -163,14 +147,9 @@ export function updateArrowModels() {
     y: carComponent.position.y + mv.y * -1
   }
 
-  console.log('Backward position available', isPositionAvailable(targetCellBackward, carEntity, availabilityMap))
   if (isPositionAvailable(targetCellBackward, carEntity, availabilityMap)) {
     GltfContainer.createOrReplace(backwardArrow, arrowActiveModel)
   } else {
     GltfContainer.createOrReplace(backwardArrow, arrowInactiveModel)
   }
-
-  console.log('Corrent models')
-  console.log(GltfContainer.get(forwardArrow).src)
-  console.log(GltfContainer.get(backwardArrow).src)
 }

@@ -2,7 +2,6 @@ import {
   EasingFunction,
   engine,
   Entity,
-  GltfContainer,
   Transform,
   Tween,
   TweenSequence,
@@ -41,7 +40,6 @@ export function initArrow() {
     parent: arrowPosEntity
   })
 
-  // GltfContainer.create(arrowAnimEntity, arrowModel)
   VisibilityComponent.create(arrowAnimEntity, { visible: true })
 
   Tween.create(arrowAnimEntity, {
@@ -86,7 +84,6 @@ export function initArrow() {
 
 function updateArrowPosition(pos: Vector3) {
   if (isVectorEqual(pos, arrowPosition)) return
-  console.log('Arrow position updated')
   arrowPosition = pos
   const startPos = Transform.get(arrowPosEntity).position
   Tween.createOrReplace(arrowPosEntity, {

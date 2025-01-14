@@ -1,9 +1,8 @@
 import { Entity } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
-import { Quaternion, Vector3, Color4 } from '@dcl/ecs-math'
+import { Vector3 } from '@dcl/ecs-math'
 import { CarDirection, Cell } from './type'
-import { globalCoordsToLocal, localCoordsToCell, getDirectionVector, cellRelativePosition } from './logic/math'
-import { BOARD_PHYSICAL_SIZE, BOARD_SIZE, CELL_SIZE_PHYSICAL, CELL_SIZE_RELATIVE, SYNC_ENTITY_ID } from '../config'
+import { BOARD_SIZE, SYNC_ENTITY_ID } from '../config'
 import { Car, CarsSpec } from './components/definitions'
 import { setUpSynchronizer } from './synchronizer'
 import { BOARD, createBoard } from './objects/board'
@@ -13,30 +12,21 @@ import {
   getAllCars,
   getAllCarsExceptMain,
   getCarsState,
-  getInGameCars,
   MAIN_CAR,
   removeCarFromGame,
   updateCarsState
 } from './objects/car'
-import { calculateFinalDelta, createAvailabilityMap, getMovementDelta, markCarCellsAsAvailable } from './logic/board'
 import { getLevel } from './levels'
 import { MAX_LEVEL } from '../config'
 import { fetchPlayerProgress, playerProgress, updatePlayerProgress } from './syncData'
 import { getPlayer } from '@dcl/sdk/players'
-import {
-  runCountdown,
-  runWinAnimation,
-  setupEffects,
-  cancelCountdown,
-  cancelWinAnimation
-} from '../../../common/effects'
+import { runCountdown, setupEffects, cancelCountdown, cancelWinAnimation } from '../../../common/effects'
 import { queue, ui } from '@dcl-sdk/mini-games/src'
-import { playMoveCarSound, playStartLevelSound, playWinSound } from './sfx'
+import { playStartLevelSound, playWinSound } from './sfx'
 import { levelButtons, setupGameUI } from './UiObjects'
 import { initSelector, selectCar } from './selector'
 import { initKeyboardInput } from './keyboardInput'
 import { CreateStateSynchronizer } from './stateSync'
-// import { initArrow } from './arrow'
 
 export let lookingAt: Cell | undefined = undefined
 
@@ -178,7 +168,7 @@ export function finishLevel() {
 
   gameState.levelFinishTime = Date.now()
 
-  updatePlayerProgress(gameState)
+  updatePlayerProgress()
   if (queue.getQueue().length > 1) {
     exitGame()
   } else {

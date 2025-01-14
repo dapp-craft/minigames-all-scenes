@@ -1,23 +1,16 @@
 import {
-  ColliderLayer,
   Entity,
   InputAction,
   MapResult,
-  Material,
-  MeshCollider,
-  MeshRenderer,
   Transform,
-  TransformType,
   engine,
   pointerEventsSystem
 } from '@dcl/sdk/ecs'
 import { Vector3 } from '@dcl/ecs-math'
-import { BOARD_PHYSICAL_SIZE, CELL_SIZE_RELATIVE } from '../../config'
 import { Quaternion } from '@dcl/sdk/math'
 import { BOARD } from './board'
 import { Car } from '../components/definitions'
 import { CarDirection, Cell } from '../type'
-import { syncEntity } from '@dcl/sdk/network'
 import { selectCar } from '../selector'
 import { CarsSpec } from '../components/definitions'
 import { getDirectionVector } from '../logic/math'
@@ -51,7 +44,6 @@ export function createCarEntity(id: number, isMain: boolean) {
       }
     },
     () => {
-      console.log('Car clicked')
       selectCar(car)
     }
   )
