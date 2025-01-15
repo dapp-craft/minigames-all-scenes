@@ -65,7 +65,6 @@ export class GameController {
   
   // @LogExecutionTime
   public async start() {
-    console.log("gameController::start")
     this._inGame = true
     this._isInit = false
     this._startTime = Date.now()
@@ -78,19 +77,14 @@ export class GameController {
     if (!this._inGame) return
 
     if (this._snake) {
-        console.log('Before terminate 2')
         this._snake.terminate()
-        console.log('After terminate 2')
         
     }
 
     if (this._food) {
-      console.log('Before terminate 3')
       this._food.terminate()
-      console.log('After terminate 3')
     }
     
-    console.log("gameController::start create snake")
     this._snake = new SnakeHead({ x: 10, y: 7 })
     this._snake.addTail()
     this._snake.addTail()
@@ -104,7 +98,6 @@ export class GameController {
     this.setSnakeDirection(Direction.UP)
     playStartSound()
     this._isInit = true
-    console.log("gameController::start end")
   }
 
   @LogExecutionTime
@@ -112,17 +105,13 @@ export class GameController {
     let snakePart: SnakePart | undefined = this._snake
     if (snakePart) {
       while (snakePart) {
-        console.log('Before terminate 4')
         snakePart.terminate()
-        console.log('After terminate 4')
         snakePart = snakePart.next
       }
     }
 
     if (this._food) {
-      console.log('Before terminate 5')
       this._food.terminate()
-      console.log('After terminate 5')
     }
     
     this.setBoost(false)
@@ -156,9 +145,7 @@ export class GameController {
     if (this._snake && this._food) {
       if (this._snake.position.x === this._food.position.x && this._snake.position.y === this._food.position.y) {
         this._snake.addTail()
-        console.log('Before terminate 6')
         this._food.terminate()
-        console.log('After terminate 6')
         this._food = undefined
 
         playPowerUpSound()
@@ -191,18 +178,14 @@ export class GameController {
       let snakePart: SnakePart | undefined = this._snake
       if (snakePart) {
         while (snakePart) {
-          console.log('Before terminate 7')
           snakePart.terminate()
-          console.log('After terminate 7')
           snakePart = snakePart.next
         }
       }
     }
 
     if (this._food) {
-      console.log('Before terminate 8')
       this._food.terminate()
-      console.log('After terminate 8')
     }
   }
 
