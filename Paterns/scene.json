@@ -2,8 +2,8 @@
   "ecs7": true,
   "runtimeVersion": "7",
   "display": {
-    "title": "PatternLock",
-    "description": "Minigame Pattern-Lock",
+    "title": "Paterns",
+    "description": "Minigame Patern",
     "navmapThumbnail": "images/scene-thumbnail.png",
     "favicon": "favicon_asset"
   },

@@ -24,7 +24,7 @@
     "Snake",
     "Steampunk",
     "West",
-    "PatternLock"
+    "Pattern"
   ],
   "dependencies": {
     "@dcl-sdk/mini-games": "1.0.3",
