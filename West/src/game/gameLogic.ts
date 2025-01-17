@@ -4,7 +4,6 @@ import { soundConfig, westGameConfig, westLevelsConfig, WIN_DURATION } from "../
 import { westGameState } from "../state";
 import { Color4, Quaternion, Vector3 } from "@dcl/sdk/math";
 import { levels } from '../levels';
-import { readGltfLocators } from '../../../common/locators';
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src';
 import { soundManager } from '../globals';
 import { runGameoverAnimation } from '../../../common/effects';
@@ -26,6 +25,7 @@ export class GameLogic {
     private endRoundTimeout = 0
     private playerLevel = 1
     private playerHP = westGameConfig.playerMaxHP
+    private playerShoots = 0
     private targetData = new Map()
     private playerScore = 0
     private stopRoundTimers: utils.TimerId[] = []
@@ -91,7 +91,7 @@ export class GameLogic {
                         soundManager.playSound('hitCiv', soundConfig.volume)
                         this.playerScore -= 10
                     }
-
+                    this.playerShoots++
                     this.updateCounters()
                     this.isEnemyLeft()
                 }
@@ -227,7 +227,7 @@ export class GameLogic {
                 end: { ...Transform.get(entity).scale, y: 0 }
             }),
             duration: westLevelsConfig.windowOpenDuration * 1000,
-            easingFunction: EasingFunction.EF_EASEINBACK,
+            easingFunction: EasingFunction.EF_EASEEXPO,
         }), 10)
     }
 
@@ -239,16 +239,6 @@ export class GameLogic {
     }
 
     private hitEntity(iterator: number) {
-        // Tween.createOrReplace(entity, {
-        //     mode: Tween.Mode.Rotate({
-        //         start: Transform.get(entity).rotation,
-        //         end: Quaternion.fromEulerDegrees(-90, 1, 1),
-
-        //     }),
-        //     duration: this.roundTimeData.hitEntityTweenDuration,
-        //     easingFunction: EasingFunction.EF_EASEINBACK,
-        // });
-        // this.refrashCertainWindow(this.targetPositionArray[iterator])
         Transform.getMutable(westGameState.availableEntity[iterator + westGameConfig.targetEntityAmount]).rotation = Quaternion.fromEulerDegrees(-90, 1, 1)
     }
 
@@ -273,13 +263,26 @@ export class GameLogic {
             this.stopGame()
             runGameoverAnimation(WIN_DURATION)
         }
+        this.decalActivate()
+    }
+
+    private decalActivate() {
+        westGameState.decalRandom = Math.floor(Math.random() * 4) + 1
+        westGameState.transparent = 1
+        engine.addSystem(
+            () => {
+                westGameState.transparent = westGameState.transparent - westGameConfig.decalDisappearanceSpeed
+                if (westGameState.transparent <= 0) engine.removeSystem('decalVision')
+            }, 1, 'decalVision'
+        );
     }
 
     private updateCounters() {
         const playerHPText = westGameState.listOfEntity.get('playerHP')
-        TextShape.getMutable(playerHPText).text = `HP \n${this.playerHP}`
+        TextShape.getMutable(playerHPText).text = `${this.playerHP}`
         const playerScoreText = westGameState.listOfEntity.get('score')
         TextShape.getMutable(playerScoreText).text = `Score \n${this.playerScore}`
+        TextShape.getMutable(westGameState.listOfEntity.get('shots')).text = `${this.playerShoots}`
     }
 
     private async finishRound() {
@@ -361,6 +364,7 @@ export class GameLogic {
         this.endRoundTimeout = 0
         this.playerLevel = 1
         this.playerHP = westGameConfig.playerMaxHP
+        this.playerShoots = 0
         this.playerScore = 0
         this.updateCounters()
         this.targetData.clear()

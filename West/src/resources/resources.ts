@@ -11,6 +11,7 @@ export const terminal: PBGltfContainer = { src: modelsFolder + 'obj_terminal.glt
 export const text: PBGltfContainer = { src: modelsFolder + 'obj_text.gltf' };
 export const wall: PBGltfContainer = { src: modelsFolder + 'obj_wall.gltf' };
 export const curtains: PBGltfContainer = { src: modelsFolder + 'obj_curtains.gltf' };
+export const heart: PBGltfContainer = { src: modelsFolder + 'obj_heart.gltf' };
 
 //Game Zone Collider
 export const gameZone: PBGltfContainer = { src: modelsFolder + 'obj_gamezone.gltf' };

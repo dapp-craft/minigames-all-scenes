@@ -12,6 +12,9 @@ import { GameLogic } from './game/gameLogic'
 import { syncEntity } from '@dcl/sdk/network'
 import { exitCallback, getReadyToStart, startGame } from './game/game'
 import { mainThereme } from './game/soundManager'
+import { heart } from './resources/resources'
+import ReactEcs, { ReactEcsRenderer, UiEntity } from '@dcl/sdk/react-ecs'
+import { uiMenu } from './ui'
 (globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 const handlers = {
@@ -43,6 +46,7 @@ export async function main() {
     await libraryReady
     setupStaticModels();
     await generateInitialEntity()
+    ReactEcsRenderer.setUiRenderer(uiMenu)
 }
 
 const generateInitialEntity = async () => {
@@ -53,9 +57,13 @@ const generateInitialEntity = async () => {
 
     const playerHP = westGameState.availableEntity[westGameConfig.targetEntityAmount * 3 + 1]
     const score = westGameState.availableEntity[westGameConfig.targetEntityAmount * 3 + 2]
+    const shots = westGameState.availableEntity[westGameConfig.targetEntityAmount * 3 + 3]
+    const labelLives = westGameState.availableEntity[westGameConfig.targetEntityAmount * 3 + 4]
 
     syncEntity(playerHP, [Transform.componentId, TextShape.componentId], WEST_SYNC_ID + westGameConfig.targetEntityAmount * 3 + 1)
     syncEntity(score, [Transform.componentId, TextShape.componentId], WEST_SYNC_ID + westGameConfig.targetEntityAmount * 3 + 2)
+    syncEntity(shots, [Transform.componentId, TextShape.componentId], WEST_SYNC_ID + westGameConfig.targetEntityAmount * 3 + 3)
+    syncEntity(labelLives, [Transform.componentId, TextShape.componentId], WEST_SYNC_ID + westGameConfig.targetEntityAmount * 3 + 4)
     for (let i = 0; i < westGameConfig.targetEntityAmount; i++) {
         syncEntity(westGameState.availableEntity[i], [Transform.componentId, VisibilityComponent.componentId, GltfContainer.componentId, Material.componentId], WEST_SYNC_ID + i)
         syncEntity(westGameState.availableEntity[i + westGameConfig.targetEntityAmount], [Transform.componentId], WEST_SYNC_ID + i + westGameConfig.targetEntityAmount)
@@ -64,6 +72,8 @@ const generateInitialEntity = async () => {
 
     westGameState.listOfEntity.set('playerHP', playerHP)
     westGameState.listOfEntity.set('score', score)
+    westGameState.listOfEntity.set('shots', shots)
+    westGameState.listOfEntity.set('labelLives', labelLives)
 
     westGameState.locatorData = await readGltfLocators(`locators/obj_locators_unique.gltf`)
     westGameState.curtainsScale = westGameState.locatorData.get(`obj_curtain_1`)!.scale;
@@ -92,12 +102,20 @@ const generateInitialEntity = async () => {
     //     }
     // }
     if (Transform.getOrNull(playerHP) == null) {
-        TextShape.create(playerHP, { text: `HP \n${westGameConfig.playerMaxHP}`, fontSize: 2 })
+        TextShape.create(playerHP, { text: `${westGameConfig.playerMaxHP}`, fontSize: 2 })
         Transform.create(playerHP, { ...westGameState.locatorData.get('counter_lives'), parent: sceneParentEntity })
+    }
+    if (Transform.getOrNull(labelLives) == null) {
+        Transform.create(labelLives, { ...westGameState.locatorData.get('label_lives'), parent: sceneParentEntity })
+        GltfContainer.create(labelLives, heart)
     }
     if (Transform.getOrNull(score) == null) {
         TextShape.create(score, { text: `Score \n0`, fontSize: 2 });
         Transform.create(score, { ...westGameState.locatorData.get('counter_score'), parent: sceneParentEntity })
+    }
+    if (Transform.getOrNull(shots) == null) {
+        TextShape.create(shots, { text: `Shots \n0`, fontSize: 2 });
+        Transform.create(shots, { ...westGameState.locatorData.get('counter_shot'), parent: sceneParentEntity })
     }
 }
 

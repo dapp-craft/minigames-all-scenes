@@ -4,7 +4,8 @@ export const westGameConfig = {
     horizontalLeftLimit: 0,
     horizontalRightLimit: 8,
     playerMaxHP: 3,
-    timeBeforeStart: 3
+    timeBeforeStart: 3,
+    decalDisappearanceSpeed: 0.03
 }
 
 export const westLevelsConfig = {
