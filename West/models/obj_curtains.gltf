@@ -23,6 +23,7 @@
 	],
 	"materials":[
 		{
+			"alphaCutoff":0.8999999761581421,
 			"alphaMode":"MASK",
 			"doubleSided":true,
 			"emissiveFactor":[
