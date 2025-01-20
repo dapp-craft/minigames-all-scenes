@@ -24,7 +24,8 @@
     "Snake",
     "Steampunk",
     "West",
-    "Pattern"
+    "Pattern",
+    "Labyrinth"
   ],
   "dependencies": {
     "@dcl-sdk/mini-games": "1.0.3",
