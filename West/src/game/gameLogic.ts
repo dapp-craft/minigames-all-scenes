@@ -282,7 +282,7 @@ export class GameLogic {
         TextShape.getMutable(playerHPText).text = `${this.playerHP}`
         const playerScoreText = westGameState.listOfEntity.get('score')
         TextShape.getMutable(playerScoreText).text = `Score \n${this.playerScore}`
-        TextShape.getMutable(westGameState.listOfEntity.get('shots')).text = `${this.playerShoots}`
+        TextShape.getMutable(westGameState.listOfEntity.get('shots')).text = `Shots \n ${this.playerShoots}`
     }
 
     private async finishRound() {
