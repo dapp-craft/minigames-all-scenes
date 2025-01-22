@@ -1,27 +1,12 @@
-import { engine, GltfContainer, MeshRenderer, Transform, TransformType } from '@dcl/sdk/ecs'
-import { Quaternion } from '@dcl/sdk/math'
+import { engine, GltfContainer, Material, MeshRenderer, Transform, TransformType } from '@dcl/sdk/ecs'
+import { Color4, Quaternion } from '@dcl/sdk/math'
 import { Mirror } from './Mirror'
 
 export const mirrors: Mirror[] = []
 
 export async function initGame() {
-  setupTestBoard()
   setupTestMirrors(testMirrorTransforms)
   setupTestRay()
-}
-
-function setupTestBoard() {
-  const board = engine.addEntity()
-
-  GltfContainer.create(board, {
-    src: 'models/board.glb'
-  })
-
-  Transform.create(board, {
-    position: { x: 14, y: 3.2, z: 1.8 },
-    scale: { x: 0.5, y: 0.5, z: 0.5 },
-    rotation: Quaternion.fromEulerDegrees(0, 90, 90)
-  })
 }
 
 function setupTestMirrors(transforms: TransformType[]) {
@@ -29,6 +14,7 @@ function setupTestMirrors(transforms: TransformType[]) {
     const mirror = new Mirror(transform)
     mirrors.push(mirror)
   })
+  mirrors[0].angleOfEntry = 90
 }
 
 export const testRay = engine.addEntity()
@@ -36,7 +22,7 @@ export const testRay = engine.addEntity()
 function setupTestRay() {
   MeshRenderer.setCylinder(testRay, 0.05, 0.05)
   Transform.createOrReplace(testRay, {
-    position: { x: 14.9, y: 2.2, z: 2.1 },
+    position: { x: 10.9, y: 3.3, z: 1.1 },
     rotation: Quaternion.fromEulerDegrees(0, 0, 90),
     scale: {
       x: 1,
@@ -44,84 +30,102 @@ function setupTestRay() {
       z: 1
     }
   })
+  Material.setPbrMaterial(testRay, {
+    albedoColor: Color4.Yellow(),
+    metallic: 0,
+    roughness: 1
+  })
 }
 
 const testMirrorTransforms: TransformType[] = [
   {
     position: {
-      x: 14.3,
-      y: 2.2,
-      z: 2.1
+      x: 10.3,
+      y: 3.3,
+      z: 1.1
     },
     rotation: Quaternion.fromEulerDegrees(0, 0, 270),
     scale: {
       x: 0.5,
-      y: 0.025,
+      y: 0.04,
       z: 0.5
     }
   },
   {
     position: {
-      x: 14.3,
-      y: 4.2,
-      z: 2.1
+      x: 10.3,
+      y: 5.1,
+      z: 1.1
     },
     rotation: Quaternion.fromEulerDegrees(0, 0, 45),
     scale: {
       x: 0.5,
-      y: 0.025,
+      y: 0.04,
       z: 0.5
     }
   },
   {
     position: {
-      x: 10,
-      y: 4.15,
-      z: 2.1
+      x: 6,
+      y: 5.05,
+      z: 1.1
+    },
+    rotation: Quaternion.fromEulerDegrees(0, 0, -45),
+    scale: {
+      x: 0.5,
+      y: 0.04,
+      z: 0.5
+    }
+  },
+  {
+    position: {
+      x: 6,
+      y: 2.9,
+      z: 1.1
+    },
+    rotation: Quaternion.fromEulerDegrees(0, 0, 45),
+    scale: {
+      x: 0.5,
+      y: 0.04,
+      z: 0.5
+    }
+  },
+  {
+    position: {
+      x: 9,
+      y: 2.9,
+      z: 1.1
+    },
+    rotation: Quaternion.fromEulerDegrees(0, 0, 45),
+    scale: {
+      x: 0.5,
+      y: 0.04,
+      z: 0.5
+    }
+  },
+  {
+    position: {
+      x: 9,
+      y: 1.5,
+      z: 1.1
     },
     rotation: Quaternion.fromEulerDegrees(0, 0, 0),
     scale: {
       x: 0.5,
-      y: 0.025,
+      y: 0.04,
       z: 0.5
     }
   },
   {
     position: {
-      x: 10,
-      y: 1.9,
-      z: 2.1
+      x: 5.8,
+      y: 1.5,
+      z: 1.1
     },
-    rotation: Quaternion.fromEulerDegrees(0, 0, 45),
+    rotation: Quaternion.fromEulerDegrees(0, 0, -45),
     scale: {
       x: 0.5,
-      y: 0.025,
-      z: 0.5
-    }
-  },
-  {
-    position: {
-      x: 12.6,
-      y: 1.9,
-      z: 2.1
-    },
-    rotation: Quaternion.fromEulerDegrees(0, 0, 45),
-    scale: {
-      x: 0.5,
-      y: 0.025,
-      z: 0.5
-    }
-  },
-  {
-    position: {
-      x: 12.6,
-      y: 0.5,
-      z: 2.1
-    },
-    rotation: Quaternion.fromEulerDegrees(0, 0, 90),
-    scale: {
-      x: 0.5,
-      y: 0.025,
+      y: 0.04,
       z: 0.5
     }
   }

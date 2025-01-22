@@ -36,7 +36,12 @@ const libraryReady = initMiniGame(
   handlers
 )
 
-const MODELS: string[] = ['models/obj_floor.gltf']
+const MODELS: string[] = [
+  'models/obj_floor.gltf',
+  'models/obj_ground.gltf',
+  'models/obj_railings.gltf',
+  'models/obj_wall.gltf'
+]
 
 executeTask(async () => {
   for (const model of MODELS) {

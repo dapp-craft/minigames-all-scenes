@@ -4,6 +4,7 @@ import {
   Entity,
   GltfContainer,
   InputAction,
+  Material,
   MeshCollider,
   MeshRenderer,
   pointerEventsSystem,
@@ -11,8 +12,8 @@ import {
   TransformType,
   VisibilityComponent
 } from '@dcl/sdk/ecs'
-import { Quaternion, Vector3 } from '@dcl/sdk/math'
-import { mirrors } from '.'
+import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
+import { mirrors, testRay } from '.'
 import { syncGameProgress } from '..'
 
 export class Mirror {
@@ -23,6 +24,7 @@ export class Mirror {
   public mirrorTransform: TransformType
   public isHit: boolean = false
   public rayTransform: TransformType | null = null
+  public angleOfEntry: number = 0
 
   constructor(transform: TransformType) {
     this.mirrorTransform = transform
@@ -57,15 +59,19 @@ export class Mirror {
   }
 
   public createOrUpdateRay() {
-    console.log(`Ray::created@${this.rayEntity}`)
+    console.log(`Ray::created ray@ in mirror ${this.mirrorEntity}`)
     MeshRenderer.setCylinder(this.rayEntity, 0.05, 0.05)
     if (this.rayTransform) Transform.createOrReplace(this.rayEntity, this.rayTransform)
-    if (this.rayTransform) VisibilityComponent.createOrReplace(this.rayEntity, { visible: true })
+    Material.setPbrMaterial(this.rayEntity, {
+      albedoColor: Color4.Yellow(),
+      metallic: 0,
+      roughness: 1
+    })
+    VisibilityComponent.createOrReplace(this.rayEntity, { visible: this.isHit })
   }
 
   public calculateAllRays(mirrors: Mirror[]) {
-    const mirrorTransform = Transform.get(this.mirrorEntity)
-    if (this.isActive) updateAllMirrorsData(mirrors, mirrorTransform)
+    if (this.isActive) updateMirrorData(mirrors, this)
   }
 }
 
@@ -84,7 +90,11 @@ function isPointOnMirror(
   const lineDir = Vector3.subtract(vectorStartPoint, vectorEndPoint)
   const pointToLineStart = Vector3.subtract(mirrorCenter, vectorStartPoint)
   const crossProduct = Vector3.cross(lineDir, pointToLineStart)
-  return Vector3.length(crossProduct) < tolerance
+  const isOnLine = Vector3.length(crossProduct) < tolerance
+  // if (!isOnLine) return false
+  return isOnLine
+  // const dotProduct = Vector3.dot(lineDir, pointToLineStart)
+  // return dotProduct >= 0
 }
 
 const getRayDirection = (rotation: Quaternion): Vector3 => {
@@ -96,25 +106,46 @@ const getPoinOnRay = (rayPosition: Vector3, direction: Vector3, distance: number
   return Vector3.add(rayPosition, Vector3.scale(direction, distance))
 }
 
-const updateAllMirrorsData = (mirrors: Mirror[], mirrorTransform: TransformType) => {
-  mirrors.forEach((targetMirror) => {
-    targetMirror.isHit = false
-    const middlePoint = Vector3.lerp(mirrorTransform.position, targetMirror.mirrorTransform.position, 0.5)
+const updateMirrorData = (mirrors: Mirror[], sourceMirror: Mirror) => {
+  const sourceIdx = mirrors.indexOf(sourceMirror)
+  const mFromClick = mirrors.slice(sourceIdx)
+  mFromClick.forEach((m) => {
+    if (m.isHit) {
+      m.isHit = false
+      engine.removeEntity(m.rayEntity)
+    }
+  })
+
+  mirrors.forEach((targetMirror, idx) => {
+    const middlePoint = Vector3.lerp(sourceMirror.mirrorTransform.position, targetMirror.mirrorTransform.position, 0.5)
     const rayTransform: TransformType = {
       position: middlePoint,
-      rotation: mirrorTransform.rotation,
-      scale: { x: 1, y: Vector3.distance(mirrorTransform.position, targetMirror.mirrorTransform.position), z: 1 }
+      rotation: sourceMirror.mirrorTransform.rotation,
+      scale: {
+        x: 1,
+        y: Vector3.distance(sourceMirror.mirrorTransform.position, targetMirror.mirrorTransform.position),
+        z: 1
+      }
     }
-    const rayDirection1 = getRayDirection(mirrorTransform.rotation)
+
+    const rayDirection1 = getRayDirection(sourceMirror.mirrorTransform.rotation)
     const rayDirection2 = getRayDirection(
-      Quaternion.multiply(mirrorTransform.rotation, Quaternion.fromEulerDegrees(0, 0, -90))
+      Quaternion.multiply(sourceMirror.mirrorTransform.rotation, Quaternion.fromEulerDegrees(0, 0, -90))
     )
 
-    const point45 = getPoinOnRay(mirrorTransform.position, rayDirection1, 0.5)
-    const point135 = getPoinOnRay(mirrorTransform.position, rayDirection2, 0.5)
+    const point45 = getPoinOnRay(sourceMirror.mirrorTransform.position, rayDirection1, 0.5)
+    const point135 = getPoinOnRay(sourceMirror.mirrorTransform.position, rayDirection2, 0.5)
 
-    const isPoint45 = isPointOnMirror(mirrorTransform.position, point45, targetMirror.mirrorTransform.position)
-    const isPoint135 = isPointOnMirror(mirrorTransform.position, point135, targetMirror.mirrorTransform.position)
+    const isPoint45 = isPointOnMirror(
+      sourceMirror.mirrorTransform.position,
+      point45,
+      targetMirror.mirrorTransform.position
+    )
+    const isPoint135 = isPointOnMirror(
+      sourceMirror.mirrorTransform.position,
+      point135,
+      targetMirror.mirrorTransform.position
+    )
     const isPoint = isPoint45 || isPoint135
     if (isPoint45) {
       rayTransform.rotation = Quaternion.multiply(rayTransform.rotation, Quaternion.fromEulerDegrees(0, 0, 45))
@@ -122,13 +153,39 @@ const updateAllMirrorsData = (mirrors: Mirror[], mirrorTransform: TransformType)
       rayTransform.rotation = Quaternion.multiply(rayTransform.rotation, Quaternion.fromEulerDegrees(0, 0, -45))
     }
     console.log('isPoint :>> ', isPoint)
-    if (isPoint) targetMirror.isHit = isPoint
-    if (isPoint && !targetMirror.rayTransform) targetMirror.rayTransform = rayTransform
 
-    if (targetMirror.isHit) {
+    if (isPoint && !targetMirror.isHit) {
+      targetMirror.isHit = true
+      if (targetMirror.isHit && !targetMirror.rayTransform) targetMirror.rayTransform = rayTransform
       targetMirror.createOrUpdateRay()
-    } else {
-      engine.removeEntity(targetMirror.rayEntity)
+      return
     }
   })
 }
+
+function calculateAngleWithMirror(
+  vectorStartPoint: Vector3,
+  vectorEndPoint: Vector3,
+  mirrorCenter: Vector3,
+  tolerance = 0.1
+): number | null {
+  const rayDirection = Vector3.subtract(vectorEndPoint, vectorStartPoint)
+  const rayDirectionNormalized = Vector3.normalize(rayDirection)
+
+  const vectorToMirror = Vector3.subtract(mirrorCenter, vectorStartPoint)
+  const vectorToMirrorNormalized = Vector3.normalize(vectorToMirror)
+
+  const dotProduct = Vector3.dot(rayDirectionNormalized, vectorToMirrorNormalized)
+  const angle = Math.acos(dotProduct)
+
+  const crossProduct = Vector3.cross(rayDirection, vectorToMirror)
+  const distance = Vector3.length(crossProduct) / Vector3.length(rayDirection)
+
+  if (distance < tolerance) {
+    return angle * (180 / Math.PI)
+  }
+
+  return null
+}
+
+const t = engine.addEntity()
