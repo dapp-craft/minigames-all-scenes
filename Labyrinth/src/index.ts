@@ -45,16 +45,22 @@ export async function main() {
   BOARD_RENDER.addCellRenderer(1, OneCellRenderer)
   BOARD_RENDER.addEntityRenderer(0, Player)
 
+  BOARD_RENDER.rerender()
+
   const player = new LabyrinthEntity({ x: 3, y: 3 }, 0, BOARD)
   BOARD.addEntity(player)
 
-  BOARD_RENDER.render()
+
   console.log('\n' + BOARD)
 
   new InputSystem(player.id, BOARD)
 
+  utils.timers.setInterval(() => {
+    BOARD.setCellType(0, 0, BOARD.getCellType(0, 0) === 0 ? 1 : 0)
+  }, 1000)
+
   // Horizontal wall
   for (let i = 0; i < BOARD.width; i++) {
-    BOARD.getCell(i, 5).type = 1
+    BOARD.setCellType(i, 5, 1)
   }
 }

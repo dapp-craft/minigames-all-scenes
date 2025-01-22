@@ -1,5 +1,6 @@
-import { Cell } from "./Cell";
+import { Cell, CellData } from "./Cell";
 import { Entity } from "./Entity";
+import { BoardEvent, EventBus, EventType } from "./Events";
 import { CellType, Direction, Position } from "./Types";
 
 
@@ -10,6 +11,8 @@ export class Board {
     private _height: number;
 
     private _entities: Map<number, Entity> = new Map();
+
+    private _eventBus: EventBus = new EventBus();
 
 
     constructor(width: number, height: number) {
@@ -31,24 +34,26 @@ export class Board {
         return Array.from(this._entities.values());
     }
 
+    public subscribe(eventType: EventType, callback: (event: BoardEvent) => void): void {
+        this._eventBus.subscribe(eventType, callback);
+    }
+
     public addEntity(entity: Entity): void {
         this._entities.set(entity.id, entity);
+        this._eventBus.emit({ type: EventType.ENTITY_ADDED, payload: { entity: entity.data } });
     }
 
     public removeEntity(id: number): void {
         this.checkEntityExists(id);
+        this._eventBus.emit({ type: EventType.ENTITY_REMOVED, payload: { entity: this.getEntitySafe(id).data } });
         this._entities.delete(id);
-    }
-
-    public getEntity(id: number): Entity | undefined {
-        this.checkEntityExists(id);
-        return this._entities.get(id);
     }
 
     public moveEntity(id: number, position: Position): void {
         this.checkEntityExists(id);
         this.checkCellExists(position.x, position.y);
         this.getEntitySafe(id).position = position;
+        this._eventBus.emit({ type: EventType.ENTITY_MOVED, payload: { entity: this.getEntitySafe(id).data } });
     }
 
     public moveEntityDirection(id: number, direction: Direction): void {
@@ -57,29 +62,24 @@ export class Board {
         const newPosition = entity.getMovePosition(direction);
         this.checkCellExists(newPosition.x, newPosition.y);
         // Check if cell is connected to the new position
-        if (!this.getCell(newPosition.x, newPosition.y).isConnectedTo(this.getCell(entity.position.x, entity.position.y))) {
+        if (!this.getCellSafe(newPosition.x, newPosition.y).isConnectedTo(this.getCellSafe(entity.position.x, entity.position.y))) {
             console.log("Cell is not connected to the new position: ", newPosition.x, newPosition.y)
             return
         }
         this.moveEntity(id, newPosition);
     }
 
-
     public setCellType(x: number, y: number, type: CellType): void {
         this._cells[y][x].type = type;
+        this._eventBus.emit({ type: EventType.CELL_CHANGED, payload: { cell: this.getCellSafe(x, y).data } });
     }
 
-    public getSellType(x: number, y: number): CellType {
-        // Check if the cell exists
-        if (x >= 0 && x < this._width && y >= 0 && y < this._height) {
-            return this._cells[y][x].type;
-        }
-        throw new Error(`Cell not found: ${x}, ${y}`);
+    public getCell(x: number, y: number): CellData {
+        return this.getCellSafe(x, y).data
     }
 
-    public getCell(x: number, y: number): Cell {
-        this.checkCellExists(x, y);
-        return this._cells[y][x];
+    public getCellType(x: number, y: number): CellType {
+        return this.getCellSafe(x, y).type
     }
 
     public toString(): string {
@@ -117,8 +117,8 @@ export class Board {
     public getPath(start: Position, end: Position): Position[] {
         const path: Position[] = [];
 
-        const startCell = this.getCell(start.x, start.y);
-        const endCell = this.getCell(end.x, end.y);
+        const startCell = this.getCellSafe(start.x, start.y);
+        const endCell = this.getCellSafe(end.x, end.y);
 
         if (!startCell || !endCell) {
             throw new Error('Start or end cell not found');
@@ -199,6 +199,14 @@ export class Board {
         if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
             throw new Error(`Cell not found: ${x}, ${y}`);
         }
+    }
+
+    private getCellSafe(x: number, y: number): Cell {
+        const cell = this._cells[y][x];
+        if (!cell) {
+            throw new Error(`Cell not found: ${x}, ${y}`);
+        }
+        return cell;
     }
     
     private getEntitySafe(id: number): Entity {

@@ -1,15 +1,15 @@
 import { Entity as DCL_Entity } from '@dcl/sdk/ecs'
-import { Entity } from '../Entity'
+import { Entity, EntityData } from '../Entity'
 import { Position } from '../Types'
 import { Board } from '../Board'
 import { Vector3 } from '@dcl/sdk/math'
 
 export abstract class EntityRenderer {
-  protected _entity: Entity
+  protected _entityData: EntityData
   protected _board: Board
   protected _cellScale: Vector3
-  constructor(entity: Entity, board: Board) {
-    this._entity = entity
+  constructor(entityData: EntityData, board: Board) {
+    this._entityData = entityData
     this._board = board
     this._cellScale = { x: 1 / board.width, y: 1 / board.height, z: 1 / board.height }
   }
@@ -17,7 +17,7 @@ export abstract class EntityRenderer {
   /**
    * Implement this method to render the entity
    */
-  public abstract render(): void
+  public abstract update(entityData: EntityData): void
 
   /**
    * Implement this method to terminate the entity renderer

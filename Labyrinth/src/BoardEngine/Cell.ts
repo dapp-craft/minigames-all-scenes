@@ -1,13 +1,14 @@
 import { CellType, Direction, Position } from "./Types";
 
+export type CellData = {
+    type: CellType;
+    position: Position;
+}
+
 export class Cell {
     private _type: CellType;
     private _cells: Map<Direction, Cell | null>;
     private _position: Position;
-
-    private _subscriberCount: number = 0;
-    // Subscribers are functions that are called when the cell type changes
-    private _subscribers: Map<number, (cell: Cell) => void> = new Map();
     
     constructor( x: number, y: number, type: CellType = 0) {
         this._type = type;
@@ -20,22 +21,19 @@ export class Cell {
         ]);
     }
 
-    public subscribe(subscriber: (cell: Cell) => void): number {
-        this._subscribers.set(this._subscriberCount, subscriber);
-        return this._subscriberCount++;
-    }
-
-    public unsubscribe(id: number): void {
-        this._subscribers.delete(id);
-    }
-
     public get type(): CellType {
-        return this._type;
+        return this.data.type;
     }
 
     public set type(type: CellType) {
         this._type = type;
-        this._subscribers.forEach((subscriber) => subscriber(this));
+    }
+
+    public get data(): CellData {
+        return {
+            type: this._type,
+            position: this._position
+        }
     }
 
     public getNeighbor(direction: Direction): Cell | null {

@@ -16,20 +16,16 @@ export class InputSystem {
   public update(): void {
     if (inputSystem.isTriggered(InputAction.IA_FORWARD, PointerEventType.PET_DOWN)) {
         this._board.moveEntityDirection(this._entityId, Direction.TOP)
-        BOARD_RENDER.render()
       }
       if (inputSystem.isTriggered(InputAction.IA_BACKWARD, PointerEventType.PET_DOWN)) {
         this._board.moveEntityDirection(this._entityId, Direction.BOTTOM)
-        BOARD_RENDER.render()
 
       }
       if (inputSystem.isTriggered(InputAction.IA_LEFT, PointerEventType.PET_DOWN)) {
         this._board.moveEntityDirection(this._entityId, Direction.LEFT)
-        BOARD_RENDER.render()
       }
       if (inputSystem.isTriggered(InputAction.IA_RIGHT, PointerEventType.PET_DOWN)) {
         this._board.moveEntityDirection(this._entityId, Direction.RIGHT)
-        BOARD_RENDER.render()
       }
   }
 }

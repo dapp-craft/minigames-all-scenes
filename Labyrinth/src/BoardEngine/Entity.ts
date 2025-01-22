@@ -3,6 +3,12 @@ import { Board } from './Board'
 import { Direction, Position, DirectionPositionDelta, EntityType } from './Types'
 import { Entity as DCL_Entity } from '@dcl/sdk/ecs'
 
+export type EntityData = {
+  id: number
+  type: EntityType
+  position: Position
+}
+
 export class Entity {
   private _entityCount: number = 1
 
@@ -12,9 +18,6 @@ export class Entity {
   protected _type: EntityType
   protected _cellScale: { x: number; y: number; z: number }
 
-  private _subscriberCount: number = 0
-  // Subscribers are functions that are called when the entity moves
-  private _subscribers: Map<number, (entity: Entity) => void> = new Map()
 
   constructor(position: Position, type: EntityType, board: Board) {
     this._position = position
@@ -26,11 +29,19 @@ export class Entity {
   }
 
   public get type(): EntityType {
-    return this._type
+    return this.data.type
   }
 
   public get id(): number {
     return this._id
+  }
+
+  public get data(): EntityData {
+    return {
+      id: this._id,
+      type: this._type,
+      position: this._position
+    }
   }
 
   public get position(): Position {
@@ -39,7 +50,6 @@ export class Entity {
 
   public set position(position: Position) {
     this._position = position
-    this._subscribers.forEach((subscriber) => subscriber(this))
   }
 
   public getMovePosition(direction: Direction): Position {

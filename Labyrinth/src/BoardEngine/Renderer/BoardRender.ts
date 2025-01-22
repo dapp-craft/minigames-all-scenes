@@ -1,12 +1,13 @@
 import { engine, Entity, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
-import { Entity as LabyrinthEntity } from '../Entity'
+import { EntityData, Entity as LabyrinthEntity } from '../Entity'
 import { Board } from '../Board'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { CellType, EntityType, Position } from '../Types'
 import { CellRenderer } from './CellRenderer'
-import { Cell } from '../Cell'
+import { Cell, CellData } from '../Cell'
 import { Extras } from './Types'
 import { EntityRenderer } from './EntityRenderer'
+import { BoardEvent, EventType } from '../Events'
 
 export class BoardRender {
   private _board: Board
@@ -14,10 +15,10 @@ export class BoardRender {
   private _boardEntity: Entity
 
   private _cellRenderers: (CellRenderer | null)[][]
-  private _cellHandlers: Map<CellType, new (cell: Cell, board: Board) => CellRenderer> = new Map()
+  private _cellHandlers: Map<CellType, new (cell: CellData, board: Board) => CellRenderer> = new Map()
 
   private _entityRenderers: Map<number, EntityRenderer> = new Map()
-  private _entityHandlers: Map<EntityType, new (entity: LabyrinthEntity, board: Board) => EntityRenderer> = new Map()
+  private _entityHandlers: Map<EntityType, new (entityData: EntityData, board: Board) => EntityRenderer> = new Map()
 
   constructor(board: Board) {
     this._board = board
@@ -31,20 +32,23 @@ export class BoardRender {
       this._cellRenderers.push([])
       for (let j = 0; j < this._board.height; j++) {
         this._cellRenderers[i].push(null)
-        this._board.getCell(i, j).subscribe(this._updateCellRenderer.bind(this))
       }
     }
+    this._board.subscribe(EventType.CELL_CHANGED, this._cellUpdateHandler.bind(this))
+    this._board.subscribe(EventType.ENTITY_ADDED, this._entityAddHandler.bind(this))
+    this._board.subscribe(EventType.ENTITY_MOVED, this._entityMovedHandler.bind(this))
+    this._board.subscribe(EventType.ENTITY_REMOVED, this._entityRemovedHandler.bind(this))
   }
 
   public get parentEntity(): Entity {
     return this._boardEntity
   }
 
-  public addEntityRenderer(type: EntityType, renderer: new (entity: LabyrinthEntity, board: Board) => EntityRenderer): void {
+  public addEntityRenderer(type: EntityType, renderer: new (entityData: EntityData, board: Board) => EntityRenderer): void {
     this._entityHandlers.set(type, renderer)
   }
 
-  public addCellRenderer(type: CellType, renderer: new (cell: Cell, board: Board) => CellRenderer): void {
+  public addCellRenderer(type: CellType, renderer: new (cellData: CellData, board: Board) => CellRenderer): void {
     this._cellHandlers.set(type, renderer)
   }
 
@@ -52,75 +56,99 @@ export class BoardRender {
     return this._boardEntity
   }
 
-  public render(): void {
+
+  public rerender(): void {
+
+    // Remove all Cell renderers
+    for (let i = 0; i < this._board.width; i++) {
+      for (let j = 0; j < this._board.height; j++) {
+        if (this._cellRenderers[i][j] !== null) {
+          this._cellRenderers[i][j]?.terminate()
+          this._cellRenderers[i][j] = null
+        }
+      }
+    }
+
+    // Remove all Entity renderers
+    for (const renderer of this._entityRenderers.values()) {
+      renderer.terminate()
+    }
+    this._entityRenderers.clear()
+
+    // Create new renderers
     for (let i = 0; i < this._board.width; i++) {
       for (let j = 0; j < this._board.height; j++) {
         const cell = this._board.getCell(i, j)
-        const HandlerClass = this._cellHandlers.get(cell.type)
-        if (!HandlerClass ) {
-          throw new Error(`No handler for cell type ${cell.type}`)
-        }
-        if (this._cellRenderers[i][j] !== null) {
-          this._updateCellRenderer(cell)
-        } else {
-          console.log("Creating new renderer for cell type", cell.type)
-          this._cellRenderers[i][j] = new HandlerClass(cell, this._board)
-          this._cellRenderers[i][j]?.render()
-        }
+        this._updateCellRenderer(cell)
       }
     }
 
     // Entity rendering
-    const currentEntities = new Set(this._board.entities.map(e => e.id))
-    
-    // Remove renderers for entities that no longer exist
-    for (const [id, renderer] of this._entityRenderers) {
-      if (!currentEntities.has(id)) {
-        renderer.terminate()
-        this._entityRenderers.delete(id)
-      }
-    }
-    
-    // Create renderers for new entities
-    for (const entity of this._board.entities) {
-      // Check if the entity has a renderer
-      if (!this._entityRenderers.has(entity.id)) {
-        this._updateEntityRenderer(entity)
-        this._entityRenderers.set(entity.id, this._entityRenderers.get(entity.id)!)
-      }
-    }
-
-    // Render all renderers
-    for (const renderer of this._entityRenderers.values()) {
-      renderer.render()
+    const entities = this._board.entities
+    for (const entity of entities) {
+      this._updateEntityRenderer(entity)
     }
   }
 
-  private _updateCellRenderer(cell: Cell): void {
+  private _entityAddHandler(event: BoardEvent): void {
+    if (event.type === EventType.ENTITY_ADDED && event.payload.entity) {
+      this._updateEntityRenderer(event.payload.entity)
+    }
+  }
+
+  private _entityMovedHandler(event: BoardEvent): void {
+    if (event.type === EventType.ENTITY_MOVED && event.payload.entity) {
+      const renderer = this._entityRenderers.get(event.payload.entity.id)
+      if (!renderer) {
+        throw new Error(`No renderer for entity ${event.payload.entity.id}`)
+      }
+      renderer.update(event.payload.entity)
+    }
+  }
+
+  private _entityRemovedHandler(event: BoardEvent): void {
+    if (event.type === EventType.ENTITY_REMOVED && event.payload.entity) {
+      const renderer = this._entityRenderers.get(event.payload.entity.id)
+      if (!renderer) {
+        throw new Error(`No renderer for entity ${event.payload.entity.id}`)
+      }
+      renderer.terminate()
+      this._entityRenderers.delete(event.payload.entity.id)
+    }
+  }
+
+  public _cellUpdateHandler(event: BoardEvent): void {
+    if (event.type === EventType.CELL_CHANGED && event.payload.cell) {
+      this._updateCellRenderer(event.payload.cell)
+    }
+  }
+
+  private _updateCellRenderer(cellData: CellData): void {
     // Remove the old renderer
-    if (this._cellRenderers[cell.position.x][cell.position.y] !== null) {
-      this._cellRenderers[cell.position.x][cell.position.y]?.terminate()
-      this._cellRenderers[cell.position.x][cell.position.y] = null
+    if (this._cellRenderers[cellData.position.x][cellData.position.y] !== null) {
+      this._cellRenderers[cellData.position.x][cellData.position.y]?.terminate()
+      this._cellRenderers[cellData.position.x][cellData.position.y] = null
     }
 
-    const HandlerClass = this._cellHandlers.get(cell.type)
+    const HandlerClass = this._cellHandlers.get(cellData.type)
     if (!HandlerClass ) {
-      throw new Error(`No handler for cell type ${cell.type}`)
+      throw new Error(`No handler for cell type ${cellData.type}`)
     }
-    this._cellRenderers[cell.position.x][cell.position.y] = new HandlerClass(cell, this._board)
-    this._cellRenderers[cell.position.x][cell.position.y]?.render()
+    this._cellRenderers[cellData.position.x][cellData.position.y] = new HandlerClass(cellData, this._board)
+    this._cellRenderers[cellData.position.x][cellData.position.y]?.render()
   }
 
-  private _updateEntityRenderer(entity: LabyrinthEntity): void {
-    if (this._entityRenderers.has(entity.id)) {
-      this._entityRenderers.get(entity.id)?.terminate()
+  private _updateEntityRenderer(entityData: EntityData): void {
+    if (this._entityRenderers.has(entityData.id)) {
+      this._entityRenderers.get(entityData.id)?.terminate()
     } else {
-      const HandlerClass = this._entityHandlers.get(entity.type)
+      const HandlerClass = this._entityHandlers.get(entityData.type)
       if (!HandlerClass) {
-        throw new Error(`No handler for entity type ${entity.type}`)
+        throw new Error(`No handler for entity type ${entityData.type}`)
       }
-      this._entityRenderers.set(entity.id, new HandlerClass(entity, this._board))
-      this._entityRenderers.get(entity.id)?.render()
+      this._entityRenderers.set(entityData.id, new HandlerClass(entityData, this._board))
+      this._entityRenderers.get(entityData.id)?.update(entityData)
     }
   }
+  
 }
