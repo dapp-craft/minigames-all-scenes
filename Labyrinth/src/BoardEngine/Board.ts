@@ -9,7 +9,6 @@ export class Board {
     private _width: number;
     private _height: number;
 
-    private _entityCount: number = 1;
     private _entities: Map<number, Entity> = new Map();
 
 
@@ -32,9 +31,8 @@ export class Board {
         return Array.from(this._entities.values());
     }
 
-    public addEntity(entity: Entity): number {
-        this._entities.set(this._entityCount, entity);
-        return this._entityCount++;
+    public addEntity(entity: Entity): void {
+        this._entities.set(entity.id, entity);
     }
 
     public removeEntity(id: number): void {
@@ -58,6 +56,11 @@ export class Board {
         const entity = this.getEntitySafe(id);
         const newPosition = entity.getMovePosition(direction);
         this.checkCellExists(newPosition.x, newPosition.y);
+        // Check if cell is connected to the new position
+        if (!this.getCell(newPosition.x, newPosition.y).isConnectedTo(this.getCell(entity.position.x, entity.position.y))) {
+            console.log("Cell is not connected to the new position: ", newPosition.x, newPosition.y)
+            return
+        }
         this.moveEntity(id, newPosition);
     }
 

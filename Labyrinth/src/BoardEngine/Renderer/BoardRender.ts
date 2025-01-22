@@ -1,20 +1,23 @@
 import { engine, Entity, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
+import { Entity as LabyrinthEntity } from '../Entity'
 import { Board } from '../Board'
 import { Color4, Vector3 } from '@dcl/sdk/math'
-import { CellType, Position } from '../Types'
+import { CellType, EntityType, Position } from '../Types'
 import { CellRenderer } from './CellRenderer'
 import { Cell } from '../Cell'
 import { Extras } from './Types'
+import { EntityRenderer } from './EntityRenderer'
 
 export class BoardRender {
   private _board: Board
 
   private _boardEntity: Entity
 
-  private _cells: Cell[][]
   private _cellRenderers: (CellRenderer | null)[][]
+  private _cellHandlers: Map<CellType, new (cell: Cell, board: Board) => CellRenderer> = new Map()
 
-  private _handlers: Map<CellType, new (cell: Cell, board: Board) => CellRenderer> = new Map()
+  private _entityRenderers: Map<number, EntityRenderer> = new Map()
+  private _entityHandlers: Map<EntityType, new (entity: LabyrinthEntity, board: Board) => EntityRenderer> = new Map()
 
   constructor(board: Board) {
     this._board = board
@@ -23,21 +26,26 @@ export class BoardRender {
     Transform.create(this._boardEntity, {position: {x: 8, y: 3, z: 8}, scale: {x: 5, y: 5, z: 5}})
     MeshRenderer.setPlane(this._boardEntity)
 
-    this._cells = []
     this._cellRenderers = []
     for (let i = 0; i < this._board.width; i++) {
-      this._cells.push([])
       this._cellRenderers.push([])
       for (let j = 0; j < this._board.height; j++) {
-        this._cells[i].push(this._board.getCell(i, j))
         this._cellRenderers[i].push(null)
-        this._cells[i][j].subscribe(this._updateCellRenderer.bind(this))
+        this._board.getCell(i, j).subscribe(this._updateCellRenderer.bind(this))
       }
     }
   }
 
+  public get parentEntity(): Entity {
+    return this._boardEntity
+  }
+
+  public addEntityRenderer(type: EntityType, renderer: new (entity: LabyrinthEntity, board: Board) => EntityRenderer): void {
+    this._entityHandlers.set(type, renderer)
+  }
+
   public addCellRenderer(type: CellType, renderer: new (cell: Cell, board: Board) => CellRenderer): void {
-    this._handlers.set(type, renderer)
+    this._cellHandlers.set(type, renderer)
   }
 
   public get boardEntity(): Entity {
@@ -48,7 +56,7 @@ export class BoardRender {
     for (let i = 0; i < this._board.width; i++) {
       for (let j = 0; j < this._board.height; j++) {
         const cell = this._board.getCell(i, j)
-        const HandlerClass = this._handlers.get(cell.type)
+        const HandlerClass = this._cellHandlers.get(cell.type)
         if (!HandlerClass ) {
           throw new Error(`No handler for cell type ${cell.type}`)
         }
@@ -61,6 +69,19 @@ export class BoardRender {
         }
       }
     }
+
+    for (const entity of this._board.entities) {
+      const HandlerClass = this._entityHandlers.get(entity.type)
+      if (!HandlerClass ) {
+        throw new Error(`No handler for entity type ${entity.type}`)
+      }
+      if (this._entityRenderers.has(entity.id)) {
+        this._entityRenderers.get(entity.id)?.render(this._boardEntity)
+      } else {
+        this._entityRenderers.set(entity.id, new HandlerClass(entity, this._board))
+        this._entityRenderers.get(entity.id)?.render(this._boardEntity)
+      }
+    }
   }
 
   private _updateCellRenderer(cell: Cell): void {
@@ -70,7 +91,7 @@ export class BoardRender {
       this._cellRenderers[cell.position.x][cell.position.y] = null
     }
 
-    const HandlerClass = this._handlers.get(cell.type)
+    const HandlerClass = this._cellHandlers.get(cell.type)
     if (!HandlerClass ) {
       throw new Error(`No handler for cell type ${cell.type}`)
     }
