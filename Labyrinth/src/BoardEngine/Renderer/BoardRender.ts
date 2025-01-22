@@ -70,17 +70,29 @@ export class BoardRender {
       }
     }
 
+    // Entity rendering
+    const currentEntities = new Set(this._board.entities.map(e => e.id))
+    
+    // Remove renderers for entities that no longer exist
+    for (const [id, renderer] of this._entityRenderers) {
+      if (!currentEntities.has(id)) {
+        renderer.terminate()
+        this._entityRenderers.delete(id)
+      }
+    }
+    
+    // Create renderers for new entities
     for (const entity of this._board.entities) {
-      const HandlerClass = this._entityHandlers.get(entity.type)
-      if (!HandlerClass ) {
-        throw new Error(`No handler for entity type ${entity.type}`)
+      // Check if the entity has a renderer
+      if (!this._entityRenderers.has(entity.id)) {
+        this._updateEntityRenderer(entity)
+        this._entityRenderers.set(entity.id, this._entityRenderers.get(entity.id)!)
       }
-      if (this._entityRenderers.has(entity.id)) {
-        this._entityRenderers.get(entity.id)?.render(this._boardEntity)
-      } else {
-        this._entityRenderers.set(entity.id, new HandlerClass(entity, this._board))
-        this._entityRenderers.get(entity.id)?.render(this._boardEntity)
-      }
+    }
+
+    // Render all renderers
+    for (const renderer of this._entityRenderers.values()) {
+      renderer.render()
     }
   }
 
@@ -97,5 +109,18 @@ export class BoardRender {
     }
     this._cellRenderers[cell.position.x][cell.position.y] = new HandlerClass(cell, this._board)
     this._cellRenderers[cell.position.x][cell.position.y]?.render()
+  }
+
+  private _updateEntityRenderer(entity: LabyrinthEntity): void {
+    if (this._entityRenderers.has(entity.id)) {
+      this._entityRenderers.get(entity.id)?.terminate()
+    } else {
+      const HandlerClass = this._entityHandlers.get(entity.type)
+      if (!HandlerClass) {
+        throw new Error(`No handler for entity type ${entity.type}`)
+      }
+      this._entityRenderers.set(entity.id, new HandlerClass(entity, this._board))
+      this._entityRenderers.get(entity.id)?.render()
+    }
   }
 }

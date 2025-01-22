@@ -17,7 +17,7 @@ export abstract class EntityRenderer {
   /**
    * Implement this method to render the entity
    */
-  public abstract render(board: DCL_Entity): void
+  public abstract render(): void
 
   /**
    * Implement this method to terminate the entity renderer
