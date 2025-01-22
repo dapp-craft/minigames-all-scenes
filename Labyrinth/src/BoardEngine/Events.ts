@@ -1,33 +1,39 @@
 import { CellData } from "./Cell";
 import { EntityData } from "./Entity";
-import { Position } from "./Types";
 
-export enum EventType {
-    ENTITY_ADDED = 'ENTITY_ADDED',
-    ENTITY_REMOVED = 'ENTITY_REMOVED',
-    ENTITY_MOVED = 'ENTITY_MOVED',
-    CELL_CHANGED = 'CELL_CHANGED'
+
+export type BoardEventMap = {
+  'ENTITY_ADDED': { entity: EntityData };
+  'ENTITY_REMOVED': { entity: EntityData };
+  'ENTITY_MOVED': { entity: EntityData };
+  'CELL_CHANGED': { cell: CellData };
 }
 
-export type BoardEvent = {
-  type: EventType;
-  payload: {
-    entity?: EntityData;
-    cell?: CellData;
-  };
-}
+export type BoardEventType = keyof BoardEventMap
+export type BoardEventPayload<T extends BoardEventType> = BoardEventMap[T]
 
 export class EventBus {
-  private _listeners: Map<string, ((event: BoardEvent) => void)[]> = new Map();
+  private _listeners: Map<BoardEventType, Set<(payload: any) => void>> = new Map()
 
-  public subscribe(eventType: BoardEvent['type'], callback: (event: BoardEvent) => void): void {
+  public subscribe<T extends BoardEventType>(
+    eventType: T,
+    callback: (payload: BoardEventPayload<T>) => void
+  ): () => void {
     if (!this._listeners.has(eventType)) {
-      this._listeners.set(eventType, []);
+      this._listeners.set(eventType, new Set())
     }
-    this._listeners.get(eventType)?.push(callback);
+    this._listeners.get(eventType)?.add(callback)
+
+    // Return unsubscribe function
+    return () => {
+      this._listeners.get(eventType)?.delete(callback)
+    }
   }
 
-  public emit(event: BoardEvent): void {
-    this._listeners.get(event.type)?.forEach(callback => callback(event));
+  public emit<T extends BoardEventType>(
+    eventType: T,
+    payload: BoardEventPayload<T>
+  ): void {
+    this._listeners.get(eventType)?.forEach(callback => callback(payload))
   }
 } 

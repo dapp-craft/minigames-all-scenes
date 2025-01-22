@@ -7,7 +7,7 @@ import { CellRenderer } from './CellRenderer'
 import { Cell, CellData } from '../Cell'
 import { Extras } from './Types'
 import { EntityRenderer } from './EntityRenderer'
-import { BoardEvent, EventType } from '../Events'
+import { BoardEventPayload } from '../Events'
 
 export class BoardRender {
   private _board: Board
@@ -24,7 +24,7 @@ export class BoardRender {
     this._board = board
 
     this._boardEntity = engine.addEntity()
-    Transform.create(this._boardEntity, {position: {x: 8, y: 3, z: 8}, scale: {x: 5, y: 5, z: 5}})
+    Transform.create(this._boardEntity, { position: { x: 8, y: 3, z: 8 }, scale: { x: 5, y: 5, z: 5 } })
     MeshRenderer.setPlane(this._boardEntity)
 
     this._cellRenderers = []
@@ -34,17 +34,20 @@ export class BoardRender {
         this._cellRenderers[i].push(null)
       }
     }
-    this._board.subscribe(EventType.CELL_CHANGED, this._cellUpdateHandler.bind(this))
-    this._board.subscribe(EventType.ENTITY_ADDED, this._entityAddHandler.bind(this))
-    this._board.subscribe(EventType.ENTITY_MOVED, this._entityMovedHandler.bind(this))
-    this._board.subscribe(EventType.ENTITY_REMOVED, this._entityRemovedHandler.bind(this))
+    this._board.subscribe('CELL_CHANGED', this._cellUpdateHandler.bind(this))
+    this._board.subscribe('ENTITY_ADDED', this._entityAddHandler.bind(this))
+    this._board.subscribe('ENTITY_MOVED', this._entityMovedHandler.bind(this))
+    this._board.subscribe('ENTITY_REMOVED', this._entityRemovedHandler.bind(this))
   }
 
   public get parentEntity(): Entity {
     return this._boardEntity
   }
 
-  public addEntityRenderer(type: EntityType, renderer: new (entityData: EntityData, board: Board) => EntityRenderer): void {
+  public addEntityRenderer(
+    type: EntityType,
+    renderer: new (entityData: EntityData, board: Board) => EntityRenderer
+  ): void {
     this._entityHandlers.set(type, renderer)
   }
 
@@ -56,9 +59,7 @@ export class BoardRender {
     return this._boardEntity
   }
 
-
   public rerender(): void {
-
     // Remove all Cell renderers
     for (let i = 0; i < this._board.width; i++) {
       for (let j = 0; j < this._board.height; j++) {
@@ -90,37 +91,29 @@ export class BoardRender {
     }
   }
 
-  private _entityAddHandler(event: BoardEvent): void {
-    if (event.type === EventType.ENTITY_ADDED && event.payload.entity) {
-      this._updateEntityRenderer(event.payload.entity)
-    }
+  private _entityAddHandler(payload: BoardEventPayload<'ENTITY_ADDED'>): void {
+    this._updateEntityRenderer(payload.entity)
   }
 
-  private _entityMovedHandler(event: BoardEvent): void {
-    if (event.type === EventType.ENTITY_MOVED && event.payload.entity) {
-      const renderer = this._entityRenderers.get(event.payload.entity.id)
-      if (!renderer) {
-        throw new Error(`No renderer for entity ${event.payload.entity.id}`)
-      }
-      renderer.update(event.payload.entity)
+  private _entityMovedHandler(payload: BoardEventPayload<'ENTITY_MOVED'>): void {
+    const renderer = this._entityRenderers.get(payload.entity.id)
+    if (!renderer) {
+      throw new Error(`No renderer for entity ${payload.entity.id}`)
     }
+    renderer.update(payload.entity)
   }
 
-  private _entityRemovedHandler(event: BoardEvent): void {
-    if (event.type === EventType.ENTITY_REMOVED && event.payload.entity) {
-      const renderer = this._entityRenderers.get(event.payload.entity.id)
-      if (!renderer) {
-        throw new Error(`No renderer for entity ${event.payload.entity.id}`)
-      }
-      renderer.terminate()
-      this._entityRenderers.delete(event.payload.entity.id)
+  private _entityRemovedHandler(payload: BoardEventPayload<'ENTITY_REMOVED'>): void {
+    const renderer = this._entityRenderers.get(payload.entity.id)
+    if (!renderer) {
+      throw new Error(`No renderer for entity ${payload.entity.id}`)
     }
+    renderer.terminate()
+    this._entityRenderers.delete(payload.entity.id)
   }
 
-  public _cellUpdateHandler(event: BoardEvent): void {
-    if (event.type === EventType.CELL_CHANGED && event.payload.cell) {
-      this._updateCellRenderer(event.payload.cell)
-    }
+  public _cellUpdateHandler(payload: BoardEventPayload<'CELL_CHANGED'>): void {
+    this._updateCellRenderer(payload.cell)
   }
 
   private _updateCellRenderer(cellData: CellData): void {
@@ -131,7 +124,7 @@ export class BoardRender {
     }
 
     const HandlerClass = this._cellHandlers.get(cellData.type)
-    if (!HandlerClass ) {
+    if (!HandlerClass) {
       throw new Error(`No handler for cell type ${cellData.type}`)
     }
     this._cellRenderers[cellData.position.x][cellData.position.y] = new HandlerClass(cellData, this._board)
@@ -150,5 +143,4 @@ export class BoardRender {
       this._entityRenderers.get(entityData.id)?.update(entityData)
     }
   }
-  
 }

@@ -1,6 +1,6 @@
 import { Cell, CellData } from "./Cell";
 import { Entity } from "./Entity";
-import { BoardEvent, EventBus, EventType } from "./Events";
+import { BoardEventPayload, BoardEventType, EventBus } from "./Events";
 import { CellType, Direction, Position } from "./Types";
 
 
@@ -34,18 +34,21 @@ export class Board {
         return Array.from(this._entities.values());
     }
 
-    public subscribe(eventType: EventType, callback: (event: BoardEvent) => void): void {
+    public subscribe<T extends BoardEventType>(
+        eventType: T,
+        callback: (payload: BoardEventPayload<T>) => void
+    ): void {
         this._eventBus.subscribe(eventType, callback);
     }
 
     public addEntity(entity: Entity): void {
         this._entities.set(entity.id, entity);
-        this._eventBus.emit({ type: EventType.ENTITY_ADDED, payload: { entity: entity.data } });
+        this._eventBus.emit("ENTITY_ADDED", { entity: entity.data });
     }
 
     public removeEntity(id: number): void {
         this.checkEntityExists(id);
-        this._eventBus.emit({ type: EventType.ENTITY_REMOVED, payload: { entity: this.getEntitySafe(id).data } });
+        this._eventBus.emit("ENTITY_REMOVED", { entity: this.getEntitySafe(id).data });
         this._entities.delete(id);
     }
 
@@ -53,7 +56,7 @@ export class Board {
         this.checkEntityExists(id);
         this.checkCellExists(position.x, position.y);
         this.getEntitySafe(id).position = position;
-        this._eventBus.emit({ type: EventType.ENTITY_MOVED, payload: { entity: this.getEntitySafe(id).data } });
+        this._eventBus.emit("ENTITY_MOVED", { entity: this.getEntitySafe(id).data });
     }
 
     public moveEntityDirection(id: number, direction: Direction): void {
@@ -71,7 +74,7 @@ export class Board {
 
     public setCellType(x: number, y: number, type: CellType): void {
         this._cells[y][x].type = type;
-        this._eventBus.emit({ type: EventType.CELL_CHANGED, payload: { cell: this.getCellSafe(x, y).data } });
+        this._eventBus.emit("CELL_CHANGED", { cell: this.getCellSafe(x, y).data });
     }
 
     public getCell(x: number, y: number): CellData {
