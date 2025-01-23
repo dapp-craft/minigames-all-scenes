@@ -1,25 +1,28 @@
 import { Cell, CellData } from "./Cell";
 import { Entity } from "./Entity";
 import { BoardEventPayload, BoardEventType, EventBus } from "./Events";
-import { CellType, Direction, Position } from "./Types";
+import { CellType, Direction, EntityType, Position } from "./Types";
 
 
 // Board class managing the game board
-export class Board {
-    private _cells: Cell[][];
+export class Board<
+    TCellType extends string = string,
+    TEntityType extends string = string
+> {
+    private _cells: Cell<TCellType>[][];
     private _width: number;
     private _height: number;
 
-    private _entities: Map<number, Entity> = new Map();
+    private _entities: Map<number, Entity<TEntityType>> = new Map();
 
     private _eventBus: EventBus = new EventBus();
 
 
-    constructor(width: number, height: number) {
+    constructor(width: number, height: number, defaultCellType: TCellType) {
         this._width = width;
         this._height = height;
         this._cells = [];
-        this.initializeBoard();
+        this.initializeBoard(defaultCellType);
     }
 
     public get width(): number {
@@ -30,7 +33,7 @@ export class Board {
         return this._height;
     }
 
-    public get entities(): Entity[] {
+    public get entities(): Entity<TEntityType>[] {
         return Array.from(this._entities.values());
     }
 
@@ -41,9 +44,11 @@ export class Board {
         this._eventBus.subscribe(eventType, callback);
     }
 
-    public addEntity(entity: Entity): void {
+    public addEntity(position: Position, type: TEntityType, board: Board): number {
+        const entity = new Entity(position, type, board);
         this._entities.set(entity.id, entity);
         this._eventBus.emit("ENTITY_ADDED", { entity: entity.data });
+        return entity.id;
     }
 
     public removeEntity(id: number): void {
@@ -72,13 +77,18 @@ export class Board {
         this.moveEntity(id, newPosition);
     }
 
-    public setCellType(x: number, y: number, type: CellType): void {
-        this._cells[y][x].type = type;
-        this._eventBus.emit("CELL_CHANGED", { cell: this.getCellSafe(x, y).data });
+    public setCellType(x: number, y: number, type: TCellType): void {
+        const cell = this.getCellSafe(x, y);
+        cell.type = type;
+        this._eventBus.emit("CELL_CHANGED", { cell: cell.data });
     }
 
     public getCell(x: number, y: number): CellData {
         return this.getCellSafe(x, y).data
+    }
+
+    public _getCellInstance(x: number, y: number): Cell<TCellType> {
+        return this.getCellSafe(x, y)
     }
 
     public getCellType(x: number, y: number): CellType {
@@ -128,9 +138,9 @@ export class Board {
         }
 
         // BFS to find the path
-        const queue: Cell[] = [];
-        const visited: Set<Cell> = new Set();
-        const parent: Map<string, Cell | undefined> = new Map();
+        const queue: Cell<TCellType>[] = [];
+        const visited: Set<Cell<TCellType>> = new Set();
+        const parent: Map<string, Cell<TCellType> | undefined> = new Map();
 
         queue.push(startCell);
         parent.set(startCell.toString(), undefined);
@@ -160,7 +170,7 @@ export class Board {
             return path;
         }
 
-        let current: Cell | undefined = endCell;
+        let current: Cell<TCellType> | undefined = endCell;
         while (current) {
             path.push(current.position);
             current = parent.get(current.toString());
@@ -170,12 +180,12 @@ export class Board {
     }
 
 
-    private initializeBoard(): void {
+    private initializeBoard<T extends TCellType>(defaultCellType: T): void {
         // Create cells
         for (let y = 0; y < this._height; y++) {
             this._cells[y] = [];
             for (let x = 0; x < this._width; x++) {
-                this._cells[y][x] = new Cell(x, y);
+                this._cells[y][x] = new Cell(x, y, defaultCellType);
             }
         }
 
@@ -204,7 +214,7 @@ export class Board {
         }
     }
 
-    private getCellSafe(x: number, y: number): Cell {
+    private getCellSafe(x: number, y: number): Cell<TCellType> {
         const cell = this._cells[y][x];
         if (!cell) {
             throw new Error(`Cell not found: ${x}, ${y}`);
@@ -212,7 +222,7 @@ export class Board {
         return cell;
     }
     
-    private getEntitySafe(id: number): Entity {
+    private getEntitySafe(id: number): Entity<TEntityType> {
         const entity = this._entities.get(id);
         if (!entity) {
             throw new Error(`Entity not found: ${id}`);

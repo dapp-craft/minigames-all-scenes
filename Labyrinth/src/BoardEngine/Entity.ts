@@ -9,17 +9,17 @@ export type EntityData = {
   position: Position
 }
 
-export class Entity {
+export class Entity <TEntityType extends EntityType = EntityType>{
   private _entityCount: number = 1
 
   protected _id: number
   protected _position: Position
   protected _board: Board
-  protected _type: EntityType
+  protected _type: TEntityType
   protected _cellScale: { x: number; y: number; z: number }
 
 
-  constructor(position: Position, type: EntityType, board: Board) {
+  constructor(position: Position, type: TEntityType, board: Board) {
     this._position = position
     this._type = type
     this._board = board

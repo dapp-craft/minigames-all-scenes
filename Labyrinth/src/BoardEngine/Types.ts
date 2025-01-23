@@ -1,8 +1,8 @@
 // Cell types enum to distinguish different cell types
-export type CellType = number;
+export type CellType = string;
 
 // Entity type to distinguish different entities
-export type EntityType = number;
+export type EntityType = string;
 
 // Direction enum to help with neighbor references
 export enum Direction {

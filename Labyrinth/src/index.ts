@@ -1,17 +1,10 @@
-import { engine, Entity, executeTask, GltfContainer, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
+import { engine, executeTask, GltfContainer, Transform } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
-import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
-import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
-import { readGltfLocators } from '../../common/locators'
-import { initMiniGame } from '../../common/library'
 import { Board } from './BoardEngine/Board'
 import { BoardRender } from './BoardEngine/Renderer/BoardRender'
-import { CellRenderer } from './BoardEngine/Renderer/CellRenderer'
-import { Cell } from './BoardEngine/Cell'
 import { ZeroCellRenderer } from './TestRenderer/Cell/ZeroCellRenderer'
 import { OneCellRenderer } from './TestRenderer/Cell/OneCellRenderer'
 import { Player } from './TestRenderer/Entity/Player'
-import { Entity as LabyrinthEntity } from './BoardEngine/Entity'
 import { InputSystem } from './InputSystem/InputSystem'
 
 // const handlers = {
@@ -34,33 +27,35 @@ executeTask(async () => {
   }
 })
 
-export const BOARD = new Board(30, 30)
+export type CustomCellTypes = 'Empty' | 'Wall'
+export type CustomEntityTypes = 'Player' | 'NPC'
+
+export const BOARD = new Board<CustomCellTypes, CustomEntityTypes>(30, 30, 'Empty')
 
 export const BOARD_RENDER = new BoardRender(BOARD)
 
 export async function main() {
   // await libraryReady
 
-  BOARD_RENDER.addCellRenderer(0, ZeroCellRenderer)
-  BOARD_RENDER.addCellRenderer(1, OneCellRenderer)
-  BOARD_RENDER.addEntityRenderer(0, Player)
+  BOARD_RENDER.addCellRenderer('Empty', ZeroCellRenderer)
+  BOARD_RENDER.addCellRenderer('Wall', OneCellRenderer)
+  BOARD_RENDER.addEntityRenderer('Player', Player)
 
   BOARD_RENDER.rerender()
 
-  const player = new LabyrinthEntity({ x: 3, y: 3 }, 0, BOARD)
-  BOARD.addEntity(player)
+  // TODO: initialize entity instance in board class
+  const player = BOARD.addEntity({ x: 3, y: 3 }, "Player", BOARD)
 
-
-  console.log('\n' + BOARD)
-
-  new InputSystem(player.id, BOARD)
+  new InputSystem(player, BOARD)
 
   utils.timers.setInterval(() => {
-    BOARD.setCellType(0, 0, BOARD.getCellType(0, 0) === 0 ? 1 : 0)
+    BOARD.setCellType(0, 0, BOARD.getCellType(0, 0) === "Wall" ? "Empty" : "Wall")
   }, 1000)
 
   // Horizontal wall
   for (let i = 0; i < BOARD.width; i++) {
-    BOARD.setCellType(i, 5, 1)
+    BOARD.setCellType(i, 4, "Wall")
   }
+  const cell11 = BOARD._getCellInstance(1, 1)
+  console.log(cell11.isConnectedTo(BOARD._getCellInstance(0, 1)))
 }
