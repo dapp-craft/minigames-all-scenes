@@ -7,7 +7,6 @@ export type CellData<T extends CellType = CellType> = {
 
 export class Cell<TCellType extends CellType = CellType> {
   private _type: TCellType
-  private _linkLayer: TCellType[]
   private _cells: Map<Direction, Cell<TCellType> | null>
   private _position: Position
 
@@ -20,7 +19,6 @@ export class Cell<TCellType extends CellType = CellType> {
       [Direction.BOTTOM, null],
       [Direction.LEFT, null]
     ])
-    this._linkLayer = []
   }
 
   public get type(): TCellType {
@@ -48,6 +46,10 @@ export class Cell<TCellType extends CellType = CellType> {
 
   public toString(): string {
     return `Cell: (${this._position.x}, ${this._position.y}) with type ${this._type}`
+  }
+
+  public isNeighbor(cell: Cell<TCellType>): boolean {
+    return this.getAllNeighbors().includes(cell)
   }
 
   public get position(): Position {
@@ -94,15 +96,6 @@ export class Cell<TCellType extends CellType = CellType> {
         return
       }
     }
-  }
-
-  /**
-   * Checks if this cell is connected to another cell and has the same type
-   * @param otherCell The cell to check connection with
-   * @returns True if the cells are connected and have the same type, false otherwise
-   */
-  public isConnectedTo(otherCell: Cell<TCellType>): boolean {
-    return this.getAllNeighbors().includes(otherCell) && this._type === otherCell._type
   }
 
   private setNeighbor(direction: Direction, cell: Cell<TCellType> | null): void {

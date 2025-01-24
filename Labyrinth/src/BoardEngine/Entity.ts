@@ -1,6 +1,6 @@
 import { Vector3 } from '@dcl/sdk/math'
 import { Board } from './Board'
-import { Direction, Position, DirectionPositionDelta, EntityType } from './Types'
+import { Direction, Position, DirectionPositionDelta, EntityType, CellType } from './Types'
 import { Entity as DCL_Entity } from '@dcl/sdk/ecs'
 
 export type EntityData = {
@@ -9,7 +9,7 @@ export type EntityData = {
   position: Position
 }
 
-export class Entity <TEntityType extends EntityType = EntityType>{
+export class Entity <TCellType extends CellType, TEntityType extends EntityType = EntityType>{
   private _entityCount: number = 1
 
   protected _id: number
@@ -17,15 +17,24 @@ export class Entity <TEntityType extends EntityType = EntityType>{
   protected _board: Board
   protected _type: TEntityType
   protected _cellScale: { x: number; y: number; z: number }
-
+  protected _allowedCellTypes: TCellType[]
 
   constructor(position: Position, type: TEntityType, board: Board) {
+    this._allowedCellTypes = []
     this._position = position
     this._type = type
     this._board = board
     this._cellScale = { x: 1 / board.width, y: 1 / board.height, z: 1 / board.height }
     this._id = this._entityCount
     this._entityCount++
+  }
+
+  public get allowedCellTypes(): TCellType[] {
+    return [...this._allowedCellTypes]
+  }
+
+  public set allowedCellTypes(cellTypes: TCellType[]) {
+    this._allowedCellTypes = cellTypes
   }
 
   public get type(): EntityType {

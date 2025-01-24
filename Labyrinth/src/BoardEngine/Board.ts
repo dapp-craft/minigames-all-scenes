@@ -13,7 +13,7 @@ export class Board<
     private _width: number;
     private _height: number;
 
-    private _entities: Map<number, Entity<TEntityType>> = new Map();
+    private _entities: Map<number, Entity<TCellType, EntityType>> = new Map();
 
     private _eventBus: EventBus = new EventBus();
 
@@ -33,7 +33,7 @@ export class Board<
         return this._height;
     }
 
-    public get entities(): Entity<TEntityType>[] {
+    public get entities(): Entity<TCellType, EntityType>[] {
         return Array.from(this._entities.values());
     }
 
@@ -44,11 +44,24 @@ export class Board<
         this._eventBus.subscribe(eventType, callback);
     }
 
-    public addEntity(position: Position, type: TEntityType, board: Board): number {
-        const entity = new Entity(position, type, board);
+    public addEntity(position: Position, type: TEntityType, board: Board, allowedCellTypes?: TCellType[]): number {
+        const entity = new Entity<TCellType, TEntityType>(position, type, board);
+        if (allowedCellTypes) {
+            entity.allowedCellTypes = allowedCellTypes
+        } else {
+            entity.allowedCellTypes = [this.getCellType(position.x, position.y) as TCellType]
+        }
         this._entities.set(entity.id, entity);
         this._eventBus.emit("ENTITY_ADDED", { entity: entity.data });
         return entity.id;
+    }
+
+    public setAllowedCellTypes(id: number, cellTypes: TCellType[]): void {
+        this.getEntitySafe(id).allowedCellTypes = cellTypes
+    }
+
+    public getAllowedCellTypes(id: number): TCellType[] {
+        return this.getEntitySafe(id).allowedCellTypes
     }
 
     public removeEntity(id: number): void {
@@ -69,10 +82,10 @@ export class Board<
         const entity = this.getEntitySafe(id);
         const newPosition = entity.getMovePosition(direction);
         this.checkCellExists(newPosition.x, newPosition.y);
-        // Check if cell is connected to the new position
-        if (!this.getCellSafe(newPosition.x, newPosition.y).isConnectedTo(this.getCellSafe(entity.position.x, entity.position.y))) {
-            console.log("Cell is not connected to the new position: ", newPosition.x, newPosition.y)
-            return
+        // Check if Entity can move to the new position type
+        const cellType = this.getCellType(newPosition.x, newPosition.y) as TCellType;
+        if (!entity.allowedCellTypes.includes(cellType)) {
+            throw new Error(`Entity cannot move to the new position: ${newPosition.x}, ${newPosition.y} because Type ${cellType} is not allowed`);
         }
         this.moveEntity(id, newPosition);
     }
@@ -105,7 +118,7 @@ export class Board<
                 result += this._cells[y][x].type; // Cell representation
                 // Add horizontal connection if it exists and not at the last column
                 if (x < this._width - 1) {
-                    result += this._cells[y][x].isConnectedTo(this._cells[y][x + 1]) ? '─' : ' ';
+                    result += this._cells[y][x].isNeighbor(this._cells[y][x + 1]) ? '─' : ' ';
                 }
             }
             result += '\n';
@@ -114,7 +127,7 @@ export class Board<
             if (y > 0) {  // Changed condition from y < height-1 to y > 0
                 for (let x = 0; x < this._width; x++) {
                     // Add vertical connection if it exists (connecting to row below)
-                    result += this._cells[y][x].isConnectedTo(this._cells[y - 1][x]) ? '│' : ' ';  // Changed y+1 to y-1
+                    result += this._cells[y][x].isNeighbor(this._cells[y - 1][x]) ? '│' : ' ';  // Changed y+1 to y-1
                     // Add spacing for alignment
                     if (x < this._width - 1) {
                         result += ' ';
@@ -158,7 +171,7 @@ export class Board<
 
             visited.add(current);
 
-            for (const neighbor of current.getAllNeighbors().filter(neighbor => neighbor.isConnectedTo(current))) {
+            for (const neighbor of current.getAllNeighbors().filter(neighbor => neighbor.isNeighbor(current))) {
                 if (!visited.has(neighbor)) {
                     queue.push(neighbor);
                     parent.set(neighbor.toString(), current);
@@ -222,7 +235,7 @@ export class Board<
         return cell;
     }
     
-    private getEntitySafe(id: number): Entity<TEntityType> {
+    private getEntitySafe(id: number): Entity<TCellType, EntityType> {
         const entity = this._entities.get(id);
         if (!entity) {
             throw new Error(`Entity not found: ${id}`);

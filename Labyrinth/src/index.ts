@@ -44,7 +44,7 @@ export async function main() {
   BOARD_RENDER.rerender()
 
   // TODO: initialize entity instance in board class
-  const player = BOARD.addEntity({ x: 3, y: 3 }, "Player", BOARD)
+  const player = BOARD.addEntity({ x: 3, y: 3 }, "Player", BOARD, ["Empty", "Wall"])
 
   new InputSystem(player, BOARD)
 
@@ -56,6 +56,4 @@ export async function main() {
   for (let i = 0; i < BOARD.width; i++) {
     BOARD.setCellType(i, 4, "Wall")
   }
-  const cell11 = BOARD._getCellInstance(1, 1)
-  console.log(cell11.isConnectedTo(BOARD._getCellInstance(0, 1)))
 }
