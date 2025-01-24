@@ -1,8 +1,9 @@
-import { engine, Entity, Transform, Material, MeshRenderer } from '@dcl/sdk/ecs'
-import { CellRenderer } from '../../BoardEngine/Renderer/CellRenderer'
-import { Cell, CellData } from '../../BoardEngine/Cell'
-import { Board } from '../../BoardEngine/Board'
-import { BOARD_RENDER } from '../..'
+import { engine, Entity, Transform, Material, MeshRenderer, MaterialTransparencyMode } from '@dcl/sdk/ecs'
+import { CellRenderer } from '../../../BoardEngine/Renderer/CellRenderer'
+import { Cell, CellData } from '../../../BoardEngine/Cell'
+import { Board } from '../../../BoardEngine/Board'
+import { BOARD_RENDER } from '../../index'
+import { Color4 } from '@dcl/sdk/math'
 
 export class ZeroCellRenderer extends CellRenderer {
   private _entity: Entity
@@ -15,7 +16,19 @@ export class ZeroCellRenderer extends CellRenderer {
       parent: BOARD_RENDER.boardEntity
     })
     MeshRenderer.setPlane(this._entity)
-    Material.setPbrMaterial(this._entity, { albedoColor: { r: 0, g: 0, b: 0, a: 1 } })
+    Material.createOrReplace(this._entity, {
+      material: {
+        $case: 'pbr',
+        pbr: {
+          emissiveColor: { r: 0.9, g: 0.9, b: 0.9 },
+          emissiveIntensity: 0.9,
+          roughness: 1.0,
+          specularIntensity: 0,
+          metallic: 0,
+          transparencyMode: MaterialTransparencyMode.MTM_AUTO
+        }
+      }
+    })
   }
 
   public terminate(): void {

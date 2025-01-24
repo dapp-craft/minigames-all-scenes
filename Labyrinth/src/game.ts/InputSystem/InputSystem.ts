@@ -1,19 +1,22 @@
 import { engine, InputAction, inputSystem, PointerEventType } from '@dcl/sdk/ecs'
-import { Board } from '../BoardEngine/Board'
-import { Direction } from '../BoardEngine/Types'
-import { BOARD_RENDER } from '..'
+import { Board } from '../../BoardEngine/Board'
+import { Direction } from '../../BoardEngine/Types'
 
 export class InputSystem {
-  private _entityId: number
+  private _entityId: number | undefined
   private _board: Board
 
-  constructor(entityId: number, board: Board) {
-    this._entityId = entityId
+  constructor(board: Board) {
     this._board = board
     engine.addSystem(this.update.bind(this))
   }
 
+  public updatePlayerEntity(entityId: number | undefined): void {
+    this._entityId = entityId
+  }
+
   public update(): void {
+    if (!this._entityId) return
     if (inputSystem.isTriggered(InputAction.IA_FORWARD, PointerEventType.PET_DOWN)) {
         this._board.moveEntityDirection(this._entityId, Direction.TOP)
       }

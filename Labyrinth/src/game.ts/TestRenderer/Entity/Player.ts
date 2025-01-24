@@ -1,10 +1,10 @@
-import { Board } from '../../BoardEngine/Board'
-import { Entity } from '../../BoardEngine/Entity'
+import { Board } from '../../../BoardEngine/Board'
+import { Entity } from '../../../BoardEngine/Entity'
 import { Entity as DCL_Entity, engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
-import { EntityRenderer } from '../../BoardEngine/Renderer/EntityRenderer'
-import { BOARD_RENDER } from '../..'
+import { EntityRenderer } from '../../../BoardEngine/Renderer/EntityRenderer'
+import { BOARD_RENDER } from '../../index'
 import { Vector3 } from '@dcl/sdk/math'
-import { EntityData } from '../../BoardEngine/Entity'
+import { EntityData } from '../../../BoardEngine/Entity'
 
 export class Player extends EntityRenderer {
   private _DCL_Entity: DCL_Entity
