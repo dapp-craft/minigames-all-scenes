@@ -19,11 +19,18 @@ BOARD_RENDER.addCellRenderer('Finish', FinishCellRenderer)
 BOARD_RENDER.addCellRenderer('Start', StartCellRenderer)
 BOARD_RENDER.addEntityRenderer('Player', Player)
 
+export const INPUT_SYSTEM = new InputSystem(BOARD)
+
+export const gameState = {
+    inGame: false,
+    level: 1,
+    timeStart: 0,
+    timeEnd: 0,
+    isMoving: false
+}
+
 export async function init() {
   await BOARD_RENDER.rerender()
-  BOARD.setCellType(0, 0, "Finish")
-  BOARD.setCellType(1, 0, "Wall")
-  new InputSystem(BOARD)
 
 
   startLevel(1)
@@ -39,6 +46,16 @@ async function startLevel(level: 1) {
     }
     BOARD.setCellType(levelData.start.x, levelData.start.y, "Start")
     BOARD.setCellType(levelData.finish.x, levelData.finish.y, "Finish")
-    
+
+    gameState.inGame = true
+    gameState.level = level
+    gameState.timeStart = Date.now()
+    gameState.isMoving = false
+
+    const player = BOARD.addEntity(levelData.start, "Player", ["Empty", "Finish", "Start"])
+
+    INPUT_SYSTEM.updatePlayerEntity(player)
+
+
 }
 

@@ -44,8 +44,8 @@ export class Board<
         this._eventBus.subscribe(eventType, callback);
     }
 
-    public addEntity(position: Position, type: TEntityType, board: Board, allowedCellTypes?: TCellType[]): number {
-        const entity = new Entity<TCellType, TEntityType>(position, type, board);
+    public addEntity(position: Position, type: TEntityType, allowedCellTypes?: TCellType[]): number {
+        const entity = new Entity<TCellType, TEntityType>(position, type, this);
         if (allowedCellTypes) {
             entity.allowedCellTypes = allowedCellTypes
         } else {
@@ -106,6 +106,14 @@ export class Board<
 
     public getCellType(x: number, y: number): CellType {
         return this.getCellSafe(x, y).type
+    }
+
+    public getCellNeighbors(position: Position): Position[] {
+        return this.getCellSafe(position.x, position.y).getAllNeighbors().map(neighbor => neighbor.position)
+    }
+
+    public getEntityPosition(id: number): Position {
+        return this.getEntitySafe(id).position
     }
 
     public toString(): string {
