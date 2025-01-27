@@ -9,7 +9,8 @@ import { WallCellRenderer } from './TestRenderer/Cell/WallCellRenderer'
 import { Player } from './TestRenderer/Entity/Player'
 import { CustomCellTypes, CustomEntityTypes } from './types'
 
-export const BOARD = new Board<CustomCellTypes, CustomEntityTypes>(41, 41, 'Empty')
+Board.init<CustomCellTypes, CustomEntityTypes>(41, 41, 'Empty')
+export const BOARD = Board.getInstance<CustomCellTypes, CustomEntityTypes>()
 
 export const BOARD_RENDER = new BoardRender(BOARD)
 

@@ -9,20 +9,35 @@ export class Board<
     TCellType extends string = string,
     TEntityType extends string = string
 > {
-    private _cells: Cell<TCellType>[][];
+    private static _instance: Board | undefined
+
     private _width: number;
     private _height: number;
 
+    private _cells: Cell<TCellType>[][];
     private _entities: Map<number, Entity<TCellType, EntityType>> = new Map();
 
     private _eventBus: EventBus = new EventBus();
 
+    private _synchronization: boolean = true
 
-    constructor(width: number, height: number, defaultCellType: TCellType) {
+
+    private constructor(width: number, height: number, defaultCellType: TCellType) {
         this._width = width;
         this._height = height;
         this._cells = [];
         this.initializeBoard(defaultCellType);
+    }
+
+    public static init<TCellType extends string, TEntityType extends string>(width: number, height: number, defaultCellType: TCellType) {
+        this._instance = new Board<TCellType, TEntityType>(width, height, defaultCellType);
+    }
+
+    public static getInstance<TCellType extends string, TEntityType extends string>() {
+        if (!this._instance) {
+            throw new Error("Board not initialized");
+        }
+        return this._instance as Board<TCellType, TEntityType>
     }
 
     public get width(): number {
@@ -35,6 +50,14 @@ export class Board<
 
     public get entities(): Entity<TCellType, EntityType>[] {
         return Array.from(this._entities.values());
+    }
+
+    public get synchronization(): boolean {
+        return this._synchronization
+    }
+
+    public set synchronization(value: boolean) {
+        this._synchronization = value
     }
 
     public subscribe<T extends BoardEventType>(
