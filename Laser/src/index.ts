@@ -4,9 +4,10 @@ import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
-import { initGame, mirrors } from './game'
+import { initGame, laser, LightSource, mirrors } from './game'
 import { CreateStateSynchronizer } from '../../common/synchronizer'
 import { Mirror } from './game/Mirror'
+import { Vector3 } from '@dcl/sdk/math'
 ;(globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
 let mirrorTransforms: TransformType[] = []
@@ -24,8 +25,7 @@ const handlers = {
 
 export const syncGameProgress = (mirrors: Mirror[]) => {
   synchronizer.send({
-    mirrors: mirrors.map((m) => m.mirrorTransform.rotation),
-    activeMirror: mirrors.findIndex((m) => m.isActive)
+    mirrors: mirrors.map((m) => m.mirrorTransform.rotation)
   })
 }
 
@@ -64,26 +64,31 @@ let synchronizer: InstanceType<typeof Synchronizer>
 const Synchronizer = CreateStateSynchronizer(
   'Laser',
   {
-    mirrors: Schemas.Array(Schemas.Quaternion),
-    activeMirror: Schemas.Number
+    mirrors: Schemas.Array(Schemas.Quaternion)
   },
   {
     mirrors: new Array<Mirror>(),
     launch: async function () {
       console.log('SyncHandler::launch')
     },
-    update: async function ({ mirrors: quaternions, activeMirror } = { mirrors: [], activeMirror: 0 }) {
+    update: async function ({ mirrors: quaternions } = { mirrors: [] }) {
       console.log('SyncHandler::update', quaternions, this.mirrors)
       if (this.mirrors.length != quaternions.length) {
         this.mirrors = quaternions.map((f, idx) => new Mirror(mirrorTransforms[idx]))
         mirrors.forEach((m) => engine.removeEntity(m.mirrorEntity))
       }
+      const cast = (s: LightSource): number | undefined => {
+        console.log('CAST:', s.getRay())
+        let newSource = this.mirrors.find((m) => m.enlighten(s, cast))
+        console.log('NEW SOURCE:', newSource)
+        if (newSource) return Vector3.distance(s.getRay().origin, newSource.getRay().origin)
+      }
       this.mirrors.forEach((mirror, idx) => {
         mirror.mirrorTransform.rotation = quaternions[idx]
-        mirror.isActive = idx === activeMirror
         mirror.createMirror()
-        mirror.calculateAllRays(this.mirrors)
+        mirror.darken()
       })
+      cast(laser)
     },
     terminate: async function () {
       console.log('SyncHandler::terminate')

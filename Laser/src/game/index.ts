@@ -1,40 +1,41 @@
-import { engine, GltfContainer, Material, MeshRenderer, Transform, TransformType } from '@dcl/sdk/ecs'
-import { Color4, Quaternion } from '@dcl/sdk/math'
+import { InputAction, pointerEventsSystem, TransformType } from '@dcl/sdk/ecs'
+import { Quaternion, Vector3 } from '@dcl/sdk/math'
 import { Mirror } from './Mirror'
+import { Laser } from './Laser'
+import { syncGameProgress } from '..'
 
 export const mirrors: Mirror[] = []
+export let laser: Laser
+
+export interface LightSource {
+  getRay(): { origin: Vector3; direction: Vector3 }
+}
 
 export async function initGame() {
-  setupTestMirrors(testMirrorTransforms)
-  setupTestRay()
+  testMirrorTransforms.forEach((transform) => mirrors.push(new Mirror(transform)))
+  laser = new Laser(testLaserTransform)
+  mirrors.forEach((m) => addPointerEvent(m))
 }
 
-function setupTestMirrors(transforms: TransformType[]) {
-  transforms.forEach((transform) => {
-    const mirror = new Mirror(transform)
-    mirrors.push(mirror)
-  })
-  mirrors[0].angleOfEntry = 90
-}
-
-export const testRay = engine.addEntity()
-
-function setupTestRay() {
-  MeshRenderer.setCylinder(testRay, 0.05, 0.05)
-  Transform.createOrReplace(testRay, {
-    position: { x: 10.9, y: 3.3, z: 1.1 },
-    rotation: Quaternion.fromEulerDegrees(0, 0, 90),
-    scale: {
-      x: 1,
-      y: 1.2,
-      z: 1
+function addPointerEvent(mirror: Mirror) {
+  pointerEventsSystem.onPointerDown(
+    {
+      entity: mirror.mirrorEntity,
+      opts: { button: InputAction.IA_POINTER, hoverText: 'Interact' }
+    },
+    () => {
+      mirror.rotateMirror()
+      mirrors.forEach((m) => m.darken())
+      function cast(s: LightSource): number | undefined {
+        console.log('CAST:', s.getRay())
+        let newSource = mirrors.find((m) => m.enlighten(s, cast))
+        console.log('NEW SOURCE:', newSource)
+        if (newSource) return Vector3.distance(s.getRay().origin, newSource.getRay().origin)
+      }
+      cast(laser)
+      syncGameProgress(mirrors)
     }
-  })
-  Material.setPbrMaterial(testRay, {
-    albedoColor: Color4.Yellow(),
-    metallic: 0,
-    roughness: 1
-  })
+  )
 }
 
 const testMirrorTransforms: TransformType[] = [
@@ -44,7 +45,7 @@ const testMirrorTransforms: TransformType[] = [
       y: 3.3,
       z: 1.1
     },
-    rotation: Quaternion.fromEulerDegrees(0, 0, 270),
+    rotation: Quaternion.fromEulerDegrees(0, 0, 0),
     scale: {
       x: 0.5,
       y: 0.04,
@@ -57,7 +58,7 @@ const testMirrorTransforms: TransformType[] = [
       y: 5.1,
       z: 1.1
     },
-    rotation: Quaternion.fromEulerDegrees(0, 0, 45),
+    rotation: Quaternion.fromEulerDegrees(0, 0, 0),
     scale: {
       x: 0.5,
       y: 0.04,
@@ -130,3 +131,13 @@ const testMirrorTransforms: TransformType[] = [
     }
   }
 ]
+
+const testLaserTransform: TransformType = {
+  position: { x: 10.9, y: 3.3, z: 1.1 },
+  rotation: Quaternion.fromEulerDegrees(0, 0, 90),
+  scale: {
+    x: 1,
+    y: 1.2,
+    z: 1
+  }
+}

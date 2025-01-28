@@ -2,64 +2,74 @@ import {
   ColliderLayer,
   engine,
   Entity,
-  GltfContainer,
-  InputAction,
   Material,
   MeshCollider,
   MeshRenderer,
-  pointerEventsSystem,
   Transform,
   TransformType,
   VisibilityComponent
 } from '@dcl/sdk/ecs'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { mirrors, testRay } from '.'
-import { syncGameProgress } from '..'
+import { LightSource } from '.'
+import { getIntersectionAngle, getPoinOnRay, getRayDirection, isPointOnMirror } from './utils'
 
-export class Mirror {
-  private state: State = State.inactive
+export class Mirror implements LightSource {
   public rayEntity: Entity = engine.addEntity()
   public mirrorEntity: Entity = engine.addEntity()
-  public isActive: boolean = false
   public mirrorTransform: TransformType
-  public isHit: boolean = false
+  public rayActive: boolean = false
   public rayTransform: TransformType | null = null
   public angleOfEntry: number = 0
 
+  private tmp = engine.addEntity()
+
   constructor(transform: TransformType) {
     this.mirrorTransform = transform
-    this.isHit = false
     this.createMirror()
     if (this.rayTransform) this.createOrUpdateRay()
+  }
+
+  getRay(): { origin: Vector3; direction: Vector3 } {
+    const { position, rotation } = Transform.get(this.mirrorEntity)
+    return {
+      origin: position,
+      direction: getRayDirection(Quaternion.multiply(rotation, Quaternion.fromEulerDegrees(0, 0, this.angleOfEntry)))
+    }
   }
 
   public createMirror() {
     console.log(`Mirror::created in constructor@${this.mirrorEntity}`)
     MeshRenderer.setBox(this.mirrorEntity)
-    if (Transform.has(this.mirrorEntity)) console.error(`BUG!!: flask transform anomaly at entity ${this.mirrorEntity}`)
+    if (Transform.has(this.mirrorEntity))
+      console.error(`BUG!!: mirror transform anomaly at entity ${this.mirrorEntity}`)
     Transform.createOrReplace(this.mirrorEntity, JSON.parse(JSON.stringify(this.mirrorTransform)))
     MeshCollider.setBox(this.mirrorEntity, ColliderLayer.CL_POINTER)
-    pointerEventsSystem.onPointerDown(
-      {
-        entity: this.mirrorEntity,
-        opts: { button: InputAction.IA_POINTER, hoverText: 'Interact' }
-      },
-      () => this.rotateMirror()
-    )
   }
 
   public rotateMirror() {
-    this.isActive = true
     const mirrorTransform = Transform.getMutable(this.mirrorEntity)
     mirrorTransform.rotation = Quaternion.multiply(mirrorTransform.rotation, Quaternion.fromEulerDegrees(0, 0, 45))
     this.mirrorTransform = mirrorTransform
-    this.calculateAllRays(mirrors)
-    syncGameProgress(mirrors)
-    this.isActive = false
   }
 
-  public createOrUpdateRay() {
+  public createOrUpdateRay(length?: number) {
     console.log(`Ray::created ray@ in mirror ${this.mirrorEntity}`)
+    const rayDirectionQuternion = Quaternion.multiply(
+      Transform.get(this.mirrorEntity).rotation,
+      Quaternion.fromEulerDegrees(0, 0, this.angleOfEntry)
+    )
+    const rayDirectionVector = getRayDirection(rayDirectionQuternion)
+    const endPoint = getPoinOnRay(Transform.get(this.mirrorEntity).position, rayDirectionVector, length ? length : 5)
+
+    this.rayTransform = {
+      position: Vector3.lerp(Transform.get(this.mirrorEntity).position, endPoint, 0.5),
+      rotation: rayDirectionQuternion,
+      scale: {
+        x: 1,
+        y: length ? length : Vector3.distance(Transform.get(this.mirrorEntity).position, endPoint),
+        z: 1
+      }
+    }
     MeshRenderer.setCylinder(this.rayEntity, 0.05, 0.05)
     if (this.rayTransform) Transform.createOrReplace(this.rayEntity, this.rayTransform)
     Material.setPbrMaterial(this.rayEntity, {
@@ -67,125 +77,41 @@ export class Mirror {
       metallic: 0,
       roughness: 1
     })
-    VisibilityComponent.createOrReplace(this.rayEntity, { visible: this.isHit })
+    VisibilityComponent.createOrReplace(this.rayEntity, { visible: this.rayActive })
   }
 
-  public calculateAllRays(mirrors: Mirror[]) {
-    if (this.isActive) updateMirrorData(mirrors, this)
-  }
-}
+  public enlighten(source: LightSource, onHit?: (source: LightSource) => number | undefined) {
+    this.createOrUpdateRay()
+    let { direction, origin } = source.getRay()
+    let isHit = isPointOnMirror(origin, getPoinOnRay(origin, direction, 0.5), Transform.get(this.mirrorEntity).position)
+    if (!isHit || this.rayActive) return false
 
-enum State {
-  active,
-  inactive,
-  locked
-}
+    MeshRenderer.setSphere(this.tmp)
+    Transform.createOrReplace(this.tmp, {
+      position: getPoinOnRay(origin, direction, 0.5),
+      scale: { x: 0.2, y: 0.2, z: 0.2 }
+    })
+    Material.setPbrMaterial(this.tmp, {
+      albedoColor: Color4.Red(),
+      metallic: 0,
+      roughness: 1
+    })
 
-function isPointOnMirror(
-  vectorStartPoint: Vector3,
-  vectorEndPoint: Vector3,
-  mirrorCenter: Vector3,
-  tolerance = 0.1
-): boolean {
-  const lineDir = Vector3.subtract(vectorStartPoint, vectorEndPoint)
-  const pointToLineStart = Vector3.subtract(mirrorCenter, vectorStartPoint)
-  const crossProduct = Vector3.cross(lineDir, pointToLineStart)
-  const isOnLine = Vector3.length(crossProduct) < tolerance
-  // if (!isOnLine) return false
-  return isOnLine
-  // const dotProduct = Vector3.dot(lineDir, pointToLineStart)
-  // return dotProduct >= 0
-}
-
-const getRayDirection = (rotation: Quaternion): Vector3 => {
-  const localDirection = Vector3.Up()
-  return Vector3.rotate(localDirection, Quaternion.multiply(rotation, Quaternion.fromEulerDegrees(0, 0, 45)))
-}
-
-const getPoinOnRay = (rayPosition: Vector3, direction: Vector3, distance: number): Vector3 => {
-  return Vector3.add(rayPosition, Vector3.scale(direction, distance))
-}
-
-const updateMirrorData = (mirrors: Mirror[], sourceMirror: Mirror) => {
-  const sourceIdx = mirrors.indexOf(sourceMirror)
-  const mFromClick = mirrors.slice(sourceIdx)
-  mFromClick.forEach((m) => {
-    if (m.isHit) {
-      m.isHit = false
-      engine.removeEntity(m.rayEntity)
-    }
-  })
-
-  mirrors.forEach((targetMirror, idx) => {
-    const middlePoint = Vector3.lerp(sourceMirror.mirrorTransform.position, targetMirror.mirrorTransform.position, 0.5)
-    const rayTransform: TransformType = {
-      position: middlePoint,
-      rotation: sourceMirror.mirrorTransform.rotation,
-      scale: {
-        x: 1,
-        y: Vector3.distance(sourceMirror.mirrorTransform.position, targetMirror.mirrorTransform.position),
-        z: 1
-      }
-    }
-
-    const rayDirection1 = getRayDirection(sourceMirror.mirrorTransform.rotation)
-    const rayDirection2 = getRayDirection(
-      Quaternion.multiply(sourceMirror.mirrorTransform.rotation, Quaternion.fromEulerDegrees(0, 0, -90))
+    this.rayActive = true
+    const mirrorPlaneDirection = getRayDirection(
+      Quaternion.multiply(Transform.get(this.mirrorEntity).rotation, Quaternion.fromEulerDegrees(0, 0, 180))
     )
+    this.angleOfEntry = getIntersectionAngle(direction, mirrorPlaneDirection)
+    const rayLength = onHit?.(this)
 
-    const point45 = getPoinOnRay(sourceMirror.mirrorTransform.position, rayDirection1, 0.5)
-    const point135 = getPoinOnRay(sourceMirror.mirrorTransform.position, rayDirection2, 0.5)
+    if (rayLength) this.createOrUpdateRay(rayLength)
 
-    const isPoint45 = isPointOnMirror(
-      sourceMirror.mirrorTransform.position,
-      point45,
-      targetMirror.mirrorTransform.position
-    )
-    const isPoint135 = isPointOnMirror(
-      sourceMirror.mirrorTransform.position,
-      point135,
-      targetMirror.mirrorTransform.position
-    )
-    const isPoint = isPoint45 || isPoint135
-    if (isPoint45) {
-      rayTransform.rotation = Quaternion.multiply(rayTransform.rotation, Quaternion.fromEulerDegrees(0, 0, 45))
-    } else if (isPoint135) {
-      rayTransform.rotation = Quaternion.multiply(rayTransform.rotation, Quaternion.fromEulerDegrees(0, 0, -45))
-    }
-    console.log('isPoint :>> ', isPoint)
-
-    if (isPoint && !targetMirror.isHit) {
-      targetMirror.isHit = true
-      if (targetMirror.isHit && !targetMirror.rayTransform) targetMirror.rayTransform = rayTransform
-      targetMirror.createOrUpdateRay()
-      return
-    }
-  })
-}
-
-function calculateAngleWithMirror(
-  vectorStartPoint: Vector3,
-  vectorEndPoint: Vector3,
-  mirrorCenter: Vector3,
-  tolerance = 0.1
-): number | null {
-  const rayDirection = Vector3.subtract(vectorEndPoint, vectorStartPoint)
-  const rayDirectionNormalized = Vector3.normalize(rayDirection)
-
-  const vectorToMirror = Vector3.subtract(mirrorCenter, vectorStartPoint)
-  const vectorToMirrorNormalized = Vector3.normalize(vectorToMirror)
-
-  const dotProduct = Vector3.dot(rayDirectionNormalized, vectorToMirrorNormalized)
-  const angle = Math.acos(dotProduct)
-
-  const crossProduct = Vector3.cross(rayDirection, vectorToMirror)
-  const distance = Vector3.length(crossProduct) / Vector3.length(rayDirection)
-
-  if (distance < tolerance) {
-    return angle * (180 / Math.PI)
+    return true
   }
 
-  return null
+  public darken() {
+    this.rayActive = false
+    Transform.deleteFrom(this.tmp)
+    Transform.deleteFrom(this.rayEntity)
+  }
 }
-
-const t = engine.addEntity()
