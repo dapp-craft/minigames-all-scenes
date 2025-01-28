@@ -40,7 +40,11 @@ const MODELS: string[] = [
   'models/obj_floor.gltf',
   'models/obj_ground.gltf',
   'models/obj_railings.gltf',
-  'models/obj_wall.gltf'
+  'models/obj_wall.gltf',
+  'models/obj_terminal.gltf',
+  'models/obj_light.gltf',
+  'models/obj_gamezone.gltf',
+  'models/obj_bench.gltf'
 ]
 
 executeTask(async () => {

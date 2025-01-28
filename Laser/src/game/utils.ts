@@ -9,16 +9,16 @@ export function getPoinOnRay(rayPosition: Vector3, direction: Vector3, distance:
   return Vector3.add(rayPosition, Vector3.scale(direction, distance))
 }
 
-export function isPointOnMirror(
-  vectorSourcePoint: Vector3,
-  vectorEndPoint: Vector3,
-  mirrorCenter: Vector3,
+export function checkRayIntersection(
+  sourcePoint: Vector3,
+  directionPoint: Vector3,
+  planeCenter: Vector3,
   tolerance = 0.1
 ): boolean {
-  if (Vector3.equals(vectorSourcePoint, vectorEndPoint)) return false
+  if (Vector3.equals(sourcePoint, directionPoint)) return false
 
-  const lineDir = Vector3.normalize(Vector3.subtract(vectorEndPoint, vectorSourcePoint))
-  const pointToStartDir = Vector3.subtract(mirrorCenter, vectorSourcePoint)
+  const lineDir = Vector3.normalize(Vector3.subtract(directionPoint, sourcePoint))
+  const pointToStartDir = Vector3.subtract(planeCenter, sourcePoint)
 
   const crossProduct = Vector3.cross(lineDir, pointToStartDir)
   const isOnLine = Vector3.length(crossProduct) < tolerance

@@ -11,7 +11,7 @@ import {
 } from '@dcl/sdk/ecs'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { LightSource } from '.'
-import { getIntersectionAngle, getPoinOnRay, getRayDirection, isPointOnMirror } from './utils'
+import { getIntersectionAngle, getPoinOnRay, getRayDirection, checkRayIntersection } from './utils'
 
 export class Mirror implements LightSource {
   public rayEntity: Entity = engine.addEntity()
@@ -54,19 +54,17 @@ export class Mirror implements LightSource {
 
   public createOrUpdateRay(length?: number) {
     console.log(`Ray::created ray@ in mirror ${this.mirrorEntity}`)
-    const rayDirectionQuternion = Quaternion.multiply(
-      Transform.get(this.mirrorEntity).rotation,
-      Quaternion.fromEulerDegrees(0, 0, this.angleOfEntry)
-    )
+    const { position, rotation } = Transform.get(this.mirrorEntity)
+    const rayDirectionQuternion = Quaternion.multiply(rotation, Quaternion.fromEulerDegrees(0, 0, this.angleOfEntry))
     const rayDirectionVector = getRayDirection(rayDirectionQuternion)
-    const endPoint = getPoinOnRay(Transform.get(this.mirrorEntity).position, rayDirectionVector, length ? length : 5)
+    const endPoint = getPoinOnRay(position, rayDirectionVector, length ? length : 5)
 
     this.rayTransform = {
-      position: Vector3.lerp(Transform.get(this.mirrorEntity).position, endPoint, 0.5),
+      position: Vector3.lerp(position, endPoint, 0.5),
       rotation: rayDirectionQuternion,
       scale: {
         x: 1,
-        y: length ? length : Vector3.distance(Transform.get(this.mirrorEntity).position, endPoint),
+        y: length ? length : Vector3.distance(position, endPoint),
         z: 1
       }
     }
@@ -81,9 +79,10 @@ export class Mirror implements LightSource {
   }
 
   public enlighten(source: LightSource, onHit?: (source: LightSource) => number | undefined) {
+    const { position, rotation } = Transform.get(this.mirrorEntity)
     this.createOrUpdateRay()
     let { direction, origin } = source.getRay()
-    let isHit = isPointOnMirror(origin, getPoinOnRay(origin, direction, 0.5), Transform.get(this.mirrorEntity).position)
+    let isHit = checkRayIntersection(origin, getPoinOnRay(origin, direction, 0.5), position)
     if (!isHit || this.rayActive) return false
 
     MeshRenderer.setSphere(this.tmp)
@@ -98,9 +97,7 @@ export class Mirror implements LightSource {
     })
 
     this.rayActive = true
-    const mirrorPlaneDirection = getRayDirection(
-      Quaternion.multiply(Transform.get(this.mirrorEntity).rotation, Quaternion.fromEulerDegrees(0, 0, 180))
-    )
+    const mirrorPlaneDirection = getRayDirection(Quaternion.multiply(rotation, Quaternion.fromEulerDegrees(0, 0, 180)))
     this.angleOfEntry = getIntersectionAngle(direction, mirrorPlaneDirection)
     const rayLength = onHit?.(this)
 
