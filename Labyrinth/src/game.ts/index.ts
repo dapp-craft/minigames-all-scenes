@@ -8,7 +8,7 @@ import { StartCellRenderer } from './TestRenderer/Cell/StartCellRenderer'
 import { WallCellRenderer } from './TestRenderer/Cell/WallCellRenderer'
 import { Player } from './TestRenderer/Entity/Player'
 import { CustomCellTypes, CustomEntityTypes } from './types'
-
+import * as utils from '@dcl-sdk/utils'
 Board.init<CustomCellTypes, CustomEntityTypes>(41, 41, 'Empty')
 export const BOARD = Board.getInstance<CustomCellTypes, CustomEntityTypes>()
 
@@ -56,6 +56,26 @@ async function startLevel(level: 1) {
     const player = BOARD.addEntity(levelData.start, "Player", ["Empty", "Finish", "Start"])
 
     INPUT_SYSTEM.updatePlayerEntity(player)
+
+    utils.timers.setTimeout(() => {
+        BOARD.setSize(10, 10)
+        // Fill board with random walls
+        for (let y = 0; y < BOARD.height; y++) {
+            for (let x = 0; x < BOARD.width; x++) {
+                BOARD.setCellType(x, y, Math.random() < 0.5 ? "Wall" : "Empty")
+            }
+        }
+    }, 3000)
+
+    utils.timers.setTimeout(() => {
+        BOARD.setSize(20, 20)
+        // Fill board with random walls
+        for (let y = 0; y < BOARD.height; y++) {
+            for (let x = 0; x < BOARD.width; x++) {
+                BOARD.setCellType(x, y, Math.random() < 0.5 ? "Wall" : "Empty")
+            }
+        }
+    }, 6000)
 
 
 }

@@ -32,6 +32,7 @@ export class ZeroCellRenderer extends CellRenderer {
   }
 
   public terminate(): void {
+    console.log("Terminating EmptyCellRenderer!")
     engine.removeEntity(this._entity)
   }
 

@@ -7,6 +7,7 @@ export type BoardEventMap = {
   'ENTITY_REMOVED': { entity: EntityData };
   'ENTITY_MOVED': { entity: EntityData };
   'CELL_CHANGED': { cell: CellData };
+  'BOARD_RESIZED': { width: number, height: number };
 }
 
 export type BoardEventType = keyof BoardEventMap

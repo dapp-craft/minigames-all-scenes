@@ -38,6 +38,7 @@ export class BoardRender {
     this._board.subscribe('ENTITY_ADDED', this._entityAddHandler.bind(this))
     this._board.subscribe('ENTITY_MOVED', this._entityMovedHandler.bind(this))
     this._board.subscribe('ENTITY_REMOVED', this._entityRemovedHandler.bind(this))
+    this._board.subscribe('BOARD_RESIZED', this._boardResizedHandler.bind(this))
   }
 
   public get parentEntity(): Entity {
@@ -110,6 +111,17 @@ export class BoardRender {
     }
     renderer.terminate()
     this._entityRenderers.delete(payload.entity.id)
+  }
+
+  private _boardResizedHandler(payload: BoardEventPayload<'BOARD_RESIZED'>): void {
+    for (const row of this._cellRenderers) {
+      for (const cell of row) {
+        if (cell !== null) {
+          cell.terminate()
+        }
+      }
+    }
+    this.rerender()
   }
 
   public _cellUpdateHandler(payload: BoardEventPayload<'CELL_CHANGED'>): void {

@@ -20,12 +20,14 @@ export class Board<
     private _eventBus: EventBus = new EventBus();
 
     private _synchronization: boolean = true
+    private _defaultCellType: TCellType
 
 
     private constructor(width: number, height: number, defaultCellType: TCellType) {
         this._width = width;
         this._height = height;
         this._cells = [];
+        this._defaultCellType = defaultCellType
         this.initializeBoard(defaultCellType);
     }
 
@@ -221,6 +223,19 @@ export class Board<
         }
 
         return path.reverse();
+    }
+
+    
+    // General board modification
+
+    public setSize(width: number, height: number){
+        this._width = width
+        this._height = height
+
+        this._cells = []
+
+        this.initializeBoard(this._defaultCellType)
+        this._eventBus.emit("BOARD_RESIZED", { width: this._width, height: this._height })
     }
 
 
