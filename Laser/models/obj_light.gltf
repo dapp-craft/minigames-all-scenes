@@ -19,11 +19,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"obj_lamp"
+			"name":"obj_light"
 		},
 		{
 			"mesh":1,
-			"name":"obj_lamp_collider"
+			"name":"obj_light_collider"
 		}
 	],
 	"materials":[
@@ -76,7 +76,7 @@
 	],
 	"meshes":[
 		{
-			"name":"obj_lamp",
+			"name":"obj_light",
 			"primitives":[
 				{
 					"attributes":{
@@ -99,7 +99,7 @@
 			]
 		},
 		{
-			"name":"obj_lamp_collider",
+			"name":"obj_light_collider",
 			"primitives":[
 				{
 					"attributes":{
@@ -316,7 +316,7 @@
 	"buffers":[
 		{
 			"byteLength":106896,
-			"uri":"obj_lamp.bin"
+			"uri":"obj_light.bin"
 		}
 	]
 }
