@@ -1,5 +1,6 @@
 import { Board } from '../BoardEngine/Board'
 import { BoardRender } from '../BoardEngine/Renderer/BoardRender'
+import { initSynhonizer } from '../BoardEngine/Synchronization'
 import { InputSystem } from './InputSystem/InputSystem'
 import { loadLevel } from './levels'
 import { ZeroCellRenderer } from './TestRenderer/Cell/EmptyCellRenderer'
@@ -23,60 +24,58 @@ BOARD_RENDER.addEntityRenderer('Player', Player)
 export const INPUT_SYSTEM = new InputSystem(BOARD)
 
 export const gameState = {
-    inGame: false,
-    level: 1,
-    timeStart: 0,
-    timeEnd: 0,
-    isMoving: false
+  inGame: false,
+  level: 1,
+  timeStart: 0,
+  timeEnd: 0,
+  isMoving: false
 }
 
 export async function init() {
+  initSynhonizer()
   await BOARD_RENDER.rerender()
 
-
-  startLevel(1)
+  //   startLevel(1)
 }
 
-
-async function startLevel(level: 1) {
-    const levelData = await loadLevel(level)
-    for (let y = 0; y < levelData.board.length; y++) {
-        for (let x = 0; x < levelData.board[y].length; x++) {
-            BOARD.setCellType(x, y, levelData.board[y][x])
-        }
+export async function startLevel(level: 1) {
+  BOARD.synchronization = "SENDER"
+  const levelData = await loadLevel(level)
+  BOARD.setSize(levelData.board[0].length, levelData.board.length)
+  for (let y = 0; y < levelData.board.length; y++) {
+    for (let x = 0; x < levelData.board[y].length; x++) {
+      BOARD.setCellType(x, y, levelData.board[y][x])
     }
-    BOARD.setCellType(levelData.start.x, levelData.start.y, "Start")
-    BOARD.setCellType(levelData.finish.x, levelData.finish.y, "Finish")
+  }
+  BOARD.setCellType(levelData.start.x, levelData.start.y, 'Start')
+  BOARD.setCellType(levelData.finish.x, levelData.finish.y, 'Finish')
 
-    gameState.inGame = true
-    gameState.level = level
-    gameState.timeStart = Date.now()
-    gameState.isMoving = false
+  gameState.inGame = true
+  gameState.level = level
+  gameState.timeStart = Date.now()
+  gameState.isMoving = false
 
-    const player = BOARD.addEntity(levelData.start, "Player", ["Empty", "Finish", "Start"])
+  const player = BOARD.addEntity(levelData.start, 'Player', ['Empty', 'Finish', 'Start'])
 
-    INPUT_SYSTEM.updatePlayerEntity(player)
+  INPUT_SYSTEM.updatePlayerEntity(player)
 
-    utils.timers.setTimeout(() => {
-        BOARD.setSize(10, 10)
-        // Fill board with random walls
-        for (let y = 0; y < BOARD.height; y++) {
-            for (let x = 0; x < BOARD.width; x++) {
-                BOARD.setCellType(x, y, Math.random() < 0.5 ? "Wall" : "Empty")
-            }
-        }
-    }, 3000)
+//   utils.timers.setTimeout(() => {
+    // BOARD.setSize(10, 10)
+//     // Fill board with random walls
+//     for (let y = 0; y < BOARD.height; y++) {
+//       for (let x = 0; x < BOARD.width; x++) {
+//         BOARD.setCellType(x, y, Math.random() < 0.5 ? 'Wall' : 'Empty')
+//       }
+//     }
+//   }, 3000)
 
-    utils.timers.setTimeout(() => {
-        BOARD.setSize(20, 20)
-        // Fill board with random walls
-        for (let y = 0; y < BOARD.height; y++) {
-            for (let x = 0; x < BOARD.width; x++) {
-                BOARD.setCellType(x, y, Math.random() < 0.5 ? "Wall" : "Empty")
-            }
-        }
-    }, 6000)
-
-
+//   utils.timers.setTimeout(() => {
+//     BOARD.setSize(20, 20)
+//     // Fill board with random walls
+//     for (let y = 0; y < BOARD.height; y++) {
+//       for (let x = 0; x < BOARD.width; x++) {
+//         BOARD.setCellType(x, y, Math.random() < 0.5 ? 'Wall' : 'Empty')
+//       }
+//     }
+//   }, 6000)
 }
-

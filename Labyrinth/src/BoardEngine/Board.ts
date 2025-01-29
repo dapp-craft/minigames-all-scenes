@@ -1,7 +1,10 @@
+import { MapResult } from "@dcl/sdk/ecs";
 import { Cell, CellData } from "./Cell";
 import { Entity } from "./Entity";
 import { BoardEventPayload, BoardEventType, EventBus } from "./Events";
+import { STATE_SYNCHRONIZER } from "./Synchronization";
 import { CellType, Direction, EntityType, Position } from "./Types";
+import { BoardDescriptorSchema } from "./Synchronization/components";
 
 
 // Board class managing the game board
@@ -19,7 +22,7 @@ export class Board<
 
     private _eventBus: EventBus = new EventBus();
 
-    private _synchronization: boolean = true
+    private _synchronizationStatus: "RECEIVER" | "SENDER" = "RECEIVER"
     private _defaultCellType: TCellType
 
 
@@ -54,12 +57,12 @@ export class Board<
         return Array.from(this._entities.values());
     }
 
-    public get synchronization(): boolean {
-        return this._synchronization
+    public get synchronization(): "RECEIVER" | "SENDER" {
+        return this._synchronizationStatus
     }
 
-    public set synchronization(value: boolean) {
-        this._synchronization = value
+    public set synchronization(value: "RECEIVER" | "SENDER") {
+        this._synchronizationStatus = value
     }
 
     public subscribe<T extends BoardEventType>(
@@ -225,7 +228,61 @@ export class Board<
         return path.reverse();
     }
 
-    
+    // Synchronization
+    public applyState(state: MapResult<typeof BoardDescriptorSchema>){
+        console.log("Applying state", state)
+        if (state.size.width !== this._width || state.size.height !== this._height) {
+            this.setSize(state.size.width, state.size.height)
+        }
+
+        for (let y = 0; y < this._height; y++) {
+            for (let x = 0; x < this._width; x++) {
+                if (state.cells[y][x] !== this._cells[y][x].type) {
+                    this.setCellType(x, y, state.cells[y][x] as TCellType)
+                }
+            }
+        }
+
+        const commonEntities = state.entities.filter(entity => this._entities.has(entity.id))
+        console.log("Common entities", commonEntities)
+
+        for (const [id, entity] of this._entities) {
+            if (commonEntities.find(entity_ => entity.id === entity_.id && entity.type == entity_.type)) {
+                console.log("Moving entity", id, "To", entity.position)
+                const newPosition = commonEntities.find(entity_ => entity.id === entity_.id)?.position
+                if (!newPosition) {
+                    throw new Error("SHOULD NOT HAPPEN: New position not found")
+                }
+                this.moveEntity(id, newPosition)
+            } else {
+                console.log("Removing entity", id)
+                this.removeEntity(id)
+            }
+        }
+
+        for (const entity of state.entities) {
+            if (!commonEntities.find(entity_ => entity.id === entity_.id && entity.type == entity_.type)) {
+                console.log("Adding entity", entity)
+                this.addEntity(entity.position, entity.type as TEntityType)
+            }
+        }
+    }
+
+    public getState(): any {
+        return {
+            size: {
+                width: this._width,
+                height: this._height,
+            },
+            cells: this._cells.map(row => row.map(cell => cell.type)),
+            entities: Array.from(this._entities.values()).map(entity => ({
+                id: entity.id,
+                position: entity.position,
+                type: entity.type
+            }))
+        }
+    }
+
     // General board modification
 
     public setSize(width: number, height: number){

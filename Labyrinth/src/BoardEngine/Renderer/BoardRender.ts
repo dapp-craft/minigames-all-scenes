@@ -1,7 +1,7 @@
 import { engine, Entity, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
 import { EntityData, Entity as LabyrinthEntity } from '../Entity'
 import { Board } from '../Board'
-import { Color4, Vector3 } from '@dcl/sdk/math'
+import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { CellType, EntityType, Position } from '../Types'
 import { CellRenderer } from './CellRenderer'
 import { Cell, CellData } from '../Cell'
@@ -24,7 +24,7 @@ export class BoardRender {
     this._board = board
 
     this._boardEntity = engine.addEntity()
-    Transform.create(this._boardEntity, { position: { x: 8, y: 3, z: 8 }, scale: { x: 5, y: 5, z: 5 } })
+    Transform.create(this._boardEntity, { position: { x: 8, y: 3, z: 2 }, scale: { x: 5, y: 5, z: 5 }, rotation: Quaternion.fromEulerDegrees(0, 180, 0) })
     MeshRenderer.setPlane(this._boardEntity)
 
     this._cellRenderers = []
