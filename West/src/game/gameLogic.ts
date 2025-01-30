@@ -71,7 +71,7 @@ export class GameLogic {
         }
         for (let i = 0; i < levelData!.role.reduce((a, b) => a + b, 0); i++) {
             Tween.deleteFrom(westGameState.availableEntity[i + westGameConfig.targetEntityAmount])
-            this.setTexture(westGameState.availableEntity[i], roles[i])
+            this.setTexture(westGameState.availableEntity[i], roles[i], { alt: false })
             this.targetData.set(i, { entity: westGameState.availableEntity[i], enemy: roles[i], dead: false })
             pointerEventsSystem.onPointerDown(
                 {
@@ -165,10 +165,24 @@ export class GameLogic {
         }
     }
 
-    private setTexture(entity: Entity, bandit: boolean) {
-        const randomTextureIndex = Math.floor(Math.random() * 13) + 1
-        const texture = `images/${bandit ? `bandit` : `citizen`}/${randomTextureIndex}.png`
-        // console.log(texture)
+    private setTexture(entity: Entity, bandit: boolean | undefined, action: { alt?: boolean, hit?: boolean }) {
+        const randomTextureIndex = Math.floor(Math.random() * 7) + 1
+        let texture = `images/${bandit ? `bandit` : `citizen`}/${randomTextureIndex}.png`
+        if (action.alt || action.hit) {
+            const material = Material.getMutable(entity).material;
+            if (material && material.$case === "pbr") {
+                const textureWrapper = material.pbr.texture?.tex;
+                if (textureWrapper && textureWrapper.$case === "texture") {
+                    const path = textureWrapper.texture.src;
+                    const match = path.match(/images\/([^/]+)\/(\d+)\.png$/);
+                    const result = [action.hit ? 'bandit_atk' : match![1], parseInt(match![2], 10), action.hit ? '_atk' : '_alt']
+                    console.log(result);
+                    texture = `images/${result[0]}/${result[1]}${result[2]}.png`
+                }
+                console.log(material)
+                console.log("ALT")
+            }
+        }
         Material.createOrReplace(entity, {
             material: {
                 $case: 'pbr',
@@ -239,7 +253,8 @@ export class GameLogic {
     }
 
     private hitEntity(iterator: number) {
-        Transform.getMutable(westGameState.availableEntity[iterator + westGameConfig.targetEntityAmount]).rotation = Quaternion.fromEulerDegrees(-90, 1, 1)
+        // Transform.getMutable(westGameState.availableEntity[iterator + westGameConfig.targetEntityAmount]).rotation = Quaternion.fromEulerDegrees(-90, 1, 1)
+        this.setTexture(westGameState.availableEntity[iterator], undefined, { alt: true })
     }
 
     private async isEnemyLeft() {
@@ -253,10 +268,12 @@ export class GameLogic {
         }
     }
 
-    private hitPlayer() {
+    private hitPlayer(data: any) {
         this.playerHP = this.playerHP - 1
         console.log("Hit PLAYER ", this.playerHP)
         this.updateCounters()
+        console.log(data)
+        this.setTexture(data.entity, undefined, { hit: true })
         soundManager.playSound('hitPLayer', soundConfig.volume)
         if (this.playerHP <= 0) {
             this.playerHP = 0
@@ -267,8 +284,8 @@ export class GameLogic {
     }
 
     private decalActivate() {
-        westGameState.decalRandom = Math.floor(Math.random() * 4) + 1
-        westGameState.transparent = 1
+        westGameState.decalRandom = Math.floor(Math.random() * 2) + 1
+        westGameState.transparent = 1;
         engine.addSystem(
             () => {
                 westGameState.transparent = westGameState.transparent - westGameConfig.decalDisappearanceSpeed
@@ -289,7 +306,7 @@ export class GameLogic {
         // console.log("Lose ROUND")
         this.targetData.forEach(data => {
             // console.log(data)
-            if (!data.dead && data.enemy) this.hitPlayer()
+            if (!data.dead && data.enemy) this.hitPlayer(data)
         })
         if (this.playerHP <= 0) return soundManager.playSound('misfire', soundConfig.volume)
         await this.stopRound(true)
@@ -321,7 +338,7 @@ export class GameLogic {
         for (let i = 0; i < levelTargetAmount; i++) {
             MeshCollider.getMutable(westGameState.availableEntity[i]).collisionMask = ColliderLayer.CL_PHYSICS
             pointerEventsSystem.removeOnPointerDown(westGameState.availableEntity[i])
-            this.hitEntity(i)
+            // this.hitEntity(i)
             this.stopRoundTimers[i] = utils.timers.setTimeout(() => {
                 VisibilityComponent.createOrReplace(westGameState.availableEntity[i]).visible = false
                 timerCouter++
