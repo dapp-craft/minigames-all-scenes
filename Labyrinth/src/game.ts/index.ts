@@ -42,6 +42,8 @@ export async function init() {
 }
 
 export async function startLevel(level: 1) {
+
+  // TODO: For synchronization use another board instance and renderer
   BOARD.synchronization = "SENDER"
   const levelData = await loadLevel(level)
   BOARD.setSize(levelData.board[0].length, levelData.board.length)
