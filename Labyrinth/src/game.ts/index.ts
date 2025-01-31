@@ -1,3 +1,4 @@
+import { Quaternion } from '@dcl/sdk/math'
 import { Board } from '../BoardEngine/Board'
 import { BoardRender } from '../BoardEngine/Renderer/BoardRender'
 import { initSynhonizer } from '../BoardEngine/Synchronization'
@@ -13,7 +14,7 @@ import * as utils from '@dcl-sdk/utils'
 Board.init<CustomCellTypes, CustomEntityTypes>(41, 41, 'Empty')
 export const BOARD = Board.getInstance<CustomCellTypes, CustomEntityTypes>()
 
-export const BOARD_RENDER = new BoardRender(BOARD)
+export const BOARD_RENDER = new BoardRender({ position: { x: 8, y: 3, z: 2 }, scale: { x: 5, y: 5, z: 5 }, rotation: Quaternion.fromEulerDegrees(0, 180, 0) }, BOARD)
 
 BOARD_RENDER.addCellRenderer('Empty', ZeroCellRenderer)
 BOARD_RENDER.addCellRenderer('Wall', WallCellRenderer)

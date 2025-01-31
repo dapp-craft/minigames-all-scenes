@@ -1,4 +1,4 @@
-import { engine, Entity, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
+import { engine, Entity, Material, MeshRenderer, Transform, TransformType } from '@dcl/sdk/ecs'
 import { EntityData, Entity as LabyrinthEntity } from '../Entity'
 import { Board } from '../Board'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
@@ -20,11 +20,11 @@ export class BoardRender {
   private _entityRenderers: Map<number, EntityRenderer> = new Map()
   private _entityHandlers: Map<EntityType, new (entityData: EntityData, board: Board) => EntityRenderer> = new Map()
 
-  constructor(board: Board) {
+  constructor(transform: TransformType, board: Board) {
     this._board = board
 
     this._boardEntity = engine.addEntity()
-    Transform.create(this._boardEntity, { position: { x: 8, y: 3, z: 2 }, scale: { x: 5, y: 5, z: 5 }, rotation: Quaternion.fromEulerDegrees(0, 180, 0) })
+    Transform.create(this._boardEntity, transform)
     MeshRenderer.setPlane(this._boardEntity)
 
     this._cellRenderers = []
