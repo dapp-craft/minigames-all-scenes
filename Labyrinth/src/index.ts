@@ -1,6 +1,6 @@
 import { engine, executeTask, GltfContainer, Transform } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
-import { init, startLevel } from './game.ts'
+import { init, startLevel } from './game/index.js'
 import { initMiniGame } from '../../common/library.js'
 import { readGltfLocators } from '../../common/locators.js'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui/index.js'
