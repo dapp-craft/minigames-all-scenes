@@ -3,7 +3,7 @@ import { Board } from '../../BoardEngine/Board'
 import { Direction, Position } from '../../BoardEngine/Types'
 import * as utils from '@dcl-sdk/utils'
 import { PLAYER_SPEED } from '../config'
-import { gameState } from '..'
+import { BOARD, gameState } from '..'
 
 const oppositeDirections: Record<Direction, Direction> = {
   [Direction.TOP]: Direction.BOTTOM,
@@ -54,6 +54,11 @@ async function moveUntilIntersection(entityId: number, initialDirection: Directi
   let previousPosition: Position | undefined = undefined
   gameState.isMoving = true
   let intervalId = utils.timers.setInterval(() => {
+    if (!BOARD.isEntityExists(entityId)) {
+      utils.timers.clearInterval(intervalId)
+      gameState.isMoving = false
+      return
+    }
     if (previousPosition == undefined) {
       previousPosition = board.getEntityPosition(entityId)
       try {
@@ -69,6 +74,13 @@ async function moveUntilIntersection(entityId: number, initialDirection: Directi
     }
 
     let neighbtourPositions: Position[] = board.getCellNeighbors(board.getEntityPosition(entityId))
+
+    if (neighbtourPositions.length == 1) {
+      utils.timers.clearInterval(intervalId)
+      gameState.isMoving = false
+      return
+    }
+    
     let availablePositions: Position[] = neighbtourPositions.filter(
       (position) => board.getCellType(position.x, position.y) != 'Wall'
     )
@@ -91,5 +103,6 @@ async function moveUntilIntersection(entityId: number, initialDirection: Directi
     let movePosition = movePositions[0]
     previousPosition = board.getEntityPosition(entityId)
     board.moveEntity(entityId, movePosition)
+    console.log("Moving in progress")
   }, 1000 / PLAYER_SPEED)
 }

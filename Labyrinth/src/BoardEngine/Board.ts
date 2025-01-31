@@ -68,8 +68,12 @@ export class Board<
     public subscribe<T extends BoardEventType>(
         eventType: T,
         callback: (payload: BoardEventPayload<T>) => void
-    ): void {
-        this._eventBus.subscribe(eventType, callback);
+    ): string {
+        return this._eventBus.subscribe(eventType, callback);
+    }
+
+    public unsubscribe(eventType: BoardEventType, subscriberId: string): void {
+        this._eventBus.unsubscribe(eventType, subscriberId);
     }
 
     public addEntity(position: Position, type: TEntityType, allowedCellTypes?: TCellType[]): number {
@@ -94,8 +98,12 @@ export class Board<
 
     public removeEntity(id: number): void {
         this.checkEntityExists(id);
-        this._eventBus.emit("ENTITY_REMOVED", { entity: this.getEntitySafe(id).data });
+
+        // Remove entity first from the board, then emit the event
+        // Because synchronization depends on the event and will reinitialize the entity
+        const entityData = this.getEntitySafe(id).data
         this._entities.delete(id);
+        this._eventBus.emit("ENTITY_REMOVED", { entity: entityData });
     }
 
     public moveEntity(id: number, position: Position): void {
@@ -226,6 +234,10 @@ export class Board<
         }
 
         return path.reverse();
+    }
+
+    public isEntityExists(id: number): boolean {
+        return this._entities.has(id)
     }
 
     // Synchronization

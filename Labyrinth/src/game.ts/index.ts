@@ -11,6 +11,8 @@ import { WallCellRenderer } from './TestRenderer/Cell/WallCellRenderer'
 import { Player } from './TestRenderer/Entity/Player'
 import { CustomCellTypes, CustomEntityTypes } from './types'
 import * as utils from '@dcl-sdk/utils'
+import { engine } from '@dcl/sdk/ecs'
+import { queue } from '@dcl-sdk/mini-games/src'
 Board.init<CustomCellTypes, CustomEntityTypes>(41, 41, 'Empty')
 export const BOARD = Board.getInstance<CustomCellTypes, CustomEntityTypes>()
 
@@ -32,11 +34,11 @@ export const gameState = {
   isMoving: false
 }
 
+let player: number
+
 export async function init() {
   initSynhonizer()
   await BOARD_RENDER.rerender()
-
-  //   startLevel(1)
 }
 
 export async function startLevel(level: 1) {
@@ -56,27 +58,34 @@ export async function startLevel(level: 1) {
   gameState.timeStart = Date.now()
   gameState.isMoving = false
 
-  const player = BOARD.addEntity(levelData.start, 'Player', ['Empty', 'Finish', 'Start'])
+  player = BOARD.addEntity(levelData.start, 'Player', ['Empty', 'Finish', 'Start'])
 
   INPUT_SYSTEM.updatePlayerEntity(player)
 
-//   utils.timers.setTimeout(() => {
-    // BOARD.setSize(10, 10)
-//     // Fill board with random walls
-//     for (let y = 0; y < BOARD.height; y++) {
-//       for (let x = 0; x < BOARD.width; x++) {
-//         BOARD.setCellType(x, y, Math.random() < 0.5 ? 'Wall' : 'Empty')
-//       }
-//     }
-//   }, 3000)
+  // Check if the player is at the finish
+  let subscriberId = BOARD.subscribe("ENTITY_MOVED", (payload) => {
+    if (payload.entity.id == player) {
+      if (payload.entity.position.x == levelData.finish.x && payload.entity.position.y == levelData.finish.y) {
+        finishGame()
+        BOARD.unsubscribe("ENTITY_MOVED", subscriberId)
+      }
+    }
+  })
 
-//   utils.timers.setTimeout(() => {
-//     BOARD.setSize(20, 20)
-//     // Fill board with random walls
-//     for (let y = 0; y < BOARD.height; y++) {
-//       for (let x = 0; x < BOARD.width; x++) {
-//         BOARD.setCellType(x, y, Math.random() < 0.5 ? 'Wall' : 'Empty')
-//       }
-//     }
-//   }, 6000)
+}
+
+
+function finishGame() {
+  console.log("Game finished")
+
+
+  BOARD.removeEntity(player)
+  player = 0
+  
+  BOARD.synchronization = "RECEIVER"
+  
+  gameState.inGame = false
+  gameState.timeEnd = Date.now()
+  queue.setNextPlayer()
+
 }

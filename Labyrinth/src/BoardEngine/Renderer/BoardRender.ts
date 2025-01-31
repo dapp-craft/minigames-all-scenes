@@ -109,6 +109,7 @@ export class BoardRender {
     if (!renderer) {
       throw new Error(`No renderer for entity ${payload.entity.id}`)
     }
+    console.log("Entity removed", payload.entity.id)
     renderer.terminate()
     this._entityRenderers.delete(payload.entity.id)
   }
