@@ -1,27 +1,27 @@
 // Cell types enum to distinguish different cell types
-export type CellType = string;
+export type CellType = string
 
 // Entity type to distinguish different entities
-export type EntityType = string;
+export type EntityType = string
 
 // Direction enum to help with neighbor references
 export enum Direction {
-    TOP,
-    RIGHT,
-    BOTTOM,
-    LEFT
+  TOP,
+  RIGHT,
+  BOTTOM,
+  LEFT
 }
 
 // Direction position delta
 export const DirectionPositionDelta: { [key in Direction]: Position } = {
-    [Direction.TOP]: {x: 0, y: 1},
-    [Direction.RIGHT]: {x: 1, y: 0},
-    [Direction.BOTTOM]: {x: 0, y: -1},
-    [Direction.LEFT]: {x: -1, y: 0}
+  [Direction.TOP]: { x: 0, y: 1 },
+  [Direction.RIGHT]: { x: 1, y: 0 },
+  [Direction.BOTTOM]: { x: 0, y: -1 },
+  [Direction.LEFT]: { x: -1, y: 0 }
 }
 
 // Position type to represent a cell's coordinates
 export type Position = {
-    x: number;
-    y: number;
+  x: number
+  y: number
 }

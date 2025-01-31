@@ -1,21 +1,20 @@
-import { CellData } from "./Cell";
-import { EntityData } from "./Entity";
-
+import { CellData } from './Cell'
+import { EntityData } from './Entity'
 
 export type BoardEventMap = {
-  'ENTITY_ADDED': { entity: EntityData };
-  'ENTITY_REMOVED': { entity: EntityData };
-  'ENTITY_MOVED': { entity: EntityData };
-  'CELL_CHANGED': { cell: CellData };
-  'BOARD_RESIZED': { width: number, height: number };
+  ENTITY_ADDED: { entity: EntityData }
+  ENTITY_REMOVED: { entity: EntityData }
+  ENTITY_MOVED: { entity: EntityData }
+  CELL_CHANGED: { cell: CellData }
+  BOARD_RESIZED: { width: number; height: number }
 }
 
 export type BoardEventType = keyof BoardEventMap
 export type BoardEventPayload<T extends BoardEventType> = BoardEventMap[T]
 
 type Subscriber = {
-  id: string;
-  callback: (payload: any) => void;
+  id: string
+  callback: (payload: any) => void
 }
 
 export class EventBus {
@@ -26,10 +25,7 @@ export class EventBus {
     return `sub_${this._nextId++}`
   }
 
-  public subscribe<T extends BoardEventType>(
-    eventType: T,
-    callback: (payload: BoardEventPayload<T>) => void
-  ): string {
+  public subscribe<T extends BoardEventType>(eventType: T, callback: (payload: BoardEventPayload<T>) => void): string {
     if (!this._listeners.has(eventType)) {
       this._listeners.set(eventType, new Map())
     }
@@ -50,10 +46,7 @@ export class EventBus {
     }
   }
 
-  public emit<T extends BoardEventType>(
-    eventType: T,
-    payload: BoardEventPayload<T>
-  ): void {
-    this._listeners.get(eventType)?.forEach(subscriber => subscriber.callback(payload))
+  public emit<T extends BoardEventType>(eventType: T, payload: BoardEventPayload<T>): void {
+    this._listeners.get(eventType)?.forEach((subscriber) => subscriber.callback(payload))
   }
-} 
+}

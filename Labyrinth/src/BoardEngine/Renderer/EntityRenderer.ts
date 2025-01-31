@@ -1,5 +1,4 @@
-import { Entity as DCL_Entity } from '@dcl/sdk/ecs'
-import { Entity, EntityData } from '../Entity'
+import { EntityData } from '../Entity'
 import { Position } from '../Types'
 import { Board } from '../Board'
 import { Vector3 } from '@dcl/sdk/math'
@@ -36,4 +35,3 @@ export abstract class EntityRenderer {
     }
   }
 }
-

@@ -9,7 +9,7 @@ export type EntityData = {
   position: Position
 }
 
-export class Entity <TCellType extends CellType, TEntityType extends EntityType = EntityType>{
+export class Entity<TCellType extends CellType, TEntityType extends EntityType = EntityType> {
   private _entityCount: number = 1
 
   protected _id: number

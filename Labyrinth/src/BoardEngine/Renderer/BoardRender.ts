@@ -1,11 +1,9 @@
-import { engine, Entity, Material, MeshRenderer, Transform, TransformType } from '@dcl/sdk/ecs'
-import { EntityData, Entity as LabyrinthEntity } from '../Entity'
+import { engine, Entity, MeshRenderer, Transform, TransformType } from '@dcl/sdk/ecs'
+import { EntityData } from '../Entity'
 import { Board } from '../Board'
-import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { CellType, EntityType, Position } from '../Types'
+import { CellType, EntityType } from '../Types'
 import { CellRenderer } from './CellRenderer'
-import { Cell, CellData } from '../Cell'
-import { Extras } from './Types'
+import { CellData } from '../Cell'
 import { EntityRenderer } from './EntityRenderer'
 import { BoardEventPayload } from '../Events'
 
@@ -46,10 +44,7 @@ export class BoardRender {
     this._entityHandlers.set(type, renderer)
   }
 
-  public addCellRenderer(
-    type: CellType,
-    renderer: new (cellData: CellData, board: Board) => CellRenderer
-  ): void {
+  public addCellRenderer(type: CellType, renderer: new (cellData: CellData, board: Board) => CellRenderer): void {
     this._cellHandlers.set(type, renderer)
   }
 

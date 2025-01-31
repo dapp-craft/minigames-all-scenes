@@ -1,9 +1,7 @@
-import { Entity } from '@dcl/sdk/ecs'
 import { CellData } from '../Cell'
 import { Position } from '../Types'
 import { Vector3 } from '@dcl/sdk/math'
 import { Board } from '../Board'
-import { Extras } from './Types'
 
 export abstract class CellRenderer {
   protected _cellData: CellData

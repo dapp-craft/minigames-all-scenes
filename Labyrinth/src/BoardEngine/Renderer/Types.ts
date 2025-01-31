@@ -1,5 +1,5 @@
-import { Entity } from "@dcl/sdk/ecs"
+import { Entity } from '@dcl/sdk/ecs'
 
 export type Extras = {
-    [key: string]: Entity
+  [key: string]: Entity
 }
