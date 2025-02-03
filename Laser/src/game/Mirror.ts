@@ -10,8 +10,8 @@ import {
   VisibilityComponent
 } from '@dcl/sdk/ecs'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { LightSource } from '.'
-import { getIntersectionAngle, getPoinOnRay, getRayDirection, checkRayIntersection } from './utils'
+import { getIntersectionAngle, getPoinOnVector, getVectorDirection, checkRayIntersection } from './utils'
+import { LightSource } from '..'
 
 export class Mirror implements LightSource {
   public rayEntity: Entity = engine.addEntity()
@@ -33,16 +33,25 @@ export class Mirror implements LightSource {
     const { position, rotation } = Transform.get(this.mirrorEntity)
     return {
       origin: position,
-      direction: getRayDirection(Quaternion.multiply(rotation, Quaternion.fromEulerDegrees(0, 0, this.angleOfEntry)))
+      direction: getVectorDirection(Quaternion.multiply(rotation, Quaternion.fromEulerDegrees(0, 0, this.angleOfEntry)))
     }
   }
 
-  public createMirror() {
+  public createMirror(randomRotation?: number) {
     console.log(`Mirror::created in constructor@${this.mirrorEntity}`)
     MeshRenderer.setBox(this.mirrorEntity)
     if (Transform.has(this.mirrorEntity))
       console.error(`BUG!!: mirror transform anomaly at entity ${this.mirrorEntity}`)
+
+    if (randomRotation) {
+      this.mirrorTransform.rotation = Quaternion.multiply(
+        this.mirrorTransform.rotation,
+        Quaternion.fromEulerDegrees(0, 0, randomRotation)
+      )
+    }
+
     Transform.createOrReplace(this.mirrorEntity, JSON.parse(JSON.stringify(this.mirrorTransform)))
+
     MeshCollider.setBox(this.mirrorEntity, ColliderLayer.CL_POINTER)
   }
 
@@ -56,8 +65,8 @@ export class Mirror implements LightSource {
     console.log(`Ray::created ray@ in mirror ${this.mirrorEntity}`)
     const { position, rotation } = Transform.get(this.mirrorEntity)
     const rayDirectionQuternion = Quaternion.multiply(rotation, Quaternion.fromEulerDegrees(0, 0, this.angleOfEntry))
-    const rayDirectionVector = getRayDirection(rayDirectionQuternion)
-    const endPoint = getPoinOnRay(position, rayDirectionVector, length ? length : 5)
+    const rayDirectionVector = getVectorDirection(rayDirectionQuternion)
+    const endPoint = getPoinOnVector(position, rayDirectionVector, length ? length : 5)
 
     this.rayTransform = {
       position: Vector3.lerp(position, endPoint, 0.5),
@@ -80,14 +89,14 @@ export class Mirror implements LightSource {
 
   public enlighten(source: LightSource, onHit?: (source: LightSource) => number | undefined) {
     const { position, rotation } = Transform.get(this.mirrorEntity)
-    this.createOrUpdateRay()
     let { direction, origin } = source.getRay()
-    let isHit = checkRayIntersection(origin, getPoinOnRay(origin, direction, 0.5), position)
+    this.createOrUpdateRay()
+    let isHit = checkRayIntersection(origin, getPoinOnVector(origin, direction, 0.5), position)
     if (!isHit || this.rayActive) return false
 
     MeshRenderer.setSphere(this.tmp)
     Transform.createOrReplace(this.tmp, {
-      position: getPoinOnRay(origin, direction, 0.5),
+      position: getPoinOnVector(origin, direction, 0.5),
       scale: { x: 0.2, y: 0.2, z: 0.2 }
     })
     Material.setPbrMaterial(this.tmp, {
@@ -97,7 +106,9 @@ export class Mirror implements LightSource {
     })
 
     this.rayActive = true
-    const mirrorPlaneDirection = getRayDirection(Quaternion.multiply(rotation, Quaternion.fromEulerDegrees(0, 0, 180)))
+    const mirrorPlaneDirection = getVectorDirection(
+      Quaternion.multiply(rotation, Quaternion.fromEulerDegrees(0, 0, 180))
+    )
     this.angleOfEntry = getIntersectionAngle(direction, mirrorPlaneDirection)
     const rayLength = onHit?.(this)
 
@@ -110,5 +121,14 @@ export class Mirror implements LightSource {
     this.rayActive = false
     Transform.deleteFrom(this.tmp)
     Transform.deleteFrom(this.rayEntity)
+  }
+
+  public removeRay() {
+    engine.removeEntity(this.tmp)
+    engine.removeEntity(this.rayEntity)
+  }
+
+  public removeMirror() {
+    Transform.deleteFrom(this.mirrorEntity)
   }
 }

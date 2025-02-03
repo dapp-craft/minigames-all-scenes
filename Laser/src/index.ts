@@ -1,32 +1,73 @@
-import { engine, executeTask, GltfContainer, Schemas, Transform, TransformType } from '@dcl/sdk/ecs'
+import { engine, executeTask, GltfContainer, InputAction, pointerEventsSystem, Schemas, Transform } from '@dcl/sdk/ecs'
 import * as utils from '@dcl-sdk/utils'
 import { sceneParentEntity } from '@dcl-sdk/mini-games/src'
 import { TIME_LEVEL_MOVES } from '@dcl-sdk/mini-games/src/ui'
 import { readGltfLocators } from '../../common/locators'
 import { initMiniGame } from '../../common/library'
-import { initGame, laser, LightSource, mirrors } from './game'
 import { CreateStateSynchronizer } from '../../common/synchronizer'
 import { Mirror } from './game/Mirror'
+import { GameFlowManager, SyncGameFlowManager } from './game/GameFlowManager'
 import { Vector3 } from '@dcl/sdk/math'
+import { laserTransform, mirrorTransforms } from './resources'
 ;(globalThis as any).DEBUG_NETWORK_MESSAGES = false
 
-let mirrorTransforms: TransformType[] = []
+export async function main() {
+  await libraryReady
+  synchronizer = new Synchronizer()
+  synchronizer.start()
+}
+
+function initGame() {
+  gameManager = new GameFlowManager({ laserTransform, mirrorTransforms })
+  gameManager.mirrors.forEach((m) => addPointerEvent(m))
+  gameManager.randomizeMirrorsRot()
+}
+
+executeTask(async () => {
+  const MODELS: string[] = [
+    'models/obj_floor.gltf',
+    'models/obj_ground.gltf',
+    'models/obj_railings.gltf',
+    'models/obj_wall.gltf',
+    'models/obj_terminal.gltf',
+    'models/obj_light.gltf',
+    'models/obj_gamezone.gltf',
+    'models/obj_bench.gltf'
+  ]
+
+  for (const model of MODELS) {
+    const entity = engine.addEntity()
+    GltfContainer.create(entity, { src: model })
+    Transform.create(entity, { parent: sceneParentEntity })
+  }
+})
+
+let synchronizer: InstanceType<typeof Synchronizer>
+let gameManager: InstanceType<typeof GameFlowManager>
+
+export interface LightSource {
+  getRay(): { origin: Vector3; direction: Vector3 }
+}
 
 const handlers = {
   start: () => {
+    initGame()
     synchronizer.stop()
-    syncGameProgress(mirrors)
+    gameManager.startGame()
+    syncGameProgress(gameManager.mirrors)
   },
-  exit: () => {},
-  restart: () => {},
+  exit: () => {
+    gameManager.endGame()
+    syncGameProgress([])
+    synchronizer.start()
+  },
+  restart: () => {
+    gameManager.recreateLevel()
+    gameManager.mirrors.forEach((m) => addPointerEvent(m))
+    syncGameProgress(gameManager.mirrors)
+  },
   toggleMusic: () => {},
   toggleSfx: () => {}
-}
-
-export const syncGameProgress = (mirrors: Mirror[]) => {
-  synchronizer.send({
-    mirrors: mirrors.map((m) => m.mirrorTransform.rotation)
-  })
 }
 
 const libraryReady = initMiniGame(
@@ -36,34 +77,26 @@ const libraryReady = initMiniGame(
   handlers
 )
 
-const MODELS: string[] = [
-  'models/obj_floor.gltf',
-  'models/obj_ground.gltf',
-  'models/obj_railings.gltf',
-  'models/obj_wall.gltf',
-  'models/obj_terminal.gltf',
-  'models/obj_light.gltf',
-  'models/obj_gamezone.gltf',
-  'models/obj_bench.gltf'
-]
-
-executeTask(async () => {
-  for (const model of MODELS) {
-    const entity = engine.addEntity()
-    GltfContainer.create(entity, { src: model })
-    Transform.create(entity, { parent: sceneParentEntity })
-  }
-})
-
-export async function main() {
-  await libraryReady
-  initGame()
-  mirrorTransforms = mirrors.map((m) => m.mirrorTransform)
-  synchronizer = new Synchronizer()
-  synchronizer.start()
+const syncGameProgress = (mirrors: Mirror[]) => {
+  synchronizer.send({
+    mirrors: mirrors.map((m) => m.mirrorTransform.rotation)
+  })
 }
 
-let synchronizer: InstanceType<typeof Synchronizer>
+function addPointerEvent(mirror: Mirror) {
+  pointerEventsSystem.onPointerDown(
+    {
+      entity: mirror.mirrorEntity,
+      opts: { button: InputAction.IA_POINTER, hoverText: 'Interact' }
+    },
+    () => {
+      mirror.rotateMirror()
+      gameManager.mirrors.forEach((m) => m.darken())
+      gameManager.castRay(gameManager.laser)
+      syncGameProgress(gameManager.mirrors)
+    }
+  )
+}
 
 const Synchronizer = CreateStateSynchronizer(
   'Laser',
@@ -71,31 +104,37 @@ const Synchronizer = CreateStateSynchronizer(
     mirrors: Schemas.Array(Schemas.Quaternion)
   },
   {
-    mirrors: new Array<Mirror>(),
+    manager: null as SyncGameFlowManager | null,
     launch: async function () {
       console.log('SyncHandler::launch')
     },
     update: async function ({ mirrors: quaternions } = { mirrors: [] }) {
-      console.log('SyncHandler::update', quaternions, this.mirrors)
-      if (this.mirrors.length != quaternions.length) {
-        this.mirrors = quaternions.map((f, idx) => new Mirror(mirrorTransforms[idx]))
-        mirrors.forEach((m) => engine.removeEntity(m.mirrorEntity))
+      console.log('SyncHandler::update', quaternions)
+
+      if (gameManager && quaternions.length && !this.manager) gameManager.endGame()
+
+      if (quaternions.length && !this.manager) {
+        this.manager = new SyncGameFlowManager({ laserTransform, mirrorTransforms })
       }
-      const cast = (s: LightSource): number | undefined => {
-        console.log('CAST:', s.getRay())
-        let newSource = this.mirrors.find((m) => m.enlighten(s, cast))
-        console.log('NEW SOURCE:', newSource)
-        if (newSource) return Vector3.distance(s.getRay().origin, newSource.getRay().origin)
+
+      if (this.manager?.mirrors && this.manager.laser) {
+        this.manager.mirrors.forEach((m, idx) => {
+          m.darken()
+          m.mirrorTransform.rotation = quaternions[idx]
+          m.createMirror()
+        })
+        this.manager.castRay(this.manager.laser)
       }
-      this.mirrors.forEach((mirror, idx) => {
-        mirror.mirrorTransform.rotation = quaternions[idx]
-        mirror.createMirror()
-        mirror.darken()
-      })
-      cast(laser)
+
+      if (this.manager && !quaternions.length) {
+        this.manager.endGame()
+        this.manager = null
+      }
     },
     terminate: async function () {
       console.log('SyncHandler::terminate')
+      this.manager?.endGame()
+      this.manager = null
     }
   }
 )

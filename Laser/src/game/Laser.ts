@@ -1,8 +1,7 @@
 import { engine, Entity, Material, MeshRenderer, Transform, TransformType } from '@dcl/sdk/ecs'
 import { Color4, Vector3 } from '@dcl/sdk/math'
-import { LightSource } from '.'
-import { Mirror } from './Mirror'
-import { getRayDirection } from './utils'
+import { LightSource } from '..'
+import { getVectorDirection } from './utils'
 
 export class Laser implements LightSource {
   public laserEntity: Entity = engine.addEntity()
@@ -16,7 +15,7 @@ export class Laser implements LightSource {
   getRay(): { origin: Vector3; direction: Vector3 } {
     return {
       origin: Transform.get(this.laserEntity).position,
-      direction: getRayDirection(this.laserTransform.rotation)
+      direction: getVectorDirection(this.laserTransform.rotation)
     }
   }
 
@@ -28,5 +27,9 @@ export class Laser implements LightSource {
       metallic: 0,
       roughness: 1
     })
+  }
+
+  removeLaser() {
+    engine.removeEntity(this.laserEntity)
   }
 }
