@@ -40,8 +40,11 @@ export class Mirror implements LightSource {
   public createMirror(randomRotation?: number) {
     console.log(`Mirror::created in constructor@${this.mirrorEntity}`)
     MeshRenderer.setBox(this.mirrorEntity)
+
     if (Transform.has(this.mirrorEntity))
       console.error(`BUG!!: mirror transform anomaly at entity ${this.mirrorEntity}`)
+
+    if (!this.mirrorTransform.rotation) this.mirrorTransform.rotation = Quaternion.Identity()
 
     if (randomRotation) {
       this.mirrorTransform.rotation = Quaternion.multiply(
