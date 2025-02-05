@@ -11,7 +11,8 @@ export const steampunkGameConfig = {
     visibleFeedbackSpeed: 0.04,
     gameTime: 30000,
     maximumTexturePerType: 21,
-    differentsObjectsPercentages: 0.25
+    differentsObjectsPercentages: 0.25,
+    levelAddTime: 15000
 }
 
 export const timeBeforeStart = 3

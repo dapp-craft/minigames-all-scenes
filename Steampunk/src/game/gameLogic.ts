@@ -56,7 +56,10 @@ export class GameLogic {
 
     private startTimer() {
         engine.removeSystem('countdown-system')
-        countdown(() => this.playGame(), steampunkGameConfig.gameTime / 1000)
+        let time = steampunkGameConfig.gameTime;
+        if (this.playerDifficulty == 2) time = steampunkGameConfig.gameTime + steampunkGameConfig.levelAddTime
+        else if (this.playerDifficulty == 3) time = steampunkGameConfig.gameTime + steampunkGameConfig.levelAddTime * 2
+        countdown(() => this.playGame(), time / 1000)
     }
 
     private playMissAnimation(board: string) {
