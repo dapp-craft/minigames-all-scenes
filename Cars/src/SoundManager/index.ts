@@ -13,7 +13,7 @@ export let SOUNDS: { [key: string]: string } = {
   win: winSound
 }
 
-export const THEME_VOLUME = 0.035
+export const THEME_VOLUME = 0.4
 
 export class SoundManager {
   private soundsStorage: Entity[] = []

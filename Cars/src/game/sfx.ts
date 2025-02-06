@@ -13,13 +13,13 @@ export function playSound(sound: string, volume: number = 0.5) {
 }
 
 export function playMoveCarSound() {
-  playSound('move_car', 1)
+  playSound('move_car', 0.7)
 }
 
 export function playStartLevelSound() {
-  playSound('start_level', 0.5)
+  playSound('start_level', 1)
 }
 
 export function playWinSound() {
-  playSound('win', 0.5)
+  playSound('win', 1)
 }
