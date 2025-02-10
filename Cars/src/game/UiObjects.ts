@@ -4,20 +4,32 @@ import { MAX_LEVEL } from '../config'
 import { gameState, inGame, startLevel } from './index'
 import { levelButtonPositions, setLevelButtonPositions } from './locators/levelButtonPositions'
 import { setLevelUiPositions, UiLocators } from './locators/UILocators'
-import { TextShape, Transform, engine, TextAlignMode, Entity } from '@dcl/sdk/ecs'
+import { TextShape, Transform, engine, TextAlignMode, Entity, MeshRenderer } from '@dcl/sdk/ecs'
 import { syncEntity } from '@dcl/sdk/network'
+import { readStaticUIPositions, staticUIPositions } from './locators/staticUI'
 
 export const levelButtons: ui.MenuButton[] = []
 
+const DIFFICULTIES = ['EASY', 'MEDIUM', 'HARD'] as const
+type Difficulty = typeof DIFFICULTIES[number]
+const DIFFICULTY_COLORS = {
+  'EASY': ui.uiAssets.shapes.SQUARE_GREEN,
+  'MEDIUM': ui.uiAssets.shapes.SQUARE_YELLOW,
+  'HARD': ui.uiAssets.shapes.SQUARE_RED
+} as const
+
 export async function setupGameUI() {
-  await Promise.all([setLevelButtonPositions(), setLevelUiPositions()])
+  await Promise.all([setLevelButtonPositions(), setLevelUiPositions(), readStaticUIPositions()])
 
   for (let index = 0; index < MAX_LEVEL; index++) {
     const level = index + 1
+    const levelDifficulty = Math.floor(index / 5)
+    const positionInRow = index % 5
+    const difficulty = DIFFICULTIES[levelDifficulty]
     const button = new ui.MenuButton(
-      levelButtonPositions.levelButtons[index],
-      ui.uiAssets.shapes.SQUARE_GREEN,
-      ui.uiAssets.numbers[level as any],
+      levelButtonPositions[difficulty][positionInRow],
+      DIFFICULTY_COLORS[difficulty],
+      ui.uiAssets.numbers[index % 5 + 1 as any],
       `START LEVEL ${level}`,
       () => {
         startLevel(Number(level))
@@ -33,6 +45,34 @@ export async function setupGameUI() {
   const timerEntity = engine.addEntity()
   syncEntity(timerEntity, [TextShape.componentId], 9001)
   seteupTimer(timerEntity)
+
+  // Static UI
+  const labelEasy = engine.addEntity()
+  Transform.create(labelEasy, staticUIPositions.label_easy)
+  TextShape.createOrReplace(labelEasy, {
+    text: 'EASY',
+    textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
+    fontSize: 3,
+    textColor: Color4.Green()
+  })
+
+  const labelMedium = engine.addEntity()
+  Transform.create(labelMedium, staticUIPositions.label_medium)
+  TextShape.createOrReplace(labelMedium, {
+    text: 'MEDIUM',
+    textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
+    fontSize: 3,
+    textColor: Color4.Yellow()
+  })
+
+  const labelHard = engine.addEntity()
+  Transform.create(labelHard, staticUIPositions.label_hard)
+  TextShape.createOrReplace(labelHard, {
+    text: 'HARD',
+    textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
+    fontSize: 3,
+    textColor: Color4.Red()
+  }) 
 }
 
 function setupMoveCouner(moveCounter: Entity) {

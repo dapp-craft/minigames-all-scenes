@@ -133,7 +133,14 @@ export async function startLevel(level: number) {
   inGame = true
 
   levelButtons.forEach((button, i) => {
-    button.buttonShapeEnabled = level === i + 1 ? ui.uiAssets.shapes.SQUARE_YELLOW : ui.uiAssets.shapes.SQUARE_GREEN
+    const buttonIndex = i
+    const buttonDifficulty = Math.floor(buttonIndex / 5) as 0 | 1 | 2
+    const buttonColor = {
+      0: ui.uiAssets.shapes.SQUARE_GREEN,
+      1: ui.uiAssets.shapes.SQUARE_YELLOW,
+      2: ui.uiAssets.shapes.SQUARE_RED
+    }
+    button.buttonShapeEnabled = level === i + 1 ? ui.uiAssets.shapes.SQUARE_PURPLE : buttonColor[buttonDifficulty]
     if (button.enabled) button.enable()
   })
 
