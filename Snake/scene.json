@@ -9,11 +9,11 @@
   },
   "owner": "",
   "contact": {
-    "name": "SDK",
+    "name": "Decentraland Foundation",
     "email": ""
   },
   "main": "bin/index.js",
-  "tags": [],
+  "tags": ["game"],
   "scene": {
     "parcels": [
       "0,0"
