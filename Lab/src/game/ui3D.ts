@@ -1,5 +1,6 @@
 import { sceneParentEntity, ui } from "@dcl-sdk/mini-games/src";
 import { engine, Entity, PBTextShape, TextAlignMode, TextShape, Transform, TransformType } from "@dcl/sdk/ecs";
+import { Color4 } from "@dcl/sdk/math"
 import { syncEntity } from "@dcl/sdk/network";
 import { readGltfLocators } from "../../../common/locators";
 import { parseTime } from "../../../common/utils/time";
@@ -50,6 +51,10 @@ export class Ui3D {
         await this.ready
         this.setTextOptimized(this.counterMoves, `Moves: ${value ?? '-'}`)
     }
+    public async setNoMoves() {
+        await this.ready
+        this.setTextOptimized(this.counterMoves, "No Moves", Color4.Red())
+    }
     public async setLevel(level?: number) {
         await this.ready
         const [difficulty] = Object.entries(DIFFICULTY_MAPPING).reverse().find(([, l]) => level && level >= l) ?? []
@@ -68,7 +73,10 @@ export class Ui3D {
         const {minutes, seconds, millis} = parseTime(value)
         this.setTextOptimized(this.counterStopwatch, `Time: ${minutes ?? '--'}:${seconds ?? '--'}.${millis ?? '---'}`)
     }
-    private setTextOptimized(entity: Entity, value: string) {
-        if (TextShape.get(entity).text != value) TextShape.getMutable(entity).text = value
+    private setTextOptimized(entity: Entity, value: string, color = Color4.White()) {
+        if (TextShape.get(entity).text != value) {
+            TextShape.getMutable(entity).text = value
+            TextShape.getMutable(entity).textColor = color
+        }
     }
 }

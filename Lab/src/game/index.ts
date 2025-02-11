@@ -46,6 +46,7 @@ export async function playLevel(
         await Promise.race([ready, flow.interrupted])
         engine.addSystem(dt => void ui3d.setTime(elapsed += dt), undefined, 'stopwatch')
         while (!flasks.every(f => !f.topLayer || f.sealed)) {
+            if (!doesMoveExists(flasks)) ui3d.setNoMoves()
             let first = await Promise.race([...flasks.map(f => f.activated), flow.interrupted])
             if (!first.topLayer) {
                 soundManager.playSound('error')
@@ -96,4 +97,18 @@ export async function playLevel(
         await destruction
         await Promise.race([flow.interrupted, Promise.resolve()])
     }
+}
+
+function doesMoveExists(flasks: Flask[]) {
+    for (let first of flasks) for (let second of flasks) {
+        // No actions possible with flasks at all
+        if (first == second || !first.topLayer || second.fillLevel == second.capacity) continue
+        // Second flask won't accept top layer from the first
+        if (second.topLayer && !Color3.equals(second.topLayer.color, first.topLayer.color)) continue
+        // Layer won't be moved completely
+        if (second.capacity - second.fillLevel < first.topLayer.volume) continue
+        // Otherwise the move exists
+        return true
+    }
+    return false
 }
