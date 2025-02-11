@@ -11,11 +11,11 @@ import { readStaticUIPositions, staticUIPositions } from './locators/staticUI'
 export const levelButtons: ui.MenuButton[] = []
 
 const DIFFICULTIES = ['EASY', 'MEDIUM', 'HARD'] as const
-type Difficulty = typeof DIFFICULTIES[number]
+type Difficulty = (typeof DIFFICULTIES)[number]
 const DIFFICULTY_COLORS = {
-  'EASY': ui.uiAssets.shapes.SQUARE_GREEN,
-  'MEDIUM': ui.uiAssets.shapes.SQUARE_YELLOW,
-  'HARD': ui.uiAssets.shapes.SQUARE_RED
+  EASY: ui.uiAssets.shapes.SQUARE_GREEN,
+  MEDIUM: ui.uiAssets.shapes.SQUARE_YELLOW,
+  HARD: ui.uiAssets.shapes.SQUARE_RED
 } as const
 
 export async function setupGameUI() {
@@ -29,7 +29,7 @@ export async function setupGameUI() {
     const button = new ui.MenuButton(
       levelButtonPositions[difficulty][positionInRow],
       DIFFICULTY_COLORS[difficulty],
-      ui.uiAssets.numbers[index % 5 + 1 as any],
+      ui.uiAssets.numbers[((index % 5) + 1) as any],
       `START LEVEL ${level}`,
       () => {
         startLevel(Number(level))
@@ -53,7 +53,9 @@ export async function setupGameUI() {
     text: 'EASY',
     textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
     fontSize: 3,
-    textColor: Color4.Green()
+    textColor: Color4.fromHexString('#0ca67d'),
+    outlineColor: Color4.fromHexString('#0ca67d'),
+    outlineWidth: 0.1
   })
 
   const labelMedium = engine.addEntity()
@@ -62,7 +64,9 @@ export async function setupGameUI() {
     text: 'MEDIUM',
     textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
     fontSize: 3,
-    textColor: Color4.Yellow()
+    outlineColor: Color4.fromHexString('#EAAE21'),
+    textColor: Color4.fromHexString('#EAAE21'),
+    outlineWidth: 0.1,
   })
 
   const labelHard = engine.addEntity()
@@ -71,8 +75,10 @@ export async function setupGameUI() {
     text: 'HARD',
     textAlign: TextAlignMode.TAM_MIDDLE_LEFT,
     fontSize: 3,
-    textColor: Color4.Red()
-  }) 
+    textColor: Color4.fromHexString('#E2134E'),
+    outlineColor: Color4.fromHexString('#E2134E'),
+    outlineWidth: 0.1
+  })
 }
 
 function setupMoveCouner(moveCounter: Entity) {
