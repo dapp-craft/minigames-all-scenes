@@ -58,6 +58,7 @@ const Synchronizer = CreateStateSynchronizer(
 let ui3d: Ui3D
 let flow: FlowController<number>
 let currentLevel = 0 as keyof typeof LEVELS
+let maxLevel = currentLevel
 let synchronizer: InstanceType<typeof Synchronizer>
 let soundManager = new SoundManager()
 let flaskTransforms = new Array<TransformType>
@@ -66,6 +67,7 @@ const gameHandlers = {
     start: async () => {
         console.log("ENTER game loop")
         synchronizer.stop()
+        ui3d.unlockButtons(maxLevel)
         let next = currentLevel
         do next = await playLevel(
                 flaskTransforms,
@@ -122,7 +124,7 @@ export async function main() {
     let [{level} = {level: 0}] = await progress.getProgress('level', progress.SortDirection.DESC, 1) ?? []
     level = Math.min(level + 1, Object.keys(LEVELS).length)
     const [difficulty] = Object.entries(DIFFICULTY_MAPPING).reverse().find(([, l]) => level >= l)!
-    currentLevel = DIFFICULTY_MAPPING[Number(difficulty) as keyof typeof DIFFICULTY_MAPPING]
+    currentLevel = maxLevel = DIFFICULTY_MAPPING[Number(difficulty) as keyof typeof DIFFICULTY_MAPPING]
 
     // Fill flask positions array
     for (const [name, value] of await locators) {
