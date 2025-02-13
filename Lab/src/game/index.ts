@@ -79,6 +79,7 @@ export async function playLevel(
         engine.removeSystem('stopwatch')
         soundManager.playSound('win', 0, 1)
         progress.upsertProgress({level, time: Math.floor(elapsed * 1000), moves})
+        ui3d.unlockButtons(level + 1)
         await Promise.race([runWinAnimation(), flow.interrupted])
     } finally {
         cancelCountdown()
